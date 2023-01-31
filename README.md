@@ -1,13 +1,12 @@
 # soul-wallet-corelib
 The EIP-4337 interaction library for SoulWallet
 
-## Installation
+## Usage
+
 
 ```bash
-npm install
+npm install --save-dev git+https://github.com/proofofsoulprotocol/soulwalletlib.git#v0.0.1
 ```
-
-## Usage
 
 ```javascript
 import { WalletLib } from 'soul-wallet-lib';
