@@ -1,4 +1,4 @@
-# soul-wallet-corelib
+# soul-wallet-lib
 The EIP-4337 interaction library for SoulWallet
 
 ## Usage
