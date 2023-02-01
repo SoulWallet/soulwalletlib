@@ -8,7 +8,7 @@ import { ecsign, toRpcSig, fromRpcSig, keccak256 as keccak256_buffer } from 'eth
 import { UserOperation } from '../entity/userOperation'
 import { ethers, BigNumber } from "ethers";
 import { SimpleWalletContract } from '../contracts/soulWallet'
-import { guardianSignature, Guaridian } from './Guardian';
+import { guardianSignature, Guardian } from './Guardian';
 
 function encode(typevalues: Array<{ type: string, val: any }>, forSignature: boolean): string {
   const types = typevalues.map(typevalue => typevalue.type === 'bytes' && forSignature ? 'bytes32' : typevalue.type)
@@ -144,7 +144,7 @@ export function packGuardiansSign(
   threshold: number, salt: string, create2Factory: string,
   guardianAddress: string | undefined = undefined
 ): string {
-  const guardianData = Guaridian.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt, create2Factory);
+  const guardianData = Guardian.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt, create2Factory);
   if (guardianAddress) {
     if (guardianData.address != guardianAddress) {
       throw new Error('guardianAddress is not equal to the calculated guardian address');
@@ -166,7 +166,7 @@ export function packGuardiansSign(
 export function packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], deadline = 0, initCode = '0x'
 ): string {
 
-  const signatureBytes = Guaridian.guardianSign(signature);
+  const signatureBytes = Guardian.guardianSign(signature);
 
   const guardianCallData = defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
   const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'],

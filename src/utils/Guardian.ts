@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-01-28 10:17:34
+ * @LastEditTime: 2023-02-01 16:42:50
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -14,10 +14,10 @@ import { GuardianMultiSigWallet } from "../contracts/guardianMultiSigWallet";
 import { WalletProxyContract } from "../contracts/walletProxy";
 import { defaultAbiCoder, getCreate2Address, keccak256 } from "ethers/lib/utils";
 import { AddressZero } from "../defines/address";
-import { NumberLike } from "../defines/numberLike";
+import { NumberLike, toNumber } from "../defines/numberLike";
 
 
-export class Guaridian {
+export class Guardian {
 
     private static getInitializeData(guardians: string[], threshold: number) {
         // function initialize(address[] calldata _guardians, uint16 _threshold)
@@ -41,7 +41,7 @@ export class Guaridian {
     }
 
     private static getGuardianCode(guardianLogicAddress: string, guardians: string[], threshold: number): string {
-        const initializeData = Guaridian.getInitializeData(guardians, threshold);
+        const initializeData = Guardian.getInitializeData(guardians, threshold);
         const factory = new ethers.ContractFactory(WalletProxyContract.ABI, WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(guardianLogicAddress, initializeData).data;
         return walletBytecode as string;
@@ -69,10 +69,10 @@ export class Guaridian {
             // salt to bytes32
             salt = keccak256(defaultAbiCoder.encode(['string'], [salt]));
         }
-        const initCodeWithArgs = Guaridian.getGuardianCode(guardianLogicAddress, guardians, threshold);
+        const initCodeWithArgs = Guardian.getGuardianCode(guardianLogicAddress, guardians, threshold);
         const initCodeHash = keccak256(initCodeWithArgs);
         const address = getCreate2Address(create2Factory, salt, initCodeHash);
-        const initCode = Guaridian.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
+        const initCode = Guardian.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
         return {
             address,
             initCode
@@ -92,7 +92,7 @@ export class Guaridian {
      * @returns (currentGuardian, guardianDelay)
      */
     public static async getGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, now: number = 0) {
-        const walletContract = Guaridian.walletContract(etherProvider, walletAddress);
+        const walletContract = Guardian.walletContract(etherProvider, walletAddress);
 
         const result = await etherProvider.call({
             from: AddressZero,
@@ -180,7 +180,9 @@ export class Guaridian {
         const op = await this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress,
             maxFeePerGas, maxPriorityFeePerGas, calldata);
 
-        if (op) op.verificationGasLimit = 600000;
+        if (op) {
+            op.verificationGasLimit = toNumber(op.verificationGasLimit) + 100000;
+        }
 
         return op;
     }

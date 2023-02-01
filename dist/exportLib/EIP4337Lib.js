@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-01-28 20:04:45
+ * @LastEditTime: 2023-02-01 16:46:56
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -39,14 +39,13 @@ class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @returns inithex
      */
-    static getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster) {
+    static getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
         // function initialize(IEntryPoint anEntryPoint, address anOwner,  IERC20 token,address paymaster)
         // encodeFunctionData
         let iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
-        let initializeData = iface.encodeFunctionData("initialize", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster]);
+        let initializeData = iface.encodeFunctionData("initialize", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress]);
         return initializeData;
     }
     /**
@@ -57,11 +56,10 @@ class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @returns the wallet code hex string
      */
-    static getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster) {
-        const initializeData = EIP4337Lib.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster);
+    static getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
+        const initializeData = EIP4337Lib.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const factory = new ethers_1.ethers.ContractFactory(walletProxy_1.WalletProxyContract.ABI, walletProxy_1.WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(walletLogicAddress, initializeData).data;
         return walletBytecode;
@@ -74,13 +72,12 @@ class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @param salt the salt number,default is 0
      * @param create2Factory create2factory address defined in EIP-2470
      * @returns
      */
-    static calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster, salt, create2Factory) {
-        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster);
+    static calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, create2Factory) {
+        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
         const walletAddress = EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
         return walletAddress;
@@ -94,15 +91,14 @@ class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @param payMasterAddress the paymaster address
      * @param salt the salt number,default is 0
      * @param create2Factory create2factory address
      * @param maxFeePerGas the max fee per gas
      * @param maxPriorityFeePerGas the max priority fee per gas
      */
-    static activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster, payMasterAddress, salt, create2Factory, maxFeePerGas, maxPriorityFeePerGas) {
-        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster);
+    static activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, payMasterAddress, salt, create2Factory, maxFeePerGas, maxPriorityFeePerGas) {
+        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
         const walletAddress = EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
         let userOperation = new userOperation_1.UserOperation();
@@ -112,7 +108,6 @@ class EIP4337Lib {
         userOperation.maxFeePerGas = maxFeePerGas;
         userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
         userOperation.initCode = EIP4337Lib.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
-        userOperation.verificationGasLimit = 500000; //100000 + 3200 + 200 * userOperation.initCode.length;
         userOperation.callGasLimit = 0;
         userOperation.callData = "0x";
         return userOperation;
@@ -193,7 +188,7 @@ EIP4337Lib.Utils = {
 EIP4337Lib.Defines = {
     AddressZero: address_1.AddressZero
 };
-EIP4337Lib.Guaridian = Guardian_1.Guaridian;
+EIP4337Lib.Guardian = Guardian_1.Guardian;
 EIP4337Lib.Tokens = {
     ERC20: Token_1.ERC20,
     ERC721: Token_1.ERC721,

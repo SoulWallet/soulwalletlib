@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 21:13:10
  * @LastEditors: cejay
- * @LastEditTime: 2023-01-28 19:37:39
+ * @LastEditTime: 2023-02-01 11:24:20
  */
 
 import { IContract } from './icontract';
@@ -54,12 +54,6 @@ const ABI: any =
 				"internalType": "address",
 				"name": "guardian",
 				"type": "address"
-			},
-			{
-				"indexed": false,
-				"internalType": "bytes",
-				"name": "tokenAndPaymaster",
-				"type": "bytes"
 			}
 		],
 		"name": "AccountInitialized",
@@ -543,11 +537,6 @@ const ABI: any =
 				"internalType": "address",
 				"name": "_guardian",
 				"type": "address"
-			},
-			{
-				"internalType": "bytes",
-				"name": "_tokenAndPaymaster",
-				"type": "bytes"
 			}
 		],
 		"name": "initialize",
@@ -837,6 +826,35 @@ const ABI: any =
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenApprove",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

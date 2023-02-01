@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-01-28 10:17:34
+ * @LastEditTime: 2023-02-01 16:42:50
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -17,7 +17,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Guaridian = void 0;
+exports.Guardian = void 0;
 const userOperation_1 = require("../entity/userOperation");
 const soulWallet_1 = require("../contracts/soulWallet");
 const ethers_1 = require("ethers");
@@ -25,7 +25,8 @@ const guardianMultiSigWallet_1 = require("../contracts/guardianMultiSigWallet");
 const walletProxy_1 = require("../contracts/walletProxy");
 const utils_1 = require("ethers/lib/utils");
 const address_1 = require("../defines/address");
-class Guaridian {
+const numberLike_1 = require("../defines/numberLike");
+class Guardian {
     static getInitializeData(guardians, threshold) {
         // function initialize(address[] calldata _guardians, uint16 _threshold)
         // order by guardians asc
@@ -48,7 +49,7 @@ class Guaridian {
         return initializeData;
     }
     static getGuardianCode(guardianLogicAddress, guardians, threshold) {
-        const initializeData = Guaridian.getInitializeData(guardians, threshold);
+        const initializeData = Guardian.getInitializeData(guardians, threshold);
         const factory = new ethers_1.ethers.ContractFactory(walletProxy_1.WalletProxyContract.ABI, walletProxy_1.WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(guardianLogicAddress, initializeData).data;
         return walletBytecode;
@@ -74,10 +75,10 @@ class Guaridian {
             // salt to bytes32
             salt = (0, utils_1.keccak256)(utils_1.defaultAbiCoder.encode(['string'], [salt]));
         }
-        const initCodeWithArgs = Guaridian.getGuardianCode(guardianLogicAddress, guardians, threshold);
+        const initCodeWithArgs = Guardian.getGuardianCode(guardianLogicAddress, guardians, threshold);
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
         const address = (0, utils_1.getCreate2Address)(create2Factory, salt, initCodeHash);
-        const initCode = Guaridian.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
+        const initCode = Guardian.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
         return {
             address,
             initCode
@@ -95,7 +96,7 @@ class Guaridian {
      */
     static getGuardian(etherProvider, walletAddress, now = 0) {
         return __awaiter(this, void 0, void 0, function* () {
-            const walletContract = Guaridian.walletContract(etherProvider, walletAddress);
+            const walletContract = Guardian.walletContract(etherProvider, walletAddress);
             const result = yield etherProvider.call({
                 from: address_1.AddressZero,
                 to: walletAddress,
@@ -169,8 +170,9 @@ class Guaridian {
             const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
             const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
             const op = yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
-            if (op)
-                op.verificationGasLimit = 600000;
+            if (op) {
+                op.verificationGasLimit = (0, numberLike_1.toNumber)(op.verificationGasLimit) + 100000;
+            }
             return op;
         });
     }
@@ -222,5 +224,5 @@ class Guaridian {
         return signatureBytes;
     }
 }
-exports.Guaridian = Guaridian;
+exports.Guardian = Guardian;
 //# sourceMappingURL=Guardian.js.map

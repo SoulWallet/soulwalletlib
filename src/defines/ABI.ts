@@ -4,37 +4,14 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-19 17:38:12
  * @LastEditors: cejay
- * @LastEditTime: 2022-11-22 23:34:02
+ * @LastEditTime: 2023-02-01 11:33:28
  */
 
 import { ContractInterface } from 'ethers';
 import { JsonFragment, Fragment } from '@ethersproject/abi'
-// const execFromEntryPoint: AbiItem = {
-//     "inputs": [
-//         {
-//             "internalType": "address",
-//             "name": "dest",
-//             "type": "address"
-//         },
-//         {
-//             "internalType": "uint256",
-//             "name": "value",
-//             "type": "uint256"
-//         },
-//         {
-//             "internalType": "bytes",
-//             "name": "func",
-//             "type": "bytes"
-//         }
-//     ],
-//     "name": "execFromEntryPoint",
-//     "outputs": [],
-//     "stateMutability": "nonpayable",
-//     "type": "function"
-// };
 
 const execFromEntryPoint = ["function execFromEntryPoint(address dest,uint256 value,bytes func)"];
-
+const tokenApprove = ["function tokenApprove(address token,address spender,uint256 amount)"];
 
 const ERC20: JsonFragment[] = [
     {
@@ -579,4 +556,4 @@ const ERC1155: JsonFragment[] = [
     }
 ];
 
-export { execFromEntryPoint, ERC20, ERC721, ERC1155 };
+export { execFromEntryPoint, ERC20, ERC721, ERC1155, tokenApprove };

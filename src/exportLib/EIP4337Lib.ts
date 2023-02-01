@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-01-28 20:04:45
+ * @LastEditTime: 2023-02-01 16:46:56
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256 } from "ethers/lib/utils";
@@ -14,7 +14,7 @@ import { IContract } from "../contracts/icontract";
 import { SimpleWalletContract } from "../contracts/soulWallet";
 import { WalletProxyContract } from "../contracts/walletProxy";
 import { DecodeCallData } from '../utils/decodeCallData';
-import { Guaridian } from "../utils/Guardian";
+import { Guardian } from "../utils/Guardian";
 import { ERC1155, ERC20, ERC721, ETH } from "../utils/Token";
 import { RPC } from '../utils/rpc';
 import { Converter } from "../utils/converter";
@@ -37,7 +37,7 @@ export class EIP4337Lib {
         AddressZero: AddressZero
     }
 
-    public static Guaridian = Guaridian;
+    public static Guardian = Guardian;
 
     public static Tokens = {
         ERC20: ERC20,
@@ -62,7 +62,6 @@ export class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @returns inithex
      */
     private static getInitializeData(
@@ -70,13 +69,12 @@ export class EIP4337Lib {
         ownerAddress: string,
         upgradeDelay: number,
         guardianDelay: number,
-        guardianAddress: string,
-        tokenAndPaymaster: string
+        guardianAddress: string
     ) {
         // function initialize(IEntryPoint anEntryPoint, address anOwner,  IERC20 token,address paymaster)
         // encodeFunctionData
         let iface = new ethers.utils.Interface(SimpleWalletContract.ABI);
-        let initializeData = iface.encodeFunctionData("initialize", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster]);
+        let initializeData = iface.encodeFunctionData("initialize", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress]);
         return initializeData;
     }
 
@@ -88,11 +86,10 @@ export class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @returns the wallet code hex string  
      */
-    public static getWalletCode(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, tokenAndPaymaster: string): string {
-        const initializeData = EIP4337Lib.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster);
+    public static getWalletCode(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string): string {
+        const initializeData = EIP4337Lib.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const factory = new ethers.ContractFactory(WalletProxyContract.ABI, WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(walletLogicAddress, initializeData).data;
         return walletBytecode as string;
@@ -106,7 +103,6 @@ export class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @param salt the salt number,default is 0
      * @param create2Factory create2factory address defined in EIP-2470
      * @returns 
@@ -118,10 +114,9 @@ export class EIP4337Lib {
         upgradeDelay: number,
         guardianDelay: number,
         guardianAddress: string,
-        tokenAndPaymaster: string,
         salt: number,
         create2Factory: string) {
-        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster);
+        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const initCodeHash = keccak256(initCodeWithArgs);
         const walletAddress = EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
         return walletAddress;
@@ -136,7 +131,6 @@ export class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @param payMasterAddress the paymaster address
      * @param salt the salt number,default is 0
      * @param create2Factory create2factory address 
@@ -150,13 +144,12 @@ export class EIP4337Lib {
         upgradeDelay: number,
         guardianDelay: number,
         guardianAddress: string,
-        tokenAndPaymaster: string,
         payMasterAddress: string,
         salt: number,
         create2Factory: string,
         maxFeePerGas: NumberLike,
         maxPriorityFeePerGas: NumberLike) {
-        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, tokenAndPaymaster);
+        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const initCodeHash = keccak256(initCodeWithArgs);
         const walletAddress = EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
         let userOperation: UserOperation = new UserOperation();
@@ -166,7 +159,6 @@ export class EIP4337Lib {
         userOperation.maxFeePerGas = maxFeePerGas;
         userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
         userOperation.initCode = EIP4337Lib.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
-        userOperation.verificationGasLimit = 500000;//100000 + 3200 + 200 * userOperation.initCode.length;
         userOperation.callGasLimit = 0;
         userOperation.callData = "0x";
         return userOperation;
