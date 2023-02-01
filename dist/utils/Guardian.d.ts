@@ -1,7 +1,7 @@
 import { UserOperation } from "../entity/userOperation";
 import { ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
-export declare class Guaridian {
+export declare class Guardian {
     private static getInitializeData;
     private static getGuardianCode;
     private static getPackedInitCode;

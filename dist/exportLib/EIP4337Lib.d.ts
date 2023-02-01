@@ -1,7 +1,7 @@
 import { UserOperation } from "../entity/userOperation";
 import { IContract } from "../contracts/icontract";
 import { DecodeCallData } from '../utils/decodeCallData';
-import { Guaridian } from "../utils/Guardian";
+import { Guardian } from "../utils/Guardian";
 import { ERC1155, ERC20, ERC721, ETH } from "../utils/Token";
 import { RPC } from '../utils/rpc';
 import { Converter } from "../utils/converter";
@@ -19,7 +19,7 @@ export declare class EIP4337Lib {
     static Defines: {
         AddressZero: string;
     };
-    static Guaridian: typeof Guaridian;
+    static Guardian: typeof Guardian;
     static Tokens: {
         ERC20: typeof ERC20;
         ERC721: typeof ERC721;

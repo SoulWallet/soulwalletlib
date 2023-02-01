@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-01-28 09:45:54
+ * @LastEditTime: 2023-02-01 16:41:00
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -26,8 +26,8 @@ class UserOperation {
     public initCode: string = '0x';
     public callData: string = '0x';
     public callGasLimit: NumberLike = 0;
-    public verificationGasLimit: NumberLike = 80000;
-    public preVerificationGas: NumberLike = 2100;
+    public verificationGasLimit: NumberLike = 500000;// createSender:315968  validateUserOp:10573 postOp:? validatePaymasterUserOp:?
+    public preVerificationGas: NumberLike =  1000000;
     public maxFeePerGas: NumberLike = 0;
     public maxPriorityFeePerGas: NumberLike = 0;
     public paymasterAndData: string = '0x';

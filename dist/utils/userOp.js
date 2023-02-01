@@ -126,7 +126,7 @@ exports.signUserOpWithPersonalSign = signUserOpWithPersonalSign;
  * @returns signature
  */
 function packGuardiansSign(deadline, signature, guardianLogicAddress, guardians, threshold, salt, create2Factory, guardianAddress = undefined) {
-    const guardianData = Guardian_1.Guaridian.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt, create2Factory);
+    const guardianData = Guardian_1.Guardian.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt, create2Factory);
     if (guardianAddress) {
         if (guardianData.address != guardianAddress) {
             throw new Error('guardianAddress is not equal to the calculated guardian address');
@@ -144,7 +144,7 @@ exports.packGuardiansSign = packGuardiansSign;
  * @returns
  */
 function packGuardiansSignByInitCode(guardianAddress, signature, deadline = 0, initCode = '0x') {
-    const signatureBytes = Guardian_1.Guaridian.guardianSign(signature);
+    const signatureBytes = Guardian_1.Guardian.guardianSign(signature);
     const guardianCallData = utils_1.defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
     const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'], [
         SignatureMode.guardian,

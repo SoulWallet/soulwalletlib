@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 11:16:53
+ * @LastEditTime: 2023-02-01 16:46:56
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -108,7 +108,6 @@ class EIP4337Lib {
         userOperation.maxFeePerGas = maxFeePerGas;
         userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
         userOperation.initCode = EIP4337Lib.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
-        userOperation.verificationGasLimit = 500000; //100000 + 3200 + 200 * userOperation.initCode.length;
         userOperation.callGasLimit = 0;
         userOperation.callData = "0x";
         return userOperation;
@@ -189,7 +188,7 @@ EIP4337Lib.Utils = {
 EIP4337Lib.Defines = {
     AddressZero: address_1.AddressZero
 };
-EIP4337Lib.Guaridian = Guardian_1.Guaridian;
+EIP4337Lib.Guardian = Guardian_1.Guardian;
 EIP4337Lib.Tokens = {
     ERC20: Token_1.ERC20,
     ERC721: Token_1.ERC721,
