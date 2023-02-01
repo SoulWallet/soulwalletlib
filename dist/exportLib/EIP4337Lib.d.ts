@@ -40,7 +40,6 @@ export declare class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @returns inithex
      */
     private static getInitializeData;
@@ -52,10 +51,9 @@ export declare class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @returns the wallet code hex string
      */
-    static getWalletCode(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, tokenAndPaymaster: string): string;
+    static getWalletCode(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string): string;
     /**
      * calculate wallet address by owner address
      * @param walletLogicAddress the wallet logic contract address
@@ -64,12 +62,11 @@ export declare class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @param salt the salt number,default is 0
      * @param create2Factory create2factory address defined in EIP-2470
      * @returns
      */
-    static calculateWalletAddress(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, tokenAndPaymaster: string, salt: number, create2Factory: string): string;
+    static calculateWalletAddress(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, salt: number, create2Factory: string): string;
     /**
      * get the userOperation for active (first time) the wallet
      * @param walletLogicAddress the wallet logic contract address
@@ -79,14 +76,13 @@ export declare class EIP4337Lib {
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param tokenAndPaymaster the packed token and paymaster (bytes)
      * @param payMasterAddress the paymaster address
      * @param salt the salt number,default is 0
      * @param create2Factory create2factory address
      * @param maxFeePerGas the max fee per gas
      * @param maxPriorityFeePerGas the max priority fee per gas
      */
-    static activateWalletOp(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, tokenAndPaymaster: string, payMasterAddress: string, salt: number, create2Factory: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): UserOperation;
+    static activateWalletOp(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, payMasterAddress: string, salt: number, create2Factory: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): UserOperation;
     static getPackedInitCode(create2Factory: string, initCode: string, salt: number): string;
     /**
      * calculate EIP-4337 wallet address
