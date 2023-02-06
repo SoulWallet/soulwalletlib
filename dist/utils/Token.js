@@ -54,13 +54,15 @@ class ERC20 {
     }
     static getApproveCallData(etherProvider, walletAddress, _token, _spender, _value) {
         return __awaiter(this, void 0, void 0, function* () {
-            const callData = new ethers_1.ethers.utils.Interface(ABI_1.tokenApprove).encodeFunctionData("tokenApprove", [_token, _spender, _value]);
+            let encodeABI = new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [_spender, _value]);
             let callGasLimit = yield etherProvider.estimateGas({
                 from: walletAddress,
                 to: _token,
                 data: new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [_spender, _value])
             });
             callGasLimit = callGasLimit.add(10000);
+            const callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint)
+                .encodeFunctionData("execFromEntryPoint", [_token, 0, encodeABI]);
             return {
                 callData,
                 callGasLimit: callGasLimit.toHexString()
