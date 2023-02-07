@@ -83,7 +83,10 @@ export declare class EIP4337Lib {
      * @param maxPriorityFeePerGas the max priority fee per gas
      */
     static activateWalletOp(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, payMasterAddress: string, salt: number, create2Factory: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): UserOperation;
+    static activateWalletOpUsingWalletFactory(walletAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, payMasterAddress: string, salt: number, walletFactory: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): UserOperation;
     static getPackedInitCode(create2Factory: string, initCode: string, salt: number): string;
+    static getPackedInitCodeUsingWalletFactory(walletFactory: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, salt: number): string;
+    static getPaymasterData(payMasterAddress: string, token: string, lowestPrice: number): string;
     /**
      * calculate EIP-4337 wallet address
      * @param initContract the init Contract

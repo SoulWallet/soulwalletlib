@@ -32,7 +32,7 @@ class UserOperation {
         this.initCode = '0x';
         this.callData = '0x';
         this.callGasLimit = 0;
-        this.verificationGasLimit = 500000; // createSender:315968  validateUserOp:10573 postOp:? validatePaymasterUserOp:?
+        this.verificationGasLimit = 700000; // createSender:315968  validateUserOp:10573 postOp:? validatePaymasterUserOp:?
         this.preVerificationGas = 1000000;
         this.maxFeePerGas = 0;
         this.maxPriorityFeePerGas = 0;

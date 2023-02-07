@@ -52,13 +52,17 @@ export class ERC20 {
     }
 
     static async getApproveCallData(etherProvider: ethers.providers.BaseProvider, walletAddress: string, _token: string, _spender: string, _value: string) {
-        const callData = new ethers.utils.Interface(tokenApprove).encodeFunctionData("tokenApprove", [_token, _spender, _value]);
+        let encodeABI = new ethers.utils.Interface(erc20).encodeFunctionData("approve", [_spender, _value]);
         let callGasLimit = await etherProvider.estimateGas({
             from: walletAddress,
             to: _token,
             data: new ethers.utils.Interface(erc20).encodeFunctionData("approve", [_spender, _value])
         });
         callGasLimit = callGasLimit.add(10000);
+        const callData = new ethers.utils.Interface(execFromEntryPoint)
+        .encodeFunctionData("execFromEntryPoint",
+            [_token, 0, encodeABI]);
+
         return {
             callData,
             callGasLimit: callGasLimit.toHexString()

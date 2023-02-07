@@ -112,11 +112,33 @@ class EIP4337Lib {
         userOperation.callData = "0x";
         return userOperation;
     }
+    static activateWalletOpUsingWalletFactory(walletAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, payMasterAddress, salt, walletFactory, maxFeePerGas, maxPriorityFeePerGas) {
+        let userOperation = new userOperation_1.UserOperation();
+        userOperation.nonce = 0;
+        userOperation.sender = walletAddress;
+        userOperation.paymasterAndData = payMasterAddress;
+        userOperation.maxFeePerGas = maxFeePerGas;
+        userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        userOperation.initCode = EIP4337Lib.getPackedInitCodeUsingWalletFactory(walletFactory, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
+        userOperation.callGasLimit = 0;
+        userOperation.callData = "0x";
+        return userOperation;
+    }
     static getPackedInitCode(create2Factory, initCode, salt) {
         const abi = { "inputs": [{ "internalType": "bytes", "name": "_initCode", "type": "bytes" }, { "internalType": "bytes32", "name": "_salt", "type": "bytes32" }], "name": "deploy", "outputs": [{ "internalType": "address payable", "name": "createdContract", "type": "address" }], "stateMutability": "nonpayable", "type": "function" };
         let iface = new ethers_1.ethers.utils.Interface([abi]);
         let packedInitCode = iface.encodeFunctionData("deploy", [initCode, EIP4337Lib.number2Bytes32(salt)]).substring(2);
         return create2Factory.toLowerCase() + packedInitCode;
+    }
+    static getPackedInitCodeUsingWalletFactory(walletFactory, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt) {
+        const abi = { "inputs": [{ "internalType": "address", "name": "_entryPoint", "type": "address" }, { "internalType": "address", "name": "_owner", "type": "address" }, { "internalType": "uint32", "name": "_upgradeDelay", "type": "uint32" }, { "internalType": "uint32", "name": "_guardianDelay", "type": "uint32" }, { "internalType": "address", "name": "_guardian", "type": "address" }, { "internalType": "bytes32", "name": "_salt", "type": "bytes32" }], "name": "createWallet", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "nonpayable", "type": "function" };
+        let iface = new ethers_1.ethers.utils.Interface([abi]);
+        let packedInitCode = iface.encodeFunctionData("createWallet", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, EIP4337Lib.number2Bytes32(salt)]).substring(2);
+        return walletFactory.toLowerCase() + packedInitCode;
+    }
+    static getPaymasterData(payMasterAddress, token, lowestPrice) {
+        const enc = payMasterAddress.toLowerCase() + utils_1.defaultAbiCoder.encode(['address', 'uint256'], [token, lowestPrice]).substring(2);
+        return enc;
     }
     /**
      * calculate EIP-4337 wallet address
