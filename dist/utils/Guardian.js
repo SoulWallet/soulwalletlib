@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 16:42:50
+ * @LastEditTime: 2023-02-09 18:41:12
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -26,8 +26,12 @@ const walletProxy_1 = require("../contracts/walletProxy");
 const utils_1 = require("ethers/lib/utils");
 const address_1 = require("../defines/address");
 const numberLike_1 = require("../defines/numberLike");
+const userOp_1 = require("./userOp");
 class Guardian {
-    static getInitializeData(guardians, threshold) {
+    constructor(singletonFactory) {
+        this._singletonFactory = singletonFactory;
+    }
+    getInitializeData(guardians, threshold) {
         // function initialize(address[] calldata _guardians, uint16 _threshold)
         // order by guardians asc
         // For user experience, guardian cannot rely on the order of address
@@ -48,17 +52,55 @@ class Guardian {
         let initializeData = iface.encodeFunctionData("initialize", [guardians, threshold]);
         return initializeData;
     }
-    static getGuardianCode(guardianLogicAddress, guardians, threshold) {
-        const initializeData = Guardian.getInitializeData(guardians, threshold);
+    getGuardianCode(guardianLogicAddress, guardians, threshold) {
+        const initializeData = this.getInitializeData(guardians, threshold);
         const factory = new ethers_1.ethers.ContractFactory(walletProxy_1.WalletProxyContract.ABI, walletProxy_1.WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(guardianLogicAddress, initializeData).data;
         return walletBytecode;
     }
-    static getPackedInitCode(create2Factory, initCode, salt) {
+    getPackedInitCode(create2Factory, initCode, salt) {
         const abi = { "inputs": [{ "internalType": "bytes", "name": "_initCode", "type": "bytes" }, { "internalType": "bytes32", "name": "_salt", "type": "bytes32" }], "name": "deploy", "outputs": [{ "internalType": "address payable", "name": "createdContract", "type": "address" }], "stateMutability": "nonpayable", "type": "function" };
         let iface = new ethers_1.ethers.utils.Interface([abi]);
         let packedInitCode = iface.encodeFunctionData("deploy", [initCode, salt]).substring(2);
         return create2Factory.toLowerCase() + packedInitCode;
+    }
+    /**
+     * sign a user operation with guardian signatures
+     * @param signatures guardian signatures
+     * @param guardianLogicAddress guardian logic contract address
+     * @param guardians guardian addresses
+     * @param threshold threshold
+     * @param salt salt
+     * @param guardianAddress guardian contract address,if provided will check if equal to the calculated guardian address
+     * @returns signature
+     */
+    packGuardiansSign(deadline, signature, guardianLogicAddress, guardians, threshold, salt, guardianAddress) {
+        const guardianData = this.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt);
+        if (guardianAddress) {
+            if (guardianData.address != guardianAddress) {
+                throw new Error('guardianAddress is not equal to the calculated guardian address');
+            }
+        }
+        return this.packGuardiansSignByInitCode(guardianData.address, signature, deadline, guardianData.initCode);
+    }
+    /**
+     * sign a user operation with guardian signatures
+     * @param guardianAddress guardian contract address
+     * @param signatures guardian signatures
+     * @param deadline deadline (block time), default 0
+     * @param initCode intiCode must given when the guardian contract is not deployed
+     * @returns
+     */
+    packGuardiansSignByInitCode(guardianAddress, signature, deadline = 0, initCode = '0x') {
+        const signatureBytes = this.guardianSign(signature);
+        const guardianCallData = utils_1.defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
+        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'], [
+            userOp_1.SignatureMode.guardian,
+            guardianAddress,
+            deadline,
+            guardianCallData
+        ]);
+        return enc;
     }
     /**
      * calculate Guardian address and deploy code (initCode)
@@ -69,22 +111,22 @@ class Guardian {
      * @param create2Factory create2 factory address
      * @returns
      */
-    static calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt, create2Factory) {
+    calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt) {
         // check if salt is bytes32 (length 66, starts with 0x, and is hex(0-9 a-f))
         if (/^0x[a-f0-9]{64}$/.test(salt) === false) {
             // salt to bytes32
             salt = (0, utils_1.keccak256)(utils_1.defaultAbiCoder.encode(['string'], [salt]));
         }
-        const initCodeWithArgs = Guardian.getGuardianCode(guardianLogicAddress, guardians, threshold);
+        const initCodeWithArgs = this.getGuardianCode(guardianLogicAddress, guardians, threshold);
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
-        const address = (0, utils_1.getCreate2Address)(create2Factory, salt, initCodeHash);
-        const initCode = Guardian.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
+        const address = (0, utils_1.getCreate2Address)(this._singletonFactory, salt, initCodeHash);
+        const initCode = this.getPackedInitCode(this._singletonFactory, initCodeWithArgs, salt);
         return {
             address,
             initCode
         };
     }
-    static walletContract(etherProvider, walletAddress) {
+    walletContract(etherProvider, walletAddress) {
         return new ethers_1.ethers.Contract(walletAddress, soulWallet_1.SimpleWalletContract.ABI, etherProvider);
     }
     /**
@@ -94,9 +136,9 @@ class Guardian {
      * @param now current timestamp ( 0: use current timestamp, >0:unix timestamp  )
      * @returns (currentGuardian, guardianDelay)
      */
-    static getGuardian(etherProvider, walletAddress, now = 0) {
+    getGuardian(etherProvider, walletAddress, now = 0) {
         return __awaiter(this, void 0, void 0, function* () {
-            const walletContract = Guardian.walletContract(etherProvider, walletAddress);
+            const walletContract = this.walletContract(etherProvider, walletAddress);
             const result = yield etherProvider.call({
                 from: address_1.AddressZero,
                 to: walletAddress,
@@ -127,7 +169,7 @@ class Guardian {
             };
         });
     }
-    static _guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, callData) {
+    _guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, callData) {
         return __awaiter(this, void 0, void 0, function* () {
             walletAddress = ethers_1.ethers.utils.getAddress(walletAddress);
             let userOperation = new userOperation_1.UserOperation();
@@ -156,7 +198,7 @@ class Guardian {
      * @param maxPriorityFeePerGas
      * @returns userOperation
      */
-    static setGuardian(etherProvider, walletAddress, guardian, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas) {
+    setGuardian(etherProvider, walletAddress, guardian, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas) {
         return __awaiter(this, void 0, void 0, function* () {
             guardian = ethers_1.ethers.utils.getAddress(guardian);
             const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
@@ -164,7 +206,7 @@ class Guardian {
             return yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
         });
     }
-    static transferOwner(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, newOwner) {
+    transferOwner(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, newOwner) {
         return __awaiter(this, void 0, void 0, function* () {
             newOwner = ethers_1.ethers.utils.getAddress(newOwner);
             const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
@@ -176,7 +218,7 @@ class Guardian {
             return op;
         });
     }
-    static guardianSign(signature) {
+    guardianSign(signature) {
         if (signature.length === 0) {
             throw new Error("signature is empty");
         }
@@ -225,4 +267,4 @@ class Guardian {
     }
 }
 exports.Guardian = Guardian;
-//# sourceMappingURL=Guardian.js.map
+//# sourceMappingURL=guardian.js.map

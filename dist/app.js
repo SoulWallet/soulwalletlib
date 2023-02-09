@@ -5,12 +5,12 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-04 21:05:35
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 11:21:47
+ * @LastEditTime: 2023-02-09 18:44:50
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserOperation = exports.EIP4337Lib = void 0;
-const EIP4337Lib_1 = require("./exportLib/EIP4337Lib");
-Object.defineProperty(exports, "EIP4337Lib", { enumerable: true, get: function () { return EIP4337Lib_1.EIP4337Lib; } });
+exports.UserOperation = exports.SoulWalletLib = void 0;
+const soulWalletLib_1 = require("./exportLib/soulWalletLib");
+Object.defineProperty(exports, "SoulWalletLib", { enumerable: true, get: function () { return soulWalletLib_1.SoulWalletLib; } });
 const userOperation_1 = require("./entity/userOperation");
 Object.defineProperty(exports, "UserOperation", { enumerable: true, get: function () { return userOperation_1.UserOperation; } });
 //# sourceMappingURL=app.js.map

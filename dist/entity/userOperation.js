@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 16:41:00
+ * @LastEditTime: 2023-02-09 22:48:41
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -38,6 +38,7 @@ class UserOperation {
         this.maxPriorityFeePerGas = 0;
         this.paymasterAndData = '0x';
         this.signature = '0x';
+        this._userOp = new userOp_1.UserOp();
     }
     toTuple() {
         /*
@@ -71,7 +72,8 @@ class UserOperation {
             signature: this.signature
         });
     }
-    static fromJSON(json) {
+    static fromJSON(json, singletonFactory) {
+        singletonFactory = singletonFactory || address_1.SingletonFactoryAddress;
         const obj = JSON.parse(json);
         if (!obj || typeof obj !== 'object') {
             throw new Error('invalid json');
@@ -160,7 +162,7 @@ class UserOperation {
      * @returns
      */
     payMasterSignHash() {
-        return (0, userOp_1.payMasterSignHash)(this);
+        return this._userOp.payMasterSignHash(this);
     }
     /**
      * sign the user operation
@@ -169,7 +171,7 @@ class UserOperation {
      * @param privateKey the private key
      */
     sign(entryPoint, chainId, privateKey) {
-        this.signature = (0, userOp_1.signUserOp)(this, entryPoint, chainId, privateKey);
+        this.signature = this._userOp.signUserOp(this, entryPoint, chainId, privateKey);
     }
     /**
      * sign the user operation with personal sign
@@ -177,17 +179,7 @@ class UserOperation {
      * @param signature the signature of the UserOpHash
      */
     signWithSignature(signAddress, signature) {
-        this.signature = (0, userOp_1.signUserOpWithPersonalSign)(signAddress, signature);
-    }
-    /**
-     * sign the user operation with guardians sign
-     * @param guardianAddress guardian address
-     * @param signature guardians signature
-     * @param deadline deadline (block timestamp)
-     * @param initCode guardian contract init code
-     */
-    signWithGuardiansSign(guardianAddress, signature, deadline = 0, initCode = '0x') {
-        this.signature = (0, userOp_1.packGuardiansSignByInitCode)(guardianAddress, signature, deadline, initCode);
+        this.signature = this._userOp.signUserOpWithPersonalSign(signAddress, signature);
     }
     /**
      * get the UserOpHash (userOp hash)
@@ -196,7 +188,7 @@ class UserOperation {
      * @returns hex string
      */
     getUserOpHash(entryPointAddress, chainId) {
-        return (0, userOp_1.getUserOpHash)(this, entryPointAddress, chainId);
+        return this._userOp.getUserOpHash(this, entryPointAddress, chainId);
     }
     /**
      * get the UserOpHash (userOp hash) with deadline
@@ -208,6 +200,46 @@ class UserOperation {
     getUserOpHashWithDeadline(entryPointAddress, chainId, deadline) {
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
+    }
+    requiredPrefund(basefee) {
+        /*
+         uint256 maxFeePerGas = mUserOp.maxFeePerGas;
+        uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
+        if (maxFeePerGas == maxPriorityFeePerGas) {
+            //legacy mode (for networks that don't support basefee opcode)
+            return maxFeePerGas;
+        }
+        return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
+        */
+        let gasPrice;
+        const maxFeePerGas = ethers_1.BigNumber.from(this.maxFeePerGas);
+        const maxPriorityFeePerGas = ethers_1.BigNumber.from(this.maxPriorityFeePerGas);
+        if (maxFeePerGas.eq(maxPriorityFeePerGas)) {
+            gasPrice = maxFeePerGas;
+        }
+        else {
+            if (basefee !== undefined) {
+                const _fee = basefee.add(maxPriorityFeePerGas);
+                gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
+            }
+            else {
+                gasPrice = maxFeePerGas;
+            }
+        }
+        /*
+       //when using a Paymaster, the verificationGasLimit is used also to as a limit for the postOp call.
+       // our security model might call postOp eventually twice
+       uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
+       uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
+
+       // TODO: copy logic of gasPrice?
+       requiredPrefund = requiredGas * getUserOpGasPrice(mUserOp);
+       */
+        const noPaymaster = this.paymasterAndData === address_1.AddressZero || this.paymasterAndData === '0x';
+        const mul = noPaymaster ? 1 : 3;
+        const requiredGas = ethers_1.BigNumber.from(this.callGasLimit).add(ethers_1.BigNumber.from(this.verificationGasLimit).mul(mul)).add(ethers_1.BigNumber.from(this.preVerificationGas));
+        const requiredPrefund = requiredGas.mul(gasPrice);
+        return requiredPrefund;
     }
 }
 exports.UserOperation = UserOperation;

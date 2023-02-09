@@ -5,8 +5,31 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 16:46:56
+ * @LastEditTime: 2023-02-09 18:44:06
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -17,21 +40,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserOperation = exports.EIP4337Lib = void 0;
+exports.UserOperation = exports.SoulWalletLib = void 0;
 const utils_1 = require("ethers/lib/utils");
-const address_1 = require("../defines/address");
+const addressDefine = __importStar(require("../defines/address"));
 const userOperation_1 = require("../entity/userOperation");
 const soulWallet_1 = require("../contracts/soulWallet");
 const walletProxy_1 = require("../contracts/walletProxy");
+const tokenPaymaster_1 = require("../contracts/tokenPaymaster");
 const decodeCallData_1 = require("../utils/decodeCallData");
-const Guardian_1 = require("../utils/Guardian");
-const Token_1 = require("../utils/Token");
-const rpc_1 = require("../utils/rpc");
+const guardian_1 = require("../utils/guardian");
+const token_1 = require("../utils/token");
+const bundler_1 = require("../utils/bundler");
 const converter_1 = require("../utils/converter");
 const ethers_1 = require("ethers");
 const gasFee_1 = require("../utils/gasFee");
 const tokenAndPaymaster_1 = require("../utils/tokenAndPaymaster");
-class EIP4337Lib {
+const deployFactory_1 = require("../utils/deployFactory");
+const bytes32_1 = require("../defines/bytes32");
+const walletFactory_1 = require("../contracts/walletFactory");
+const address_1 = require("../defines/address");
+class SoulWalletLib {
+    constructor(singletonFactory) {
+        this.Bundler = bundler_1.Bundler;
+        singletonFactory = singletonFactory || address_1.SingletonFactoryAddress;
+        this._singletonFactory = singletonFactory;
+        this._deployFactory = new deployFactory_1.DeployFactory(singletonFactory);
+        this.Utils = {
+            getNonce: this.getNonce,
+            DecodeCallData: decodeCallData_1.DecodeCallData,
+            suggestedGasFee: gasFee_1.CodefiGasFees,
+            tokenAndPaymaster: tokenAndPaymaster_1.TokenAndPaymaster,
+            deployFactory: this._deployFactory,
+            fromTransaction: new converter_1.Converter().fromTransaction
+        };
+        this.Tokens = {
+            ERC1155: new token_1.ERC1155(this._singletonFactory),
+            ERC20: new token_1.ERC20(this._singletonFactory),
+            ERC721: new token_1.ERC721(this._singletonFactory),
+            ETH: new token_1.ETH(this._singletonFactory)
+        };
+        this.Guardian = new guardian_1.Guardian(this._singletonFactory);
+    }
+    get singletonFactory() {
+        return this._singletonFactory;
+    }
     /**
      *
      * @param entryPointAddress the entryPoint address
@@ -41,7 +93,7 @@ class EIP4337Lib {
      * @param guardianAddress the guardian contract address
      * @returns inithex
      */
-    static getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
+    getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
         // function initialize(IEntryPoint anEntryPoint, address anOwner,  IERC20 token,address paymaster)
         // encodeFunctionData
         let iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
@@ -58,8 +110,8 @@ class EIP4337Lib {
      * @param guardianAddress the guardian contract address
      * @returns the wallet code hex string
      */
-    static getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
-        const initializeData = EIP4337Lib.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
+    getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
+        const initializeData = this.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const factory = new ethers_1.ethers.ContractFactory(walletProxy_1.WalletProxyContract.ABI, walletProxy_1.WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(walletLogicAddress, initializeData).data;
         return walletBytecode;
@@ -73,70 +125,73 @@ class EIP4337Lib {
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
      * @param salt the salt number,default is 0
-     * @param create2Factory create2factory address defined in EIP-2470
      * @returns
      */
-    static calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, create2Factory) {
-        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
+    calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt) {
+        const initCodeWithArgs = this.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
-        const walletAddress = EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
+        const walletAddress = this.calculateWalletAddressByCodeHash(initCodeHash, salt);
         return walletAddress;
     }
     /**
      * get the userOperation for active (first time) the wallet
      * @param walletLogicAddress the wallet logic contract address
      * @param entryPointAddress
-     * @param payMasterAddress
      * @param ownerAddress
      * @param upgradeDelay the upgrade delay time
      * @param guardianDelay the guardian delay time
      * @param guardianAddress the guardian contract address
-     * @param payMasterAddress the paymaster address
-     * @param salt the salt number,default is 0
-     * @param create2Factory create2factory address
+     * @param paymasterAndData the paymaster address and data
      * @param maxFeePerGas the max fee per gas
      * @param maxPriorityFeePerGas the max priority fee per gas
+     * @param salt the salt number,default is 0
+     * @param walletProxy the walletProxy contract address
+     * @param walletFactory the walletFactory contract address
      */
-    static activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, payMasterAddress, salt, create2Factory, maxFeePerGas, maxPriorityFeePerGas) {
-        const initCodeWithArgs = EIP4337Lib.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
-        const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
-        const walletAddress = EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
-        let userOperation = new userOperation_1.UserOperation();
+    activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, salt, walletFactory) {
+        const walletAddress = this.calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
+        const userOperation = new userOperation_1.UserOperation();
         userOperation.nonce = 0;
         userOperation.sender = walletAddress;
-        userOperation.paymasterAndData = payMasterAddress;
+        userOperation.paymasterAndData = paymasterAndData;
         userOperation.maxFeePerGas = maxFeePerGas;
         userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-        userOperation.initCode = EIP4337Lib.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
+        userOperation.initCode = this.getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
         userOperation.callGasLimit = 0;
         userOperation.callData = "0x";
         return userOperation;
     }
-    static activateWalletOpUsingWalletFactory(walletAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, payMasterAddress, salt, walletFactory, maxFeePerGas, maxPriorityFeePerGas) {
-        let userOperation = new userOperation_1.UserOperation();
-        userOperation.nonce = 0;
-        userOperation.sender = walletAddress;
-        userOperation.paymasterAndData = payMasterAddress;
-        userOperation.maxFeePerGas = maxFeePerGas;
-        userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-        userOperation.initCode = EIP4337Lib.getPackedInitCodeUsingWalletFactory(walletFactory, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
-        userOperation.callGasLimit = 0;
-        userOperation.callData = "0x";
-        return userOperation;
-    }
-    static getPackedInitCode(create2Factory, initCode, salt) {
-        const abi = { "inputs": [{ "internalType": "bytes", "name": "_initCode", "type": "bytes" }, { "internalType": "bytes32", "name": "_salt", "type": "bytes32" }], "name": "deploy", "outputs": [{ "internalType": "address payable", "name": "createdContract", "type": "address" }], "stateMutability": "nonpayable", "type": "function" };
-        let iface = new ethers_1.ethers.utils.Interface([abi]);
-        let packedInitCode = iface.encodeFunctionData("deploy", [initCode, EIP4337Lib.number2Bytes32(salt)]).substring(2);
-        return create2Factory.toLowerCase() + packedInitCode;
-    }
-    static getPackedInitCodeUsingWalletFactory(walletFactory, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt) {
-        const abi = { "inputs": [{ "internalType": "address", "name": "_entryPoint", "type": "address" }, { "internalType": "address", "name": "_owner", "type": "address" }, { "internalType": "uint32", "name": "_upgradeDelay", "type": "uint32" }, { "internalType": "uint32", "name": "_guardianDelay", "type": "uint32" }, { "internalType": "address", "name": "_guardian", "type": "address" }, { "internalType": "bytes32", "name": "_salt", "type": "bytes32" }], "name": "createWallet", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "nonpayable", "type": "function" };
-        let iface = new ethers_1.ethers.utils.Interface([abi]);
-        let packedInitCode = iface.encodeFunctionData("createWallet", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, EIP4337Lib.number2Bytes32(salt)]).substring(2);
+    getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt) {
+        let iface = new ethers_1.ethers.utils.Interface(walletFactory_1.WalletFactoryContract.ABI);
+        let packedInitCode = iface.encodeFunctionData("createWallet", [
+            entryPointAddress,
+            ownerAddress,
+            upgradeDelay,
+            guardianDelay,
+            guardianAddress,
+            this.number2Bytes32(salt)
+        ]).substring(2);
+        if (!walletFactory) {
+            if (!walletLogicAddress) {
+                throw new Error("walletLogicAddress is undefined");
+            }
+            walletFactory = this._deployFactory.getAddress(walletLogicAddress);
+        }
         return walletFactory.toLowerCase() + packedInitCode;
     }
-    static getPaymasterData(payMasterAddress, token, lowestPrice) {
+    getPaymasterExchangePrice(etherProvider, payMasterAddress, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const paymaster = new ethers_1.ethers.Contract(payMasterAddress, tokenPaymaster_1.TokenPaymasterContract.ABI, etherProvider);
+            if ((yield paymaster.isSupportedToken(token)) === true) {
+                const price = yield paymaster.exchangePrice(token);
+                return price;
+            }
+            else {
+                throw new Error("token is not supported");
+            }
+        });
+    }
+    getPaymasterData(payMasterAddress, token, lowestPrice) {
         const enc = payMasterAddress.toLowerCase() + utils_1.defaultAbiCoder.encode(['address', 'uint256'], [token, lowestPrice]).substring(2);
         return enc;
     }
@@ -145,27 +200,28 @@ class EIP4337Lib {
      * @param initContract the init Contract
      * @param initArgs the init args
      * @param salt the salt number
-     * @param create2Factory create2factory address defined in EIP-2470
      * @returns
      */
-    static calculateWalletAddressByCode(initContract, initArgs, salt, create2Factory) {
+    calculateWalletAddressByCode(initContract, initArgs, salt) {
         const factory = new ethers_1.ethers.ContractFactory(initContract.ABI, initContract.bytecode);
         const initCodeWithArgs = factory.getDeployTransaction(initArgs).data;
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
-        return EIP4337Lib.calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory);
+        return this.calculateWalletAddressByCodeHash(initCodeHash, salt);
     }
-    static number2Bytes32(num) {
+    number2Bytes32(num) {
+        if (num === undefined) {
+            return bytes32_1.bytes32_zero;
+        }
         return (0, utils_1.hexZeroPad)((0, utils_1.hexlify)(num), 32);
     }
     /**
      * calculate EIP-4337 wallet address
      * @param initCodeHash the init code after keccak256
      * @param salt the salt number
-     * @param create2Factory create2factory address defined in EIP-2470
      * @returns the EIP-4337 wallet address
      */
-    static calculateWalletAddressByCodeHash(initCodeHash, salt, create2Factory) {
-        return (0, utils_1.getCreate2Address)(create2Factory, EIP4337Lib.number2Bytes32(salt), initCodeHash);
+    calculateWalletAddressByCodeHash(initCodeHash, salt) {
+        return (0, utils_1.getCreate2Address)(this._singletonFactory, this.number2Bytes32(salt), initCodeHash);
     }
     /**
      * get nonce number from contract wallet
@@ -174,7 +230,7 @@ class EIP4337Lib {
      * @param defaultBlock "earliest", "latest" and "pending"
      * @returns the next nonce number
      */
-    static getNonce(walletAddress, etherProvider, defaultBlock = 'latest') {
+    getNonce(walletAddress, etherProvider, defaultBlock = 'latest') {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const code = yield etherProvider.getCode(walletAddress, defaultBlock);
@@ -199,31 +255,8 @@ class EIP4337Lib {
         });
     }
 }
-exports.EIP4337Lib = EIP4337Lib;
-EIP4337Lib.Utils = {
-    getNonce: EIP4337Lib.getNonce,
-    DecodeCallData: decodeCallData_1.DecodeCallData,
-    fromTransaction: converter_1.Converter.fromTransaction,
-    suggestedGasFee: gasFee_1.CodefiGasFees,
-    tokenAndPaymaster: tokenAndPaymaster_1.TokenAndPaymaster
-};
-EIP4337Lib.Defines = {
-    AddressZero: address_1.AddressZero
-};
-EIP4337Lib.Guardian = Guardian_1.Guardian;
-EIP4337Lib.Tokens = {
-    ERC20: Token_1.ERC20,
-    ERC721: Token_1.ERC721,
-    ERC1155: Token_1.ERC1155,
-    ETH: Token_1.ETH,
-};
-EIP4337Lib.RPC = {
-    eth_sendUserOperation: rpc_1.RPC.eth_sendUserOperation,
-    eth_supportedEntryPoints: rpc_1.RPC.eth_supportedEntryPoints,
-    waitUserOperation: rpc_1.RPC.waitUserOperation,
-    simulateValidation: rpc_1.RPC.simulateValidation,
-    simulateHandleOp: rpc_1.RPC.simulateHandleOp,
-};
+exports.SoulWalletLib = SoulWalletLib;
+SoulWalletLib.Defines = addressDefine;
 var userOperation_2 = require("../entity/userOperation");
 Object.defineProperty(exports, "UserOperation", { enumerable: true, get: function () { return userOperation_2.UserOperation; } });
-//# sourceMappingURL=EIP4337Lib.js.map
+//# sourceMappingURL=soulWalletLib.js.map

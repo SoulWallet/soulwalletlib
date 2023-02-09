@@ -8,6 +8,10 @@ export interface ITransaction {
     to: string;
     value: string;
 }
-export declare class Converter {
-    static fromTransaction(etherProvider: ethers.providers.BaseProvider, entryPointAddress: string, transcation: ITransaction, nonce?: number, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string): Promise<UserOperation | null>;
+export interface IConverter {
+    fromTransaction(etherProvider: ethers.providers.BaseProvider, entryPointAddress: string, transcation: ITransaction, nonce: number, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, paymasterAndData: string): Promise<UserOperation | null>;
+}
+export declare class Converter implements IConverter {
+    constructor();
+    fromTransaction(etherProvider: ethers.providers.BaseProvider, entryPointAddress: string, transcation: ITransaction, nonce?: number, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string): Promise<UserOperation | null>;
 }
