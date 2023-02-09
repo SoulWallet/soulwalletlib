@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2022-12-23 19:46:07
+ * @LastEditTime: 2023-02-09 18:43:58
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -20,9 +20,24 @@ export interface ITransaction {
     value: string;
 }
 
-export class Converter {
+export interface IConverter {
+    fromTransaction(
+        etherProvider: ethers.providers.BaseProvider,
+        entryPointAddress: string,
+        transcation: ITransaction,
+        nonce: number,
+        maxFeePerGas: NumberLike,
+        maxPriorityFeePerGas: NumberLike,
+        paymasterAndData: string
+    ): Promise<UserOperation | null>;
+}
 
-    public static async fromTransaction(
+export class Converter implements IConverter {
+
+    constructor() {
+    }
+
+    public async fromTransaction(
         etherProvider: ethers.providers.BaseProvider,
         entryPointAddress: string,
         transcation: ITransaction,

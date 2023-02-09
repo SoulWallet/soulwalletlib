@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2022-12-23 19:46:07
+ * @LastEditTime: 2023-02-09 18:43:58
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -22,7 +22,9 @@ const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
 const ethers_1 = require("ethers");
 class Converter {
-    static fromTransaction(etherProvider, entryPointAddress, transcation, nonce = 0, maxFeePerGas = 0, maxPriorityFeePerGas = 0, paymasterAndData = "0x") {
+    constructor() {
+    }
+    fromTransaction(etherProvider, entryPointAddress, transcation, nonce = 0, maxFeePerGas = 0, maxPriorityFeePerGas = 0, paymasterAndData = "0x") {
         return __awaiter(this, void 0, void 0, function* () {
             const op = new userOperation_1.UserOperation();
             op.sender = transcation.from;

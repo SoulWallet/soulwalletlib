@@ -1,3 +1,3 @@
-import { EIP4337Lib } from './exportLib/EIP4337Lib';
+import { SoulWalletLib } from './exportLib/soulWalletLib';
 import { UserOperation } from "./entity/userOperation";
-export { EIP4337Lib, UserOperation };
+export { SoulWalletLib, UserOperation };

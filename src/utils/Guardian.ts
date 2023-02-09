@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 16:42:50
+ * @LastEditTime: 2023-02-09 18:41:12
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -15,11 +15,18 @@ import { WalletProxyContract } from "../contracts/walletProxy";
 import { defaultAbiCoder, getCreate2Address, keccak256 } from "ethers/lib/utils";
 import { AddressZero } from "../defines/address";
 import { NumberLike, toNumber } from "../defines/numberLike";
+import { SignatureMode } from "./userOp";
 
 
 export class Guardian {
 
-    private static getInitializeData(guardians: string[], threshold: number) {
+    private _singletonFactory: string;
+
+    constructor(singletonFactory: string) {
+        this._singletonFactory = singletonFactory;
+    }
+
+    private getInitializeData(guardians: string[], threshold: number) {
         // function initialize(address[] calldata _guardians, uint16 _threshold)
         // order by guardians asc
         // For user experience, guardian cannot rely on the order of address
@@ -40,19 +47,76 @@ export class Guardian {
         return initializeData;
     }
 
-    private static getGuardianCode(guardianLogicAddress: string, guardians: string[], threshold: number): string {
-        const initializeData = Guardian.getInitializeData(guardians, threshold);
+    private getGuardianCode(guardianLogicAddress: string, guardians: string[], threshold: number): string {
+        const initializeData = this.getInitializeData(guardians, threshold);
         const factory = new ethers.ContractFactory(WalletProxyContract.ABI, WalletProxyContract.bytecode);
         const walletBytecode = factory.getDeployTransaction(guardianLogicAddress, initializeData).data;
         return walletBytecode as string;
     }
 
-    private static getPackedInitCode(create2Factory: string, initCode: string, salt: string) {
+    private getPackedInitCode(create2Factory: string, initCode: string, salt: string) {
         const abi = { "inputs": [{ "internalType": "bytes", "name": "_initCode", "type": "bytes" }, { "internalType": "bytes32", "name": "_salt", "type": "bytes32" }], "name": "deploy", "outputs": [{ "internalType": "address payable", "name": "createdContract", "type": "address" }], "stateMutability": "nonpayable", "type": "function" };
         let iface = new ethers.utils.Interface([abi]);
         let packedInitCode = iface.encodeFunctionData("deploy", [initCode, salt]).substring(2);
         return create2Factory.toLowerCase() + packedInitCode;
     }
+
+
+
+    /**
+     * sign a user operation with guardian signatures
+     * @param signatures guardian signatures  
+     * @param guardianLogicAddress guardian logic contract address
+     * @param guardians guardian addresses
+     * @param threshold threshold
+     * @param salt salt
+     * @param guardianAddress guardian contract address,if provided will check if equal to the calculated guardian address
+     * @returns signature
+     */
+    public packGuardiansSign(
+        deadline: number,
+        signature: guardianSignature[],
+        guardianLogicAddress: string, guardians: string[],
+        threshold: number, salt: string,
+        guardianAddress?: string
+    ): string {
+        const guardianData = this.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt);
+        if (guardianAddress) {
+            if (guardianData.address != guardianAddress) {
+                throw new Error('guardianAddress is not equal to the calculated guardian address');
+            }
+        }
+        return this.packGuardiansSignByInitCode(guardianData.address, signature, deadline, guardianData.initCode);
+    }
+
+
+
+    /**
+     * sign a user operation with guardian signatures
+     * @param guardianAddress guardian contract address
+     * @param signatures guardian signatures
+     * @param deadline deadline (block time), default 0
+     * @param initCode intiCode must given when the guardian contract is not deployed
+     * @returns 
+     */
+    public packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], deadline = 0, initCode = '0x'
+    ): string {
+
+        const signatureBytes = this.guardianSign(signature);
+
+        const guardianCallData = defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
+        const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'],
+            [
+                SignatureMode.guardian,
+                guardianAddress,
+                deadline,
+                guardianCallData
+            ]
+        );
+        return enc;
+    }
+
+
 
     /**
      * calculate Guardian address and deploy code (initCode)
@@ -63,23 +127,23 @@ export class Guardian {
      * @param create2Factory create2 factory address
      * @returns 
      */
-    public static calculateGuardianAndInitCode(guardianLogicAddress: string, guardians: string[], threshold: number, salt: string, create2Factory: string) {
+    public calculateGuardianAndInitCode(guardianLogicAddress: string, guardians: string[], threshold: number, salt: string) {
         // check if salt is bytes32 (length 66, starts with 0x, and is hex(0-9 a-f))
         if (/^0x[a-f0-9]{64}$/.test(salt) === false) {
             // salt to bytes32
             salt = keccak256(defaultAbiCoder.encode(['string'], [salt]));
         }
-        const initCodeWithArgs = Guardian.getGuardianCode(guardianLogicAddress, guardians, threshold);
+        const initCodeWithArgs = this.getGuardianCode(guardianLogicAddress, guardians, threshold);
         const initCodeHash = keccak256(initCodeWithArgs);
-        const address = getCreate2Address(create2Factory, salt, initCodeHash);
-        const initCode = Guardian.getPackedInitCode(create2Factory, initCodeWithArgs, salt);
+        const address = getCreate2Address(this._singletonFactory, salt, initCodeHash);
+        const initCode = this.getPackedInitCode(this._singletonFactory, initCodeWithArgs, salt);
         return {
             address,
             initCode
         };
     }
 
-    private static walletContract(etherProvider: ethers.providers.BaseProvider, walletAddress: string) {
+    private walletContract(etherProvider: ethers.providers.BaseProvider, walletAddress: string) {
         return new ethers.Contract(walletAddress, SimpleWalletContract.ABI, etherProvider);
     }
 
@@ -91,8 +155,8 @@ export class Guardian {
      * @param now current timestamp ( 0: use current timestamp, >0:unix timestamp  )
      * @returns (currentGuardian, guardianDelay)
      */
-    public static async getGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, now: number = 0) {
-        const walletContract = Guardian.walletContract(etherProvider, walletAddress);
+    public async getGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, now: number = 0) {
+        const walletContract = this.walletContract(etherProvider, walletAddress);
 
         const result = await etherProvider.call({
             from: AddressZero,
@@ -125,7 +189,7 @@ export class Guardian {
     }
 
 
-    private static async _guardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number,
+    private async _guardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number,
         entryPointAddress: string, paymasterAndData: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callData: string) {
 
@@ -156,7 +220,7 @@ export class Guardian {
      * @param maxPriorityFeePerGas
      * @returns userOperation
      */
-    public static async setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string,
+    public async setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string,
         nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike) {
         guardian = ethers.utils.getAddress(guardian);
 
@@ -169,7 +233,7 @@ export class Guardian {
 
 
 
-    public static async transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
+    public async transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: number, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string) {
         newOwner = ethers.utils.getAddress(newOwner);
@@ -187,7 +251,7 @@ export class Guardian {
         return op;
     }
 
-    public static guardianSign(
+    public guardianSign(
         signature: guardianSignature[]
     ): string {
         if (signature.length === 0) {
