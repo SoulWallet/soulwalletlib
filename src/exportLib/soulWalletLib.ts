@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 18:44:06
+ * @LastEditTime: 2023-02-10 15:44:59
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder } from "ethers/lib/utils";
@@ -39,12 +39,10 @@ export class SoulWalletLib {
 
     public Guardian: Guardian;
 
-    public Tokens;
-
 
     constructor(singletonFactory?: string) {
         singletonFactory = singletonFactory || SingletonFactoryAddress;
-        
+
         this._singletonFactory = singletonFactory;
         this._deployFactory = new DeployFactory(singletonFactory);
 
@@ -57,13 +55,6 @@ export class SoulWalletLib {
             fromTransaction: new Converter().fromTransaction
         }
 
-        this.Tokens = {
-            ERC1155: new ERC1155(this._singletonFactory),
-            ERC20: new ERC20(this._singletonFactory),
-            ERC721: new ERC721(this._singletonFactory),
-            ETH: new ETH(this._singletonFactory)
-        }
-
         this.Guardian = new Guardian(this._singletonFactory);
 
     }
@@ -72,7 +63,14 @@ export class SoulWalletLib {
         return this._singletonFactory;
     }
 
+
     public Bundler = Bundler;
+    public Tokens = {
+        ERC1155: new ERC1155(),
+        ERC20: new ERC20(),
+        ERC721: new ERC721(),
+        ETH: new ETH()
+    };
 
 
     /**

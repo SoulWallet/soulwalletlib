@@ -23,15 +23,15 @@ export declare class SoulWalletLib {
     };
     static Defines: typeof addressDefine;
     Guardian: Guardian;
+    constructor(singletonFactory?: string);
+    get singletonFactory(): string;
+    Bundler: typeof Bundler;
     Tokens: {
         ERC1155: ERC1155;
         ERC20: ERC20;
         ERC721: ERC721;
         ETH: ETH;
     };
-    constructor(singletonFactory?: string);
-    get singletonFactory(): string;
-    Bundler: typeof Bundler;
     /**
      *
      * @param entryPointAddress the entryPoint address

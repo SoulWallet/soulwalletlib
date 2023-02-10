@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 18:44:06
+ * @LastEditTime: 2023-02-10 15:44:59
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -62,6 +62,12 @@ const address_1 = require("../defines/address");
 class SoulWalletLib {
     constructor(singletonFactory) {
         this.Bundler = bundler_1.Bundler;
+        this.Tokens = {
+            ERC1155: new token_1.ERC1155(),
+            ERC20: new token_1.ERC20(),
+            ERC721: new token_1.ERC721(),
+            ETH: new token_1.ETH()
+        };
         singletonFactory = singletonFactory || address_1.SingletonFactoryAddress;
         this._singletonFactory = singletonFactory;
         this._deployFactory = new deployFactory_1.DeployFactory(singletonFactory);
@@ -72,12 +78,6 @@ class SoulWalletLib {
             tokenAndPaymaster: tokenAndPaymaster_1.TokenAndPaymaster,
             deployFactory: this._deployFactory,
             fromTransaction: new converter_1.Converter().fromTransaction
-        };
-        this.Tokens = {
-            ERC1155: new token_1.ERC1155(this._singletonFactory),
-            ERC20: new token_1.ERC20(this._singletonFactory),
-            ERC721: new token_1.ERC721(this._singletonFactory),
-            ETH: new token_1.ETH(this._singletonFactory)
         };
         this.Guardian = new guardian_1.Guardian(this._singletonFactory);
     }

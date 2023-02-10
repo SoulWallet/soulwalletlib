@@ -6,7 +6,7 @@ export declare class Token {
 }
 export declare class ERC20 {
     private _token;
-    constructor(singletonFactory: string);
+    constructor();
     private getContract;
     approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _value: string): Promise<UserOperation | null>;
     getApproveCallData(etherProvider: ethers.providers.BaseProvider, walletAddress: string, _token: string, _spender: string, _value: string): Promise<{
@@ -18,7 +18,7 @@ export declare class ERC20 {
 }
 export declare class ERC721 {
     private _token;
-    constructor(singletonFactory: string);
+    constructor();
     private getContract;
     approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _tokenId: string): Promise<UserOperation | null>;
     transferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _tokenId: string): Promise<UserOperation | null>;
@@ -28,7 +28,7 @@ export declare class ERC721 {
 }
 export declare class ERC1155 {
     private _token;
-    constructor(singletonFactory: string);
+    constructor();
     private getContract;
     safeTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _id: string, _value: string, _data: string): Promise<UserOperation | null>;
     safeBatchTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _ids: string, _values: string, _data: string): Promise<UserOperation | null>;
@@ -36,6 +36,6 @@ export declare class ERC1155 {
 }
 export declare class ETH {
     private _token;
-    constructor(singletonFactory: string);
-    transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: number, maxPriorityFeePerGas: number, to: string, value: string): Promise<UserOperation | null>;
+    constructor();
+    transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, to: string, value: string): Promise<UserOperation | null>;
 }

@@ -4,12 +4,11 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 18:42:50
+ * @LastEditTime: 2023-02-10 15:49:28
  */
 import { UserOperation } from "../entity/userOperation";
-import { SimpleWalletContract } from "../contracts/soulWallet";
-import { execFromEntryPoint, tokenApprove, ERC1155 as erc1155, ERC20 as erc20, ERC721 as erc721 } from "../defines/ABI";
-import { BigNumber, ethers } from "ethers";
+import { execFromEntryPoint, ERC1155 as erc1155, ERC20 as erc20, ERC721 as erc721 } from "../defines/ABI";
+import { ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 export class Token {
 
@@ -44,7 +43,7 @@ export class ERC20 {
 
     private _token;
 
-    constructor(singletonFactory: string) {
+    constructor() {
         this._token = new Token();
     }
 
@@ -97,7 +96,7 @@ export class ERC20 {
 export class ERC721 {
     private _token;
 
-    constructor(singletonFactory: string) {
+    constructor() {
         this._token = new Token();
     }
 
@@ -151,7 +150,7 @@ export class ERC721 {
 export class ERC1155 {
     private _token;
 
-    constructor(singletonFactory: string) {
+    constructor() {
         this._token = new Token();
     }
 
@@ -187,12 +186,12 @@ export class ERC1155 {
 export class ETH {
     private _token;
 
-    constructor(singletonFactory: string) {
+    constructor() {
         this._token = new Token();
     }
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: number, entryPointAddress: string, paymasterAddress: string,
-        maxFeePerGas: number, maxPriorityFeePerGas: number, to: string, value: string) {
+        maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, to: string, value: string) {
 
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, to, '0x', value);
     }

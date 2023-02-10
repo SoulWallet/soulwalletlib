@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 15:16:15
+ * @LastEditTime: 2023-02-10 16:22:32
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -68,7 +68,12 @@ class Bundler {
             });
             const rpcResp = response.data;
             if (rpcResp) {
-                return rpcResp.result;
+                if (rpcResp.result && !rpcResp.error) {
+                    return rpcResp.result;
+                }
+                else {
+                    throw rpcResp.error;
+                }
             }
             throw new Error('request error');
         });
@@ -139,14 +144,15 @@ class Bundler {
     }
     eth_sendUserOperation(userOp) {
         return __awaiter(this, void 0, void 0, function* () {
+            const params = [
+                JSON.parse(userOp.toJSON()),
+                this._entryPoint
+            ];
             return this._request({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_sendUserOperation',
-                params: [
-                    JSON.parse(userOp.toJSON()),
-                    this._entryPoint
-                ]
+                params
             });
         });
     }
@@ -176,7 +182,7 @@ class Bundler {
                 emitter.emit('error', error);
                 return;
             }
-            emitter.emit('bundlerAccept', userOpHash);
+            emitter.emit('send', userOpHash);
         });
     }
     sendUserOperation(userOp) {
