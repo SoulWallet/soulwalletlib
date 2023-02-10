@@ -16,7 +16,7 @@ exports.ETH = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.Token =
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 18:42:50
+ * @LastEditTime: 2023-02-10 15:49:28
  */
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
@@ -43,7 +43,7 @@ class Token {
 }
 exports.Token = Token;
 class ERC20 {
-    constructor(singletonFactory) {
+    constructor() {
         this._token = new Token();
     }
     getContract(etherProvider, contractAddress) {
@@ -87,7 +87,7 @@ class ERC20 {
 }
 exports.ERC20 = ERC20;
 class ERC721 {
-    constructor(singletonFactory) {
+    constructor() {
         this._token = new Token();
     }
     getContract(etherProvider, contractAddress) {
@@ -126,7 +126,7 @@ class ERC721 {
 }
 exports.ERC721 = ERC721;
 class ERC1155 {
-    constructor(singletonFactory) {
+    constructor() {
         this._token = new Token();
     }
     getContract(etherProvider, contractAddress) {
@@ -153,7 +153,7 @@ class ERC1155 {
 }
 exports.ERC1155 = ERC1155;
 class ETH {
-    constructor(singletonFactory) {
+    constructor() {
         this._token = new Token();
     }
     transfer(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, to, value) {

@@ -1,7 +1,46 @@
 /// <reference types="node" />
-import { ethers } from "ethers";
+import { ethers, BigNumber } from "ethers";
 import { UserOperation } from "../entity/userOperation";
 import EventEmitter from 'events';
+export interface IExecutionResult {
+    preOpGas: BigNumber;
+    paid: BigNumber;
+    deadline: BigNumber;
+    paymasterDeadline: BigNumber;
+}
+export interface IFailedOp {
+    opIndex: BigNumber;
+    paymaster: string;
+    reason: string;
+}
+export interface IReturnInfo {
+    preOpGas: BigNumber;
+    prefund: BigNumber;
+    deadline: BigNumber;
+    paymasterDeadline: BigNumber;
+    paymasterContext: string;
+}
+export interface IStakeInfo {
+    stake: BigNumber;
+    unstakeDelaySec: BigNumber;
+}
+export interface IValidationResult {
+    op: IReturnInfo;
+    senderInfo: IStakeInfo;
+    factoryInfo: IStakeInfo;
+    paymasterInfo: IStakeInfo;
+}
+export interface IResult {
+    /**
+     *
+     */
+    result?: IValidationResult | IFailedOp | IExecutionResult;
+    /**
+     * eg. "AA41 too little verificationGas"
+     * can not decode result | eth_call revert message
+     */
+    error?: string;
+}
 export declare class ApiTimeOut {
     web3ApiRequestTimeout: number;
     web3ApiResponseTimeout: number;
@@ -40,16 +79,9 @@ export declare class Bundler {
     private eth_getUserOperationByHash;
     private _sendUserOperation;
     sendUserOperation(userOp: UserOperation): EventEmitter;
-    simulateHandleOp(op: UserOperation): Promise<{
-        preOpGas: any;
-        paid: any;
-        deadline: any;
-        paymasterDeadline: any;
-    }>;
-    simulateValidation(op: UserOperation): Promise<{
-        op: any;
-        senderInfo: any;
-        factoryInfo: any;
-        paymasterInfo: any;
-    }>;
+    private decodeExecutionResult;
+    private decodeFailedOp;
+    private decodeValidationResult;
+    simulateHandleOp(op: UserOperation): Promise<IResult>;
+    simulateValidation(op: UserOperation): Promise<IResult>;
 }
