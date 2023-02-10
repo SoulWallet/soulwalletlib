@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 23:17:31
+ * @LastEditTime: 2023-02-10 10:54:04
  */
 
 
@@ -188,12 +188,10 @@ export class Bundler {
 
 
 
-    async simulateHandleOp(
-        entryPointAddress: string,
-        op: UserOperation) {
+    async simulateHandleOp(op: UserOperation) {
         const result = await this._etherProvider.call({
             from: AddressZero,
-            to: entryPointAddress,
+            to: this._entryPoint,
             data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
         });
         // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
@@ -221,11 +219,10 @@ export class Bundler {
     }
 
     async simulateValidation(
-        entryPointAddress: string,
         op: UserOperation) {
         const result = await this._etherProvider.call({
             from: AddressZero,
-            to: entryPointAddress,
+            to: this._entryPoint,
             data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
         });
         // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9

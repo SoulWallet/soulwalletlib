@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 23:17:31
+ * @LastEditTime: 2023-02-10 10:54:04
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -184,11 +184,11 @@ class Bundler {
         this._sendUserOperation(emitter, userOp);
         return emitter;
     }
-    simulateHandleOp(entryPointAddress, op) {
+    simulateHandleOp(op) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield this._etherProvider.call({
                 from: address_1.AddressZero,
-                to: entryPointAddress,
+                to: this._entryPoint,
                 data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
             });
             // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
@@ -209,11 +209,11 @@ class Bundler {
             throw new Error(result);
         });
     }
-    simulateValidation(entryPointAddress, op) {
+    simulateValidation(op) {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield this._etherProvider.call({
                 from: address_1.AddressZero,
-                to: entryPointAddress,
+                to: this._entryPoint,
                 data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
             });
             // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9
