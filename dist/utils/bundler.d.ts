@@ -40,13 +40,13 @@ export declare class Bundler {
     private eth_getUserOperationByHash;
     private _sendUserOperation;
     sendUserOperation(userOp: UserOperation): EventEmitter;
-    simulateHandleOp(entryPointAddress: string, op: UserOperation): Promise<{
+    simulateHandleOp(op: UserOperation): Promise<{
         preOpGas: any;
         paid: any;
         deadline: any;
         paymasterDeadline: any;
     }>;
-    simulateValidation(entryPointAddress: string, op: UserOperation): Promise<{
+    simulateValidation(op: UserOperation): Promise<{
         op: any;
         senderInfo: any;
         factoryInfo: any;
