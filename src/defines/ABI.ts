@@ -4,13 +4,17 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-19 17:38:12
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 11:33:28
+ * @LastEditTime: 2023-02-10 15:24:12
  */
 
 import { ContractInterface } from 'ethers';
 import { JsonFragment, Fragment } from '@ethersproject/abi'
 
 const execFromEntryPoint = ["function execFromEntryPoint(address dest,uint256 value,bytes func)"];
+//execFromEntryPoint(address[],uint256[],bytes[])	0x2763604f
+const execBatchFromEntryPoint = ["function execFromEntryPoint(address[] dest,uint256[] value,bytes[] func)"];
+
+
 const tokenApprove = ["function tokenApprove(address token,address spender,uint256 amount)"];
 
 const ERC20: JsonFragment[] = [
@@ -556,4 +560,4 @@ const ERC1155: JsonFragment[] = [
     }
 ];
 
-export { execFromEntryPoint, ERC20, ERC721, ERC1155, tokenApprove };
+export { execFromEntryPoint, execBatchFromEntryPoint, ERC20, ERC721, ERC1155, tokenApprove };

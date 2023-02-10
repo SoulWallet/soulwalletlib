@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 10:54:04
+ * @LastEditTime: 2023-02-10 15:16:15
  */
 
 
@@ -20,6 +20,67 @@ import { EntryPointContract } from '../contracts/entryPoint';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 
 
+export interface IExecutionResult {
+    preOpGas: BigNumber,
+    paid: BigNumber,
+    deadline: BigNumber,
+    paymasterDeadline: BigNumber
+}
+export interface IFailedOp {
+    opIndex: BigNumber;
+    paymaster: string;
+    reason: string;
+}
+
+
+export interface IReturnInfo {
+    /* 
+    struct ReturnInfo {
+        uint256 preOpGas;
+        uint256 prefund;
+        uint256 deadline;
+        uint256 paymasterDeadline;
+        bytes paymasterContext;
+    }
+    */
+    preOpGas: BigNumber,
+    prefund: BigNumber,
+    deadline: BigNumber,
+    paymasterDeadline: BigNumber,
+    paymasterContext: string
+}
+
+export interface IStakeInfo {
+    /* 
+     //API struct used by getStakeInfo and simulateValidation
+    struct StakeInfo {
+        uint256 stake;
+        uint256 unstakeDelaySec;
+    }
+    */
+    stake: BigNumber,
+    unstakeDelaySec: BigNumber
+}
+
+export interface IValidationResult {
+    op: IReturnInfo;
+    senderInfo: IStakeInfo;
+    factoryInfo: IStakeInfo;
+    paymasterInfo: IStakeInfo;
+}
+
+export interface IResult {
+    /**
+     * 
+     */
+    result?: IValidationResult | IFailedOp | IExecutionResult;
+
+    /**
+     * eg. "AA41 too little verificationGas" 
+     * can not decode result | eth_call revert message
+     */
+    error?: string;
+}
 
 export class ApiTimeOut {
     web3ApiRequestTimeout = 1000 * 10;
@@ -188,12 +249,8 @@ export class Bundler {
 
 
 
-    async simulateHandleOp(op: UserOperation) {
-        const result = await this._etherProvider.call({
-            from: AddressZero,
-            to: this._entryPoint,
-            data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
-        });
+
+    private decodeExecutionResult(result: string): IResult | null {
         // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
         if (result.startsWith('0xa30fd31e')) {
             const re = defaultAbiCoder.decode(
@@ -201,46 +258,100 @@ export class Bundler {
                 '0x' + result.substring(10)
             );
             return {
-                preOpGas: re[0],
-                paid: re[1],
-                deadline: re[2],
-                paymasterDeadline: re[3]
-            };
-        } else if (result.startsWith('0x00fa072b')) {
+                result: {
+                    preOpGas: re[0],
+                    paid: re[1],
+                    deadline: re[2],
+                    paymasterDeadline: re[3]
+                }
+            }
+        }
+        return null;
+    }
+
+    private decodeFailedOp(result: string): IResult | null {
+        //error FailedOp(uint256 opIndex, address paymaster, string reason)
+        if (result.startsWith('0x00fa072b')) {
             // FailedOp(uint256,address,string)
             const re = defaultAbiCoder.decode(
                 ['uint256', 'address', 'string'],
                 '0x' + result.substring(10)
             );
-            throw new Error(`FailedOp(${re[0]},${re[1]},${re[2]})`);
-        }
-        throw new Error(result);
-
+            const failedOp: IFailedOp = {
+                opIndex: re[0],
+                paymaster: re[1],
+                reason: re[2]
+            }
+            return {
+                result: failedOp
+            }
+        };
+        return null;
     }
 
-    async simulateValidation(
-        op: UserOperation) {
-        const result = await this._etherProvider.call({
-            from: AddressZero,
-            to: this._entryPoint,
-            data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
-        });
-        // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9
+
+    private decodeValidationResult(result: string): IResult | null {
+        // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9if (result.startsWith('0x3dd956e9')) {
         if (result.startsWith('0x3dd956e9')) {
             const re = defaultAbiCoder.decode(
                 ['(uint256,uint256,uint256,uint256,bytes)', '(uint256,uint256)', '(uint256,uint256)', '(uint256,uint256)'],
                 '0x' + result.substring(10)
             );
             return {
-                op: re[0],
-                senderInfo: re[1],
-                factoryInfo: re[2],
-                paymasterInfo: re[3],
+                result: {
+                    op: re[0],
+                    senderInfo: re[1],
+                    factoryInfo: re[2],
+                    paymasterInfo: re[3],
+                }
             };
 
-        } else {
-            throw new Error(`simulateValidation failed: ${result}`);
         }
+        return null;
+    }
+
+    async simulateHandleOp(op: UserOperation): Promise<IResult> {
+        try {
+            const result = await this._etherProvider.call({
+                from: AddressZero,
+                to: this._entryPoint,
+                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
+            });
+            let re = this.decodeExecutionResult(result);
+            if (re) return re;
+            re = this.decodeFailedOp(result);
+            if (re) return re;
+            return {
+                error: result
+            };
+        } catch (e: any) {
+            console.error(e);
+            return {
+                error: "call error"
+            };
+        }
+
+    }
+
+    async simulateValidation(op: UserOperation): Promise<IResult> {
+        try {
+            const result = await this._etherProvider.call({
+                from: AddressZero,
+                to: this._entryPoint,
+                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
+            });
+            let re = this.decodeValidationResult(result);
+            if (re) return re;
+            return {
+                error: result
+            };
+        } catch (e: any) {
+            console.error(e);
+            return {
+                error: "call error"
+            };
+        }
+
     }
 
 }

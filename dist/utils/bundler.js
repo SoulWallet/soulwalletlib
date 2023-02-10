@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 10:54:04
+ * @LastEditTime: 2023-02-10 15:16:15
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -184,50 +184,99 @@ class Bundler {
         this._sendUserOperation(emitter, userOp);
         return emitter;
     }
-    simulateHandleOp(op) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this._etherProvider.call({
-                from: address_1.AddressZero,
-                to: this._entryPoint,
-                data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
-            });
-            // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
-            if (result.startsWith('0xa30fd31e')) {
-                const re = utils_1.defaultAbiCoder.decode(['uint256', 'uint256', 'uint256', 'uint256'], '0x' + result.substring(10));
-                return {
+    decodeExecutionResult(result) {
+        // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
+        if (result.startsWith('0xa30fd31e')) {
+            const re = utils_1.defaultAbiCoder.decode(['uint256', 'uint256', 'uint256', 'uint256'], '0x' + result.substring(10));
+            return {
+                result: {
                     preOpGas: re[0],
                     paid: re[1],
                     deadline: re[2],
                     paymasterDeadline: re[3]
-                };
-            }
-            else if (result.startsWith('0x00fa072b')) {
-                // FailedOp(uint256,address,string)
-                const re = utils_1.defaultAbiCoder.decode(['uint256', 'address', 'string'], '0x' + result.substring(10));
-                throw new Error(`FailedOp(${re[0]},${re[1]},${re[2]})`);
-            }
-            throw new Error(result);
-        });
+                }
+            };
+        }
+        return null;
     }
-    simulateValidation(op) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this._etherProvider.call({
-                from: address_1.AddressZero,
-                to: this._entryPoint,
-                data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
-            });
-            // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9
-            if (result.startsWith('0x3dd956e9')) {
-                const re = utils_1.defaultAbiCoder.decode(['(uint256,uint256,uint256,uint256,bytes)', '(uint256,uint256)', '(uint256,uint256)', '(uint256,uint256)'], '0x' + result.substring(10));
-                return {
+    decodeFailedOp(result) {
+        //error FailedOp(uint256 opIndex, address paymaster, string reason)
+        if (result.startsWith('0x00fa072b')) {
+            // FailedOp(uint256,address,string)
+            const re = utils_1.defaultAbiCoder.decode(['uint256', 'address', 'string'], '0x' + result.substring(10));
+            const failedOp = {
+                opIndex: re[0],
+                paymaster: re[1],
+                reason: re[2]
+            };
+            return {
+                result: failedOp
+            };
+        }
+        ;
+        return null;
+    }
+    decodeValidationResult(result) {
+        // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9if (result.startsWith('0x3dd956e9')) {
+        if (result.startsWith('0x3dd956e9')) {
+            const re = utils_1.defaultAbiCoder.decode(['(uint256,uint256,uint256,uint256,bytes)', '(uint256,uint256)', '(uint256,uint256)', '(uint256,uint256)'], '0x' + result.substring(10));
+            return {
+                result: {
                     op: re[0],
                     senderInfo: re[1],
                     factoryInfo: re[2],
                     paymasterInfo: re[3],
+                }
+            };
+        }
+        return null;
+    }
+    simulateHandleOp(op) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this._etherProvider.call({
+                    from: address_1.AddressZero,
+                    to: this._entryPoint,
+                    data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
+                });
+                let re = this.decodeExecutionResult(result);
+                if (re)
+                    return re;
+                re = this.decodeFailedOp(result);
+                if (re)
+                    return re;
+                return {
+                    error: result
                 };
             }
-            else {
-                throw new Error(`simulateValidation failed: ${result}`);
+            catch (e) {
+                console.error(e);
+                return {
+                    error: "call error"
+                };
+            }
+        });
+    }
+    simulateValidation(op) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this._etherProvider.call({
+                    from: address_1.AddressZero,
+                    to: this._entryPoint,
+                    data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
+                });
+                let re = this.decodeValidationResult(result);
+                if (re)
+                    return re;
+                return {
+                    error: result
+                };
+            }
+            catch (e) {
+                console.error(e);
+                return {
+                    error: "call error"
+                };
             }
         });
     }

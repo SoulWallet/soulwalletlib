@@ -5,12 +5,15 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-19 17:38:12
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 11:33:28
+ * @LastEditTime: 2023-02-10 15:24:12
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.tokenApprove = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.execFromEntryPoint = void 0;
+exports.tokenApprove = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.execBatchFromEntryPoint = exports.execFromEntryPoint = void 0;
 const execFromEntryPoint = ["function execFromEntryPoint(address dest,uint256 value,bytes func)"];
 exports.execFromEntryPoint = execFromEntryPoint;
+//execFromEntryPoint(address[],uint256[],bytes[])	0x2763604f
+const execBatchFromEntryPoint = ["function execFromEntryPoint(address[] dest,uint256[] value,bytes[] func)"];
+exports.execBatchFromEntryPoint = execBatchFromEntryPoint;
 const tokenApprove = ["function tokenApprove(address token,address spender,uint256 amount)"];
 exports.tokenApprove = tokenApprove;
 const ERC20 = [
