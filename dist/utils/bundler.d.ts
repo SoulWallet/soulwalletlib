@@ -31,6 +31,7 @@ export interface IValidationResult {
     paymasterInfo: IStakeInfo;
 }
 export interface IResult {
+    status: number;
     /**
      *
      */
@@ -78,6 +79,11 @@ export declare class Bundler {
     private eth_getUserOperationReceipt;
     private eth_getUserOperationByHash;
     private _sendUserOperation;
+    /**
+     *
+     * @param userOp
+     * @returns emitter event: send, error, receipt
+     */
     sendUserOperation(userOp: UserOperation): EventEmitter;
     private decodeExecutionResult;
     private decodeFailedOp;

@@ -4,11 +4,10 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 18:43:26
+ * @LastEditTime: 2023-02-11 13:02:33
  */
 
 
-import axios from 'axios';
 import { ethers, BigNumber } from "ethers";
 
 import { UserOperation } from "../entity/userOperation";
@@ -18,6 +17,7 @@ import EventEmitter from 'events';
 import { AddressZero } from '../defines/address';
 import { EntryPointContract } from '../contracts/entryPoint';
 import { defaultAbiCoder } from 'ethers/lib/utils';
+import { HttpRequest } from './httpRequest';
 
 
 export interface IExecutionResult {
@@ -70,6 +70,7 @@ export interface IValidationResult {
 }
 
 export interface IResult {
+    status: number;
     /**
      * 
      */
@@ -112,6 +113,7 @@ export class Bundler {
         }
     }
 
+
     private async _request<T1, T2>(data: IRPCRequest<T1>, timeout?: number): Promise<T2> {
         if (!this._bundlerApi) {
             throw new Error('bundlerApi is not set');
@@ -119,11 +121,9 @@ export class Bundler {
         if (typeof timeout === 'undefined') {
             timeout = this._timeout.web3ApiRequestTimeout;
         }
-        let response = await axios.post(this._bundlerApi, data, {
-            timeout
-        });
-        const rpcResp = response.data as IRPCResponse<T2>;
-        if (rpcResp) {
+        let response = await HttpRequest.post(this._bundlerApi, data, timeout);
+        if (response) {
+            const rpcResp = response as IRPCResponse<T2>;
             if (rpcResp.result && !rpcResp.error) {
                 return rpcResp.result;
             } else {
@@ -247,6 +247,11 @@ export class Bundler {
 
     }
 
+    /**
+     * 
+     * @param userOp 
+     * @returns emitter event: send, error, receipt
+     */
     public sendUserOperation(userOp: UserOperation) {
         const emitter = new EventEmitter();
         this._sendUserOperation(emitter, userOp);
@@ -264,6 +269,7 @@ export class Bundler {
                 '0x' + result.substring(10)
             );
             return {
+                status: 0,
                 result: {
                     preOpGas: re[0],
                     paid: re[1],
@@ -289,6 +295,7 @@ export class Bundler {
                 reason: re[2]
             }
             return {
+                status: 1,
                 result: failedOp
             }
         };
@@ -304,6 +311,7 @@ export class Bundler {
                 '0x' + result.substring(10)
             );
             return {
+                status: 0,
                 result: {
                     op: re[0],
                     senderInfo: re[1],
@@ -328,11 +336,13 @@ export class Bundler {
             re = this.decodeFailedOp(result);
             if (re) return re;
             return {
+                status: 2,
                 error: result
             };
         } catch (e: any) {
             console.error(e);
             return {
+                status: 3,
                 error: "call error"
             };
         }
@@ -351,11 +361,13 @@ export class Bundler {
             re = this.decodeFailedOp(result);
             if (re) return re;
             return {
+                status: 4,
                 error: result
             };
         } catch (e: any) {
             console.error(e);
             return {
+                status: 5,
                 error: "call error"
             };
         }

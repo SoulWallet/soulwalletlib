@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserOp = exports.SignatureMode = void 0;
 const utils_1 = require("ethers/lib/utils");
 const ethereumjs_util_1 = require("ethereumjs-util");
-const userOperation_1 = require("../entity/userOperation");
 const ethers_1 = require("ethers");
 var SignatureMode;
 (function (SignatureMode) {
@@ -22,8 +21,20 @@ class UserOp {
         const values = typevalues.map((typevalue) => typevalue.type === 'bytes' && forSignature ? (0, utils_1.keccak256)(typevalue.val) : typevalue.val);
         return utils_1.defaultAbiCoder.encode(types, values);
     }
-    packUserOp(op, forSignature = true) {
-        op = userOperation_1.UserOperation.fromJSON(op.toJSON());
+    packUserOp(_op, forSignature = true) {
+        const op = {
+            sender: _op.sender,
+            nonce: ethers_1.BigNumber.from(_op.nonce),
+            initCode: _op.initCode,
+            callData: _op.callData,
+            callGasLimit: ethers_1.BigNumber.from(_op.callGasLimit),
+            verificationGasLimit: ethers_1.BigNumber.from(_op.verificationGasLimit),
+            preVerificationGas: ethers_1.BigNumber.from(_op.preVerificationGas),
+            maxFeePerGas: ethers_1.BigNumber.from(_op.maxFeePerGas),
+            maxPriorityFeePerGas: ethers_1.BigNumber.from(_op.maxPriorityFeePerGas),
+            paymasterAndData: _op.paymasterAndData,
+            signature: "0x"
+        };
         if (forSignature) {
             // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
             const userOpType = {
@@ -43,7 +54,7 @@ class UserOp {
                 name: 'userOp',
                 type: 'tuple'
             };
-            let encoded = utils_1.defaultAbiCoder.encode([userOpType], [Object.assign(Object.assign({}, op), { signature: '0x' })]);
+            let encoded = utils_1.defaultAbiCoder.encode([userOpType], [op]);
             // remove leading word (total length) and trailing word (zero-length signature)
             encoded = '0x' + encoded.slice(66, encoded.length - 64);
             return encoded;

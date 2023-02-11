@@ -4,10 +4,11 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-02 22:38:58
  * @LastEditors: cejay
- * @LastEditTime: 2022-12-09 15:35:00
+ * @LastEditTime: 2023-02-11 13:01:29
  */
-import axios from 'axios';
+
 import { ethers } from "ethers";
+import {HttpRequest} from './httpRequest';
 
 export class DecodeCallData {
     private static instance: DecodeCallData;
@@ -134,14 +135,15 @@ export class DecodeCallData {
                 return method;
             }
             const url = `https://www.4byte.directory/api/v1/signatures/?hex_signature=${bytes4}`;
-            const response = await axios.get(url);
-            if (response && response.data && response.data.count &&
-                response.data.results && typeof (response.data.count) === 'number' &&
-                typeof (response.data.results) === 'object' && response.data.results.length > 0 &&
-                typeof (response.data.results[0].text_signature) === 'string'
+            // http get url
+            const response = await HttpRequest.get(url);
+            if (response && response.count &&
+                response.results && typeof (response.count) === 'number' &&
+                typeof (response.results) === 'object' && response.results.length > 0 &&
+                typeof (response.results[0].text_signature) === 'string'
             ) {
                 //watch_tg_invmru_10b052bb(bool,address,bool)
-                const text_signature = response.data.results[0].text_signature;
+                const text_signature = response.results[0].text_signature;
                 await this.saveToStorage(bytes4, text_signature);
                 return text_signature;
             }

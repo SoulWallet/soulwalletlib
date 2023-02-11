@@ -8,9 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CodefiGasFees = void 0;
 /*
@@ -19,9 +16,9 @@ exports.CodefiGasFees = void 0;
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-12-28 20:46:15
  * @LastEditors: cejay
- * @LastEditTime: 2022-12-28 21:01:27
+ * @LastEditTime: 2023-02-11 12:46:59
  */
-const axios_1 = __importDefault(require("axios"));
+const httpRequest_1 = require("./httpRequest");
 class CodefiGasFees {
     /*
     https://gas-api.metaswap.codefi.network/networks/1/suggestedGasFees
@@ -30,9 +27,10 @@ class CodefiGasFees {
     static getEIP1559GasFees(chainId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield axios_1.default.get(`https://gas-api.metaswap.codefi.network/networks/${chainId}/suggestedGasFees`);
-                if (response.status === 200) {
-                    const gas = response.data;
+                const url = `https://gas-api.metaswap.codefi.network/networks/${chainId}/suggestedGasFees`;
+                const response = yield httpRequest_1.HttpRequest.get(url);
+                if (response) {
+                    const gas = response;
                     if (gas) {
                         return gas;
                     }
@@ -47,9 +45,10 @@ class CodefiGasFees {
     static getLegacyGasPrices(chainId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield axios_1.default.get(`https://gas-api.metaswap.codefi.network/networks/${chainId}/gasPrices`);
-                if (response.status === 200) {
-                    const gas = response.data;
+                const url = `https://gas-api.metaswap.codefi.network/networks/${chainId}/gasPrices`;
+                const response = yield httpRequest_1.HttpRequest.get(url);
+                if (response) {
+                    const gas = response;
                     if (gas) {
                         return gas;
                     }

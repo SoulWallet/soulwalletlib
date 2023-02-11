@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 18:43:26
+ * @LastEditTime: 2023-02-11 13:02:33
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -21,12 +21,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bundler = exports.ApiTimeOut = void 0;
-const axios_1 = __importDefault(require("axios"));
 const ethers_1 = require("ethers");
 const events_1 = __importDefault(require("events"));
 const address_1 = require("../defines/address");
 const entryPoint_1 = require("../contracts/entryPoint");
 const utils_1 = require("ethers/lib/utils");
+const httpRequest_1 = require("./httpRequest");
 class ApiTimeOut {
     constructor() {
         this.web3ApiRequestTimeout = 1000 * 10;
@@ -63,11 +63,9 @@ class Bundler {
             if (typeof timeout === 'undefined') {
                 timeout = this._timeout.web3ApiRequestTimeout;
             }
-            let response = yield axios_1.default.post(this._bundlerApi, data, {
-                timeout
-            });
-            const rpcResp = response.data;
-            if (rpcResp) {
+            let response = yield httpRequest_1.HttpRequest.post(this._bundlerApi, data, timeout);
+            if (response) {
+                const rpcResp = response;
                 if (rpcResp.result && !rpcResp.error) {
                     return rpcResp.result;
                 }
@@ -185,6 +183,11 @@ class Bundler {
             emitter.emit('send', userOpHash);
         });
     }
+    /**
+     *
+     * @param userOp
+     * @returns emitter event: send, error, receipt
+     */
     sendUserOperation(userOp) {
         const emitter = new events_1.default();
         this._sendUserOperation(emitter, userOp);
@@ -195,6 +198,7 @@ class Bundler {
         if (result.startsWith('0xa30fd31e')) {
             const re = utils_1.defaultAbiCoder.decode(['uint256', 'uint256', 'uint256', 'uint256'], '0x' + result.substring(10));
             return {
+                status: 0,
                 result: {
                     preOpGas: re[0],
                     paid: re[1],
@@ -216,6 +220,7 @@ class Bundler {
                 reason: re[2]
             };
             return {
+                status: 1,
                 result: failedOp
             };
         }
@@ -227,6 +232,7 @@ class Bundler {
         if (result.startsWith('0x3dd956e9')) {
             const re = utils_1.defaultAbiCoder.decode(['(uint256,uint256,uint256,uint256,bytes)', '(uint256,uint256)', '(uint256,uint256)', '(uint256,uint256)'], '0x' + result.substring(10));
             return {
+                status: 0,
                 result: {
                     op: re[0],
                     senderInfo: re[1],
@@ -252,12 +258,14 @@ class Bundler {
                 if (re)
                     return re;
                 return {
+                    status: 2,
                     error: result
                 };
             }
             catch (e) {
                 console.error(e);
                 return {
+                    status: 3,
                     error: "call error"
                 };
             }
@@ -278,12 +286,14 @@ class Bundler {
                 if (re)
                     return re;
                 return {
+                    status: 4,
                     error: result
                 };
             }
             catch (e) {
                 console.error(e);
                 return {
+                    status: 5,
                     error: "call error"
                 };
             }
