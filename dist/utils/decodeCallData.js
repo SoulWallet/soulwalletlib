@@ -1,4 +1,12 @@
 "use strict";
+/*
+ * @Description:
+ * @Version: 1.0
+ * @Autor: z.cejay@gmail.com
+ * @Date: 2022-09-02 22:38:58
+ * @LastEditors: cejay
+ * @LastEditTime: 2023-02-11 13:01:29
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,21 +16,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DecodeCallData = void 0;
-/*
- * @Description:
- * @Version: 1.0
- * @Autor: z.cejay@gmail.com
- * @Date: 2022-09-02 22:38:58
- * @LastEditors: cejay
- * @LastEditTime: 2022-12-09 15:35:00
- */
-const axios_1 = __importDefault(require("axios"));
 const ethers_1 = require("ethers");
+const httpRequest_1 = require("./httpRequest");
 class DecodeCallData {
     constructor() {
         this.bytes4Methods = new Map();
@@ -145,13 +142,14 @@ class DecodeCallData {
                     return method;
                 }
                 const url = `https://www.4byte.directory/api/v1/signatures/?hex_signature=${bytes4}`;
-                const response = yield axios_1.default.get(url);
-                if (response && response.data && response.data.count &&
-                    response.data.results && typeof (response.data.count) === 'number' &&
-                    typeof (response.data.results) === 'object' && response.data.results.length > 0 &&
-                    typeof (response.data.results[0].text_signature) === 'string') {
+                // http get url
+                const response = yield httpRequest_1.HttpRequest.get(url);
+                if (response && response.count &&
+                    response.results && typeof (response.count) === 'number' &&
+                    typeof (response.results) === 'object' && response.results.length > 0 &&
+                    typeof (response.results[0].text_signature) === 'string') {
                     //watch_tg_invmru_10b052bb(bool,address,bool)
-                    const text_signature = response.data.results[0].text_signature;
+                    const text_signature = response.results[0].text_signature;
                     yield this.saveToStorage(bytes4, text_signature);
                     return text_signature;
                 }

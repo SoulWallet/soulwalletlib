@@ -4,9 +4,9 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-12-28 20:46:15
  * @LastEditors: cejay
- * @LastEditTime: 2022-12-28 21:01:27
+ * @LastEditTime: 2023-02-11 12:46:59
  */
-import axios from 'axios';
+import { HttpRequest } from './httpRequest';
 import { SuggestedGasFees, gasPrices } from '../entity/codefiGasFees';
 
 export class CodefiGasFees {
@@ -16,9 +16,10 @@ export class CodefiGasFees {
     */
     static async getEIP1559GasFees(chainId: number): Promise<SuggestedGasFees | null> {
         try {
-            const response = await axios.get(`https://gas-api.metaswap.codefi.network/networks/${chainId}/suggestedGasFees`);
-            if (response.status === 200) {
-                const gas = response.data as SuggestedGasFees;
+            const url = `https://gas-api.metaswap.codefi.network/networks/${chainId}/suggestedGasFees`;
+            const response = await HttpRequest.get(url);
+            if (response) {
+                const gas = response as SuggestedGasFees;
                 if (gas) {
                     return gas;
                 }
@@ -31,9 +32,10 @@ export class CodefiGasFees {
     }
     static async getLegacyGasPrices(chainId: number): Promise<gasPrices | null> {
         try {
-            const response = await axios.get(`https://gas-api.metaswap.codefi.network/networks/${chainId}/gasPrices`);
-            if (response.status === 200) {
-                const gas = response.data as gasPrices;
+            const url = `https://gas-api.metaswap.codefi.network/networks/${chainId}/gasPrices`;
+            const response = await HttpRequest.get(url);
+            if (response) {
+                const gas = response as gasPrices;
                 if (gas) {
                     return gas;
                 }

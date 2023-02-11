@@ -6,7 +6,7 @@
 import { arrayify, defaultAbiCoder, keccak256, recoverAddress } from 'ethers/lib/utils'
 import { ecsign, toRpcSig, fromRpcSig, keccak256 as keccak256_buffer } from 'ethereumjs-util'
 import { UserOperation } from '../entity/userOperation'
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export enum SignatureMode {
   owner = 0,
@@ -29,8 +29,20 @@ export class UserOp {
 
 
 
-  public packUserOp(op: UserOperation, forSignature = true): string {
-    op = UserOperation.fromJSON(op.toJSON());
+  public packUserOp(_op: UserOperation, forSignature = true): string {
+    const op = {
+      sender: _op.sender,
+      nonce: BigNumber.from(_op.nonce),
+      initCode: _op.initCode,
+      callData: _op.callData,
+      callGasLimit: BigNumber.from(_op.callGasLimit),
+      verificationGasLimit: BigNumber.from(_op.verificationGasLimit),
+      preVerificationGas: BigNumber.from(_op.preVerificationGas),
+      maxFeePerGas: BigNumber.from(_op.maxFeePerGas),
+      maxPriorityFeePerGas: BigNumber.from(_op.maxPriorityFeePerGas),
+      paymasterAndData: _op.paymasterAndData,
+      signature: "0x"
+    };
     if (forSignature) {
       // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
       const userOpType = {
@@ -50,7 +62,7 @@ export class UserOp {
         name: 'userOp',
         type: 'tuple'
       }
-      let encoded = defaultAbiCoder.encode([userOpType as any], [{ ...op, signature: '0x' }])
+      let encoded = defaultAbiCoder.encode([userOpType as any], [op])
       // remove leading word (total length) and trailing word (zero-length signature)
       encoded = '0x' + encoded.slice(66, encoded.length - 64)
       return encoded
