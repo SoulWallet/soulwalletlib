@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 16:22:32
+ * @LastEditTime: 2023-02-10 18:43:26
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -272,6 +272,9 @@ class Bundler {
                     data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
                 });
                 let re = this.decodeValidationResult(result);
+                if (re)
+                    return re;
+                re = this.decodeFailedOp(result);
                 if (re)
                     return re;
                 return {

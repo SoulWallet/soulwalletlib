@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 22:48:41
+ * @LastEditTime: 2023-02-10 18:29:37
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -69,8 +69,7 @@ class UserOperation {
         });
     }
 
-    public static fromJSON(json: string, singletonFactory?: string): UserOperation {
-        singletonFactory = singletonFactory || SingletonFactoryAddress;
+    public static fromJSON(json: string): UserOperation {
         const obj = JSON.parse(json);
         if (!obj || typeof obj !== 'object') {
             throw new Error('invalid json');
