@@ -30,6 +30,7 @@ export class UserOp {
 
 
   public packUserOp(op: UserOperation, forSignature = true): string {
+    op = UserOperation.fromJSON(op.toJSON());
     if (forSignature) {
       // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
       const userOpType = {
@@ -74,7 +75,7 @@ export class UserOp {
   }
 
   public getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string {
-    const userOpHash = keccak256(this.packUserOp(op, true))
+    const userOpHash = keccak256(this.packUserOp(op, true));
     const enc = defaultAbiCoder.encode(
       ['bytes32', 'address', 'uint256'],
       [userOpHash, entryPointAddress, chainId])

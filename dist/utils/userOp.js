@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserOp = exports.SignatureMode = void 0;
 const utils_1 = require("ethers/lib/utils");
 const ethereumjs_util_1 = require("ethereumjs-util");
+const userOperation_1 = require("../entity/userOperation");
 const ethers_1 = require("ethers");
 var SignatureMode;
 (function (SignatureMode) {
@@ -22,6 +23,7 @@ class UserOp {
         return utils_1.defaultAbiCoder.encode(types, values);
     }
     packUserOp(op, forSignature = true) {
+        op = userOperation_1.UserOperation.fromJSON(op.toJSON());
         if (forSignature) {
             // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
             const userOpType = {
