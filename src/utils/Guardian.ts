@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 18:41:12
+ * @LastEditTime: 2023-02-12 22:30:42
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -189,7 +189,7 @@ export class Guardian {
     }
 
 
-    private async _guardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number,
+    private async _guardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike,
         entryPointAddress: string, paymasterAndData: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callData: string) {
 
@@ -221,7 +221,7 @@ export class Guardian {
      * @returns userOperation
      */
     public async setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike) {
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike) {
         guardian = ethers.utils.getAddress(guardian);
 
         const iface = new ethers.utils.Interface(SimpleWalletContract.ABI);
@@ -234,7 +234,7 @@ export class Guardian {
 
 
     public async transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string) {
         newOwner = ethers.utils.getAddress(newOwner);
 

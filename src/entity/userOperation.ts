@@ -4,12 +4,12 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 18:29:37
+ * @LastEditTime: 2023-02-12 22:39:37
  */
 
 import { ethers, BigNumber } from "ethers";
 import { AddressZero, SingletonFactoryAddress } from "../defines/address";
-import { NumberLike, toHexString, toNumber } from "../defines/numberLike";
+import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
 import { UserOp } from '../utils/userOp';
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
@@ -24,7 +24,7 @@ class UserOperation {
     }
 
     public sender: string = '';
-    public nonce: number = 0;
+    public nonce: NumberLike = 0;
     public initCode: string = '0x';
     public callData: string = '0x';
     public callGasLimit: NumberLike = 0;
@@ -50,7 +50,7 @@ class UserOperation {
         bytes paymasterData;
         bytes signature;
         */
-        return `["${this.sender.toLocaleLowerCase()}","${this.nonce}","${this.initCode}","${this.callData}","${this.callGasLimit}","${this.verificationGasLimit}","${this.preVerificationGas}","${this.maxFeePerGas}","${this.maxPriorityFeePerGas}","${this.paymasterAndData}","${this.signature}"]`;
+        return `["${this.sender.toLocaleLowerCase()}","${toDecString(this.nonce)}","${this.initCode}","${this.callData}","${toDecString(this.callGasLimit)}","${toDecString(this.verificationGasLimit)}","${toDecString(this.preVerificationGas)}","${toDecString(this.maxFeePerGas)}","${toDecString(this.maxPriorityFeePerGas)}","${this.paymasterAndData}","${this.signature}"]`;
     }
 
     public toJSON(): string {
@@ -64,7 +64,7 @@ class UserOperation {
             preVerificationGas: toHexString(this.preVerificationGas),
             maxFeePerGas: toHexString(this.maxFeePerGas),
             maxPriorityFeePerGas: toHexString(this.maxPriorityFeePerGas),
-            paymasterAndData: this.paymasterAndData === AddressZero ? '0x' : this.paymasterAndData,
+            paymasterAndData: this.paymasterAndData === '0x' ? AddressZero : this.paymasterAndData,
             signature: this.signature
         });
     }
@@ -110,7 +110,7 @@ class UserOperation {
 
         const userOp = new UserOperation();
         userOp.sender = obj.sender;
-        userOp.nonce = toNumber(obj.nonce);
+        userOp.nonce = obj.nonce;
         userOp.initCode = obj.initCode;
         userOp.callData = obj.callData;
         userOp.callGasLimit = obj.callGasLimit;

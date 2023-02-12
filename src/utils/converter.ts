@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 15:36:46
+ * @LastEditTime: 2023-02-12 22:30:25
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -27,10 +27,10 @@ export class Converter {
     }
 
     public async fromTransaction(
-        etherProvider: ethers.providers.BaseProvider,
-        entryPointAddress: string,
+        // etherProvider: ethers.providers.BaseProvider,
+        // entryPointAddress: string,
         transcations: ITransaction[],
-        nonce: number = 0,
+        nonce: NumberLike = 0,
         maxFeePerGas: NumberLike = 0,
         maxPriorityFeePerGas: NumberLike = 0,
         paymasterAndData: string = "0x"

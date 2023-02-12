@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-11 13:02:33
+ * @LastEditTime: 2023-02-12 22:16:26
  */
 
 
@@ -18,70 +18,10 @@ import { AddressZero } from '../defines/address';
 import { EntryPointContract } from '../contracts/entryPoint';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { HttpRequest } from './httpRequest';
+import { IUserOpReceipt } from "../interface/IUserOpReceipt";
+import { IFailedOp, IResult } from "../interface/IResult";
 
 
-export interface IExecutionResult {
-    preOpGas: BigNumber,
-    paid: BigNumber,
-    deadline: BigNumber,
-    paymasterDeadline: BigNumber
-}
-export interface IFailedOp {
-    opIndex: BigNumber;
-    paymaster: string;
-    reason: string;
-}
-
-
-export interface IReturnInfo {
-    /* 
-    struct ReturnInfo {
-        uint256 preOpGas;
-        uint256 prefund;
-        uint256 deadline;
-        uint256 paymasterDeadline;
-        bytes paymasterContext;
-    }
-    */
-    preOpGas: BigNumber,
-    prefund: BigNumber,
-    deadline: BigNumber,
-    paymasterDeadline: BigNumber,
-    paymasterContext: string
-}
-
-export interface IStakeInfo {
-    /* 
-     //API struct used by getStakeInfo and simulateValidation
-    struct StakeInfo {
-        uint256 stake;
-        uint256 unstakeDelaySec;
-    }
-    */
-    stake: BigNumber,
-    unstakeDelaySec: BigNumber
-}
-
-export interface IValidationResult {
-    op: IReturnInfo;
-    senderInfo: IStakeInfo;
-    factoryInfo: IStakeInfo;
-    paymasterInfo: IStakeInfo;
-}
-
-export interface IResult {
-    status: number;
-    /**
-     * 
-     */
-    result?: IValidationResult | IFailedOp | IExecutionResult;
-
-    /**
-     * eg. "AA41 too little verificationGas" 
-     * can not decode result | eth_call revert message
-     */
-    error?: string;
-}
 
 export class ApiTimeOut {
     web3ApiRequestTimeout = 1000 * 10;
@@ -114,7 +54,7 @@ export class Bundler {
     }
 
 
-    private async _request<T1, T2>(data: IRPCRequest<T1>, timeout?: number): Promise<T2> {
+    private async rpcRequest<T1, T2>(data: IRPCRequest<T1>, timeout?: number): Promise<T2> {
         if (!this._bundlerApi) {
             throw new Error('bundlerApi is not set');
         }
@@ -124,7 +64,7 @@ export class Bundler {
         let response = await HttpRequest.post(this._bundlerApi, data, timeout);
         if (response) {
             const rpcResp = response as IRPCResponse<T2>;
-            if (rpcResp.result && !rpcResp.error) {
+            if (!rpcResp.error) {
                 return rpcResp.result;
             } else {
                 throw rpcResp.error;
@@ -171,20 +111,8 @@ export class Bundler {
 
     }
 
-
-    public get Raw() {
-        return {
-            eth_chainId: this.eth_chainId,
-            eth_supportedEntryPoints: this.eth_supportedEntryPoints,
-            eth_sendUserOperation: this.eth_sendUserOperation,
-            eth_estimateUserOperationGas: this.eth_estimateUserOperationGas,
-            eth_getUserOperationReceipt: this.eth_getUserOperationReceipt,
-            eth_getUserOperationByHash: this.eth_getUserOperationByHash,
-        };
-    }
-
-    private async eth_chainId(): Promise<string> {
-        return this._request<never[], string>(
+    public async eth_chainId(): Promise<string> {
+        return this.rpcRequest<never[], string>(
             {
                 jsonrpc: '2.0',
                 id: 1,
@@ -194,8 +122,8 @@ export class Bundler {
         );
     }
 
-    private async eth_supportedEntryPoints() {
-        return this._request<never[], string[]>(
+    public async eth_supportedEntryPoints() {
+        return this.rpcRequest<never[], string[]>(
             {
                 jsonrpc: '2.0',
                 id: 1,
@@ -205,56 +133,80 @@ export class Bundler {
         );
     }
 
-    private async eth_sendUserOperation(userOp: UserOperation) {
-        const params = [
-            JSON.parse(userOp.toJSON()),
-            this._entryPoint
-        ];
-
-        return this._request<any[], string>(
+    public async eth_sendUserOperation(userOp: UserOperation) {
+        return this.rpcRequest<any[], string>(
             {
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_sendUserOperation',
-                params
+                params: [
+                    JSON.parse(userOp.toJSON()),
+                    this._entryPoint
+                ]
             }
         );
     }
 
-    private async eth_estimateUserOperationGas(userOp: UserOperation) {
+    public async eth_estimateUserOperationGas(userOp: UserOperation) {
         throw new Error('not implement');
     }
 
-    private async eth_getUserOperationReceipt(userOpHash: string) {
+    public async eth_getUserOperationReceipt(userOpHash: string) {
+        return this.rpcRequest<string[], IUserOpReceipt | null>(
+            {
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'eth_getUserOperationReceipt',
+                params: [userOpHash]
+            }
+        );
+    }
+
+    public async eth_getUserOperationByHash(userOpHash: string) {
         throw new Error('not implement');
     }
 
-    private async eth_getUserOperationByHash(userOpHash: string) {
-        throw new Error('not implement');
-    }
-
-    private async _sendUserOperation(emitter: EventEmitter, userOp: UserOperation) {
-        console.log('sendUserOperation', userOp);
-        let userOpHash = '';
-        try {
-            userOpHash = await this.eth_sendUserOperation(userOp);
-        } catch (error) {
-            emitter.emit('error', error);
-            return;
-        }
-        emitter.emit('send', userOpHash);
-
-
+    private sleep(ms: number) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+        });
     }
 
     /**
      * 
      * @param userOp 
-     * @returns emitter event: send, error, receipt
+     * @returns emitter event: send, error, receipt, timeout
      */
-    public sendUserOperation(userOp: UserOperation) {
+    public sendUserOperation(userOp: UserOperation, receiptTimeout: number = 0, receiptInterval: number = 1000 * 6) {
         const emitter = new EventEmitter();
-        this._sendUserOperation(emitter, userOp);
+        this.eth_sendUserOperation(userOp).then((userOpHash) => {
+            emitter.emit('send', userOpHash);
+
+            async () => {
+
+                const startTime = Date.now();
+                while (receiptTimeout === 0 || Date.now() - startTime < receiptTimeout) {
+
+                    // sleep 6s
+                    await this.sleep(receiptInterval);
+
+                    try {
+                        const re = await this.eth_getUserOperationReceipt(userOpHash);
+                        if (re) {
+                            emitter.emit('receipt', re);
+                            return;
+                        }
+                    } catch (error) {
+                        console.error(error);
+                    }
+
+                }
+                emitter.emit('timeout', new Error('receipt timeout'));
+            }
+
+        }).catch((error) => {
+            emitter.emit('error', error);
+        });
         return emitter;
     }
 
@@ -354,6 +306,7 @@ export class Bundler {
             const result = await this._etherProvider.call({
                 from: AddressZero,
                 to: this._entryPoint,
+                gasLimit: 10e6,
                 data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
             });
             let re = this.decodeValidationResult(result);

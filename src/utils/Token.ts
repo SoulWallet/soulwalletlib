@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 15:49:28
+ * @LastEditTime: 2023-02-12 22:31:02
  */
 import { UserOperation } from "../entity/userOperation";
 import { execFromEntryPoint, ERC1155 as erc1155, ERC20 as erc20, ERC721 as erc721 } from "../defines/ABI";
@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 export class Token {
 
-    async createOp(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number,
+    async createOp(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike,
         entryPointAddress: string, paymasterAndData: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callContract: string, encodeABI: string, value: string = '0') {
 
@@ -51,7 +51,7 @@ export class ERC20 {
         return new ethers.Contract(contractAddress, erc20, etherProvider);
     }
     async approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _value: string) {
 
         let encodeABI = new ethers.utils.Interface(erc20).encodeFunctionData("approve", [_spender, _value]);
@@ -77,7 +77,7 @@ export class ERC20 {
     }
 
     async transferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _value: string) {
 
         let encodeABI = new ethers.utils.Interface(erc20).encodeFunctionData("transferFrom", [_from, _to, _value]);
@@ -85,7 +85,7 @@ export class ERC20 {
     }
 
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _to: string, _value: string) {
 
         let encodeABI = new ethers.utils.Interface(erc20).encodeFunctionData("transfer", [_to, _value]);
@@ -104,7 +104,7 @@ export class ERC721 {
         return new ethers.Contract(contractAddress, erc721, etherProvider);
     }
     async approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _tokenId: string) {
 
         let encodeABI = new ethers.utils.Interface(erc721).encodeFunctionData("approve", [_spender, _tokenId]);
@@ -112,7 +112,7 @@ export class ERC721 {
     }
 
     async transferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _tokenId: string) {
 
         let encodeABI = new ethers.utils.Interface(erc721).encodeFunctionData("transferFrom", [_from, _to, _tokenId]);
@@ -120,7 +120,7 @@ export class ERC721 {
     }
 
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _to: string, _tokenId: string) {
 
         let encodeABI = new ethers.utils.Interface(erc721).encodeFunctionData("transfer", [_to, _tokenId]);
@@ -128,7 +128,7 @@ export class ERC721 {
     }
 
     async safeTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _tokenId: string) {
 
         let encodeABI = new ethers.utils.Interface(erc721).encodeFunctionData("safeTransferFrom", [_from, _to, _tokenId]);
@@ -136,7 +136,7 @@ export class ERC721 {
     }
 
     async setApprovalForAll(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _operator: string, _approved: boolean) {
 
         let encodeABI = new ethers.utils.Interface(erc721).encodeFunctionData("setApprovalForAll", [_operator, _approved]);
@@ -158,7 +158,7 @@ export class ERC1155 {
         return new ethers.Contract(contractAddress, erc1155, etherProvider);
     }
     async safeTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _id: string, _value: string, _data: string) {
 
         let encodeABI = new ethers.utils.Interface(erc1155).encodeFunctionData("safeTransferFrom", [_from, _to, _id, _value, _data]);
@@ -166,7 +166,7 @@ export class ERC1155 {
     }
 
     async safeBatchTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _ids: string, _values: string, _data: string) {
 
         let encodeABI = new ethers.utils.Interface(erc1155).encodeFunctionData("safeBatchTransferFrom", [_from, _to, _ids, _values, _data]);
@@ -174,7 +174,7 @@ export class ERC1155 {
     }
 
     async setApprovalForAll(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _operator: string, _approved: boolean) {
 
         let encodeABI = new ethers.utils.Interface(erc1155).encodeFunctionData("setApprovalForAll", [_operator, _approved]);
@@ -190,7 +190,7 @@ export class ETH {
         this._token = new Token();
     }
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: number, entryPointAddress: string, paymasterAddress: string,
+        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, to: string, value: string) {
 
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, to, '0x', value);
