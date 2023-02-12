@@ -14,12 +14,12 @@ export declare class SoulWalletLib {
     private _singletonFactory;
     private _deployFactory;
     Utils: {
-        getNonce: (walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock?: string) => Promise<number>;
+        getNonce: (walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock?: string) => Promise<NumberLike>;
         DecodeCallData: typeof DecodeCallData;
         suggestedGasFee: typeof CodefiGasFees;
         tokenAndPaymaster: typeof TokenAndPaymaster;
         deployFactory: DeployFactory;
-        fromTransaction: (etherProvider: ethers.providers.BaseProvider, entryPointAddress: string, transcations: import("../utils/converter").ITransaction[], nonce?: number, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string) => Promise<UserOperation | null>;
+        fromTransaction: (transcations: import("../utils/converter").ITransaction[], nonce?: NumberLike, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string) => Promise<UserOperation | null>;
     };
     static Defines: typeof addressDefine;
     Guardian: Guardian;

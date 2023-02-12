@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-11 13:02:33
+ * @LastEditTime: 2023-02-12 22:16:26
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -55,7 +55,7 @@ class Bundler {
             this._timeout = timeout;
         }
     }
-    _request(data, timeout) {
+    rpcRequest(data, timeout) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this._bundlerApi) {
                 throw new Error('bundlerApi is not set');
@@ -66,7 +66,7 @@ class Bundler {
             let response = yield httpRequest_1.HttpRequest.post(this._bundlerApi, data, timeout);
             if (response) {
                 const rpcResp = response;
-                if (rpcResp.result && !rpcResp.error) {
+                if (!rpcResp.error) {
                     return rpcResp.result;
                 }
                 else {
@@ -110,19 +110,9 @@ class Bundler {
             }
         });
     }
-    get Raw() {
-        return {
-            eth_chainId: this.eth_chainId,
-            eth_supportedEntryPoints: this.eth_supportedEntryPoints,
-            eth_sendUserOperation: this.eth_sendUserOperation,
-            eth_estimateUserOperationGas: this.eth_estimateUserOperationGas,
-            eth_getUserOperationReceipt: this.eth_getUserOperationReceipt,
-            eth_getUserOperationByHash: this.eth_getUserOperationByHash,
-        };
-    }
     eth_chainId() {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._request({
+            return this.rpcRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_chainId',
@@ -132,7 +122,7 @@ class Bundler {
     }
     eth_supportedEntryPoints() {
         return __awaiter(this, void 0, void 0, function* () {
-            return this._request({
+            return this.rpcRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_supportedEntryPoints',
@@ -142,15 +132,14 @@ class Bundler {
     }
     eth_sendUserOperation(userOp) {
         return __awaiter(this, void 0, void 0, function* () {
-            const params = [
-                JSON.parse(userOp.toJSON()),
-                this._entryPoint
-            ];
-            return this._request({
+            return this.rpcRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_sendUserOperation',
-                params
+                params: [
+                    JSON.parse(userOp.toJSON()),
+                    this._entryPoint
+                ]
             });
         });
     }
@@ -161,7 +150,12 @@ class Bundler {
     }
     eth_getUserOperationReceipt(userOpHash) {
         return __awaiter(this, void 0, void 0, function* () {
-            throw new Error('not implement');
+            return this.rpcRequest({
+                jsonrpc: '2.0',
+                id: 1,
+                method: 'eth_getUserOperationReceipt',
+                params: [userOpHash]
+            });
         });
     }
     eth_getUserOperationByHash(userOpHash) {
@@ -169,28 +163,41 @@ class Bundler {
             throw new Error('not implement');
         });
     }
-    _sendUserOperation(emitter, userOp) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log('sendUserOperation', userOp);
-            let userOpHash = '';
-            try {
-                userOpHash = yield this.eth_sendUserOperation(userOp);
-            }
-            catch (error) {
-                emitter.emit('error', error);
-                return;
-            }
-            emitter.emit('send', userOpHash);
+    sleep(ms) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
         });
     }
     /**
      *
      * @param userOp
-     * @returns emitter event: send, error, receipt
+     * @returns emitter event: send, error, receipt, timeout
      */
-    sendUserOperation(userOp) {
+    sendUserOperation(userOp, receiptTimeout = 0, receiptInterval = 1000 * 6) {
         const emitter = new events_1.default();
-        this._sendUserOperation(emitter, userOp);
+        this.eth_sendUserOperation(userOp).then((userOpHash) => {
+            emitter.emit('send', userOpHash);
+            () => __awaiter(this, void 0, void 0, function* () {
+                const startTime = Date.now();
+                while (receiptTimeout === 0 || Date.now() - startTime < receiptTimeout) {
+                    // sleep 6s
+                    yield this.sleep(receiptInterval);
+                    try {
+                        const re = yield this.eth_getUserOperationReceipt(userOpHash);
+                        if (re) {
+                            emitter.emit('receipt', re);
+                            return;
+                        }
+                    }
+                    catch (error) {
+                        console.error(error);
+                    }
+                }
+                emitter.emit('timeout', new Error('receipt timeout'));
+            });
+        }).catch((error) => {
+            emitter.emit('error', error);
+        });
         return emitter;
     }
     decodeExecutionResult(result) {
@@ -277,6 +284,7 @@ class Bundler {
                 const result = yield this._etherProvider.call({
                     from: address_1.AddressZero,
                     to: this._entryPoint,
+                    gasLimit: 10e6,
                     data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
                 });
                 let re = this.decodeValidationResult(result);

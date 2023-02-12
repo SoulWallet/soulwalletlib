@@ -7,7 +7,7 @@ declare class UserOperation {
     private _userOp;
     constructor();
     sender: string;
-    nonce: number;
+    nonce: NumberLike;
     initCode: string;
     callData: string;
     callGasLimit: NumberLike;

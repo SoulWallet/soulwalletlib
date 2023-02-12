@@ -275,7 +275,7 @@ export class SoulWalletLib {
      * @param defaultBlock "earliest", "latest" and "pending"
      * @returns the next nonce number
      */
-    private async getNonce(walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock = 'latest'): Promise<number> {
+    private async getNonce(walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock = 'latest'): Promise<NumberLike> {
         try {
             const code = await etherProvider.getCode(walletAddress, defaultBlock);
             // check contract is exist
@@ -284,12 +284,10 @@ export class SoulWalletLib {
             } else {
                 const contract = new ethers.Contract(walletAddress, [{ "inputs": [], "name": "nonce", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }], etherProvider);
                 const nonce = await contract.nonce();
-                // try parse to number
-                const nextNonce = parseInt(nonce, 10);
-                if (isNaN(nextNonce)) {
-                    throw new Error('nonce is not a number');
+                if (nonce === undefined) {
+                    throw new Error('nonce is undefined');
                 }
-                return nextNonce;
+                return nonce;
             }
 
         } catch (error) {

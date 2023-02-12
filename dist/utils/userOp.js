@@ -33,7 +33,7 @@ class UserOp {
             maxFeePerGas: ethers_1.BigNumber.from(_op.maxFeePerGas),
             maxPriorityFeePerGas: ethers_1.BigNumber.from(_op.maxPriorityFeePerGas),
             paymasterAndData: _op.paymasterAndData,
-            signature: "0x"
+            signature: _op.signature
         };
         if (forSignature) {
             // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
@@ -54,7 +54,7 @@ class UserOp {
                 name: 'userOp',
                 type: 'tuple'
             };
-            let encoded = utils_1.defaultAbiCoder.encode([userOpType], [op]);
+            let encoded = utils_1.defaultAbiCoder.encode([userOpType], [Object.assign(Object.assign({}, op), { signature: '0x' })]);
             // remove leading word (total length) and trailing word (zero-length signature)
             encoded = '0x' + encoded.slice(66, encoded.length - 64);
             return encoded;

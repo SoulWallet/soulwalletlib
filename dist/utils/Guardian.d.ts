@@ -67,8 +67,8 @@ export declare class Guardian {
      * @param maxPriorityFeePerGas
      * @returns userOperation
      */
-    setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): Promise<UserOperation | null>;
-    transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: number, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string): Promise<UserOperation | null>;
+    setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string, nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): Promise<UserOperation | null>;
+    transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string): Promise<UserOperation | null>;
     guardianSign(signature: guardianSignature[]): string;
 }
 export interface guardianSignature {
