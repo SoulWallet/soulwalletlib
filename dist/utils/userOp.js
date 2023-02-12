@@ -21,20 +21,8 @@ class UserOp {
         const values = typevalues.map((typevalue) => typevalue.type === 'bytes' && forSignature ? (0, utils_1.keccak256)(typevalue.val) : typevalue.val);
         return utils_1.defaultAbiCoder.encode(types, values);
     }
-    packUserOp(_op, forSignature = true) {
-        const op = {
-            sender: _op.sender,
-            nonce: ethers_1.BigNumber.from(_op.nonce),
-            initCode: _op.initCode,
-            callData: _op.callData,
-            callGasLimit: ethers_1.BigNumber.from(_op.callGasLimit),
-            verificationGasLimit: ethers_1.BigNumber.from(_op.verificationGasLimit),
-            preVerificationGas: ethers_1.BigNumber.from(_op.preVerificationGas),
-            maxFeePerGas: ethers_1.BigNumber.from(_op.maxFeePerGas),
-            maxPriorityFeePerGas: ethers_1.BigNumber.from(_op.maxPriorityFeePerGas),
-            paymasterAndData: _op.paymasterAndData,
-            signature: _op.signature
-        };
+    packUserOp(op, forSignature = true) {
+        op.alignment();
         if (forSignature) {
             // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
             const userOpType = {

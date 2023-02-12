@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-12-19 09:43:11
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 16:07:07
+ * @LastEditTime: 2023-02-12 23:00:03
  */
 
 import { BigNumber } from "@ethersproject/bignumber";
@@ -21,7 +21,10 @@ export function toDecString(value: NumberLike): string {
 }
 
 export function toHexString(value: NumberLike): string {
-    return BigNumber.from(value).toHexString();
+    if (typeof value === "number" || (typeof value === "string" && !value.startsWith('0x'))) {
+        return BigNumber.from(value).toHexString();
+    }
+    return value;
 }
 
 export function toNumber(value: NumberLike): number {

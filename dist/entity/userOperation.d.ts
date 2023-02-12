@@ -18,6 +18,7 @@ declare class UserOperation {
     paymasterAndData: string;
     signature: string;
     toTuple(): string;
+    alignment(): void;
     toJSON(): string;
     static fromJSON(json: string): UserOperation;
     /**

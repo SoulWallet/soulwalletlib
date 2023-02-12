@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 15:44:59
+ * @LastEditTime: 2023-02-12 23:05:46
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -244,7 +244,7 @@ class SoulWalletLib {
                     if (nonce === undefined) {
                         throw new Error('nonce is undefined');
                     }
-                    return nonce;
+                    return ethers_1.BigNumber.from(nonce).toNumber();
                 }
             }
             catch (error) {

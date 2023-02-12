@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 15:44:59
+ * @LastEditTime: 2023-02-12 23:05:46
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder } from "ethers/lib/utils";
@@ -275,7 +275,7 @@ export class SoulWalletLib {
      * @param defaultBlock "earliest", "latest" and "pending"
      * @returns the next nonce number
      */
-    private async getNonce(walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock = 'latest'): Promise<NumberLike> {
+    private async getNonce(walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock = 'latest'): Promise<number> {
         try {
             const code = await etherProvider.getCode(walletAddress, defaultBlock);
             // check contract is exist
@@ -287,7 +287,7 @@ export class SoulWalletLib {
                 if (nonce === undefined) {
                     throw new Error('nonce is undefined');
                 }
-                return nonce;
+                return BigNumber.from(nonce).toNumber();
             }
 
         } catch (error) {

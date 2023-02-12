@@ -10,7 +10,7 @@ export declare enum SignatureMode {
 export declare class UserOp {
     constructor();
     private encode;
-    packUserOp(_op: UserOperation, forSignature?: boolean): string;
+    packUserOp(op: UserOperation, forSignature?: boolean): string;
     getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string;
     private _signUserOp;
     _signReuestId(userOpHash: string, privateKey: string): string;

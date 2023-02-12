@@ -14,7 +14,7 @@ export declare class SoulWalletLib {
     private _singletonFactory;
     private _deployFactory;
     Utils: {
-        getNonce: (walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock?: string) => Promise<NumberLike>;
+        getNonce: (walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock?: string) => Promise<number>;
         DecodeCallData: typeof DecodeCallData;
         suggestedGasFee: typeof CodefiGasFees;
         tokenAndPaymaster: typeof TokenAndPaymaster;

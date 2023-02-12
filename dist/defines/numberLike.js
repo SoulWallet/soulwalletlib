@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-12-19 09:43:11
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-10 16:07:07
+ * @LastEditTime: 2023-02-12 23:00:03
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toNumber = exports.toHexString = exports.toDecString = exports.isNumberLike = void 0;
@@ -19,7 +19,10 @@ function toDecString(value) {
 }
 exports.toDecString = toDecString;
 function toHexString(value) {
-    return bignumber_1.BigNumber.from(value).toHexString();
+    if (typeof value === "number" || (typeof value === "string" && !value.startsWith('0x'))) {
+        return bignumber_1.BigNumber.from(value).toHexString();
+    }
+    return value;
 }
 exports.toHexString = toHexString;
 function toNumber(value) {
