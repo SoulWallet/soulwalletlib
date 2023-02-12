@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:39:37
+ * @LastEditTime: 2023-02-12 23:02:00
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -57,18 +57,28 @@ class UserOperation {
         */
         return `["${this.sender.toLocaleLowerCase()}","${(0, numberLike_1.toDecString)(this.nonce)}","${this.initCode}","${this.callData}","${(0, numberLike_1.toDecString)(this.callGasLimit)}","${(0, numberLike_1.toDecString)(this.verificationGasLimit)}","${(0, numberLike_1.toDecString)(this.preVerificationGas)}","${(0, numberLike_1.toDecString)(this.maxFeePerGas)}","${(0, numberLike_1.toDecString)(this.maxPriorityFeePerGas)}","${this.paymasterAndData}","${this.signature}"]`;
     }
+    alignment() {
+        this.nonce = (0, numberLike_1.toHexString)(this.nonce);
+        this.callGasLimit = (0, numberLike_1.toHexString)(this.callGasLimit);
+        this.verificationGasLimit = (0, numberLike_1.toHexString)(this.verificationGasLimit);
+        this.preVerificationGas = (0, numberLike_1.toHexString)(this.preVerificationGas);
+        this.maxFeePerGas = (0, numberLike_1.toHexString)(this.maxFeePerGas);
+        this.maxPriorityFeePerGas = (0, numberLike_1.toHexString)(this.maxPriorityFeePerGas);
+        this.paymasterAndData = this.paymasterAndData === '0x' ? address_1.AddressZero : this.paymasterAndData;
+    }
     toJSON() {
+        this.alignment();
         return JSON.stringify({
             sender: this.sender,
-            nonce: (0, numberLike_1.toHexString)(this.nonce),
+            nonce: this.nonce,
             initCode: this.initCode,
             callData: this.callData,
-            callGasLimit: (0, numberLike_1.toHexString)(this.callGasLimit),
-            verificationGasLimit: (0, numberLike_1.toHexString)(this.verificationGasLimit),
-            preVerificationGas: (0, numberLike_1.toHexString)(this.preVerificationGas),
-            maxFeePerGas: (0, numberLike_1.toHexString)(this.maxFeePerGas),
-            maxPriorityFeePerGas: (0, numberLike_1.toHexString)(this.maxPriorityFeePerGas),
-            paymasterAndData: this.paymasterAndData === '0x' ? address_1.AddressZero : this.paymasterAndData,
+            callGasLimit: this.callGasLimit,
+            verificationGasLimit: this.verificationGasLimit,
+            preVerificationGas: this.preVerificationGas,
+            maxFeePerGas: this.maxFeePerGas,
+            maxPriorityFeePerGas: this.maxPriorityFeePerGas,
+            paymasterAndData: this.paymasterAndData,
             signature: this.signature
         });
     }

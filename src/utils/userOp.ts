@@ -29,20 +29,8 @@ export class UserOp {
 
 
 
-  public packUserOp(_op: UserOperation, forSignature = true): string {
-    const op = {
-      sender: _op.sender,
-      nonce: BigNumber.from(_op.nonce),
-      initCode: _op.initCode,
-      callData: _op.callData,
-      callGasLimit: BigNumber.from(_op.callGasLimit),
-      verificationGasLimit: BigNumber.from(_op.verificationGasLimit),
-      preVerificationGas: BigNumber.from(_op.preVerificationGas),
-      maxFeePerGas: BigNumber.from(_op.maxFeePerGas),
-      maxPriorityFeePerGas: BigNumber.from(_op.maxPriorityFeePerGas),
-      paymasterAndData: _op.paymasterAndData,
-      signature: _op.signature
-    };
+  public packUserOp(op: UserOperation, forSignature = true): string {
+    op.alignment();
     if (forSignature) {
       // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
       const userOpType = {
