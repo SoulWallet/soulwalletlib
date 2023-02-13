@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:16:26
+ * @LastEditTime: 2023-02-13 16:37:54
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -175,27 +175,25 @@ class Bundler {
      */
     sendUserOperation(userOp, receiptTimeout = 0, receiptInterval = 1000 * 6) {
         const emitter = new events_1.default();
-        this.eth_sendUserOperation(userOp).then((userOpHash) => {
+        this.eth_sendUserOperation(userOp).then((userOpHash) => __awaiter(this, void 0, void 0, function* () {
             emitter.emit('send', userOpHash);
-            () => __awaiter(this, void 0, void 0, function* () {
-                const startTime = Date.now();
-                while (receiptTimeout === 0 || Date.now() - startTime < receiptTimeout) {
-                    // sleep 6s
-                    yield this.sleep(receiptInterval);
-                    try {
-                        const re = yield this.eth_getUserOperationReceipt(userOpHash);
-                        if (re) {
-                            emitter.emit('receipt', re);
-                            return;
-                        }
-                    }
-                    catch (error) {
-                        console.error(error);
+            const startTime = Date.now();
+            while (receiptTimeout === 0 || Date.now() - startTime < receiptTimeout) {
+                // sleep 6s
+                yield this.sleep(receiptInterval);
+                try {
+                    const re = yield this.eth_getUserOperationReceipt(userOpHash);
+                    if (re) {
+                        emitter.emit('receipt', re);
+                        return;
                     }
                 }
-                emitter.emit('timeout', new Error('receipt timeout'));
-            });
-        }).catch((error) => {
+                catch (error) {
+                    console.error(error);
+                }
+            }
+            emitter.emit('timeout', new Error('receipt timeout'));
+        })).catch((error) => {
             emitter.emit('error', error);
         });
         return emitter;

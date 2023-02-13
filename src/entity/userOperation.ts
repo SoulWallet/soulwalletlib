@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 23:02:00
+ * @LastEditTime: 2023-02-13 13:51:52
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -60,7 +60,7 @@ class UserOperation {
         this.preVerificationGas = toHexString(this.preVerificationGas);
         this.maxFeePerGas = toHexString(this.maxFeePerGas);
         this.maxPriorityFeePerGas = toHexString(this.maxPriorityFeePerGas);
-        this.paymasterAndData = this.paymasterAndData === '0x' ? AddressZero : this.paymasterAndData;
+        this.paymasterAndData = this.paymasterAndData === AddressZero ? '0x' : this.paymasterAndData;
     }
 
     public toJSON(): string {

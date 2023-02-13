@@ -1,6 +1,6 @@
 {
   "name": "soul-wallet-lib",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "The EIP-4337 library for Soul-Wallet",
   "main": "dist/app.js",
   "scripts": {
