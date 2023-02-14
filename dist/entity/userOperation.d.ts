@@ -21,6 +21,7 @@ declare class UserOperation {
     alignment(): void;
     toJSON(): string;
     static fromJSON(json: string): UserOperation;
+    static fromObject(obj: any): UserOperation;
     /**
      * estimate the gas
      * @param entryPointAddress the entry point address

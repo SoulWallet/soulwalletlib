@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 23:05:46
+ * @LastEditTime: 2023-02-14 17:18:20
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -59,6 +59,7 @@ const deployFactory_1 = require("../utils/deployFactory");
 const bytes32_1 = require("../defines/bytes32");
 const walletFactory_1 = require("../contracts/walletFactory");
 const address_1 = require("../defines/address");
+const ABI_1 = require("../defines/ABI");
 class SoulWalletLib {
     constructor(singletonFactory) {
         this.Bundler = bundler_1.Bundler;
@@ -179,20 +180,35 @@ class SoulWalletLib {
         }
         return walletFactory.toLowerCase() + packedInitCode;
     }
-    getPaymasterExchangePrice(etherProvider, payMasterAddress, token) {
+    getPaymasterExchangePrice(etherProvider, payMasterAddress, token, fetchTokenDecimals = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const paymaster = new ethers_1.ethers.Contract(payMasterAddress, tokenPaymaster_1.TokenPaymasterContract.ABI, etherProvider);
             if ((yield paymaster.isSupportedToken(token)) === true) {
-                const price = yield paymaster.exchangePrice(token);
-                return price;
+                const exchangePrice = yield paymaster.exchangePrice(token);
+                /*
+                    exchangePrice.decimals
+                    exchangePrice.price
+                */
+                const price = exchangePrice.price;
+                const decimals = exchangePrice.decimals;
+                let tokenDecimals;
+                if (fetchTokenDecimals) {
+                    const erc20Token = new ethers_1.ethers.Contract(token, ABI_1.ERC20, etherProvider);
+                    tokenDecimals = yield erc20Token.decimals();
+                }
+                return {
+                    price,
+                    decimals,
+                    tokenDecimals
+                };
             }
             else {
                 throw new Error("token is not supported");
             }
         });
     }
-    getPaymasterData(payMasterAddress, token, lowestPrice) {
-        const enc = payMasterAddress.toLowerCase() + utils_1.defaultAbiCoder.encode(['address', 'uint256'], [token, lowestPrice]).substring(2);
+    getPaymasterData(payMasterAddress, token, maxCost) {
+        const enc = payMasterAddress.toLowerCase() + utils_1.defaultAbiCoder.encode(['address', 'uint256'], [token, maxCost]).substring(2);
         return enc;
     }
     /**
