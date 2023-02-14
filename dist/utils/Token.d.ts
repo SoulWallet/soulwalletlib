@@ -1,6 +1,7 @@
 import { UserOperation } from "../entity/userOperation";
 import { ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
+import { IApproveToken } from "../interface/IApproveToken";
 export declare class Token {
     createOp(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike, entryPointAddress: string, paymasterAndData: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callContract: string, encodeABI: string, value?: string): Promise<UserOperation | null>;
 }
@@ -9,7 +10,9 @@ export declare class ERC20 {
     constructor();
     private getContract;
     approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _value: string): Promise<UserOperation | null>;
-    getApproveCallData(etherProvider: ethers.providers.BaseProvider, walletAddress: string, _token: string, _spender: string, _value: string): Promise<{
+    private readonly MAX_INT256;
+    private approveGasLimit;
+    getApproveCallData(etherProvider: ethers.providers.BaseProvider, walletAddress: string, approveData: IApproveToken[]): Promise<{
         callData: string;
         callGasLimit: string;
     }>;

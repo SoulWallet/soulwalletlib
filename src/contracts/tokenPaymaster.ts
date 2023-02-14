@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 17:05:30
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 17:09:10
+ * @LastEditTime: 2023-02-14 16:44:19
  */
 import { IContract } from './icontract';
 
@@ -22,8 +22,13 @@ const ABI: any =
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "price",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "decimals",
+                "type": "uint8"
             }
         ],
         "stateMutability": "view",

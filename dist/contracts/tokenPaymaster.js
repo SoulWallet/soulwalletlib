@@ -14,8 +14,13 @@ const ABI = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "price",
                 "type": "uint256"
+            },
+            {
+                "internalType": "uint8",
+                "name": "decimals",
+                "type": "uint8"
             }
         ],
         "stateMutability": "view",

@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 23:05:46
+ * @LastEditTime: 2023-02-14 17:18:20
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder } from "ethers/lib/utils";
@@ -27,6 +27,7 @@ import { DeployFactory } from '../utils/deployFactory';
 import { bytes32_zero } from "../defines/bytes32";
 import { WalletFactoryContract } from "../contracts/walletFactory";
 import { SingletonFactoryAddress } from "../defines/address";
+import { ERC20 as erc20 } from "../defines/ABI";
 
 export class SoulWalletLib {
 
@@ -210,20 +211,39 @@ export class SoulWalletLib {
         return walletFactory.toLowerCase() + packedInitCode;
     }
 
-    public async getPaymasterExchangePrice(etherProvider: ethers.providers.BaseProvider, payMasterAddress: string, token: string): Promise<BigNumber> {
+    public async getPaymasterExchangePrice(etherProvider: ethers.providers.BaseProvider,
+        payMasterAddress: string, token: string, fetchTokenDecimals: boolean = false) {
         const paymaster = new ethers.Contract(payMasterAddress, TokenPaymasterContract.ABI, etherProvider);
+
         if (await paymaster.isSupportedToken(token) === true) {
-            const price = await paymaster.exchangePrice(token);
-            return price;
+            const exchangePrice = await paymaster.exchangePrice(token);
+            /* 
+                exchangePrice.decimals
+                exchangePrice.price
+            */
+            const price: BigNumber = exchangePrice.price;
+            const decimals: number = exchangePrice.decimals;
+            let tokenDecimals: number | undefined;
+
+            if (fetchTokenDecimals) {
+                const erc20Token = new ethers.Contract(token, erc20, etherProvider);
+                tokenDecimals = await erc20Token.decimals();
+            }
+
+            return {
+                price,
+                decimals,
+                tokenDecimals
+            };
         } else {
             throw new Error("token is not supported");
         }
     }
 
-    public getPaymasterData(payMasterAddress: string, token: string, lowestPrice: BigNumber) {
+    public getPaymasterData(payMasterAddress: string, token: string, maxCost: BigNumber) {
         const enc = payMasterAddress.toLowerCase() + defaultAbiCoder.encode(
             ['address', 'uint256'],
-            [token, lowestPrice]).substring(2)
+            [token, maxCost]).substring(2)
         return enc;
     }
 

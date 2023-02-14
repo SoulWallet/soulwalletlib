@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-02 22:38:58
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-11 13:01:29
+ * @LastEditTime: 2023-02-14 10:55:56
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -79,6 +79,11 @@ class DecodeCallData {
             functionName: 'execFromEntryPoint',
             functionSignature: 'execFromEntryPoint(address,uint256,bytes)',
             typesArray: ['address', 'uint256', 'bytes']
+        });
+        this.bytes4Methods.set('0x2763604f', {
+            functionName: 'execFromEntryPoint',
+            functionSignature: 'execFromEntryPoint(address[],uint256[],bytes[])',
+            typesArray: ['address[]', 'uint256[]', 'bytes[]']
         });
         this.bytes4Methods.set('0xe6268114', {
             functionName: 'deleteGuardianRequest',
@@ -178,11 +183,17 @@ class DecodeCallData {
                 //const params = this.web3.eth.abi.decodeParameters(typesArray, callData.slice(10));
                 const params = ethers_1.ethers.utils.defaultAbiCoder.decode(typesArray, '0x' + callData.slice(10));
                 //  functionSignature: 'execFromEntryPoint(address,uint256,bytes)',
+                // functionSignature: 'execFromEntryPoint(address[],uint256[],bytes[])',
                 if (method.functionSignature === 'execFromEntryPoint(address,uint256,bytes)') {
                     const address = params[0];
                     const uint256 = params[1];
                     const bytes = params[2];
                     return this.decode(bytes);
+                }
+                else if (method.functionSignature === 'execFromEntryPoint(address[],uint256[],bytes[])') {
+                    // not implement
+                    // #TODO
+                    return null;
                 }
                 else {
                     return {

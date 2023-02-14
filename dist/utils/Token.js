@@ -16,7 +16,7 @@ exports.ETH = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.Token =
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:31:02
+ * @LastEditTime: 2023-02-14 09:04:49
  */
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
@@ -44,6 +44,7 @@ class Token {
 exports.Token = Token;
 class ERC20 {
     constructor() {
+        this.MAX_INT256 = '115792089237316195423570985008687907853269984665640564039457584007913129639935'; //uint256 MAX_INT = 2**256 - 1
         this._token = new Token();
     }
     getContract(etherProvider, contractAddress) {
@@ -55,21 +56,54 @@ class ERC20 {
             return yield this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
         });
     }
-    getApproveCallData(etherProvider, walletAddress, _token, _spender, _value) {
+    approveGasLimit(etherProvider, walletAddress, approveData) {
         return __awaiter(this, void 0, void 0, function* () {
-            let encodeABI = new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [_spender, _value]);
+            if (approveData.value === undefined) {
+                approveData.value = this.MAX_INT256;
+            }
             let callGasLimit = yield etherProvider.estimateGas({
                 from: walletAddress,
-                to: _token,
-                data: new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [_spender, _value])
+                to: approveData.token,
+                data: new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [approveData.spender, approveData.value])
             });
-            callGasLimit = callGasLimit.add(10000);
-            const callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint)
-                .encodeFunctionData("execFromEntryPoint", [_token, 0, encodeABI]);
-            return {
-                callData,
-                callGasLimit: callGasLimit.toHexString()
+            return callGasLimit;
+        });
+    }
+    getApproveCallData(etherProvider, walletAddress, approveData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const approveCallData = {
+                callData: '0x',
+                callGasLimit: '0x0'
             };
+            if (approveData.length > 0) {
+                if (approveData.length === 1) {
+                    const encodeABI = new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [
+                        approveData[0].spender,
+                        approveData[0].value === undefined ? this.MAX_INT256 : approveData[0].value
+                    ]);
+                    approveCallData.callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint).encodeFunctionData("execFromEntryPoint", [approveData[0].token, 0, encodeABI]);
+                    approveCallData.callGasLimit = (yield this.approveGasLimit(etherProvider, walletAddress, approveData[0])).add(21000).toHexString();
+                }
+                else {
+                    const token = [];
+                    const value = [];
+                    const data = [];
+                    let callGasLimit = ethers_1.BigNumber.from(21000);
+                    for (let i = 0; i < approveData.length; i++) {
+                        token.push(approveData[i].token);
+                        value.push(0);
+                        callGasLimit = callGasLimit.add(yield this.approveGasLimit(etherProvider, walletAddress, approveData[i]));
+                        const encodeABI = new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [
+                            approveData[i].spender,
+                            approveData[i].value === undefined ? this.MAX_INT256 : approveData[i].value
+                        ]);
+                        data.push(encodeABI);
+                    }
+                    approveCallData.callGasLimit = callGasLimit.toHexString();
+                    approveCallData.callData = new ethers_1.ethers.utils.Interface(ABI_1.execBatchFromEntryPoint).encodeFunctionData("execFromEntryPoint", [token, value, data]);
+                }
+            }
+            return approveCallData;
         });
     }
     transferFrom(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, _from, _to, _value) {
