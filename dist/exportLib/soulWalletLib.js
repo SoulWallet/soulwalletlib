@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 17:18:20
+ * @LastEditTime: 2023-02-16 17:00:11
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -179,6 +179,23 @@ class SoulWalletLib {
             walletFactory = this._deployFactory.getAddress(walletLogicAddress);
         }
         return walletFactory.toLowerCase() + packedInitCode;
+    }
+    paymasterSupportedToken(etherProvider, payMasterAddress, tokens) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const paymaster = new ethers_1.ethers.Contract(payMasterAddress, tokenPaymaster_1.TokenPaymasterContract.ABI, etherProvider);
+            const reqs = [];
+            for (const token of tokens) {
+                reqs.push(paymaster.isSupportedToken(token));
+            }
+            const results = yield Promise.all(reqs);
+            const supportedTokens = [];
+            for (let i = 0; i < tokens.length; i++) {
+                if (results[i] === true) {
+                    supportedTokens.push(tokens[i]);
+                }
+            }
+            return supportedTokens;
+        });
     }
     getPaymasterExchangePrice(etherProvider, payMasterAddress, token, fetchTokenDecimals = false) {
         return __awaiter(this, void 0, void 0, function* () {
