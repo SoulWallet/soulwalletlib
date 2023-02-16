@@ -16,7 +16,7 @@ exports.ETH = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.Token =
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 09:04:49
+ * @LastEditTime: 2023-02-16 16:51:43
  */
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
@@ -76,15 +76,29 @@ class ERC20 {
                 callGasLimit: '0x0'
             };
             if (approveData.length > 0) {
-                if (approveData.length === 1) {
-                    const encodeABI = new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [
-                        approveData[0].spender,
-                        approveData[0].value === undefined ? this.MAX_INT256 : approveData[0].value
-                    ]);
-                    approveCallData.callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint).encodeFunctionData("execFromEntryPoint", [approveData[0].token, 0, encodeABI]);
-                    approveCallData.callGasLimit = (yield this.approveGasLimit(etherProvider, walletAddress, approveData[0])).add(21000).toHexString();
-                }
-                else {
+                // if (approveData.length === 1) {
+                //     const encodeABI = new ethers.utils.Interface(erc20).encodeFunctionData("approve", [
+                //         approveData[0].spender,
+                //         approveData[0].value === undefined ? this.MAX_INT256 : approveData[0].value
+                //     ]);
+                //     approveCallData.callData = new ethers.utils.Interface(execFromEntryPoint).encodeFunctionData("execFromEntryPoint", [approveData[0].token, 0, encodeABI]);
+                //     approveCallData.callGasLimit = (await this.approveGasLimit(etherProvider, walletAddress, approveData[0])).add(21000).toHexString();
+                // } else 
+                {
+                    // order by approveData.token asc 
+                    approveData.sort((a, b) => {
+                        const aBig = ethers_1.BigNumber.from(a.token);
+                        const bBig = ethers_1.BigNumber.from(b.token);
+                        if (aBig.eq(bBig)) {
+                            throw new Error("token address is same");
+                        }
+                        else if (aBig.lt(bBig)) {
+                            return -1;
+                        }
+                        else {
+                            return 1;
+                        }
+                    });
                     const token = [];
                     const value = [];
                     const data = [];
@@ -97,6 +111,7 @@ class ERC20 {
                             approveData[i].spender,
                             approveData[i].value === undefined ? this.MAX_INT256 : approveData[i].value
                         ]);
+                        //console.log(`token:${approveData[i].token},spender:${approveData[i].spender},value:${approveData[i].value}`);
                         data.push(encodeABI);
                     }
                     approveCallData.callGasLimit = callGasLimit.toHexString();

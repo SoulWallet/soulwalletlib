@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 17:18:20
+ * @LastEditTime: 2023-02-16 17:00:11
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder } from "ethers/lib/utils";
@@ -209,6 +209,22 @@ export class SoulWalletLib {
             walletFactory = this._deployFactory.getAddress(walletLogicAddress);
         }
         return walletFactory.toLowerCase() + packedInitCode;
+    }
+
+    public async paymasterSupportedToken(etherProvider: ethers.providers.BaseProvider, payMasterAddress: string, tokens: string[]) {
+        const paymaster = new ethers.Contract(payMasterAddress, TokenPaymasterContract.ABI, etherProvider);
+        const reqs = [];
+        for (const token of tokens) {
+            reqs.push(paymaster.isSupportedToken(token));
+        }
+        const results = await Promise.all(reqs);
+        const supportedTokens = [];
+        for (let i = 0; i < tokens.length; i++) {
+            if (results[i] === true) {
+                supportedTokens.push(tokens[i]);
+            }
+        }
+        return supportedTokens;
     }
 
     public async getPaymasterExchangePrice(etherProvider: ethers.providers.BaseProvider,
