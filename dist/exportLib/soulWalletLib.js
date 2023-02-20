@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-16 17:00:11
+ * @LastEditTime: 2023-02-20 20:11:24
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -48,7 +48,7 @@ const soulWallet_1 = require("../contracts/soulWallet");
 const walletProxy_1 = require("../contracts/walletProxy");
 const tokenPaymaster_1 = require("../contracts/tokenPaymaster");
 const decodeCallData_1 = require("../utils/decodeCallData");
-const guardian_1 = require("../utils/guardian");
+const guardians_1 = require("../utils/guardians");
 const token_1 = require("../utils/token");
 const bundler_1 = require("../utils/bundler");
 const converter_1 = require("../utils/converter");
@@ -80,7 +80,7 @@ class SoulWalletLib {
             deployFactory: this._deployFactory,
             fromTransaction: new converter_1.Converter().fromTransaction
         };
-        this.Guardian = new guardian_1.Guardian(this._singletonFactory);
+        this.Guardian = new guardians_1.Guardian(this._singletonFactory);
     }
     get singletonFactory() {
         return this._singletonFactory;
@@ -111,9 +111,15 @@ class SoulWalletLib {
      * @param guardianAddress the guardian contract address
      * @returns the wallet code hex string
      */
-    getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
+    getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, walletProxyConfig) {
+        if (!walletProxyConfig) {
+            walletProxyConfig = {
+                contractInterface: walletProxy_1.WalletProxyContract.ABI,
+                bytecode: walletProxy_1.WalletProxyContract.bytecode
+            };
+        }
         const initializeData = this.getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
-        const factory = new ethers_1.ethers.ContractFactory(walletProxy_1.WalletProxyContract.ABI, walletProxy_1.WalletProxyContract.bytecode);
+        const factory = new ethers_1.ethers.ContractFactory(walletProxyConfig.contractInterface, walletProxyConfig.bytecode);
         const walletBytecode = factory.getDeployTransaction(walletLogicAddress, initializeData).data;
         return walletBytecode;
     }
@@ -128,10 +134,10 @@ class SoulWalletLib {
      * @param salt the salt number,default is 0
      * @returns
      */
-    calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt) {
-        const initCodeWithArgs = this.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress);
+    calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, singletonFactory, walletProxyConfig) {
+        const initCodeWithArgs = this.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, walletProxyConfig);
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
-        const walletAddress = this.calculateWalletAddressByCodeHash(initCodeHash, salt);
+        const walletAddress = this.calculateWalletAddressByCodeHash(initCodeHash, salt, singletonFactory);
         return walletAddress;
     }
     /**
@@ -149,8 +155,8 @@ class SoulWalletLib {
      * @param walletProxy the walletProxy contract address
      * @param walletFactory the walletFactory contract address
      */
-    activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, salt, walletFactory) {
-        const walletAddress = this.calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
+    activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, salt, walletFactory, singletonFactory, walletProxyConfig) {
+        const walletAddress = this.calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, singletonFactory, walletProxyConfig);
         const userOperation = new userOperation_1.UserOperation();
         userOperation.nonce = 0;
         userOperation.sender = walletAddress;
@@ -162,8 +168,11 @@ class SoulWalletLib {
         userOperation.callData = "0x";
         return userOperation;
     }
-    getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt) {
-        let iface = new ethers_1.ethers.utils.Interface(walletFactory_1.WalletFactoryContract.ABI);
+    getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, walletFactoryInterface) {
+        if (!walletFactoryInterface) {
+            walletFactoryInterface = walletFactory_1.WalletFactoryContract.ABI;
+        }
+        let iface = new ethers_1.ethers.utils.Interface(walletFactoryInterface);
         let packedInitCode = iface.encodeFunctionData("createWallet", [
             entryPointAddress,
             ownerAddress,
@@ -253,8 +262,8 @@ class SoulWalletLib {
      * @param salt the salt number
      * @returns the EIP-4337 wallet address
      */
-    calculateWalletAddressByCodeHash(initCodeHash, salt) {
-        return (0, utils_1.getCreate2Address)(this._singletonFactory, this.number2Bytes32(salt), initCodeHash);
+    calculateWalletAddressByCodeHash(initCodeHash, salt, singletonFactory) {
+        return (0, utils_1.getCreate2Address)(singletonFactory || this._singletonFactory, this.number2Bytes32(salt), initCodeHash);
     }
     /**
      * get nonce number from contract wallet
@@ -287,7 +296,11 @@ class SoulWalletLib {
     }
 }
 exports.SoulWalletLib = SoulWalletLib;
-SoulWalletLib.Defines = addressDefine;
+SoulWalletLib.Defines = {
+    AddressZero: addressDefine.AddressZero,
+    SingletonFactoryAddress: addressDefine.SingletonFactoryAddress,
+    bytes32_zero: bytes32_1.bytes32_zero
+};
 var userOperation_2 = require("../entity/userOperation");
 Object.defineProperty(exports, "UserOperation", { enumerable: true, get: function () { return userOperation_2.UserOperation; } });
 //# sourceMappingURL=soulWalletLib.js.map

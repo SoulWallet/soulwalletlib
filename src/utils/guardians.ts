@@ -4,15 +4,15 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:30:42
+ * @LastEditTime: 2023-02-17 16:40:45
  */
 
 import { UserOperation } from "../entity/userOperation";
 import { SimpleWalletContract } from "../contracts/soulWallet";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ContractInterface, ethers } from "ethers";
 import { GuardianMultiSigWallet } from "../contracts/guardianMultiSigWallet";
 import { WalletProxyContract } from "../contracts/walletProxy";
-import { defaultAbiCoder, getCreate2Address, keccak256 } from "ethers/lib/utils";
+import { BytesLike, defaultAbiCoder, getCreate2Address, keccak256 } from "ethers/lib/utils";
 import { AddressZero } from "../defines/address";
 import { NumberLike, toNumber } from "../defines/numberLike";
 import { SignatureMode } from "./userOp";
@@ -47,9 +47,18 @@ export class Guardian {
         return initializeData;
     }
 
-    private getGuardianCode(guardianLogicAddress: string, guardians: string[], threshold: number): string {
+    private getGuardianCode(guardianLogicAddress: string, guardians: string[], threshold: number, guardianProxyConfig?: {
+        contractInterface: ContractInterface,
+        bytecode: BytesLike | { object: string }
+    }): string {
+        if (!guardianProxyConfig) {
+            guardianProxyConfig = {
+                contractInterface: WalletProxyContract.ABI,
+                bytecode: WalletProxyContract.bytecode
+            }
+        }
         const initializeData = this.getInitializeData(guardians, threshold);
-        const factory = new ethers.ContractFactory(WalletProxyContract.ABI, WalletProxyContract.bytecode);
+        const factory = new ethers.ContractFactory(guardianProxyConfig.contractInterface, guardianProxyConfig.bytecode);
         const walletBytecode = factory.getDeployTransaction(guardianLogicAddress, initializeData).data;
         return walletBytecode as string;
     }

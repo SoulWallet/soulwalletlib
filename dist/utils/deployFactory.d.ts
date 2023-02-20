@@ -1,13 +1,15 @@
-import { ethers } from "ethers";
-export interface IDeployFactory {
-    getAddress(logicContractAddress: string, salt?: string, ver?: number): string;
-    deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver?: number): Promise<string>;
-}
-export declare class DeployFactory implements IDeployFactory {
+import { BytesLike } from "ethers/lib/utils";
+import { ContractInterface, ethers } from "ethers";
+export declare class DeployFactory {
     private _singletonFactory;
     constructor(singletonFactory: string);
     private getFactory;
-    getAddress(logicContractAddress: string, salt?: string, ver?: number): string;
+    getAddress(logicContractAddress: string, salt?: string, ver?: number, walletFactoryConfig?: {
+        contractInterface: ContractInterface;
+        bytecode: BytesLike | {
+            object: string;
+        };
+    }): string;
     /**
      * deploy factory contract( if etherProvider is set)
      * @param logicContractAddress account logic contract address
@@ -18,5 +20,10 @@ export declare class DeployFactory implements IDeployFactory {
      * @param ver
      * @returns
      */
-    deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver?: number): Promise<string>;
+    deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver?: number, walletFactoryConfig?: {
+        contractInterface: ContractInterface;
+        bytecode: BytesLike | {
+            object: string;
+        };
+    }): Promise<string>;
 }
