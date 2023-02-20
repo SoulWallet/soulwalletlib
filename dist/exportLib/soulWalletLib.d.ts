@@ -1,11 +1,11 @@
-import * as addressDefine from "../defines/address";
+import { BytesLike } from "ethers/lib/utils";
 import { UserOperation } from "../entity/userOperation";
 import { IContract } from "../contracts/icontract";
 import { DecodeCallData } from '../utils/decodeCallData';
-import { Guardian } from "../utils/guardian";
+import { Guardian } from "../utils/guardians";
 import { ERC1155, ERC20, ERC721, ETH } from "../utils/token";
 import { Bundler } from '../utils/bundler';
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ContractInterface, ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 import { CodefiGasFees } from '../utils/gasFee';
 import { TokenAndPaymaster } from '../utils/tokenAndPaymaster';
@@ -21,10 +21,14 @@ export declare class SoulWalletLib {
         deployFactory: DeployFactory;
         fromTransaction: (transcations: import("../utils/converter").ITransaction[], nonce?: NumberLike, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string) => Promise<UserOperation | null>;
     };
-    static Defines: typeof addressDefine;
     Guardian: Guardian;
     constructor(singletonFactory?: string);
     get singletonFactory(): string;
+    static Defines: {
+        AddressZero: string;
+        SingletonFactoryAddress: string;
+        bytes32_zero: string;
+    };
     Bundler: typeof Bundler;
     Tokens: {
         ERC1155: ERC1155;
@@ -52,7 +56,12 @@ export declare class SoulWalletLib {
      * @param guardianAddress the guardian contract address
      * @returns the wallet code hex string
      */
-    getWalletCode(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string): string;
+    getWalletCode(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, walletProxyConfig?: {
+        contractInterface: ContractInterface;
+        bytecode: BytesLike | {
+            object: string;
+        };
+    }): string;
     /**
      * calculate wallet address by owner address
      * @param walletLogicAddress the wallet logic contract address
@@ -64,7 +73,12 @@ export declare class SoulWalletLib {
      * @param salt the salt number,default is 0
      * @returns
      */
-    calculateWalletAddress(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, salt?: number): string;
+    calculateWalletAddress(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, salt?: number, singletonFactory?: string, walletProxyConfig?: {
+        contractInterface: ContractInterface;
+        bytecode: BytesLike | {
+            object: string;
+        };
+    }): string;
     /**
      * get the userOperation for active (first time) the wallet
      * @param walletLogicAddress the wallet logic contract address
@@ -80,7 +94,12 @@ export declare class SoulWalletLib {
      * @param walletProxy the walletProxy contract address
      * @param walletFactory the walletFactory contract address
      */
-    activateWalletOp(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, paymasterAndData: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, salt?: number, walletFactory?: string): UserOperation;
+    activateWalletOp(walletLogicAddress: string, entryPointAddress: string, ownerAddress: string, upgradeDelay: number, guardianDelay: number, guardianAddress: string, paymasterAndData: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, salt?: number, walletFactory?: string, singletonFactory?: string, walletProxyConfig?: {
+        contractInterface: ContractInterface;
+        bytecode: BytesLike | {
+            object: string;
+        };
+    }): UserOperation;
     private getPackedInitCodeUsingWalletFactory;
     paymasterSupportedToken(etherProvider: ethers.providers.BaseProvider, payMasterAddress: string, tokens: string[]): Promise<string[]>;
     getPaymasterExchangePrice(etherProvider: ethers.providers.BaseProvider, payMasterAddress: string, token: string, fetchTokenDecimals?: boolean): Promise<{

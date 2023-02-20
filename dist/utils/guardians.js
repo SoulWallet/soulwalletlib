@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:30:42
+ * @LastEditTime: 2023-02-17 16:40:45
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -52,9 +52,15 @@ class Guardian {
         let initializeData = iface.encodeFunctionData("initialize", [guardians, threshold]);
         return initializeData;
     }
-    getGuardianCode(guardianLogicAddress, guardians, threshold) {
+    getGuardianCode(guardianLogicAddress, guardians, threshold, guardianProxyConfig) {
+        if (!guardianProxyConfig) {
+            guardianProxyConfig = {
+                contractInterface: walletProxy_1.WalletProxyContract.ABI,
+                bytecode: walletProxy_1.WalletProxyContract.bytecode
+            };
+        }
         const initializeData = this.getInitializeData(guardians, threshold);
-        const factory = new ethers_1.ethers.ContractFactory(walletProxy_1.WalletProxyContract.ABI, walletProxy_1.WalletProxyContract.bytecode);
+        const factory = new ethers_1.ethers.ContractFactory(guardianProxyConfig.contractInterface, guardianProxyConfig.bytecode);
         const walletBytecode = factory.getDeployTransaction(guardianLogicAddress, initializeData).data;
         return walletBytecode;
     }
@@ -267,4 +273,4 @@ class Guardian {
     }
 }
 exports.Guardian = Guardian;
-//# sourceMappingURL=guardian.js.map
+//# sourceMappingURL=guardians.js.map

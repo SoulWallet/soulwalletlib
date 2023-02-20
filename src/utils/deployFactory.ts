@@ -4,21 +4,17 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-08 16:13:28
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-09 22:48:19
+ * @LastEditTime: 2023-02-17 17:07:12
  */
 
-import { getCreate2Address, keccak256 } from "ethers/lib/utils";
+import { BytesLike, getCreate2Address, keccak256 } from "ethers/lib/utils";
 import { WalletFactoryContract } from "../contracts/walletFactory";
 import { SingletonFactory } from "../contracts/singletonFactory";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ContractInterface, ethers } from "ethers";
 import { bytes32_zero } from "../defines/bytes32";
 
-export interface IDeployFactory {
-    getAddress(logicContractAddress: string, salt?: string, ver?: number): string;
-    deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver?: number): Promise<string>;
-}
 
-export class DeployFactory implements IDeployFactory {
+export class DeployFactory {
 
     private _singletonFactory: string;
 
@@ -26,7 +22,10 @@ export class DeployFactory implements IDeployFactory {
         this._singletonFactory = singletonFactory;
     }
 
-    private getFactory(logicContractAddress: string, salt?: string, ver: number = 1) {
+    private getFactory(logicContractAddress: string, salt?: string, ver: number = 1, walletFactoryConfig?: {
+        contractInterface: ContractInterface,
+        bytecode: BytesLike | { object: string }
+    }) {
         salt = salt || bytes32_zero;
         if (ver !== 1) {
             throw new Error('version not support');
@@ -36,7 +35,13 @@ export class DeployFactory implements IDeployFactory {
         if (! /^0x[0-9a-fA-F]{64}$/.test(salt)) {
             throw new Error('salt is not bytes32');
         }
-        const walletFactory = new ethers.ContractFactory(WalletFactoryContract.ABI, WalletFactoryContract.bytecode);
+        if (!walletFactoryConfig) {
+            walletFactoryConfig = {
+                contractInterface: WalletFactoryContract.ABI,
+                bytecode: WalletFactoryContract.bytecode
+            }
+        }
+        const walletFactory = new ethers.ContractFactory(walletFactoryConfig.contractInterface, walletFactoryConfig.bytecode);
         let walletFactoryInitCodeWithArgs = walletFactory.getDeployTransaction(
             logicContractAddress,
             this._singletonFactory
@@ -49,8 +54,11 @@ export class DeployFactory implements IDeployFactory {
         };
     }
 
-    public getAddress(logicContractAddress: string, salt?: string, ver: number = 1) {
-        return this.getFactory(logicContractAddress, salt, ver).factoryAddress;
+    public getAddress(logicContractAddress: string, salt?: string, ver: number = 1, walletFactoryConfig?: {
+        contractInterface: ContractInterface,
+        bytecode: BytesLike | { object: string }
+    }) {
+        return this.getFactory(logicContractAddress, salt, ver, walletFactoryConfig).factoryAddress;
     }
 
 
@@ -64,9 +72,12 @@ export class DeployFactory implements IDeployFactory {
      * @param ver 
      * @returns 
      */
-    public async deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver: number = 1) {
+    public async deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver: number = 1, walletFactoryConfig?: {
+        contractInterface: ContractInterface,
+        bytecode: BytesLike | { object: string }
+    }) {
 
-        const { factoryAddress, initCodeWithArgs } = this.getFactory(logicContractAddress, salt, ver);
+        const { factoryAddress, initCodeWithArgs } = this.getFactory(logicContractAddress, salt, ver, walletFactoryConfig);
 
         salt = salt || bytes32_zero;
 
@@ -77,7 +88,7 @@ export class DeployFactory implements IDeployFactory {
 
         const singletonFactoryContract = new ethers.Contract(this._singletonFactory, SingletonFactory.ABI, etherProvider);
         const calldata = singletonFactoryContract.interface.encodeFunctionData('deploy', [initCodeWithArgs, salt]);
-        const gasLimit = BigNumber.from(2000000).toHexString();
+        const gasLimit = BigNumber.from(6000000).toHexString();
         // send tx
         const tx = {
             to: this._singletonFactory,
