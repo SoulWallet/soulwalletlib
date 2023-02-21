@@ -133,7 +133,7 @@ class Guardian {
         };
     }
     walletContract(etherProvider, walletAddress) {
-        return new ethers_1.ethers.Contract(walletAddress, soulWallet_1.SimpleWalletContract.ABI, etherProvider);
+        return new ethers_1.ethers.Contract(walletAddress, soulWallet_1.SoulWalletContract.ABI, etherProvider);
     }
     /**
      * get guardian info
@@ -148,9 +148,9 @@ class Guardian {
             const result = yield etherProvider.call({
                 from: address_1.AddressZero,
                 to: walletAddress,
-                data: new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI).encodeFunctionData("guardianInfo", []),
+                data: new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI).encodeFunctionData("guardianInfo", []),
             });
-            const decoded = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI).decodeFunctionResult("guardianInfo", result);
+            const decoded = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI).decodeFunctionResult("guardianInfo", result);
             /*
             
     0:'0x0000000000000000000000000000000000000000'
@@ -207,7 +207,7 @@ class Guardian {
     setGuardian(etherProvider, walletAddress, guardian, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas) {
         return __awaiter(this, void 0, void 0, function* () {
             guardian = ethers_1.ethers.utils.getAddress(guardian);
-            const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
+            const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
             const calldata = iface.encodeFunctionData("setGuardian", [guardian]);
             return yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
         });
@@ -215,7 +215,7 @@ class Guardian {
     transferOwner(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, newOwner) {
         return __awaiter(this, void 0, void 0, function* () {
             newOwner = ethers_1.ethers.utils.getAddress(newOwner);
-            const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
+            const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
             const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
             const op = yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
             if (op) {

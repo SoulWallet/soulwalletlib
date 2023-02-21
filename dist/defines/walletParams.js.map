@@ -1,0 +1,1 @@
+{"version":3,"file":"walletParams.js","sourceRoot":"","sources":["../../src/defines/walletParams.ts"],"names":[],"mappings":";AAAA;;;;;;;GAOG;;;AAUH,MAAa,YAAY;IAIrB;QAFQ,gBAAW,GAAG,IAAI,GAAG,EAA4B,CAAC;QAGtD,IAAI,CAAC,WAAW,CAAC,GAAG,CAAC,GAAG,EAAE;YACtB,aAAa,EAAE,EAAE;YACjB,SAAS,EAAE,IAAI;YACf,UAAU,EAAE,IAAI;YAChB,gBAAgB,EAAE,IAAI;SACzB,CAAC,CAAC;IACP,CAAC;CACJ;AAZD,oCAYC"}

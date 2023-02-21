@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 21:13:10
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 11:24:20
+ * @LastEditTime: 2023-02-21 23:00:26
  */
 
 import { IContract } from './icontract';
@@ -1059,4 +1059,4 @@ const contract: IContract = {
 	bytecode
 }
 
-export { contract as SimpleWalletContract };
+export { contract as SoulWalletContract };

@@ -8,7 +8,7 @@
  */
 
 import { UserOperation } from "../entity/userOperation";
-import { SimpleWalletContract } from "../contracts/soulWallet";
+import { SoulWalletContract } from "../contracts/soulWallet";
 import { BigNumber, ContractInterface, ethers } from "ethers";
 import { GuardianMultiSigWallet } from "../contracts/guardianMultiSigWallet";
 import { WalletProxyContract } from "../contracts/walletProxy";
@@ -153,7 +153,7 @@ export class Guardian {
     }
 
     private walletContract(etherProvider: ethers.providers.BaseProvider, walletAddress: string) {
-        return new ethers.Contract(walletAddress, SimpleWalletContract.ABI, etherProvider);
+        return new ethers.Contract(walletAddress, SoulWalletContract.ABI, etherProvider);
     }
 
 
@@ -170,9 +170,9 @@ export class Guardian {
         const result = await etherProvider.call({
             from: AddressZero,
             to: walletAddress,
-            data: new ethers.utils.Interface(SimpleWalletContract.ABI).encodeFunctionData("guardianInfo", []),
+            data: new ethers.utils.Interface(SoulWalletContract.ABI).encodeFunctionData("guardianInfo", []),
         });
-        const decoded = new ethers.utils.Interface(SimpleWalletContract.ABI).decodeFunctionResult("guardianInfo", result);
+        const decoded = new ethers.utils.Interface(SoulWalletContract.ABI).decodeFunctionResult("guardianInfo", result);
         /* 
         
 0:'0x0000000000000000000000000000000000000000'
@@ -233,7 +233,7 @@ export class Guardian {
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike) {
         guardian = ethers.utils.getAddress(guardian);
 
-        const iface = new ethers.utils.Interface(SimpleWalletContract.ABI);
+        const iface = new ethers.utils.Interface(SoulWalletContract.ABI);
         const calldata = iface.encodeFunctionData("setGuardian", [guardian]);
 
         return await this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress,
@@ -247,7 +247,7 @@ export class Guardian {
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string) {
         newOwner = ethers.utils.getAddress(newOwner);
 
-        const iface = new ethers.utils.Interface(SimpleWalletContract.ABI);
+        const iface = new ethers.utils.Interface(SoulWalletContract.ABI);
         const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
 
         const op = await this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress,

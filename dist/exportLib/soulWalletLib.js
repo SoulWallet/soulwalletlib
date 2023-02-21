@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-20 20:11:24
+ * @LastEditTime: 2023-02-21 17:46:49
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -49,7 +49,7 @@ const walletProxy_1 = require("../contracts/walletProxy");
 const tokenPaymaster_1 = require("../contracts/tokenPaymaster");
 const decodeCallData_1 = require("../utils/decodeCallData");
 const guardians_1 = require("../utils/guardians");
-const token_1 = require("../utils/token");
+const tokens_1 = require("../utils/tokens");
 const bundler_1 = require("../utils/bundler");
 const converter_1 = require("../utils/converter");
 const ethers_1 = require("ethers");
@@ -64,10 +64,10 @@ class SoulWalletLib {
     constructor(singletonFactory) {
         this.Bundler = bundler_1.Bundler;
         this.Tokens = {
-            ERC1155: new token_1.ERC1155(),
-            ERC20: new token_1.ERC20(),
-            ERC721: new token_1.ERC721(),
-            ETH: new token_1.ETH()
+            ERC1155: new tokens_1.ERC1155(),
+            ERC20: new tokens_1.ERC20(),
+            ERC721: new tokens_1.ERC721(),
+            ETH: new tokens_1.ETH()
         };
         singletonFactory = singletonFactory || address_1.SingletonFactoryAddress;
         this._singletonFactory = singletonFactory;
@@ -97,7 +97,7 @@ class SoulWalletLib {
     getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
         // function initialize(IEntryPoint anEntryPoint, address anOwner,  IERC20 token,address paymaster)
         // encodeFunctionData
-        let iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SimpleWalletContract.ABI);
+        let iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
         let initializeData = iface.encodeFunctionData("initialize", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress]);
         return initializeData;
     }
