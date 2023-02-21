@@ -4,19 +4,19 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-20 20:11:24
+ * @LastEditTime: 2023-02-21 17:46:49
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder, BytesLike } from "ethers/lib/utils";
 import * as addressDefine from "../defines/address";
 import { UserOperation } from "../entity/userOperation";
 import { IContract } from "../contracts/icontract";
-import { SimpleWalletContract } from "../contracts/soulWallet";
+import { SoulWalletContract } from "../contracts/soulWallet";
 import { WalletProxyContract } from "../contracts/walletProxy";
 import { TokenPaymasterContract } from "../contracts/tokenPaymaster";
 import { DecodeCallData } from '../utils/decodeCallData';
 import { Guardian } from "../utils/guardians";
-import { ERC1155, ERC20, ERC721, ETH } from "../utils/token";
+import { ERC1155, ERC20, ERC721, ETH } from "../utils/tokens";
 import { Bundler } from '../utils/bundler';
 import { Converter } from "../utils/converter";
 import { BigNumber, ContractInterface, ethers } from "ethers";
@@ -97,7 +97,7 @@ export class SoulWalletLib {
     ) {
         // function initialize(IEntryPoint anEntryPoint, address anOwner,  IERC20 token,address paymaster)
         // encodeFunctionData
-        let iface = new ethers.utils.Interface(SimpleWalletContract.ABI);
+        let iface = new ethers.utils.Interface(SoulWalletContract.ABI);
         let initializeData = iface.encodeFunctionData("initialize", [entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress]);
         return initializeData;
     }

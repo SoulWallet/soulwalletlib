@@ -5,10 +5,10 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 21:13:10
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-01 11:24:20
+ * @LastEditTime: 2023-02-21 23:00:26
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SimpleWalletContract = void 0;
+exports.SoulWalletContract = void 0;
 const ABI = [
     {
         "inputs": [],
@@ -1051,5 +1051,5 @@ const contract = {
     ABI,
     bytecode
 };
-exports.SimpleWalletContract = contract;
+exports.SoulWalletContract = contract;
 //# sourceMappingURL=soulWallet.js.map
