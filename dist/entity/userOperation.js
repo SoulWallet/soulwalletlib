@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-22 14:53:02
+ * @LastEditTime: 2023-02-22 16:19:13
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -263,6 +263,11 @@ class UserOperation {
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
     }
+    /**
+     * get required pre fund
+     * @param basefee for EIP1559, the basefee
+     * @returns required pre fund
+     */
     requiredPrefund(basefee) {
         this.calcPreVerificationGas();
         /*
@@ -282,6 +287,7 @@ class UserOperation {
         }
         else {
             if (basefee !== undefined) {
+                basefee = ethers_1.BigNumber.from(basefee);
                 const _fee = basefee.add(maxPriorityFeePerGas);
                 gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
             }

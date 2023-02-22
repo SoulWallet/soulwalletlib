@@ -63,6 +63,11 @@ declare class UserOperation {
      * @returns bytes32 hash
      */
     getUserOpHashWithDeadline(entryPointAddress: string, chainId: number, deadline: number): string;
-    requiredPrefund(basefee?: BigNumber): BigNumber;
+    /**
+     * get required pre fund
+     * @param basefee for EIP1559, the basefee
+     * @returns required pre fund
+     */
+    requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber;
 }
 export { UserOperation };
