@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-22 14:53:02
+ * @LastEditTime: 2023-02-22 16:19:13
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -278,7 +278,12 @@ class UserOperation {
         return ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
     }
 
-    public requiredPrefund(basefee?: BigNumber): BigNumber {
+    /**
+     * get required pre fund
+     * @param basefee for EIP1559, the basefee
+     * @returns required pre fund
+     */
+    public requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber {
         this.calcPreVerificationGas();
 
         /* 
@@ -297,6 +302,7 @@ class UserOperation {
             gasPrice = maxFeePerGas;
         } else {
             if (basefee !== undefined) {
+                basefee = BigNumber.from(basefee);
                 const _fee = basefee.add(maxPriorityFeePerGas);
                 gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
             } else {
