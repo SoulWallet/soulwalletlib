@@ -27,6 +27,24 @@ export class UserOp {
   }
 
 
+  public callDataCost(op: UserOperation): number {
+    let mockSignature = false;
+    if (op.signature === '0x') {
+      mockSignature = true;
+      // Single signature
+      op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
+
+      // Guardian signature
+      // #TODO
+    }
+    const packed = this.packUserOp(op, false);
+    if (mockSignature) {
+      op.signature = '0x';
+    }
+    return ethers.utils.arrayify(packed)
+      .map(x => x === 0 ? 4 : 16)
+      .reduce((sum, x) => sum + x)
+  }
 
 
   public packUserOp(op: UserOperation, forSignature = true): string {

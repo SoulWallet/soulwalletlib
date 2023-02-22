@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:30:25
+ * @LastEditTime: 2023-02-22 14:53:42
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -24,10 +24,7 @@ const ethers_1 = require("ethers");
 class Converter {
     constructor() {
     }
-    fromTransaction(
-    // etherProvider: ethers.providers.BaseProvider,
-    // entryPointAddress: string,
-    transcations, nonce = 0, maxFeePerGas = 0, maxPriorityFeePerGas = 0, paymasterAndData = "0x") {
+    fromTransaction(etherProvider, entryPointAddress, transcations, nonce, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData = "0x") {
         return __awaiter(this, void 0, void 0, function* () {
             const op = new userOperation_1.UserOperation();
             op.nonce = nonce;
@@ -39,13 +36,13 @@ class Converter {
             }
             op.sender = (transcations[0].from).toLowerCase();
             // #TODO if gas is null
-            let _callGasLimit = ethers_1.BigNumber.from(transcations[0].gas);
+            //let _callGasLimit: BigNumber = BigNumber.from(transcations[0].gas);
             const _to = [transcations[0].to];
             const _value = [transcations[0].value];
             const _data = [transcations[0].data];
             if (transcations.length > 1) {
                 for (let i = 1; i < transcations.length; i++) {
-                    _callGasLimit.add(ethers_1.BigNumber.from(transcations[i]));
+                    // _callGasLimit.add(BigNumber.from(transcations[i]));
                     _to.push(transcations[i].to);
                     _value.push(transcations[i].value);
                     _data.push(transcations[i].data);
@@ -54,7 +51,7 @@ class Converter {
                     }
                 }
             }
-            op.callGasLimit = _callGasLimit.toHexString();
+            //op.callGasLimit = _callGasLimit.toHexString();
             if (transcations.length === 1) {
                 op.callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint)
                     .encodeFunctionData("execFromEntryPoint", [_to[0], _value[0], _data[0]]);
@@ -63,12 +60,10 @@ class Converter {
                 op.callData = new ethers_1.ethers.utils.Interface(ABI_1.execBatchFromEntryPoint)
                     .encodeFunctionData("execFromEntryPoint", [_to, _value, _data]);
             }
-            // let gasEstimated = await op.estimateGas(entryPointAddress,
-            //     etherProvider
-            // );
-            // if (!gasEstimated) {
-            //     return null;
-            // }
+            let gasEstimated = yield op.estimateGas(entryPointAddress, etherProvider);
+            if (!gasEstimated) {
+                return null;
+            }
             return op;
         });
     }

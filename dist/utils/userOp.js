@@ -21,6 +21,23 @@ class UserOp {
         const values = typevalues.map((typevalue) => typevalue.type === 'bytes' && forSignature ? (0, utils_1.keccak256)(typevalue.val) : typevalue.val);
         return utils_1.defaultAbiCoder.encode(types, values);
     }
+    callDataCost(op) {
+        let mockSignature = false;
+        if (op.signature === '0x') {
+            mockSignature = true;
+            // Single signature
+            op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
+            // Guardian signature
+            // #TODO
+        }
+        const packed = this.packUserOp(op, false);
+        if (mockSignature) {
+            op.signature = '0x';
+        }
+        return ethers_1.ethers.utils.arrayify(packed)
+            .map(x => x === 0 ? 4 : 16)
+            .reduce((sum, x) => sum + x);
+    }
     packUserOp(op, forSignature = true) {
         op.alignment();
         if (forSignature) {

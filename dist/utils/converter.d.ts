@@ -1,13 +1,13 @@
 import { UserOperation } from "../entity/userOperation";
+import { ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 export interface ITransaction {
-    data: string;
     from: string;
-    gas: string;
+    data: string;
     to: string;
     value: string;
 }
 export declare class Converter {
     constructor();
-    fromTransaction(transcations: ITransaction[], nonce?: NumberLike, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string): Promise<UserOperation | null>;
+    fromTransaction(etherProvider: ethers.providers.BaseProvider, entryPointAddress: string, transcations: ITransaction[], nonce: NumberLike, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, paymasterAndData?: string): Promise<UserOperation | null>;
 }

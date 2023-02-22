@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 22:30:25
+ * @LastEditTime: 2023-02-22 14:53:42
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -13,9 +13,8 @@ import { BigNumber, ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 
 export interface ITransaction {
-    data: string;
     from: string;
-    gas: string;
+    data: string;
     to: string;
     value: string;
 }
@@ -27,12 +26,12 @@ export class Converter {
     }
 
     public async fromTransaction(
-        // etherProvider: ethers.providers.BaseProvider,
-        // entryPointAddress: string,
+        etherProvider: ethers.providers.BaseProvider,
+        entryPointAddress: string,
         transcations: ITransaction[],
-        nonce: NumberLike = 0,
-        maxFeePerGas: NumberLike = 0,
-        maxPriorityFeePerGas: NumberLike = 0,
+        nonce: NumberLike,
+        maxFeePerGas: NumberLike,
+        maxPriorityFeePerGas: NumberLike,
         paymasterAndData: string = "0x"
     ): Promise<UserOperation | null> {
 
@@ -51,7 +50,7 @@ export class Converter {
         // #TODO if gas is null
 
 
-        let _callGasLimit: BigNumber = BigNumber.from(transcations[0].gas);
+        //let _callGasLimit: BigNumber = BigNumber.from(transcations[0].gas);
 
         const _to: string[] = [transcations[0].to];
         const _value: string[] = [transcations[0].value];
@@ -59,7 +58,7 @@ export class Converter {
 
         if (transcations.length > 1) {
             for (let i = 1; i < transcations.length; i++) {
-                _callGasLimit.add(BigNumber.from(transcations[i]));
+                // _callGasLimit.add(BigNumber.from(transcations[i]));
                 _to.push(transcations[i].to);
                 _value.push(transcations[i].value);
                 _data.push(transcations[i].data);
@@ -69,7 +68,7 @@ export class Converter {
             }
         }
 
-        op.callGasLimit = _callGasLimit.toHexString();
+        //op.callGasLimit = _callGasLimit.toHexString();
 
         if (transcations.length === 1) {
             op.callData = new ethers.utils.Interface(execFromEntryPoint)
@@ -84,12 +83,12 @@ export class Converter {
         }
 
 
-        // let gasEstimated = await op.estimateGas(entryPointAddress,
-        //     etherProvider
-        // );
-        // if (!gasEstimated) {
-        //     return null;
-        // }
+        let gasEstimated = await op.estimateGas(entryPointAddress,
+            etherProvider
+        );
+        if (!gasEstimated) {
+            return null;
+        }
 
         return op;
     }
