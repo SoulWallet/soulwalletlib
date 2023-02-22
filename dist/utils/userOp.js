@@ -15,6 +15,16 @@ var SignatureMode;
 })(SignatureMode = exports.SignatureMode || (exports.SignatureMode = {}));
 class UserOp {
     constructor() {
+        // define in bundler (https://github.com/eth-infinitism/bundler/blob/main/packages/sdk/src/calcPreVerificationGas.ts#L44)
+        this.DefaultGasOverheads = {
+            fixed: 21000,
+            perUserOp: 18300,
+            perUserOpWord: 4,
+            zeroByte: 4,
+            nonZeroByte: 16,
+            bundleSize: 1,
+            sigSize: 65
+        };
     }
     encode(typevalues, forSignature) {
         const types = typevalues.map(typevalue => typevalue.type === 'bytes' && forSignature ? 'bytes32' : typevalue.type);
@@ -30,13 +40,17 @@ class UserOp {
             // Guardian signature
             // #TODO
         }
-        const packed = this.packUserOp(op, false);
+        const packed = ethers_1.ethers.utils.arrayify(this.packUserOp(op, false));
         if (mockSignature) {
             op.signature = '0x';
         }
-        return ethers_1.ethers.utils.arrayify(packed)
-            .map(x => x === 0 ? 4 : 16)
-            .reduce((sum, x) => sum + x);
+        const lengthInWord = (packed.length + 31) / 32;
+        const callDataCost = packed.map(x => x === 0 ? this.DefaultGasOverheads.zeroByte : this.DefaultGasOverheads.nonZeroByte).reduce((sum, x) => sum + x);
+        const ret = Math.round(callDataCost +
+            this.DefaultGasOverheads.fixed / this.DefaultGasOverheads.bundleSize +
+            this.DefaultGasOverheads.perUserOp +
+            this.DefaultGasOverheads.perUserOpWord * lengthInWord);
+        return ret;
     }
     packUserOp(op, forSignature = true) {
         op.alignment();

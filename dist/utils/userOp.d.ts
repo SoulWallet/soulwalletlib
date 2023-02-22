@@ -10,6 +10,7 @@ export declare enum SignatureMode {
 export declare class UserOp {
     constructor();
     private encode;
+    private DefaultGasOverheads;
     callDataCost(op: UserOperation): number;
     packUserOp(op: UserOperation, forSignature?: boolean): string;
     getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string;
