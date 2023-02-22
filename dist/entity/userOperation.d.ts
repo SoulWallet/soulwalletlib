@@ -22,6 +22,7 @@ declare class UserOperation {
     toJSON(): string;
     static fromJSON(json: string): UserOperation;
     static fromObject(obj: any): UserOperation;
+    private calcPreVerificationGas;
     /**
      * estimate the gas
      * @param entryPointAddress the entry point address

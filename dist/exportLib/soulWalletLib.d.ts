@@ -19,7 +19,7 @@ export declare class SoulWalletLib {
         suggestedGasFee: typeof CodefiGasFees;
         tokenAndPaymaster: typeof TokenAndPaymaster;
         deployFactory: DeployFactory;
-        fromTransaction: (transcations: import("../utils/converter").ITransaction[], nonce?: NumberLike, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string) => Promise<UserOperation | null>;
+        fromTransaction: (etherProvider: ethers.providers.BaseProvider, entryPointAddress: string, transcations: import("../utils/converter").ITransaction[], nonce: NumberLike, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, paymasterAndData?: string) => Promise<UserOperation | null>;
     };
     Guardian: Guardian;
     constructor(singletonFactory?: string);

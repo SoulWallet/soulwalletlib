@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 10:40:59
+ * @LastEditTime: 2023-02-22 14:53:02
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -28,8 +28,8 @@ class UserOperation {
     public initCode: string = '0x';
     public callData: string = '0x';
     public callGasLimit: NumberLike = 0;
-    public verificationGasLimit: NumberLike = 700000;// createSender:315968  validateUserOp:10573 postOp:? validatePaymasterUserOp:?
-    public preVerificationGas: NumberLike = 1000000;
+    public verificationGasLimit: NumberLike = 410000;
+    public preVerificationGas: NumberLike = 0;//47000;
     public maxFeePerGas: NumberLike = 0;
     public maxPriorityFeePerGas: NumberLike = 0;
     public paymasterAndData: string = '0x';
@@ -187,6 +187,12 @@ class UserOperation {
         return userOp;
     }
 
+    private calcPreVerificationGas() {
+        if (BigNumber.from(this.preVerificationGas).lt(10000)) {
+            this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+        }
+    }
+
     /**
      * estimate the gas
      * @param entryPointAddress the entry point address
@@ -200,11 +206,6 @@ class UserOperation {
         // (transaction: ethers.utils.Deferrable<ethers.providers.TransactionRequest>): Promise<ether.BigNumber>
     ) {
         try {
-            // //  // Single signer 385000,
-            // this.verificationGasLimit = 60000;
-            // if (this.initCode.length > 0) {
-            //     this.verificationGasLimit += (3200 + 200 * this.initCode.length);
-            // }
             const estimateGasRe = await etherProvider.estimateGas({
                 from: entryPointAddress,
                 to: this.sender,
@@ -260,6 +261,7 @@ class UserOperation {
      * @returns hex string
      */
     public getUserOpHash(entryPointAddress: string, chainId: number): string {
+        this.calcPreVerificationGas();
         return this._userOp.getUserOpHash(this, entryPointAddress, chainId);
     }
 
@@ -271,11 +273,13 @@ class UserOperation {
      * @returns bytes32 hash
      */
     public getUserOpHashWithDeadline(entryPointAddress: string, chainId: number, deadline: number): string {
+        this.calcPreVerificationGas();
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
     }
 
     public requiredPrefund(basefee?: BigNumber): BigNumber {
+        this.calcPreVerificationGas();
 
         /* 
          uint256 maxFeePerGas = mUserOp.maxFeePerGas;

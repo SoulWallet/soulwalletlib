@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 10:40:59
+ * @LastEditTime: 2023-02-22 14:53:02
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -32,8 +32,8 @@ class UserOperation {
         this.initCode = '0x';
         this.callData = '0x';
         this.callGasLimit = 0;
-        this.verificationGasLimit = 700000; // createSender:315968  validateUserOp:10573 postOp:? validatePaymasterUserOp:?
-        this.preVerificationGas = 1000000;
+        this.verificationGasLimit = 410000;
+        this.preVerificationGas = 0; //47000;
         this.maxFeePerGas = 0;
         this.maxPriorityFeePerGas = 0;
         this.paymasterAndData = '0x';
@@ -185,6 +185,11 @@ class UserOperation {
         userOp.signature = obj.signature;
         return userOp;
     }
+    calcPreVerificationGas() {
+        if (ethers_1.BigNumber.from(this.preVerificationGas).lt(10000)) {
+            this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+        }
+    }
     /**
      * estimate the gas
      * @param entryPointAddress the entry point address
@@ -197,11 +202,6 @@ class UserOperation {
     ) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // //  // Single signer 385000,
-                // this.verificationGasLimit = 60000;
-                // if (this.initCode.length > 0) {
-                //     this.verificationGasLimit += (3200 + 200 * this.initCode.length);
-                // }
                 const estimateGasRe = yield etherProvider.estimateGas({
                     from: entryPointAddress,
                     to: this.sender,
@@ -248,6 +248,7 @@ class UserOperation {
      * @returns hex string
      */
     getUserOpHash(entryPointAddress, chainId) {
+        this.calcPreVerificationGas();
         return this._userOp.getUserOpHash(this, entryPointAddress, chainId);
     }
     /**
@@ -258,10 +259,12 @@ class UserOperation {
      * @returns bytes32 hash
      */
     getUserOpHashWithDeadline(entryPointAddress, chainId, deadline) {
+        this.calcPreVerificationGas();
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
     }
     requiredPrefund(basefee) {
+        this.calcPreVerificationGas();
         /*
          uint256 maxFeePerGas = mUserOp.maxFeePerGas;
         uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
