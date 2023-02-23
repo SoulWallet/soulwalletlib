@@ -1,12 +1,3 @@
-/*
- * @Description: 
- * @Version: 1.0
- * @Autor: z.cejay@gmail.com
- * @Date: 2022-07-25 10:53:52
- * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 15:34:19
- */
-
 import { ethers, BigNumber } from "ethers";
 import { AddressZero, SingletonFactoryAddress } from "../defines/address";
 import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
@@ -19,21 +10,101 @@ class UserOperation {
 
     private _userOp: UserOp;
 
+
     constructor() {
         this._userOp = new UserOp();
     }
+    private _sender: string = '';
+    public get sender(): string {
+        return this._sender;
+    }
+    public set sender(value: string) {
+        if (!ethers.utils.isAddress(value)) {
+            throw new Error('invalid sender address');
+        }
+        this._sender = value;
+    }
+    private _nonce: NumberLike = 0;
+    public get nonce(): NumberLike {
+        return this._nonce;
+    }
+    public set nonce(value: NumberLike) {
+        this._nonce = value;
+    }
+    private _initCode: string = '0x';
+    public get initCode(): string {
+        return this._initCode;
+    }
+    public set initCode(value: string) {
+        this._initCode = value;
 
-    public sender: string = '';
-    public nonce: NumberLike = 0;
-    public initCode: string = '0x';
-    public callData: string = '0x';
-    public callGasLimit: NumberLike = 0;
-    public verificationGasLimit: NumberLike = 450000;
-    public preVerificationGas: NumberLike = 0;//47000;
-    public maxFeePerGas: NumberLike = 0;
-    public maxPriorityFeePerGas: NumberLike = 0;
-    public paymasterAndData: string = '0x';
-    public signature: string = '0x';
+        // update preVerificationGas & verificationGasLimit
+        this.calcGas();
+    }
+    private _callData: string = '0x';
+    public get callData(): string {
+        return this._callData;
+    }
+    public set callData(value: string) {
+        this._callData = value;
+
+        // update preVerificationGas & verificationGasLimit
+        this.calcGas();
+    }
+    private _callGasLimit: NumberLike = 0;
+    public get callGasLimit(): NumberLike {
+        return this._callGasLimit;
+    }
+    public set callGasLimit(value: NumberLike) {
+        this._callGasLimit = value;
+    }
+    private _verificationGasLimit: NumberLike = 450000;
+    public get verificationGasLimit(): NumberLike {
+        return this._verificationGasLimit;
+    }
+    public set verificationGasLimit(value: NumberLike) {
+        this._verificationGasLimit = value;
+    }
+    private _preVerificationGas: NumberLike = 47000;
+    public get preVerificationGas(): NumberLike {
+        return this._preVerificationGas;
+    }
+    public set preVerificationGas(value: NumberLike) {
+        this._preVerificationGas = value;
+    }
+    private _maxFeePerGas: NumberLike = 0;
+    public get maxFeePerGas(): NumberLike {
+        return this._maxFeePerGas;
+    }
+    public set maxFeePerGas(value: NumberLike) {
+        this._maxFeePerGas = value;
+    }
+    private _maxPriorityFeePerGas: NumberLike = 0;
+    public get maxPriorityFeePerGas(): NumberLike {
+        return this._maxPriorityFeePerGas;
+    }
+    public set maxPriorityFeePerGas(value: NumberLike) {
+        this._maxPriorityFeePerGas = value;
+    }
+    private _paymasterAndData: string = '0x';
+    public get paymasterAndData(): string {
+        return this._paymasterAndData;
+    }
+    public set paymasterAndData(value: string) {
+        this._paymasterAndData = value;
+
+        // update preVerificationGas & verificationGasLimit
+        this.calcGas();
+    }
+    private _signature: string = '0x';
+    public get signature(): string {
+        return this._signature;
+    }
+    public set signature(value: string) {
+        this._signature = value;
+    }
+
+
 
     public toTuple(): string {
         /* 
@@ -53,14 +124,31 @@ class UserOperation {
         return `["${this.sender.toLocaleLowerCase()}","${toDecString(this.nonce)}","${this.initCode}","${this.callData}","${toDecString(this.callGasLimit)}","${toDecString(this.verificationGasLimit)}","${toDecString(this.preVerificationGas)}","${toDecString(this.maxFeePerGas)}","${toDecString(this.maxPriorityFeePerGas)}","${this.paymasterAndData}","${this.signature}"]`;
     }
 
+    public getStruct() {
+        this.alignment();
+        return {
+            sender: this.sender,
+            nonce: this.nonce,
+            initCode: this.initCode,
+            callData: this.callData,
+            callGasLimit: this.callGasLimit,
+            verificationGasLimit: this.verificationGasLimit,
+            preVerificationGas: this.preVerificationGas,
+            maxFeePerGas: this.maxFeePerGas,
+            maxPriorityFeePerGas: this.maxPriorityFeePerGas,
+            paymasterAndData: this.paymasterAndData,
+            signature: this.signature
+        };
+    }
+
     public alignment() {
-        this.nonce = toHexString(this.nonce);
-        this.callGasLimit = toHexString(this.callGasLimit);
-        this.verificationGasLimit = toHexString(this.verificationGasLimit);
-        this.preVerificationGas = toHexString(this.preVerificationGas);
-        this.maxFeePerGas = toHexString(this.maxFeePerGas);
-        this.maxPriorityFeePerGas = toHexString(this.maxPriorityFeePerGas);
-        this.paymasterAndData = this.paymasterAndData === AddressZero ? '0x' : this.paymasterAndData;
+        this._nonce = toHexString(this._nonce);
+        this._callGasLimit = toHexString(this._callGasLimit);
+        this._verificationGasLimit = toHexString(this._verificationGasLimit);
+        this._preVerificationGas = toHexString(this._preVerificationGas);
+        this._maxFeePerGas = toHexString(this._maxFeePerGas);
+        this._maxPriorityFeePerGas = toHexString(this._maxPriorityFeePerGas);
+        this._paymasterAndData = this._paymasterAndData === AddressZero ? '0x' : this._paymasterAndData;
     }
 
     public toJSON(): string {
@@ -187,21 +275,41 @@ class UserOperation {
         return userOp;
     }
 
-    public setCallData(callData: string) {
-        this.callData = callData;
-        this.preVerificationGas = 0;
-        this.calcPreVerificationGas();
-    }
-    public setPaymasterAndData(paymasterAndData: string='0x') {
-        this.paymasterAndData = paymasterAndData;
-        this.preVerificationGas = 0;
-        this.calcPreVerificationGas();
-    }
-
-    private calcPreVerificationGas() {
-        if (BigNumber.from(this.preVerificationGas).eq(0)) {
-            this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+    private calcGas() {
+        /**
+        * if recovery wallet,preVerificationGas += 20000
+        * 0x4fb2e45d:transferOwner(address)
+        */
+        let isRecoveryWallet = false;
+        if (this.callData.startsWith('0x4fb2e45d')) {
+            isRecoveryWallet = true;
         }
+
+        // #region preVerificationGas
+
+        let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
+
+        if (isRecoveryWallet) {
+            _preVerificationGas += 20000;
+        }
+        this.preVerificationGas = _preVerificationGas;
+
+        // #endregion preVerificationGas
+
+        // #region verificationGasLimit
+        let _verificationGasLimit = 50000;
+        if (isRecoveryWallet) {
+            _verificationGasLimit += 500000; // create guardian cost
+        }
+        if (this._initCode !== '0x') {
+            _verificationGasLimit += 400000; // create wallet cost
+        }
+        if (this.paymasterAndData.length > 2 && this.paymasterAndData !== AddressZero) {
+            _verificationGasLimit += 20000; // paymaster cost ( validatePaymasterUserOp & postOp )
+        }
+        this.verificationGasLimit = _verificationGasLimit;
+
+        // #endregion verificationGasLimit
     }
 
     /**
@@ -272,7 +380,6 @@ class UserOperation {
      * @returns hex string
      */
     public getUserOpHash(entryPointAddress: string, chainId: number): string {
-        this.calcPreVerificationGas();
         return this._userOp.getUserOpHash(this, entryPointAddress, chainId);
     }
 
@@ -284,7 +391,6 @@ class UserOperation {
      * @returns bytes32 hash
      */
     public getUserOpHashWithDeadline(entryPointAddress: string, chainId: number, deadline: number): string {
-        this.calcPreVerificationGas();
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
     }
@@ -295,8 +401,6 @@ class UserOperation {
      * @returns required pre fund
      */
     public requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber {
-        this.calcPreVerificationGas();
-
         /* 
          uint256 maxFeePerGas = mUserOp.maxFeePerGas;
         uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;

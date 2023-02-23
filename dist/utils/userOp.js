@@ -32,13 +32,14 @@ class UserOp {
         return utils_1.defaultAbiCoder.encode(types, values);
     }
     callDataCost(op) {
+        if (!ethers_1.ethers.utils.isAddress(op.sender)) {
+            return 0;
+        }
         let mockSignature = false;
         if (op.signature === '0x') {
             mockSignature = true;
             // Single signature
             op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
-            // Guardian signature
-            // #TODO
         }
         const packed = ethers_1.ethers.utils.arrayify(this.packUserOp(op, false));
         if (mockSignature) {
@@ -58,17 +59,17 @@ class UserOp {
             // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
             const userOpType = {
                 components: [
-                    { type: 'address', name: 'sender' },
-                    { type: 'uint256', name: 'nonce' },
-                    { type: 'bytes', name: 'initCode' },
-                    { type: 'bytes', name: 'callData' },
-                    { type: 'uint256', name: 'callGasLimit' },
-                    { type: 'uint256', name: 'verificationGasLimit' },
-                    { type: 'uint256', name: 'preVerificationGas' },
-                    { type: 'uint256', name: 'maxFeePerGas' },
-                    { type: 'uint256', name: 'maxPriorityFeePerGas' },
-                    { type: 'bytes', name: 'paymasterAndData' },
-                    { type: 'bytes', name: 'signature' }
+                    { type: 'address', name: '_sender' },
+                    { type: 'uint256', name: '_nonce' },
+                    { type: 'bytes', name: '_initCode' },
+                    { type: 'bytes', name: '_callData' },
+                    { type: 'uint256', name: '_callGasLimit' },
+                    { type: 'uint256', name: '_verificationGasLimit' },
+                    { type: 'uint256', name: '_preVerificationGas' },
+                    { type: 'uint256', name: '_maxFeePerGas' },
+                    { type: 'uint256', name: '_maxPriorityFeePerGas' },
+                    { type: 'bytes', name: '_paymasterAndData' },
+                    { type: 'bytes', name: '_signature' }
                 ],
                 name: 'userOp',
                 type: 'tuple'
