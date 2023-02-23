@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 15:13:11
+ * @LastEditTime: 2023-02-23 15:34:19
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -185,8 +185,20 @@ class UserOperation {
         userOp.signature = obj.signature;
         return userOp;
     }
+    setCallData(callData) {
+        this.callData = callData;
+        this.preVerificationGas = 0;
+        this.calcPreVerificationGas();
+    }
+    setPaymasterAndData(paymasterAndData = '0x') {
+        this.paymasterAndData = paymasterAndData;
+        this.preVerificationGas = 0;
+        this.calcPreVerificationGas();
+    }
     calcPreVerificationGas() {
-        this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+        if (ethers_1.BigNumber.from(this.preVerificationGas).eq(0)) {
+            this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+        }
     }
     /**
      * estimate the gas

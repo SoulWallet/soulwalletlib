@@ -22,6 +22,8 @@ declare class UserOperation {
     toJSON(): string;
     static fromJSON(json: string): UserOperation;
     static fromObject(obj: any): UserOperation;
+    setCallData(callData: string): void;
+    setPaymasterAndData(paymasterAndData?: string): void;
     private calcPreVerificationGas;
     /**
      * estimate the gas
