@@ -4,10 +4,10 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-02 22:38:58
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 10:55:56
+ * @LastEditTime: 2023-02-23 10:41:49
  */
 
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { HttpRequest } from './httpRequest';
 
 export class DecodeCallData {
@@ -163,10 +163,10 @@ export class DecodeCallData {
      * @param callData call data
      * @returns 
      */
-    public async decode(callData: string): Promise<IDecode | null> {
+    public async decode(callData: string): Promise<IDecode[]> {
 
         if (!callData || callData.length < 10) {
-            return null;
+            return [];
         }
 
         callData = callData.toLowerCase();
@@ -182,18 +182,66 @@ export class DecodeCallData {
                 const address = params[0];
                 const uint256 = params[1];
                 const bytes = params[2];
-                return this.decode(bytes);
+                const _ret = await this._decode(address, uint256, bytes);
+                if(_ret){
+                    return [_ret];
+                }
+                return [];
             } else if (method.functionSignature === 'execFromEntryPoint(address[],uint256[],bytes[])') {
-                // not implement
-                // #TODO
-                return null;
+                const address = params[0];
+                const uint256 = params[1];
+                const bytes = params[2];
+                const result: IDecode[] = [];
+                for (let i = 0; i < bytes.length; i++) {
+                    const _ret = await this._decode(address[i], uint256[i], bytes[i]);
+                    if(_ret){
+                        result.push(_ret);
+                    }
+                }
+                return result;
             } else {
-                return {
+                return [{
                     functionName: method.functionName,
                     functionSignature: method.functionSignature,
+                    to: '0x',
+                    value: BigNumber.from(0),
                     params: params
-                };
+                }];
             }
+        }
+
+
+        return [];
+    }
+
+
+    public async _decode(to: string, value: number | string | BigNumber, callData: string): Promise<IDecode | null> {
+        const _value = BigNumber.from(value);
+        if (!callData || callData.length < 10) {
+            return {
+                functionName: '',
+                functionSignature: '',
+                to: to,
+                value: _value,
+                params: []
+            };
+        }
+        const bytes4 = callData.slice(0, 10)
+        const method = this.bytes4Methods.get(bytes4);
+        if (method) {
+            const typesArray = method.typesArray;
+            //const params = this.web3.eth.abi.decodeParameters(typesArray, callData.slice(10));
+            const params = ethers.utils.defaultAbiCoder.decode(typesArray, '0x' + callData.slice(10));
+            //  functionSignature: 'execFromEntryPoint(address,uint256,bytes)',
+            // functionSignature: 'execFromEntryPoint(address[],uint256[],bytes[])',
+
+            return {
+                functionName: method.functionName,
+                functionSignature: method.functionSignature,
+                to: to,
+                value: _value,
+                params: params
+            };
 
         }
         const methodSignature = await this.read4BytesMethod(bytes4);
@@ -204,10 +252,15 @@ export class DecodeCallData {
             return {
                 functionName: functionName,
                 functionSignature: methodSignature,
+                to: to,
+                value: _value,
                 params: null
             };
         }
     }
+
+
+
 
 
     // private scanParams(params: string) {
@@ -263,7 +316,29 @@ interface IByte4Method {
 }
 
 interface IDecode {
+
+    /**
+     * function name
+     */
     functionName: string,
+
+    /**
+     * function signature
+     */
     functionSignature: string;
+
+    /**
+     * to address
+     */
+    to: string;
+
+    /**
+     * ether value
+     */
+    value: BigNumber;
+
+    /**
+     * other params
+     */
     params: any
 }
