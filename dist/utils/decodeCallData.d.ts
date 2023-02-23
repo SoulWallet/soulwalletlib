@@ -1,3 +1,4 @@
+import { BigNumber } from "ethers";
 export declare class DecodeCallData {
     private static instance;
     private bytes4Methods;
@@ -19,11 +20,29 @@ export declare class DecodeCallData {
      * @param callData call data
      * @returns
      */
-    decode(callData: string): Promise<IDecode | null>;
+    decode(callData: string): Promise<IDecode[]>;
+    _decode(to: string, value: number | string | BigNumber, callData: string): Promise<IDecode | null>;
 }
 interface IDecode {
+    /**
+     * function name
+     */
     functionName: string;
+    /**
+     * function signature
+     */
     functionSignature: string;
+    /**
+     * to address
+     */
+    to: string;
+    /**
+     * ether value
+     */
+    value: BigNumber;
+    /**
+     * other params
+     */
     params: any;
 }
 export {};

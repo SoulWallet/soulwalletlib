@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-22 17:11:07
+ * @LastEditTime: 2023-02-23 10:01:39
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -32,7 +32,7 @@ class UserOperation {
         this.initCode = '0x';
         this.callData = '0x';
         this.callGasLimit = 0;
-        this.verificationGasLimit = 410000;
+        this.verificationGasLimit = 450000;
         this.preVerificationGas = 0; //47000;
         this.maxFeePerGas = 0;
         this.maxPriorityFeePerGas = 0;

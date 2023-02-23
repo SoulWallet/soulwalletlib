@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-02 22:38:58
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-14 10:55:56
+ * @LastEditTime: 2023-02-23 10:41:49
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -173,7 +173,7 @@ class DecodeCallData {
     decode(callData) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!callData || callData.length < 10) {
-                return null;
+                return [];
             }
             callData = callData.toLowerCase();
             const bytes4 = callData.slice(0, 10);
@@ -188,20 +188,65 @@ class DecodeCallData {
                     const address = params[0];
                     const uint256 = params[1];
                     const bytes = params[2];
-                    return this.decode(bytes);
+                    const _ret = yield this._decode(address, uint256, bytes);
+                    if (_ret) {
+                        return [_ret];
+                    }
+                    return [];
                 }
                 else if (method.functionSignature === 'execFromEntryPoint(address[],uint256[],bytes[])') {
-                    // not implement
-                    // #TODO
-                    return null;
+                    const address = params[0];
+                    const uint256 = params[1];
+                    const bytes = params[2];
+                    const result = [];
+                    for (let i = 0; i < bytes.length; i++) {
+                        const _ret = yield this._decode(address[i], uint256[i], bytes[i]);
+                        if (_ret) {
+                            result.push(_ret);
+                        }
+                    }
+                    return result;
                 }
                 else {
-                    return {
-                        functionName: method.functionName,
-                        functionSignature: method.functionSignature,
-                        params: params
-                    };
+                    return [{
+                            functionName: method.functionName,
+                            functionSignature: method.functionSignature,
+                            to: '0x',
+                            value: ethers_1.BigNumber.from(0),
+                            params: params
+                        }];
                 }
+            }
+            return [];
+        });
+    }
+    _decode(to, value, callData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const _value = ethers_1.BigNumber.from(value);
+            if (!callData || callData.length < 10) {
+                return {
+                    functionName: '',
+                    functionSignature: '',
+                    to: to,
+                    value: _value,
+                    params: []
+                };
+            }
+            const bytes4 = callData.slice(0, 10);
+            const method = this.bytes4Methods.get(bytes4);
+            if (method) {
+                const typesArray = method.typesArray;
+                //const params = this.web3.eth.abi.decodeParameters(typesArray, callData.slice(10));
+                const params = ethers_1.ethers.utils.defaultAbiCoder.decode(typesArray, '0x' + callData.slice(10));
+                //  functionSignature: 'execFromEntryPoint(address,uint256,bytes)',
+                // functionSignature: 'execFromEntryPoint(address[],uint256[],bytes[])',
+                return {
+                    functionName: method.functionName,
+                    functionSignature: method.functionSignature,
+                    to: to,
+                    value: _value,
+                    params: params
+                };
             }
             const methodSignature = yield this.read4BytesMethod(bytes4);
             if (!methodSignature) {
@@ -212,6 +257,8 @@ class DecodeCallData {
                 return {
                     functionName: functionName,
                     functionSignature: methodSignature,
+                    to: to,
+                    value: _value,
                     params: null
                 };
             }
