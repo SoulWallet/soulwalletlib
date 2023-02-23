@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 15:13:11
+ * @LastEditTime: 2023-02-23 15:34:19
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -187,8 +187,21 @@ class UserOperation {
         return userOp;
     }
 
+    public setCallData(callData: string) {
+        this.callData = callData;
+        this.preVerificationGas = 0;
+        this.calcPreVerificationGas();
+    }
+    public setPaymasterAndData(paymasterAndData: string='0x') {
+        this.paymasterAndData = paymasterAndData;
+        this.preVerificationGas = 0;
+        this.calcPreVerificationGas();
+    }
+
     private calcPreVerificationGas() {
-        this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+        if (BigNumber.from(this.preVerificationGas).eq(0)) {
+            this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
+        }
     }
 
     /**
