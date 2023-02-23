@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-07-25 10:53:52
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 10:01:39
+ * @LastEditTime: 2023-02-23 15:13:11
  */
 
 import { ethers, BigNumber } from "ethers";
@@ -188,9 +188,7 @@ class UserOperation {
     }
 
     private calcPreVerificationGas() {
-        if (BigNumber.from(this.preVerificationGas).eq(0)) {
-            this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
-        }
+        this.preVerificationGas = this._userOp.callDataCost(this) + 10000;
     }
 
     /**
