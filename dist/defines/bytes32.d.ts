@@ -1,1 +1,5 @@
+/**
+ * zero bytes32
+ * @type {string}
+ */
 export declare const bytes32_zero = "0x0000000000000000000000000000000000000000000000000000000000000000";

@@ -1,4 +1,12 @@
 import { BigNumber } from "ethers";
+/**
+ * @interface IExecutionResult
+ * @property {BigNumber} preOpGas
+ * @property {BigNumber} paid
+ * @property {BigNumber} deadline
+ * @property {BigNumber} paymasterDeadline
+ *
+ */
 export interface IExecutionResult {
     preOpGas: BigNumber;
     paid: BigNumber;

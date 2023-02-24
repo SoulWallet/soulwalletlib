@@ -1,27 +1,35 @@
 import { BigNumber } from "ethers";
+/**
+ * decode call data
+ * @class DecodeCallData
+ */
 export declare class DecodeCallData {
     private static instance;
     private bytes4Methods;
     private _saveToStorage;
     private _readFromStorage;
     private constructor();
+    /**
+     * get instance
+     * @returns {DecodeCallData}
+     */
     static new(): DecodeCallData;
     /**
      * set saveToStorage function & readFromStorage function
-     * @param saveToStorage async function
-     * @param readFromStorage async function
+     * @param {Function} saveToStorage
+     * @param {Function} readFromStorage
      */
     setStorage(saveToStorage: (key: string, value: string) => any, readFromStorage: (key: string) => string | null): void;
     private saveToStorage;
     private readFromStorage;
     private read4BytesMethod;
     /**
-     * decode call data
-     * @param callData call data
-     * @returns
+     * decode callData
+     * @param {string} callData
+     * @returns {Promise<IDecode[]>}
      */
     decode(callData: string): Promise<IDecode[]>;
-    _decode(to: string, value: number | string | BigNumber, callData: string): Promise<IDecode | null>;
+    private _decode;
 }
 interface IDecode {
     /**

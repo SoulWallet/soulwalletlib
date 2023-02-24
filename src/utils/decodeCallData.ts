@@ -4,12 +4,16 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-02 22:38:58
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 10:41:49
+ * @LastEditTime: 2023-02-24 18:16:15
  */
 
 import { BigNumber, ethers } from "ethers";
 import { HttpRequest } from './httpRequest';
 
+/**
+ * decode call data
+ * @class DecodeCallData
+ */
 export class DecodeCallData {
     private static instance: DecodeCallData;
     private bytes4Methods = new Map<string, IByte4Method>();
@@ -101,6 +105,10 @@ export class DecodeCallData {
 
     }
 
+    /**
+     * get instance
+     * @returns {DecodeCallData}
+     */
     public static new() {
         if (!DecodeCallData.instance) {
             DecodeCallData.instance = new DecodeCallData();
@@ -110,8 +118,8 @@ export class DecodeCallData {
 
     /**
      * set saveToStorage function & readFromStorage function
-     * @param saveToStorage async function
-     * @param readFromStorage async function
+     * @param {Function} saveToStorage
+     * @param {Function} readFromStorage
      */
     public setStorage(saveToStorage: (key: string, value: string) => any, readFromStorage: (key: string) => string | null) {
         this._saveToStorage = saveToStorage;
@@ -159,9 +167,9 @@ export class DecodeCallData {
     }
 
     /**
-     * decode call data 
-     * @param callData call data
-     * @returns 
+     * decode callData
+     * @param {string} callData
+     * @returns {Promise<IDecode[]>} 
      */
     public async decode(callData: string): Promise<IDecode[]> {
 
@@ -183,7 +191,7 @@ export class DecodeCallData {
                 const uint256 = params[1];
                 const bytes = params[2];
                 const _ret = await this._decode(address, uint256, bytes);
-                if(_ret){
+                if (_ret) {
                     return [_ret];
                 }
                 return [];
@@ -194,7 +202,7 @@ export class DecodeCallData {
                 const result: IDecode[] = [];
                 for (let i = 0; i < bytes.length; i++) {
                     const _ret = await this._decode(address[i], uint256[i], bytes[i]);
-                    if(_ret){
+                    if (_ret) {
                         result.push(_ret);
                     }
                 }
@@ -215,7 +223,7 @@ export class DecodeCallData {
     }
 
 
-    public async _decode(to: string, value: number | string | BigNumber, callData: string): Promise<IDecode | null> {
+    private async _decode(to: string, value: number | string | BigNumber, callData: string): Promise<IDecode | null> {
         const _value = BigNumber.from(value);
         if (!callData || callData.length < 10) {
             return {

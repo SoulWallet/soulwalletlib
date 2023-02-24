@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 10:32:20
+ * @LastEditTime: 2023-02-24 17:32:20
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -21,9 +21,27 @@ exports.Converter = void 0;
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
 const ethers_1 = require("ethers");
+/**
+ * converter class
+ * @class Converter
+ */
 class Converter {
+    /**
+     * @constructor
+     */
     constructor() {
     }
+    /**
+     * convert transcations to userOperation
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} entryPointAddress the entry point address
+     * @param {ITransaction[]} transcations the transcations
+     * @param {NumberLike} nonce the nonce
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string?} paymasterAndData the paymaster and data
+     * @returns {Promise<UserOperation | null>} the userOperation
+     */
     fromTransaction(etherProvider, entryPointAddress, transcations, nonce, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData = "0x") {
         return __awaiter(this, void 0, void 0, function* () {
             const op = new userOperation_1.UserOperation();

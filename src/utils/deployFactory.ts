@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-08 16:13:28
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-17 17:07:12
+ * @LastEditTime: 2023-02-24 17:35:25
  */
 
 import { BytesLike, getCreate2Address, keccak256 } from "ethers/lib/utils";
@@ -14,10 +14,20 @@ import { BigNumber, ContractInterface, ethers } from "ethers";
 import { bytes32_zero } from "../defines/bytes32";
 
 
+/**
+ * deploy factory contract
+ * @class DeployFactory
+ */
 export class DeployFactory {
 
     private _singletonFactory: string;
 
+    /**
+     * Creates an instance of DeployFactory.
+     * @param {string} singletonFactory singleton factory address
+     * @memberof DeployFactory
+     * @constructor
+     */
     constructor(singletonFactory: string) {
         this._singletonFactory = singletonFactory;
     }
@@ -54,6 +64,14 @@ export class DeployFactory {
         };
     }
 
+    /**
+     * get factory address
+     * @param {string} logicContractAddress account logic contract address
+     * @param {string?} salt salt
+     * @param {number} [ver=1] version
+     * @param {walletFactoryConfig?} walletFactoryConfig wallet factory config
+     * @returns {string} factory address
+     */
     public getAddress(logicContractAddress: string, salt?: string, ver: number = 1, walletFactoryConfig?: {
         contractInterface: ContractInterface,
         bytecode: BytesLike | { object: string }
@@ -64,13 +82,13 @@ export class DeployFactory {
 
     /**
      * deploy factory contract( if etherProvider is set)
-     * @param logicContractAddress account logic contract address
-     * @param proxyContractAddress proxy contract address (auto deploy if not set)
-     * @param etherProvider 
-     * @param create2Factory 
-     * @param salt 
-     * @param ver 
-     * @returns 
+     * @param {string} logicContractAddress account logic contract address
+     * @param {ethers.providers.BaseProvider?} etherProvider ether provider
+     * @param {ethers.Signer} signer signer
+     * @param {string?} salt salt
+     * @param {number} [ver=1] version
+     * @param {walletFactoryConfig?} walletFactoryConfig wallet factory config
+     * @returns {Promise<string>} factory address
      */
     public async deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver: number = 1, walletFactoryConfig?: {
         contractInterface: ContractInterface,

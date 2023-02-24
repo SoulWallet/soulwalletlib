@@ -4,9 +4,17 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-12-28 20:47:28
  * @LastEditors: cejay
- * @LastEditTime: 2022-12-28 20:54:07
+ * @LastEditTime: 2023-02-24 17:13:48
  */
 
+/**
+ * gas fee interface
+ * @interface fee
+ * @property {string} suggestedMaxPriorityFeePerGas the suggested max priority fee per gas
+ * @property {string} suggestedMaxFeePerGas the suggested max fee per gas
+ * @property {number} minWaitTimeEstimate the min wait time estimate
+ * @property {number} maxWaitTimeEstimate the max wait time estimate
+ */
 export interface fee {
     suggestedMaxPriorityFeePerGas: string;
     suggestedMaxFeePerGas: string;
@@ -14,6 +22,13 @@ export interface fee {
     maxWaitTimeEstimate: number;
 }
 
+/**
+ * suggested gas fees interface
+ * @interface SuggestedGasFees
+ * @property {fee} low the low fee
+ * @property {fee} medium the medium fee
+ * @property {fee} high the high fee
+ */
 export interface SuggestedGasFees {
     low: fee;
     medium: fee;
@@ -27,6 +42,13 @@ export interface SuggestedGasFees {
     baseFeeTrend: string;
 }
 
+/**
+ * gas prices interface
+ * @interface gasPrices
+ * @property {string} SafeGasPrice the safe gas price
+ * @property {string} ProposeGasPrice the propose gas price
+ * @property {string} FastGasPrice the fast gas price
+ */
 export interface gasPrices {
     SafeGasPrice: string;
     ProposeGasPrice: string;

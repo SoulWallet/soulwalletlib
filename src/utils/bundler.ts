@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-13 16:37:54
+ * @LastEditTime: 2023-02-24 17:33:07
  */
 
 
@@ -31,6 +31,10 @@ export class ApiTimeOut {
 }
 
 
+/**
+ * bundler utils
+ * @class Bundler
+ */
 export class Bundler {
     private _entryPoint: string = '';
     private _etherProvider: ethers.providers.BaseProvider;
@@ -38,11 +42,13 @@ export class Bundler {
     private _timeout: ApiTimeOut = new ApiTimeOut();
 
     /**
-     * 
-     * @param entryPoint the entry point address
-     * @param etherProvider 
-     * @param bundlerApi the bundler api address(https)
-     * @param timeout the timeout config
+     * Bundler utils
+     * @constructor Bundler
+     * @param {String} entryPoint the entry point address
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String?} bundlerApi the bundler api url
+     * @param {ApiTimeOut?} timeout the timeout
+     * @returns {Bundler}
      */
     constructor(entryPoint: string, etherProvider: ethers.providers.BaseProvider, bundlerApi?: string, timeout?: ApiTimeOut) {
         this._entryPoint = entryPoint;
@@ -75,6 +81,11 @@ export class Bundler {
 
 
     private _init = false;
+
+    /**
+     * init the bundler
+     * @returns {Promise<void>}
+     */
     public async init() {
         if (this._init) {
             return;
@@ -111,6 +122,10 @@ export class Bundler {
 
     }
 
+    /**
+     * get bundler supported chainid
+     * @returns {Promise<String>} supported chainid
+     */
     public async eth_chainId(): Promise<string> {
         return this.rpcRequest<never[], string>(
             {
@@ -122,6 +137,10 @@ export class Bundler {
         );
     }
 
+    /**
+     * get bundler supported entry points
+     * @returns {Promise<String[]>} supported entry points
+     */
     public async eth_supportedEntryPoints() {
         return this.rpcRequest<never[], string[]>(
             {
@@ -133,6 +152,11 @@ export class Bundler {
         );
     }
 
+    /**
+     * send user operation via bundler
+     * @param {UserOperation} userOp
+     * @returns {Promise<String>} user operation hash
+     */
     public async eth_sendUserOperation(userOp: UserOperation) {
         return this.rpcRequest<any[], string>(
             {
@@ -172,10 +196,13 @@ export class Bundler {
         });
     }
 
+
     /**
-     * 
-     * @param userOp 
-     * @returns emitter event: send, error, receipt, timeout
+     * send user operation via bundler
+     * @param {UserOperation} userOp
+     * @param {Number} receiptTimeout receipt timeout
+     * @param {Number} receiptInterval receipt interval
+     * @returns {EventEmitter} emitter event: send, error, receipt, timeout
      */
     public sendUserOperation(userOp: UserOperation, receiptTimeout: number = 0, receiptInterval: number = 1000 * 6) {
         const emitter = new EventEmitter();
@@ -204,9 +231,6 @@ export class Bundler {
         });
         return emitter;
     }
-
-
-
 
     private decodeExecutionResult(result: string): IResult | null {
         // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
@@ -249,7 +273,6 @@ export class Bundler {
         return null;
     }
 
-
     private decodeValidationResult(result: string): IResult | null {
         // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9if (result.startsWith('0x3dd956e9')) {
         if (result.startsWith('0x3dd956e9')) {
@@ -271,6 +294,11 @@ export class Bundler {
         return null;
     }
 
+    /**
+     * simulateHandleOp
+     * @param {UserOperation} op
+     * @returns {Promise<IResult>} result
+     */
     async simulateHandleOp(op: UserOperation): Promise<IResult> {
         try {
             const result = await this._etherProvider.call({
@@ -296,6 +324,11 @@ export class Bundler {
 
     }
 
+    /**
+     * simulateValidation
+     * @param {UserOperation} op
+     * @returns {Promise<IResult>} result
+     */
     async simulateValidation(op: UserOperation): Promise<IResult> {
         try {
             const result = await this._etherProvider.call({

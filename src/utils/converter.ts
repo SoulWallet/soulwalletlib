@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 10:32:20
+ * @LastEditTime: 2023-02-24 17:32:20
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -12,6 +12,14 @@ import { execFromEntryPoint, execBatchFromEntryPoint } from "../defines/ABI";
 import { BigNumber, ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 
+/**
+ * transcation interface
+ * @interface ITransaction
+ * @property {string} from the from address
+ * @property {string} data the data
+ * @property {string} to the to address
+ * @property {string} value the value
+ */
 export interface ITransaction {
     from: string;
     data: string;
@@ -20,11 +28,29 @@ export interface ITransaction {
 }
 
 
+/**
+ * converter class
+ * @class Converter
+ */
 export class Converter {
 
+    /**
+     * @constructor
+     */
     constructor() {
     }
 
+    /**
+     * convert transcations to userOperation
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} entryPointAddress the entry point address
+     * @param {ITransaction[]} transcations the transcations
+     * @param {NumberLike} nonce the nonce
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string?} paymasterAndData the paymaster and data
+     * @returns {Promise<UserOperation | null>} the userOperation
+     */
     public async fromTransaction(
         etherProvider: ethers.providers.BaseProvider,
         entryPointAddress: string,

@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-21 17:46:49
+ * @LastEditTime: 2023-02-24 16:57:04
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -61,6 +61,11 @@ const walletFactory_1 = require("../contracts/walletFactory");
 const address_1 = require("../defines/address");
 const ABI_1 = require("../defines/ABI");
 class SoulWalletLib {
+    /**
+     * @constructor SoulWalletLib
+     * @param {String?} singletonFactory the singletonFactory address
+     * @returns {SoulWalletLib}
+     */
     constructor(singletonFactory) {
         this.Bundler = bundler_1.Bundler;
         this.Tokens = {
@@ -82,17 +87,21 @@ class SoulWalletLib {
         };
         this.Guardian = new guardians_1.Guardian(this._singletonFactory);
     }
+    /**
+     * get singletonFactory address
+     * @returns {String} address
+     */
     get singletonFactory() {
         return this._singletonFactory;
     }
     /**
-     *
-     * @param entryPointAddress the entryPoint address
-     * @param ownerAddress the owner address
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @returns inithex
+     * get initialize data
+     * @param {String} entryPointAddress  the entryPoint address
+     * @param {String} ownerAddress the owner address
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @returns {String} inithex
      */
     getInitializeData(entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress) {
         // function initialize(IEntryPoint anEntryPoint, address anOwner,  IERC20 token,address paymaster)
@@ -103,13 +112,14 @@ class SoulWalletLib {
     }
     /**
      * get wallet code
-     * @param walletLogicAddress the wallet logic contract address
-     * @param entryPointAddress the entryPoint address
-     * @param ownerAddress the owner address
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @returns the wallet code hex string
+     * @param {String} walletLogicAddress the wallet logic contract address
+     * @param {String} entryPointAddress the entryPoint address
+     * @param {String} ownerAddress the owner address
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @param {Object?} walletProxyConfig the wallet proxy config
+     * @returns {String} the wallet code hex string
      */
     getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, walletProxyConfig) {
         if (!walletProxyConfig) {
@@ -125,14 +135,16 @@ class SoulWalletLib {
     }
     /**
      * calculate wallet address by owner address
-     * @param walletLogicAddress the wallet logic contract address
-     * @param entryPointAddress the entryPoint address
-     * @param ownerAddress the owner address
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @param salt the salt number,default is 0
-     * @returns
+     * @param {String} walletLogicAddress the wallet logic contract address
+     * @param {String} entryPointAddress the entryPoint address
+     * @param {String} ownerAddress the owner address
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @param {Number?} salt the salt number,default is 0
+     * @param {String?} singletonFactory the singletonFactory address,default is SingletonFactoryAddress
+     * @param {Object?} walletProxyConfig the wallet proxy config
+     * @returns {String} the wallet address
      */
     calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, singletonFactory, walletProxyConfig) {
         const initCodeWithArgs = this.getWalletCode(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, walletProxyConfig);
@@ -142,18 +154,20 @@ class SoulWalletLib {
     }
     /**
      * get the userOperation for active (first time) the wallet
-     * @param walletLogicAddress the wallet logic contract address
-     * @param entryPointAddress
-     * @param ownerAddress
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @param paymasterAndData the paymaster address and data
-     * @param maxFeePerGas the max fee per gas
-     * @param maxPriorityFeePerGas the max priority fee per gas
-     * @param salt the salt number,default is 0
-     * @param walletProxy the walletProxy contract address
-     * @param walletFactory the walletFactory contract address
+     * @param {String} walletLogicAddress the wallet logic contract address
+     * @param {String} entryPointAddress the entryPoint address
+     * @param {String} ownerAddress the owner address
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @param {String} paymasterAndData the paymaster address and data
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {Number?} salt the salt number,default is 0
+     * @param {String?} walletFactory the walletFactory contract address
+     * @param {String?} singletonFactory the singletonFactory contract address
+     * @param {Object?} walletProxyConfig the walletProxyConfig
+     * @returns {UserOperation} the userOperation
      */
     activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, salt, walletFactory, singletonFactory, walletProxyConfig) {
         const walletAddress = this.calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, singletonFactory, walletProxyConfig);
@@ -189,6 +203,13 @@ class SoulWalletLib {
         }
         return walletFactory.toLowerCase() + packedInitCode;
     }
+    /**
+     * check if the token is supported by paymaster
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String} payMasterAddress paymaster contract address
+     * @param {String[]} tokens token address list
+     * @returns {String[]} supported token address list
+     */
     paymasterSupportedToken(etherProvider, payMasterAddress, tokens) {
         return __awaiter(this, void 0, void 0, function* () {
             const paymaster = new ethers_1.ethers.Contract(payMasterAddress, tokenPaymaster_1.TokenPaymasterContract.ABI, etherProvider);
@@ -206,6 +227,14 @@ class SoulWalletLib {
             return supportedTokens;
         });
     }
+    /**
+     * get paymaster exchange price
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String} payMasterAddress paymaster contract address
+     * @param {String} token token address
+     * @param {Boolean?} fetchTokenDecimals fetch token decimals or not
+     * @returns {Object} exchange price
+     */
     getPaymasterExchangePrice(etherProvider, payMasterAddress, token, fetchTokenDecimals = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const paymaster = new ethers_1.ethers.Contract(payMasterAddress, tokenPaymaster_1.TokenPaymasterContract.ABI, etherProvider);
@@ -233,16 +262,23 @@ class SoulWalletLib {
             }
         });
     }
+    /**
+     * get paymaster data
+     * @param {String} payMasterAddress paymaster contract address
+     * @param {String} token token address
+     * @param {BigNumber} maxCost token max cost
+     * @returns {String} paymasterAndData(hex string)
+     */
     getPaymasterData(payMasterAddress, token, maxCost) {
         const enc = payMasterAddress.toLowerCase() + utils_1.defaultAbiCoder.encode(['address', 'uint256'], [token, maxCost]).substring(2);
         return enc;
     }
     /**
-     * calculate EIP-4337 wallet address
-     * @param initContract the init Contract
-     * @param initArgs the init args
-     * @param salt the salt number
-     * @returns
+     * calculate wallet address
+     * @param {IContract} initContract the init Contract
+     * @param {any[] | undefined} initArgs the init args
+     * @param {Number} salt the salt number
+     * @returns {String} wallet address
      */
     calculateWalletAddressByCode(initContract, initArgs, salt) {
         const factory = new ethers_1.ethers.ContractFactory(initContract.ABI, initContract.bytecode);
@@ -250,6 +286,11 @@ class SoulWalletLib {
         const initCodeHash = (0, utils_1.keccak256)(initCodeWithArgs);
         return this.calculateWalletAddressByCodeHash(initCodeHash, salt);
     }
+    /**
+     * convert number to bytes32
+     * @param {Number?} num the number
+     * @returns {String} bytes32
+     */
     number2Bytes32(num) {
         if (num === undefined) {
             return bytes32_1.bytes32_zero;
@@ -257,20 +298,21 @@ class SoulWalletLib {
         return (0, utils_1.hexZeroPad)((0, utils_1.hexlify)(num), 32);
     }
     /**
-     * calculate EIP-4337 wallet address
-     * @param initCodeHash the init code after keccak256
-     * @param salt the salt number
-     * @returns the EIP-4337 wallet address
+     * calculate wallet address
+     * @param {String} initCodeHash the init code after keccak256
+     * @param {Number?} salt the salt number
+     * @param {String?} singletonFactory the singleton factory address
+     * @returns {String} the wallet address
      */
     calculateWalletAddressByCodeHash(initCodeHash, salt, singletonFactory) {
         return (0, utils_1.getCreate2Address)(singletonFactory || this._singletonFactory, this.number2Bytes32(salt), initCodeHash);
     }
     /**
      * get nonce number from contract wallet
-     * @param walletAddress the wallet address
-     * @param web3 the web3 instance
-     * @param defaultBlock "earliest", "latest" and "pending"
-     * @returns the next nonce number
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String?} defaultBlock "earliest", "latest" and "pending"
+     * @returns {Number} the next nonce number
      */
     getNonce(walletAddress, etherProvider, defaultBlock = 'latest') {
         return __awaiter(this, void 0, void 0, function* () {
@@ -296,6 +338,9 @@ class SoulWalletLib {
     }
 }
 exports.SoulWalletLib = SoulWalletLib;
+/**
+ *
+ */
 SoulWalletLib.Defines = {
     AddressZero: addressDefine.AddressZero,
     SingletonFactoryAddress: addressDefine.SingletonFactoryAddress,

@@ -16,14 +16,21 @@ exports.CodefiGasFees = void 0;
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-12-28 20:46:15
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-11 12:46:59
+ * @LastEditTime: 2023-02-24 17:36:35
  */
 const httpRequest_1 = require("./httpRequest");
+/**
+ * gas fee
+ * @class CodefiGasFees
+ */
 class CodefiGasFees {
-    /*
-    https://gas-api.metaswap.codefi.network/networks/1/suggestedGasFees
-    https://gas-api.metaswap.codefi.network/networks/1/gasPrices
-    */
+    /**
+     * get gas fees
+     * @static
+     * @link https://gas-api.metaswap.codefi.network/networks/1/suggestedGasFees
+     * @param {number} chainId the chain id
+     * @returns {Promise<SuggestedGasFees | null>} the gas fees
+     */
     static getEIP1559GasFees(chainId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -42,6 +49,13 @@ class CodefiGasFees {
             return null;
         });
     }
+    /**
+     * get legacy gas prices
+     * @static
+     * @link https://gas-api.metaswap.codefi.network/networks/1/gasPrices
+     * @param {number} chainId the chain id
+     * @returns {Promise<gasPrices | null>} the gas prices
+     */
     static getLegacyGasPrices(chainId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

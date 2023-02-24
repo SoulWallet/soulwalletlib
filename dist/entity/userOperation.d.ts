@@ -3,8 +3,27 @@ import { NumberLike } from "../defines/numberLike";
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol
  */
+/**
+ * @class UserOperation
+ * @description UserOperation class
+ * @example
+ * const userOperation = new UserOperation();
+ * @property {String} sender the sender address
+ * @property {NumberLike} nonce the nonce
+ * @property {String} initCode the initCode
+ * @property {String} callData the callData
+ * @property {String} preVerificationGas the preVerificationGas
+ * @property {String} verificationGasLimit the verificationGasLimit
+ * @property {String} maxFeePerGas the maxFeePerGas
+ * @property {String} maxPriorityFeePerGas the maxPriorityFeePerGas
+ * @property {String} paymasterAndData the paymasterAndData
+ * @property {String} signature the signature
+ */
 declare class UserOperation {
     private _userOp;
+    /**
+     * @constructor UserOperation
+     */
     constructor();
     private _sender;
     get sender(): string;
@@ -39,7 +58,15 @@ declare class UserOperation {
     private _signature;
     get signature(): string;
     set signature(value: string);
+    /**
+     * @description convert to userOperation tuple string
+     * @returns {string} the userOperation tuple string
+     */
     toTuple(): string;
+    /**
+     * @description convert to userOperation struct
+     * @returns {object} the userOperation struct
+     */
     getStruct(): {
         sender: string;
         nonce: NumberLike;
@@ -53,55 +80,76 @@ declare class UserOperation {
         paymasterAndData: string;
         signature: string;
     };
+    /**
+     * @description convert NumberLike property to hex string
+     * @returns {void}
+     */
     alignment(): void;
+    /**
+     * @description convert to userOperation json string
+     * @returns {string} the userOperation json string
+     */
     toJSON(): string;
+    /**
+     * @description convert from userOperation json string
+     * @param {string} json the userOperation json string
+     * @returns {UserOperation} the userOperation object
+     */
     static fromJSON(json: string): UserOperation;
+    /**
+     * @description convert from userOperation object
+     * @param {object} obj the userOperation object
+     * @returns {UserOperation} the userOperation object
+     */
     static fromObject(obj: any): UserOperation;
     private calcGas;
     /**
-     * estimate the gas
-     * @param entryPointAddress the entry point address
-     * @param estimateGasFunc the estimate gas function
-     * @returns false if failed
+     * @description estimate gas
+     * @param {string} entryPointAddress the entry point address
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @returns {Promise<boolean>} true or false
      */
     estimateGas(entryPointAddress: string, etherProvider: ethers.providers.BaseProvider): Promise<boolean>;
     /**
-     * get the paymaster sign hash
-     * @returns
+     * @description get the paymaster sign hash
+     * @returns {string} the paymaster sign hash
      */
     payMasterSignHash(): string;
     /**
-     * sign the user operation
-     * @param entryPoint the entry point address
-     * @param chainId the chain id
-     * @param privateKey the private key
+     * @description sign the user operation
+     * @param {string} entryPoint the entry point address
+     * @param {number} chainId the chain id
+     * @param {string} privateKey the private key
+     * @returns {void}
      */
     sign(entryPoint: string, chainId: number, privateKey: string): void;
     /**
-     * sign the user operation with personal sign
-     * @param signAddress the sign address
-     * @param signature the signature of the UserOpHash
+     * @description sign the user operation with signature
+     * @param {string} signAddress the sign address
+     * @param {string} signature the signature
+     * @returns {void}
      */
     signWithSignature(signAddress: string, signature: string): void;
     /**
-     * get the UserOpHash (userOp hash)
-     * @param entryPointAddress the entry point address
-     * @param chainId the chain id
-     * @returns hex string
+     * @description get the UserOpHash (userOp hash)
+     * @param {string} entryPointAddress the entry point address
+     * @param {number} chainId the chain id
+     * @returns {string} the UserOpHash (userOp hash)
      */
     getUserOpHash(entryPointAddress: string, chainId: number): string;
     /**
-     * get the UserOpHash (userOp hash) with deadline
-     * @param entryPointAddress
-     * @param chainId
-     * @param deadline unix timestamp
-     * @returns bytes32 hash
+     * @description get the UserOpHash (userOp hash) with deadline
+     * @param {string} entryPointAddress the entry point address
+     * @param {number} chainId the chain id
+     * @param {number} deadline the deadline
+     * @returns {string} the UserOpHash (userOp hash) with deadline
+     * @remarks deadline is a timestamp in seconds
      */
     getUserOpHashWithDeadline(entryPointAddress: string, chainId: number, deadline: number): string;
     /**
-     * get required pre fund
-     * @param basefee for EIP1559, the basefee
-     * @returns required pre fund
+     * @description get the required prefund
+     * @param {(BigNumber | NumberLike)?} basefee the basefee
+     * @returns {BigNumber} the required prefund
      */
     requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber;
 }
