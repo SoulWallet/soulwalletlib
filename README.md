@@ -34,9 +34,9 @@
 
 - Built-in CallData parsing module
 
-- Auto update preVerificationGas (lower deposit requirements for user)
-
 - Built-in common operations, such as ERC20 ERC721 ERC1155 (e.g. you can create a transfer UserOperation with one function)
+
+- Auto update preVerificationGas (lower deposit requirements for user)
 
 - ⚠️ Note: current version will refactor the code in the future and cannot guarantee compatibility
 
