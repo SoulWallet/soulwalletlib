@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[src/interface/IResult.ts:46](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L46)
+[src/interface/IResult.ts:46](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L46)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:48](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L48)
+[src/interface/IResult.ts:48](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L48)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:47](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L47)
+[src/interface/IResult.ts:47](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L47)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:44](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L44)
+[src/interface/IResult.ts:44](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L44)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:45](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L45)
+[src/interface/IResult.ts:45](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L45)

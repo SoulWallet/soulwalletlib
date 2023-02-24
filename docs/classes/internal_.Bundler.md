@@ -57,7 +57,7 @@ Bundler utils
 
 #### Defined in
 
-[src/utils/bundler.ts:53](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L53)
+[src/utils/bundler.ts:53](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L53)
 
 ## Properties
 
@@ -67,7 +67,7 @@ Bundler utils
 
 #### Defined in
 
-[src/utils/bundler.ts:41](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L41)
+[src/utils/bundler.ts:41](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L41)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:39](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L39)
+[src/utils/bundler.ts:39](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L39)
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:40](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L40)
+[src/utils/bundler.ts:40](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L40)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:83](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L83)
+[src/utils/bundler.ts:83](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L83)
 
 ___
 
@@ -107,7 +107,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:42](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L42)
+[src/utils/bundler.ts:42](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L42)
 
 ## Methods
 
@@ -127,7 +127,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:235](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L235)
+[src/utils/bundler.ts:235](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L235)
 
 ___
 
@@ -147,7 +147,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:255](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L255)
+[src/utils/bundler.ts:255](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L255)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:276](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L276)
+[src/utils/bundler.ts:276](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L276)
 
 ___
 
@@ -185,7 +185,7 @@ supported chainid
 
 #### Defined in
 
-[src/utils/bundler.ts:129](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L129)
+[src/utils/bundler.ts:129](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L129)
 
 ___
 
@@ -205,7 +205,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:174](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L174)
+[src/utils/bundler.ts:174](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L174)
 
 ___
 
@@ -225,7 +225,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:189](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L189)
+[src/utils/bundler.ts:189](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L189)
 
 ___
 
@@ -245,7 +245,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:178](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L178)
+[src/utils/bundler.ts:178](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L178)
 
 ___
 
@@ -269,7 +269,7 @@ user operation hash
 
 #### Defined in
 
-[src/utils/bundler.ts:160](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L160)
+[src/utils/bundler.ts:160](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L160)
 
 ___
 
@@ -287,7 +287,7 @@ supported entry points
 
 #### Defined in
 
-[src/utils/bundler.ts:144](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L144)
+[src/utils/bundler.ts:144](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L144)
 
 ___
 
@@ -303,7 +303,7 @@ init the bundler
 
 #### Defined in
 
-[src/utils/bundler.ts:89](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L89)
+[src/utils/bundler.ts:89](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L89)
 
 ___
 
@@ -331,7 +331,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:63](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L63)
+[src/utils/bundler.ts:63](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L63)
 
 ___
 
@@ -357,7 +357,7 @@ emitter event: send, error, receipt, timeout
 
 #### Defined in
 
-[src/utils/bundler.ts:207](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L207)
+[src/utils/bundler.ts:207](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L207)
 
 ___
 
@@ -381,7 +381,7 @@ result
 
 #### Defined in
 
-[src/utils/bundler.ts:302](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L302)
+[src/utils/bundler.ts:302](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L302)
 
 ___
 
@@ -405,7 +405,7 @@ result
 
 #### Defined in
 
-[src/utils/bundler.ts:332](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L332)
+[src/utils/bundler.ts:332](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L332)
 
 ___
 
@@ -425,4 +425,4 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:193](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L193)
+[src/utils/bundler.ts:193](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L193)

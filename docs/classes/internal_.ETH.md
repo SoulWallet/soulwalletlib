@@ -28,7 +28,7 @@ ETH
 
 #### Defined in
 
-[src/utils/tokens.ts:454](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L454)
+[src/utils/tokens.ts:454](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L454)
 
 ## Properties
 
@@ -38,7 +38,7 @@ ETH
 
 #### Defined in
 
-[src/utils/tokens.ts:449](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L449)
+[src/utils/tokens.ts:449](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L449)
 
 ## Methods
 
@@ -70,4 +70,4 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:472](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L472)
+[src/utils/tokens.ts:472](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L472)

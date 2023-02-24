@@ -51,7 +51,7 @@ the gas fees
 
 #### Defined in
 
-[src/utils/gasFee.ts:25](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/gasFee.ts#L25)
+[src/utils/gasFee.ts:25](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/gasFee.ts#L25)
 
 ___
 
@@ -81,4 +81,4 @@ the gas prices
 
 #### Defined in
 
-[src/utils/gasFee.ts:49](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/gasFee.ts#L49)
+[src/utils/gasFee.ts:49](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/gasFee.ts#L49)

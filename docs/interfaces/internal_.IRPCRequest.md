@@ -27,7 +27,7 @@
 
 #### Defined in
 
-[src/interface/IRPCRequest.ts:12](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L12)
+[src/interface/IRPCRequest.ts:12](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L12)
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 #### Defined in
 
-[src/interface/IRPCRequest.ts:11](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L11)
+[src/interface/IRPCRequest.ts:11](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L11)
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 #### Defined in
 
-[src/interface/IRPCRequest.ts:13](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L13)
+[src/interface/IRPCRequest.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L13)
 
 ___
 
@@ -57,4 +57,4 @@ ___
 
 #### Defined in
 
-[src/interface/IRPCRequest.ts:14](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L14)
+[src/interface/IRPCRequest.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IRPCRequest.ts#L14)

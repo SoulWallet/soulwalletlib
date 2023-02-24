@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/interface/IResult.ts:66](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L66)
+[src/interface/IResult.ts:66](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L66)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:64](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L64)
+[src/interface/IResult.ts:64](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L64)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:67](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L67)
+[src/interface/IResult.ts:67](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L67)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:65](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L65)
+[src/interface/IResult.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L65)

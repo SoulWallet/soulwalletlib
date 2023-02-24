@@ -45,7 +45,7 @@ the high fee
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:42](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L42)
+[src/entity/codefiGasFees.ts:42](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L42)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:36](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L36)
+[src/entity/codefiGasFees.ts:36](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L36)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:35](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L35)
+[src/entity/codefiGasFees.ts:35](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L35)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:40](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L40)
+[src/entity/codefiGasFees.ts:40](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L40)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:39](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L39)
+[src/entity/codefiGasFees.ts:39](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L39)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:38](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L38)
+[src/entity/codefiGasFees.ts:38](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L38)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:33](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L33)
+[src/entity/codefiGasFees.ts:33](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L33)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:34](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L34)
+[src/entity/codefiGasFees.ts:34](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L34)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:37](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L37)
+[src/entity/codefiGasFees.ts:37](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L37)
 
 ___
 
@@ -135,4 +135,4 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:41](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L41)
+[src/entity/codefiGasFees.ts:41](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L41)

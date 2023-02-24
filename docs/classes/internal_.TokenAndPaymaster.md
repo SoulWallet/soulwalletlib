@@ -47,7 +47,7 @@ the packed bytes
 
 #### Defined in
 
-[src/utils/tokenAndPaymaster.ts:24](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L24)
+[src/utils/tokenAndPaymaster.ts:24](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L24)
 
 ___
 
@@ -73,4 +73,4 @@ the unpacked token and paymaster
 
 #### Defined in
 
-[src/utils/tokenAndPaymaster.ts:67](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L67)
+[src/utils/tokenAndPaymaster.ts:67](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L67)

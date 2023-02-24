@@ -112,7 +112,7 @@ the signature
 
 #### Defined in
 
-[src/entity/userOperation.ts:33](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L33)
+[src/entity/userOperation.ts:33](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L33)
 
 ## Properties
 
@@ -122,7 +122,7 @@ the signature
 
 #### Defined in
 
-[src/entity/userOperation.ts:64](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L64)
+[src/entity/userOperation.ts:64](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L64)
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:74](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L74)
+[src/entity/userOperation.ts:74](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L74)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:54](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L54)
+[src/entity/userOperation.ts:54](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L54)
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:95](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L95)
+[src/entity/userOperation.ts:95](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L95)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:102](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L102)
+[src/entity/userOperation.ts:102](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L102)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:47](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L47)
+[src/entity/userOperation.ts:47](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L47)
 
 ___
 
@@ -182,7 +182,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:109](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L109)
+[src/entity/userOperation.ts:109](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L109)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:88](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L88)
+[src/entity/userOperation.ts:88](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L88)
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:36](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L36)
+[src/entity/userOperation.ts:36](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L36)
 
 ___
 
@@ -212,7 +212,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:119](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L119)
+[src/entity/userOperation.ts:119](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L119)
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:27](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L27)
+[src/entity/userOperation.ts:27](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L27)
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:81](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L81)
+[src/entity/userOperation.ts:81](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L81)
 
 ## Accessors
 
@@ -246,7 +246,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:65](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L65)
+[src/entity/userOperation.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L65)
 
 • `set` **callData**(`value`): `void`
 
@@ -262,7 +262,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:68](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L68)
+[src/entity/userOperation.ts:68](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L68)
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:75](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L75)
+[src/entity/userOperation.ts:75](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L75)
 
 • `set` **callGasLimit**(`value`): `void`
 
@@ -292,7 +292,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:78](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L78)
+[src/entity/userOperation.ts:78](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L78)
 
 ___
 
@@ -306,7 +306,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:55](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L55)
+[src/entity/userOperation.ts:55](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L55)
 
 • `set` **initCode**(`value`): `void`
 
@@ -322,7 +322,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:58](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L58)
+[src/entity/userOperation.ts:58](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L58)
 
 ___
 
@@ -336,7 +336,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:96](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L96)
+[src/entity/userOperation.ts:96](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L96)
 
 • `set` **maxFeePerGas**(`value`): `void`
 
@@ -352,7 +352,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:99](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L99)
+[src/entity/userOperation.ts:99](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L99)
 
 ___
 
@@ -366,7 +366,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:103](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L103)
+[src/entity/userOperation.ts:103](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L103)
 
 • `set` **maxPriorityFeePerGas**(`value`): `void`
 
@@ -382,7 +382,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:106](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L106)
+[src/entity/userOperation.ts:106](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L106)
 
 ___
 
@@ -396,7 +396,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:48](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L48)
+[src/entity/userOperation.ts:48](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L48)
 
 • `set` **nonce**(`value`): `void`
 
@@ -412,7 +412,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:51](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L51)
+[src/entity/userOperation.ts:51](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L51)
 
 ___
 
@@ -426,7 +426,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:110](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L110)
+[src/entity/userOperation.ts:110](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L110)
 
 • `set` **paymasterAndData**(`value`): `void`
 
@@ -442,7 +442,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:113](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L113)
+[src/entity/userOperation.ts:113](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L113)
 
 ___
 
@@ -456,7 +456,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:89](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L89)
+[src/entity/userOperation.ts:89](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L89)
 
 • `set` **preVerificationGas**(`value`): `void`
 
@@ -472,7 +472,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:92](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L92)
+[src/entity/userOperation.ts:92](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L92)
 
 ___
 
@@ -486,7 +486,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:38](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L38)
+[src/entity/userOperation.ts:38](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L38)
 
 • `set` **sender**(`value`): `void`
 
@@ -502,7 +502,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:41](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L41)
+[src/entity/userOperation.ts:41](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L41)
 
 ___
 
@@ -516,7 +516,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:120](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L120)
+[src/entity/userOperation.ts:120](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L120)
 
 • `set` **signature**(`value`): `void`
 
@@ -532,7 +532,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:123](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L123)
+[src/entity/userOperation.ts:123](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L123)
 
 ___
 
@@ -546,7 +546,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:82](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L82)
+[src/entity/userOperation.ts:82](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L82)
 
 • `set` **verificationGasLimit**(`value`): `void`
 
@@ -562,7 +562,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:85](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L85)
+[src/entity/userOperation.ts:85](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L85)
 
 ## Methods
 
@@ -580,7 +580,7 @@ convert NumberLike property to hex string
 
 #### Defined in
 
-[src/entity/userOperation.ts:176](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L176)
+[src/entity/userOperation.ts:176](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L176)
 
 ___
 
@@ -594,7 +594,7 @@ ___
 
 #### Defined in
 
-[src/entity/userOperation.ts:324](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L324)
+[src/entity/userOperation.ts:324](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L324)
 
 ___
 
@@ -621,7 +621,7 @@ true or false
 
 #### Defined in
 
-[src/entity/userOperation.ts:369](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L369)
+[src/entity/userOperation.ts:369](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L369)
 
 ___
 
@@ -655,7 +655,7 @@ the userOperation struct
 
 #### Defined in
 
-[src/entity/userOperation.ts:155](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L155)
+[src/entity/userOperation.ts:155](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L155)
 
 ___
 
@@ -682,7 +682,7 @@ the UserOpHash (userOp hash)
 
 #### Defined in
 
-[src/entity/userOperation.ts:432](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L432)
+[src/entity/userOperation.ts:432](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L432)
 
 ___
 
@@ -714,7 +714,7 @@ the UserOpHash (userOp hash) with deadline
 
 #### Defined in
 
-[src/entity/userOperation.ts:444](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L444)
+[src/entity/userOperation.ts:444](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L444)
 
 ___
 
@@ -734,7 +734,7 @@ the paymaster sign hash
 
 #### Defined in
 
-[src/entity/userOperation.ts:396](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L396)
+[src/entity/userOperation.ts:396](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L396)
 
 ___
 
@@ -760,7 +760,7 @@ the required prefund
 
 #### Defined in
 
-[src/entity/userOperation.ts:454](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L454)
+[src/entity/userOperation.ts:454](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L454)
 
 ___
 
@@ -786,7 +786,7 @@ sign the user operation
 
 #### Defined in
 
-[src/entity/userOperation.ts:407](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L407)
+[src/entity/userOperation.ts:407](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L407)
 
 ___
 
@@ -811,7 +811,7 @@ sign the user operation with signature
 
 #### Defined in
 
-[src/entity/userOperation.ts:421](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L421)
+[src/entity/userOperation.ts:421](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L421)
 
 ___
 
@@ -831,7 +831,7 @@ the userOperation json string
 
 #### Defined in
 
-[src/entity/userOperation.ts:190](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L190)
+[src/entity/userOperation.ts:190](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L190)
 
 ___
 
@@ -851,7 +851,7 @@ the userOperation tuple string
 
 #### Defined in
 
-[src/entity/userOperation.ts:133](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L133)
+[src/entity/userOperation.ts:133](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L133)
 
 ___
 
@@ -877,7 +877,7 @@ the userOperation object
 
 #### Defined in
 
-[src/entity/userOperation.ts:212](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L212)
+[src/entity/userOperation.ts:212](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L212)
 
 ___
 
@@ -903,4 +903,4 @@ the userOperation object
 
 #### Defined in
 
-[src/entity/userOperation.ts:271](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L271)
+[src/entity/userOperation.ts:271](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/userOperation.ts#L271)

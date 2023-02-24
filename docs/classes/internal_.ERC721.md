@@ -33,7 +33,7 @@ ERC721
 
 #### Defined in
 
-[src/utils/tokens.ts:223](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L223)
+[src/utils/tokens.ts:223](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L223)
 
 ## Properties
 
@@ -43,7 +43,7 @@ ERC721
 
 #### Defined in
 
-[src/utils/tokens.ts:218](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L218)
+[src/utils/tokens.ts:218](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L218)
 
 ## Methods
 
@@ -76,7 +76,7 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:246](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L246)
+[src/utils/tokens.ts:246](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L246)
 
 ___
 
@@ -97,7 +97,7 @@ ___
 
 #### Defined in
 
-[src/utils/tokens.ts:227](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L227)
+[src/utils/tokens.ts:227](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L227)
 
 ___
 
@@ -131,7 +131,7 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:314](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L314)
+[src/utils/tokens.ts:314](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L314)
 
 ___
 
@@ -164,7 +164,7 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:337](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L337)
+[src/utils/tokens.ts:337](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L337)
 
 ___
 
@@ -197,7 +197,7 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:291](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L291)
+[src/utils/tokens.ts:291](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L291)
 
 ___
 
@@ -231,4 +231,4 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:268](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L268)
+[src/utils/tokens.ts:268](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L268)

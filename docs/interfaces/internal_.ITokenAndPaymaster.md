@@ -33,7 +33,7 @@ the paymaster address
 
 #### Defined in
 
-[src/utils/tokenAndPaymaster.ts:93](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L93)
+[src/utils/tokenAndPaymaster.ts:93](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L93)
 
 ___
 
@@ -43,4 +43,4 @@ ___
 
 #### Defined in
 
-[src/utils/tokenAndPaymaster.ts:92](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L92)
+[src/utils/tokenAndPaymaster.ts:92](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokenAndPaymaster.ts#L92)

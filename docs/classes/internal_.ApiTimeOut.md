@@ -31,7 +31,7 @@
 
 #### Defined in
 
-[src/utils/bundler.ts:29](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L29)
+[src/utils/bundler.ts:29](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L29)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:30](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L30)
+[src/utils/bundler.ts:30](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L30)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:27](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L27)
+[src/utils/bundler.ts:27](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L27)
 
 ___
 
@@ -61,4 +61,4 @@ ___
 
 #### Defined in
 
-[src/utils/bundler.ts:28](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L28)
+[src/utils/bundler.ts:28](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/bundler.ts#L28)

@@ -38,7 +38,7 @@ the fast gas price
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:55](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L55)
+[src/entity/codefiGasFees.ts:55](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L55)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:54](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L54)
+[src/entity/codefiGasFees.ts:54](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L54)
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:53](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L53)
+[src/entity/codefiGasFees.ts:53](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L53)

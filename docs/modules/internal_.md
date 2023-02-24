@@ -484,7 +484,7 @@ number like type
 
 #### Defined in
 
-[src/defines/numberLike.ts:16](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/defines/numberLike.ts#L16)
+[src/defines/numberLike.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/defines/numberLike.ts#L16)
 
 ___
 
