@@ -23,7 +23,7 @@
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:34](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L34)
+[src/interface/IUserOpReceipt.ts:34](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L34)
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:38](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L38)
+[src/interface/IUserOpReceipt.ts:38](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L38)
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:32](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L32)
+[src/interface/IUserOpReceipt.ts:32](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L32)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:36](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L36)
+[src/interface/IUserOpReceipt.ts:36](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L36)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:37](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L37)
+[src/interface/IUserOpReceipt.ts:37](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L37)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:35](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L35)
+[src/interface/IUserOpReceipt.ts:35](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L35)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:33](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L33)
+[src/interface/IUserOpReceipt.ts:33](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L33)
 
 ___
 
@@ -93,4 +93,4 @@ ___
 
 #### Defined in
 
-[src/interface/IUserOpReceipt.ts:31](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L31)
+[src/interface/IUserOpReceipt.ts:31](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IUserOpReceipt.ts#L31)

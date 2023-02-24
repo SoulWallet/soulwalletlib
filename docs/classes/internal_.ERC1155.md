@@ -31,7 +31,7 @@ ERC1155
 
 #### Defined in
 
-[src/utils/tokens.ts:359](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L359)
+[src/utils/tokens.ts:359](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L359)
 
 ## Properties
 
@@ -41,7 +41,7 @@ ERC1155
 
 #### Defined in
 
-[src/utils/tokens.ts:354](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L354)
+[src/utils/tokens.ts:354](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L354)
 
 ## Methods
 
@@ -62,7 +62,7 @@ ERC1155
 
 #### Defined in
 
-[src/utils/tokens.ts:363](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L363)
+[src/utils/tokens.ts:363](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L363)
 
 ___
 
@@ -98,7 +98,7 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:410](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L410)
+[src/utils/tokens.ts:410](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L410)
 
 ___
 
@@ -134,7 +134,7 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:384](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L384)
+[src/utils/tokens.ts:384](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L384)
 
 ___
 
@@ -167,4 +167,4 @@ the userOperation
 
 #### Defined in
 
-[src/utils/tokens.ts:433](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L433)
+[src/utils/tokens.ts:433](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L433)

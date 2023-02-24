@@ -47,7 +47,7 @@ Creates an instance of Guardian.
 
 #### Defined in
 
-[src/utils/guardians.ts:35](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L35)
+[src/utils/guardians.ts:35](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L35)
 
 ## Properties
 
@@ -57,7 +57,7 @@ Creates an instance of Guardian.
 
 #### Defined in
 
-[src/utils/guardians.ts:27](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L27)
+[src/utils/guardians.ts:27](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L27)
 
 ## Methods
 
@@ -84,7 +84,7 @@ Creates an instance of Guardian.
 
 #### Defined in
 
-[src/utils/guardians.ts:205](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L205)
+[src/utils/guardians.ts:205](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L205)
 
 ___
 
@@ -116,7 +116,7 @@ address is the guardian contract address,initCode is the deploy code
 
 #### Defined in
 
-[src/utils/guardians.ts:144](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L144)
+[src/utils/guardians.ts:144](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L144)
 
 ___
 
@@ -142,7 +142,7 @@ get guardian info
 
 #### Defined in
 
-[src/utils/guardians.ts:171](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L171)
+[src/utils/guardians.ts:171](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L171)
 
 ___
 
@@ -167,7 +167,7 @@ ___
 
 #### Defined in
 
-[src/utils/guardians.ts:60](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L60)
+[src/utils/guardians.ts:60](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L60)
 
 ___
 
@@ -188,7 +188,7 @@ ___
 
 #### Defined in
 
-[src/utils/guardians.ts:39](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L39)
+[src/utils/guardians.ts:39](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L39)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[src/utils/guardians.ts:76](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L76)
+[src/utils/guardians.ts:76](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L76)
 
 ___
 
@@ -234,7 +234,7 @@ packed signature
 
 #### Defined in
 
-[src/utils/guardians.ts:283](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L283)
+[src/utils/guardians.ts:283](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L283)
 
 ___
 
@@ -264,7 +264,7 @@ signature
 
 #### Defined in
 
-[src/utils/guardians.ts:94](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L94)
+[src/utils/guardians.ts:94](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L94)
 
 ___
 
@@ -291,7 +291,7 @@ signature
 
 #### Defined in
 
-[src/utils/guardians.ts:118](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L118)
+[src/utils/guardians.ts:118](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L118)
 
 ___
 
@@ -322,7 +322,7 @@ userOperation
 
 #### Defined in
 
-[src/utils/guardians.ts:237](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L237)
+[src/utils/guardians.ts:237](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L237)
 
 ___
 
@@ -353,7 +353,7 @@ userOperation
 
 #### Defined in
 
-[src/utils/guardians.ts:260](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L260)
+[src/utils/guardians.ts:260](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L260)
 
 ___
 
@@ -374,4 +374,4 @@ ___
 
 #### Defined in
 
-[src/utils/guardians.ts:160](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L160)
+[src/utils/guardians.ts:160](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/guardians.ts#L160)

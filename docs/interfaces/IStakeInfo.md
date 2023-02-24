@@ -17,7 +17,7 @@
 
 #### Defined in
 
-[src/interface/IResult.ts:59](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L59)
+[src/interface/IResult.ts:59](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L59)
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 #### Defined in
 
-[src/interface/IResult.ts:60](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L60)
+[src/interface/IResult.ts:60](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IResult.ts#L60)

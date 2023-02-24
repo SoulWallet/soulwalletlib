@@ -43,7 +43,7 @@ the max wait time estimate
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:22](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L22)
+[src/entity/codefiGasFees.ts:22](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L22)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:21](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L21)
+[src/entity/codefiGasFees.ts:21](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L21)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:20](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L20)
+[src/entity/codefiGasFees.ts:20](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L20)
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 #### Defined in
 
-[src/entity/codefiGasFees.ts:19](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L19)
+[src/entity/codefiGasFees.ts:19](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/entity/codefiGasFees.ts#L19)

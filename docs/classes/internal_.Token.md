@@ -49,4 +49,4 @@ token interface
 
 #### Defined in
 
-[src/utils/tokens.ts:21](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L21)
+[src/utils/tokens.ts:21](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/tokens.ts#L21)

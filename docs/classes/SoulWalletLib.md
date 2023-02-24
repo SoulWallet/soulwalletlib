@@ -51,7 +51,7 @@
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:57](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L57)
+[src/exportLib/soulWalletLib.ts:57](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L57)
 
 ## Properties
 
@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:94](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L94)
+[src/exportLib/soulWalletLib.ts:94](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L94)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:49](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L49)
+[src/exportLib/soulWalletLib.ts:49](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L49)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:95](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L95)
+[src/exportLib/soulWalletLib.ts:95](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L95)
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:44](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L44)
+[src/exportLib/soulWalletLib.ts:44](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L44)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:39](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L39)
+[src/exportLib/soulWalletLib.ts:39](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L39)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:36](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L36)
+[src/exportLib/soulWalletLib.ts:36](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L36)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:87](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L87)
+[src/exportLib/soulWalletLib.ts:87](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L87)
 
 ## Accessors
 
@@ -167,7 +167,7 @@ address
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:80](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L80)
+[src/exportLib/soulWalletLib.ts:80](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L80)
 
 ## Methods
 
@@ -205,7 +205,7 @@ the userOperation
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:209](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L209)
+[src/exportLib/soulWalletLib.ts:209](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L209)
 
 ___
 
@@ -239,7 +239,7 @@ the wallet address
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:173](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L173)
+[src/exportLib/soulWalletLib.ts:173](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L173)
 
 ___
 
@@ -265,7 +265,7 @@ wallet address
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:366](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L366)
+[src/exportLib/soulWalletLib.ts:366](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L366)
 
 ___
 
@@ -291,7 +291,7 @@ the wallet address
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:397](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L397)
+[src/exportLib/soulWalletLib.ts:397](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L397)
 
 ___
 
@@ -319,7 +319,7 @@ inithex
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:112](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L112)
+[src/exportLib/soulWalletLib.ts:112](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L112)
 
 ___
 
@@ -345,7 +345,7 @@ the next nonce number
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:416](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L416)
+[src/exportLib/soulWalletLib.ts:416](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L416)
 
 ___
 
@@ -373,7 +373,7 @@ ___
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:251](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L251)
+[src/exportLib/soulWalletLib.ts:251](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L251)
 
 ___
 
@@ -399,7 +399,7 @@ paymasterAndData(hex string)
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:352](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L352)
+[src/exportLib/soulWalletLib.ts:352](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L352)
 
 ___
 
@@ -426,7 +426,7 @@ exchange price
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:316](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L316)
+[src/exportLib/soulWalletLib.ts:316](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L316)
 
 ___
 
@@ -458,7 +458,7 @@ the wallet code hex string
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:137](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L137)
+[src/exportLib/soulWalletLib.ts:137](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L137)
 
 ___
 
@@ -482,7 +482,7 @@ bytes32
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:383](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L383)
+[src/exportLib/soulWalletLib.ts:383](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L383)
 
 ___
 
@@ -508,4 +508,4 @@ supported token address list
 
 #### Defined in
 
-[src/exportLib/soulWalletLib.ts:292](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L292)
+[src/exportLib/soulWalletLib.ts:292](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/exportLib/soulWalletLib.ts#L292)

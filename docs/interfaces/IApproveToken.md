@@ -36,7 +36,7 @@ the approve value
 
 #### Defined in
 
-[src/interface/IApproveToken.ts:19](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IApproveToken.ts#L19)
+[src/interface/IApproveToken.ts:19](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IApproveToken.ts#L19)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[src/interface/IApproveToken.ts:18](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IApproveToken.ts#L18)
+[src/interface/IApproveToken.ts:18](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IApproveToken.ts#L18)
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 #### Defined in
 
-[src/interface/IApproveToken.ts:20](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/interface/IApproveToken.ts#L20)
+[src/interface/IApproveToken.ts:20](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/interface/IApproveToken.ts#L20)

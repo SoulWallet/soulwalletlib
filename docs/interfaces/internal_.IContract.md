@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[src/contracts/icontract.ts:13](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/contracts/icontract.ts#L13)
+[src/contracts/icontract.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/contracts/icontract.ts#L13)
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 #### Defined in
 
-[src/contracts/icontract.ts:14](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/contracts/icontract.ts#L14)
+[src/contracts/icontract.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/contracts/icontract.ts#L14)

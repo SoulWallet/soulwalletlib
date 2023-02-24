@@ -42,7 +42,7 @@ DeployFactory
 
 #### Defined in
 
-[src/utils/deployFactory.ts:31](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L31)
+[src/utils/deployFactory.ts:31](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L31)
 
 ## Properties
 
@@ -52,7 +52,7 @@ DeployFactory
 
 #### Defined in
 
-[src/utils/deployFactory.ts:23](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L23)
+[src/utils/deployFactory.ts:23](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L23)
 
 ## Methods
 
@@ -83,7 +83,7 @@ factory address
 
 #### Defined in
 
-[src/utils/deployFactory.ts:93](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L93)
+[src/utils/deployFactory.ts:93](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L93)
 
 ___
 
@@ -112,7 +112,7 @@ factory address
 
 #### Defined in
 
-[src/utils/deployFactory.ts:75](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L75)
+[src/utils/deployFactory.ts:75](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L75)
 
 ___
 
@@ -142,4 +142,4 @@ ___
 
 #### Defined in
 
-[src/utils/deployFactory.ts:35](https://github.com/zhangshengjie/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L35)
+[src/utils/deployFactory.ts:35](https://github.com/proofofsoulprotocol/soulwalletlib/blob/93d2029/src/utils/deployFactory.ts#L35)
