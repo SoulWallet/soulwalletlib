@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-13 16:37:54
+ * @LastEditTime: 2023-02-24 17:33:07
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -36,13 +36,19 @@ class ApiTimeOut {
     }
 }
 exports.ApiTimeOut = ApiTimeOut;
+/**
+ * bundler utils
+ * @class Bundler
+ */
 class Bundler {
     /**
-     *
-     * @param entryPoint the entry point address
-     * @param etherProvider
-     * @param bundlerApi the bundler api address(https)
-     * @param timeout the timeout config
+     * Bundler utils
+     * @constructor Bundler
+     * @param {String} entryPoint the entry point address
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String?} bundlerApi the bundler api url
+     * @param {ApiTimeOut?} timeout the timeout
+     * @returns {Bundler}
      */
     constructor(entryPoint, etherProvider, bundlerApi, timeout) {
         this._entryPoint = '';
@@ -76,6 +82,10 @@ class Bundler {
             throw new Error('request error');
         });
     }
+    /**
+     * init the bundler
+     * @returns {Promise<void>}
+     */
     init() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this._init) {
@@ -110,6 +120,10 @@ class Bundler {
             }
         });
     }
+    /**
+     * get bundler supported chainid
+     * @returns {Promise<String>} supported chainid
+     */
     eth_chainId() {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
@@ -120,6 +134,10 @@ class Bundler {
             });
         });
     }
+    /**
+     * get bundler supported entry points
+     * @returns {Promise<String[]>} supported entry points
+     */
     eth_supportedEntryPoints() {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
@@ -130,6 +148,11 @@ class Bundler {
             });
         });
     }
+    /**
+     * send user operation via bundler
+     * @param {UserOperation} userOp
+     * @returns {Promise<String>} user operation hash
+     */
     eth_sendUserOperation(userOp) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
@@ -169,9 +192,11 @@ class Bundler {
         });
     }
     /**
-     *
-     * @param userOp
-     * @returns emitter event: send, error, receipt, timeout
+     * send user operation via bundler
+     * @param {UserOperation} userOp
+     * @param {Number} receiptTimeout receipt timeout
+     * @param {Number} receiptInterval receipt interval
+     * @returns {EventEmitter} emitter event: send, error, receipt, timeout
      */
     sendUserOperation(userOp, receiptTimeout = 0, receiptInterval = 1000 * 6) {
         const emitter = new events_1.default();
@@ -248,6 +273,11 @@ class Bundler {
         }
         return null;
     }
+    /**
+     * simulateHandleOp
+     * @param {UserOperation} op
+     * @returns {Promise<IResult>} result
+     */
     simulateHandleOp(op) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -276,6 +306,11 @@ class Bundler {
             }
         });
     }
+    /**
+     * simulateValidation
+     * @param {UserOperation} op
+     * @returns {Promise<IResult>} result
+     */
     simulateValidation(op) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

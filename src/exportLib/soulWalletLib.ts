@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-21 17:46:49
+ * @LastEditTime: 2023-02-24 16:57:04
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder, BytesLike } from "ethers/lib/utils";
@@ -32,14 +32,28 @@ import { JsonFragment, Fragment } from '@ethersproject/abi'
 
 export class SoulWalletLib {
 
+    /** @private */
     private _singletonFactory;
+
+    /** @private */
     private _deployFactory;
 
+    /**
+     * @type {Object}
+     */
     public Utils;
 
+    /**
+     * @type {Guardian}
+     */
     public Guardian: Guardian;
 
 
+    /**
+     * @constructor SoulWalletLib
+     * @param {String?} singletonFactory the singletonFactory address
+     * @returns {SoulWalletLib}
+     */
     constructor(singletonFactory?: string) {
         singletonFactory = singletonFactory || SingletonFactoryAddress;
 
@@ -59,10 +73,17 @@ export class SoulWalletLib {
 
     }
 
+    /**
+     * get singletonFactory address
+     * @returns {String} address
+     */
     public get singletonFactory() {
         return this._singletonFactory;
     }
 
+    /**
+     * 
+     */
     public static Defines = {
         AddressZero: addressDefine.AddressZero,
         SingletonFactoryAddress: addressDefine.SingletonFactoryAddress,
@@ -80,13 +101,13 @@ export class SoulWalletLib {
 
 
     /**
-     * 
-     * @param entryPointAddress the entryPoint address
-     * @param ownerAddress the owner address 
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @returns inithex
+     * get initialize data
+     * @param {String} entryPointAddress  the entryPoint address
+     * @param {String} ownerAddress the owner address 
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @returns {String} inithex
      */
     private getInitializeData(
         entryPointAddress: string,
@@ -104,13 +125,14 @@ export class SoulWalletLib {
 
     /**
      * get wallet code
-     * @param walletLogicAddress the wallet logic contract address
-     * @param entryPointAddress the entryPoint address
-     * @param ownerAddress the owner address
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @returns the wallet code hex string  
+     * @param {String} walletLogicAddress the wallet logic contract address
+     * @param {String} entryPointAddress the entryPoint address
+     * @param {String} ownerAddress the owner address
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @param {Object?} walletProxyConfig the wallet proxy config
+     * @returns {String} the wallet code hex string  
      */
     public getWalletCode(
         walletLogicAddress: string,
@@ -137,14 +159,16 @@ export class SoulWalletLib {
 
     /**
      * calculate wallet address by owner address
-     * @param walletLogicAddress the wallet logic contract address
-     * @param entryPointAddress the entryPoint address
-     * @param ownerAddress the owner address 
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @param salt the salt number,default is 0
-     * @returns 
+     * @param {String} walletLogicAddress the wallet logic contract address
+     * @param {String} entryPointAddress the entryPoint address
+     * @param {String} ownerAddress the owner address 
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @param {Number?} salt the salt number,default is 0
+     * @param {String?} singletonFactory the singletonFactory address,default is SingletonFactoryAddress
+     * @param {Object?} walletProxyConfig the wallet proxy config
+     * @returns {String} the wallet address
      */
     public calculateWalletAddress(
         walletLogicAddress: string,
@@ -167,18 +191,20 @@ export class SoulWalletLib {
 
     /**
      * get the userOperation for active (first time) the wallet
-     * @param walletLogicAddress the wallet logic contract address
-     * @param entryPointAddress 
-     * @param ownerAddress 
-     * @param upgradeDelay the upgrade delay time
-     * @param guardianDelay the guardian delay time
-     * @param guardianAddress the guardian contract address
-     * @param paymasterAndData the paymaster address and data
-     * @param maxFeePerGas the max fee per gas
-     * @param maxPriorityFeePerGas the max priority fee per gas
-     * @param salt the salt number,default is 0
-     * @param walletProxy the walletProxy contract address
-     * @param walletFactory the walletFactory contract address
+     * @param {String} walletLogicAddress the wallet logic contract address
+     * @param {String} entryPointAddress the entryPoint address
+     * @param {String} ownerAddress the owner address
+     * @param {Number} upgradeDelay the upgrade delay time
+     * @param {Number} guardianDelay the guardian delay time
+     * @param {String} guardianAddress the guardian contract address
+     * @param {String} paymasterAndData the paymaster address and data
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {Number?} salt the salt number,default is 0
+     * @param {String?} walletFactory the walletFactory contract address
+     * @param {String?} singletonFactory the singletonFactory contract address
+     * @param {Object?} walletProxyConfig the walletProxyConfig
+     * @returns {UserOperation} the userOperation
      */
     public activateWalletOp(
         walletLogicAddress: string,
@@ -255,6 +281,14 @@ export class SoulWalletLib {
         return walletFactory.toLowerCase() + packedInitCode;
     }
 
+
+    /**
+     * check if the token is supported by paymaster
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String} payMasterAddress paymaster contract address
+     * @param {String[]} tokens token address list
+     * @returns {String[]} supported token address list
+     */
     public async paymasterSupportedToken(etherProvider: ethers.providers.BaseProvider, payMasterAddress: string, tokens: string[]) {
         const paymaster = new ethers.Contract(payMasterAddress, TokenPaymasterContract.ABI, etherProvider);
         const reqs = [];
@@ -271,6 +305,14 @@ export class SoulWalletLib {
         return supportedTokens;
     }
 
+    /**
+     * get paymaster exchange price
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String} payMasterAddress paymaster contract address
+     * @param {String} token token address
+     * @param {Boolean?} fetchTokenDecimals fetch token decimals or not
+     * @returns {Object} exchange price
+     */
     public async getPaymasterExchangePrice(etherProvider: ethers.providers.BaseProvider,
         payMasterAddress: string, token: string, fetchTokenDecimals: boolean = false) {
         const paymaster = new ethers.Contract(payMasterAddress, TokenPaymasterContract.ABI, etherProvider);
@@ -300,6 +342,13 @@ export class SoulWalletLib {
         }
     }
 
+    /**
+     * get paymaster data
+     * @param {String} payMasterAddress paymaster contract address
+     * @param {String} token token address
+     * @param {BigNumber} maxCost token max cost
+     * @returns {String} paymasterAndData(hex string)
+     */
     public getPaymasterData(payMasterAddress: string, token: string, maxCost: BigNumber) {
         const enc = payMasterAddress.toLowerCase() + defaultAbiCoder.encode(
             ['address', 'uint256'],
@@ -308,11 +357,11 @@ export class SoulWalletLib {
     }
 
     /**
-     * calculate EIP-4337 wallet address
-     * @param initContract the init Contract
-     * @param initArgs the init args
-     * @param salt the salt number
-     * @returns 
+     * calculate wallet address
+     * @param {IContract} initContract the init Contract
+     * @param {any[] | undefined} initArgs the init args
+     * @param {Number} salt the salt number
+     * @returns {String} wallet address
      */
     public calculateWalletAddressByCode(
         initContract: IContract,
@@ -325,6 +374,12 @@ export class SoulWalletLib {
 
     }
 
+
+    /**
+     * convert number to bytes32
+     * @param {Number?} num the number
+     * @returns {String} bytes32
+     */
     public number2Bytes32(num?: number) {
         if (num === undefined) {
             return bytes32_zero;
@@ -333,10 +388,11 @@ export class SoulWalletLib {
     }
 
     /**
-     * calculate EIP-4337 wallet address
-     * @param initCodeHash the init code after keccak256
-     * @param salt the salt number
-     * @returns the EIP-4337 wallet address
+     * calculate wallet address
+     * @param {String} initCodeHash the init code after keccak256
+     * @param {Number?} salt the salt number
+     * @param {String?} singletonFactory the singleton factory address
+     * @returns {String} the wallet address
      */
     private calculateWalletAddressByCodeHash(
         initCodeHash: string,
@@ -352,10 +408,10 @@ export class SoulWalletLib {
 
     /**
      * get nonce number from contract wallet
-     * @param walletAddress the wallet address
-     * @param web3 the web3 instance
-     * @param defaultBlock "earliest", "latest" and "pending"
-     * @returns the next nonce number
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {String?} defaultBlock "earliest", "latest" and "pending"
+     * @returns {Number} the next nonce number
      */
     private async getNonce(walletAddress: string, etherProvider: ethers.providers.BaseProvider, defaultBlock = 'latest'): Promise<number> {
         try {

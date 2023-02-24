@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-02 22:38:58
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-23 10:41:49
+ * @LastEditTime: 2023-02-24 18:16:15
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -20,6 +20,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DecodeCallData = void 0;
 const ethers_1 = require("ethers");
 const httpRequest_1 = require("./httpRequest");
+/**
+ * decode call data
+ * @class DecodeCallData
+ */
 class DecodeCallData {
     constructor() {
         this.bytes4Methods = new Map();
@@ -106,6 +110,10 @@ class DecodeCallData {
             typesArray: ['address']
         });
     }
+    /**
+     * get instance
+     * @returns {DecodeCallData}
+     */
     static new() {
         if (!DecodeCallData.instance) {
             DecodeCallData.instance = new DecodeCallData();
@@ -114,8 +122,8 @@ class DecodeCallData {
     }
     /**
      * set saveToStorage function & readFromStorage function
-     * @param saveToStorage async function
-     * @param readFromStorage async function
+     * @param {Function} saveToStorage
+     * @param {Function} readFromStorage
      */
     setStorage(saveToStorage, readFromStorage) {
         this._saveToStorage = saveToStorage;
@@ -166,9 +174,9 @@ class DecodeCallData {
         });
     }
     /**
-     * decode call data
-     * @param callData call data
-     * @returns
+     * decode callData
+     * @param {string} callData
+     * @returns {Promise<IDecode[]>}
      */
     decode(callData) {
         return __awaiter(this, void 0, void 0, function* () {

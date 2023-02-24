@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-21 15:37:48
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-21 18:54:44
+ * @LastEditTime: 2023-02-24 17:13:21
  */
 
 export interface walletInitParams {

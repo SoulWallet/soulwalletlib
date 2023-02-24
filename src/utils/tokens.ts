@@ -4,13 +4,18 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-16 16:51:43
+ * @LastEditTime: 2023-02-24 21:46:25
  */
 import { UserOperation } from "../entity/userOperation";
 import { execFromEntryPoint, execBatchFromEntryPoint, ERC1155 as erc1155, ERC20 as erc20, ERC721 as erc721 } from "../defines/ABI";
 import { BigNumber, ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 import { IApproveToken } from "../interface/IApproveToken";
+
+/**
+ * token interface
+ * @class Token
+ */
 export class Token {
 
     async createOp(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike,
@@ -40,10 +45,19 @@ export class Token {
     }
 }
 
+/**
+ * erc20 token class
+ * @class ERC20
+ * 
+ */
 export class ERC20 {
 
     private _token;
 
+    /**
+     * @constructor
+     * 
+     */
     constructor() {
         this._token = new Token();
     }
@@ -51,6 +65,21 @@ export class ERC20 {
     private getContract(etherProvider: ethers.providers.BaseProvider, contractAddress: string) {
         return new ethers.Contract(contractAddress, erc20, etherProvider);
     }
+
+    /**
+     * approve token to spender
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _spender the spender address
+     * @param {string} _value the value
+     * @returns {Promise<UserOperation | null>} the userOperation
+     */
     async approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _value: string) {
@@ -60,6 +89,7 @@ export class ERC20 {
     }
 
     private readonly MAX_INT256 = '115792089237316195423570985008687907853269984665640564039457584007913129639935'; //uint256 MAX_INT = 2**256 - 1
+
 
     private async approveGasLimit(etherProvider: ethers.providers.BaseProvider, walletAddress: string, approveData: IApproveToken) {
         if (approveData.value === undefined) {
@@ -74,6 +104,13 @@ export class ERC20 {
     }
 
 
+    /**
+     * get approve call data (use activate wallet)
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {IApproveToken[]} approveData the approve data
+     * @returns {Promise<{callData: string, callGasLimit: string}>} the call data
+     */
     async getApproveCallData(etherProvider: ethers.providers.BaseProvider, walletAddress: string, approveData: IApproveToken[]) {
 
         const approveCallData = {
@@ -127,6 +164,21 @@ export class ERC20 {
         return approveCallData;
     }
 
+    /**
+     * transfer token
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _to the to address
+     * @param {string} _value the value
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async transferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _value: string) {
@@ -135,6 +187,20 @@ export class ERC20 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * transfer token
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _to the to address
+     * @param {string} _value the value
+     * @returns {Promise<UserOperation | null>} the userOperation
+     */
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _to: string, _value: string) {
@@ -144,9 +210,16 @@ export class ERC20 {
     }
 }
 
+/**
+ * ERC721
+ * @class
+ */
 export class ERC721 {
     private _token;
 
+    /**
+     * @constructor
+     */
     constructor() {
         this._token = new Token();
     }
@@ -154,6 +227,22 @@ export class ERC721 {
     private getContract(etherProvider: ethers.providers.BaseProvider, contractAddress: string) {
         return new ethers.Contract(contractAddress, erc721, etherProvider);
     }
+
+    /**
+     * approve token to spender
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _spender the spender address
+     * @param {string} _tokenId the token id
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async approve(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _spender: string, _tokenId: string) {
@@ -162,6 +251,20 @@ export class ERC721 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * transfer token
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _to the to address
+     * @param {string} _tokenId the token id
+     * @returns {Promise<UserOperation | null>} the userOperation
+     */
     async transferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _tokenId: string) {
@@ -170,6 +273,21 @@ export class ERC721 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * transfer token
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _to the to address
+     * @param {string} _tokenId the token id
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _to: string, _tokenId: string) {
@@ -178,6 +296,21 @@ export class ERC721 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * safe transfer token
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _to the to address
+     * @param {string} _tokenId the token id
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async safeTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _tokenId: string) {
@@ -186,6 +319,21 @@ export class ERC721 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * Enable or disable approval for a third party ("operator") to manage all of `msg.sender`'s assets
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _operator the operator address
+     * @param {boolean} _approved the approved
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async setApprovalForAll(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _operator: string, _approved: boolean) {
@@ -198,9 +346,16 @@ export class ERC721 {
 }
 
 
+/**
+ * ERC1155
+ * @class
+ */
 export class ERC1155 {
     private _token;
 
+    /**
+     * @constructor
+     */
     constructor() {
         this._token = new Token();
     }
@@ -208,6 +363,24 @@ export class ERC1155 {
     private getContract(etherProvider: ethers.providers.BaseProvider, contractAddress: string) {
         return new ethers.Contract(contractAddress, erc1155, etherProvider);
     }
+
+    /**
+     * safeTransferFrom
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _from the from address
+     * @param {string} _to the to address
+     * @param {string} _id the id
+     * @param {string} _value the value
+     * @param {string} _data the data
+     * @returns {Promise<UserOperation | null>} the userOperation
+     */
     async safeTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _id: string, _value: string, _data: string) {
@@ -216,6 +389,24 @@ export class ERC1155 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * safeBatchTransferFrom
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _from the from address
+     * @param {string} _to the to address
+     * @param {string} _ids the ids
+     * @param {string} _values the values
+     * @param {string} _data the data
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async safeBatchTransferFrom(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _from: string, _to: string, _ids: string, _values: string, _data: string) {
@@ -224,6 +415,21 @@ export class ERC1155 {
         return await this._token.createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, _token, encodeABI);
     }
 
+    /**
+     * Enable or disable approval for a third party ("operator") to manage all of `msg.sender`'s assets
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} _token the token address
+     * @param {string} _operator the operator address
+     * @param {boolean} _approved the approved
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async setApprovalForAll(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, _token: string, _operator: string, _approved: boolean) {
@@ -234,12 +440,35 @@ export class ERC1155 {
 
 
 }
+
+/**
+ * ETH
+ * @class
+ */
 export class ETH {
     private _token;
 
+    /**
+     * @constructor
+     */
     constructor() {
         this._token = new Token();
     }
+
+    /**
+     * transfer
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @param {string} walletAddress same as userOperation.sender
+     * @param {NumberLike} nonce the nonce
+     * @param {string} entryPointAddress the entry point address
+     * @param {string} paymasterAddress the paymaster address
+     * @param {NumberLike} maxFeePerGas the max fee per gas
+     * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
+     * @param {string} to the to address
+     * @param {string} value the value
+     * @returns {Promise<UserOperation | null>} the userOperation
+     * 
+     */
     async transfer(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
         nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, to: string, value: string) {

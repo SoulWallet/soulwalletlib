@@ -4,12 +4,20 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-12 21:57:09
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-12 21:57:10
+ * @LastEditTime: 2023-02-24 17:25:36
  */
 
 import { BigNumber } from "ethers";
 
 
+/**
+ * @interface IExecutionResult
+ * @property {BigNumber} preOpGas
+ * @property {BigNumber} paid
+ * @property {BigNumber} deadline
+ * @property {BigNumber} paymasterDeadline
+ * 
+ */
 export interface IExecutionResult {
     preOpGas: BigNumber,
     paid: BigNumber,

@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-08 16:13:28
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-17 17:07:12
+ * @LastEditTime: 2023-02-24 17:35:25
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -23,7 +23,17 @@ const walletFactory_1 = require("../contracts/walletFactory");
 const singletonFactory_1 = require("../contracts/singletonFactory");
 const ethers_1 = require("ethers");
 const bytes32_1 = require("../defines/bytes32");
+/**
+ * deploy factory contract
+ * @class DeployFactory
+ */
 class DeployFactory {
+    /**
+     * Creates an instance of DeployFactory.
+     * @param {string} singletonFactory singleton factory address
+     * @memberof DeployFactory
+     * @constructor
+     */
     constructor(singletonFactory) {
         this._singletonFactory = singletonFactory;
     }
@@ -51,18 +61,26 @@ class DeployFactory {
             initCodeWithArgs: walletFactoryInitCodeWithArgs
         };
     }
+    /**
+     * get factory address
+     * @param {string} logicContractAddress account logic contract address
+     * @param {string?} salt salt
+     * @param {number} [ver=1] version
+     * @param {walletFactoryConfig?} walletFactoryConfig wallet factory config
+     * @returns {string} factory address
+     */
     getAddress(logicContractAddress, salt, ver = 1, walletFactoryConfig) {
         return this.getFactory(logicContractAddress, salt, ver, walletFactoryConfig).factoryAddress;
     }
     /**
      * deploy factory contract( if etherProvider is set)
-     * @param logicContractAddress account logic contract address
-     * @param proxyContractAddress proxy contract address (auto deploy if not set)
-     * @param etherProvider
-     * @param create2Factory
-     * @param salt
-     * @param ver
-     * @returns
+     * @param {string} logicContractAddress account logic contract address
+     * @param {ethers.providers.BaseProvider?} etherProvider ether provider
+     * @param {ethers.Signer} signer signer
+     * @param {string?} salt salt
+     * @param {number} [ver=1] version
+     * @param {walletFactoryConfig?} walletFactoryConfig wallet factory config
+     * @returns {Promise<string>} factory address
      */
     deploy(logicContractAddress, etherProvider, signer, salt, ver = 1, walletFactoryConfig) {
         return __awaiter(this, void 0, void 0, function* () {

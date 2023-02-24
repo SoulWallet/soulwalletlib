@@ -6,15 +6,35 @@ import { UserOp } from '../utils/userOp';
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
  */
 
+/**
+ * @class UserOperation
+ * @description UserOperation class
+ * @example
+ * const userOperation = new UserOperation();
+ * @property {String} sender the sender address
+ * @property {NumberLike} nonce the nonce
+ * @property {String} initCode the initCode
+ * @property {String} callData the callData
+ * @property {String} preVerificationGas the preVerificationGas
+ * @property {String} verificationGasLimit the verificationGasLimit
+ * @property {String} maxFeePerGas the maxFeePerGas
+ * @property {String} maxPriorityFeePerGas the maxPriorityFeePerGas
+ * @property {String} paymasterAndData the paymasterAndData
+ * @property {String} signature the signature
+ */
 class UserOperation {
 
     private _userOp: UserOp;
 
 
+    /**
+     * @constructor UserOperation
+     */
     constructor() {
         this._userOp = new UserOp();
     }
     private _sender: string = '';
+    
     public get sender(): string {
         return this._sender;
     }
@@ -106,6 +126,10 @@ class UserOperation {
 
 
 
+    /**
+     * @description convert to userOperation tuple string
+     * @returns {string} the userOperation tuple string
+     */
     public toTuple(): string {
         /* 
         address sender;
@@ -124,6 +148,10 @@ class UserOperation {
         return `["${this.sender.toLocaleLowerCase()}","${toDecString(this.nonce)}","${this.initCode}","${this.callData}","${toDecString(this.callGasLimit)}","${toDecString(this.verificationGasLimit)}","${toDecString(this.preVerificationGas)}","${toDecString(this.maxFeePerGas)}","${toDecString(this.maxPriorityFeePerGas)}","${this.paymasterAndData}","${this.signature}"]`;
     }
 
+    /**
+     * @description convert to userOperation struct
+     * @returns {object} the userOperation struct
+     */
     public getStruct() {
         this.alignment();
         return {
@@ -141,6 +169,10 @@ class UserOperation {
         };
     }
 
+    /**
+     * @description convert NumberLike property to hex string
+     * @returns {void}
+     */
     public alignment() {
         this._nonce = toHexString(this._nonce);
         this._callGasLimit = toHexString(this._callGasLimit);
@@ -151,6 +183,10 @@ class UserOperation {
         this._paymasterAndData = this._paymasterAndData === AddressZero ? '0x' : this._paymasterAndData;
     }
 
+    /**
+     * @description convert to userOperation json string
+     * @returns {string} the userOperation json string
+     */
     public toJSON(): string {
         this.alignment();
         return JSON.stringify({
@@ -168,6 +204,11 @@ class UserOperation {
         });
     }
 
+    /**
+     * @description convert from userOperation json string
+     * @param {string} json the userOperation json string
+     * @returns {UserOperation} the userOperation object
+     */
     public static fromJSON(json: string): UserOperation {
         const obj = JSON.parse(json);
         if (!obj || typeof obj !== 'object') {
@@ -222,6 +263,11 @@ class UserOperation {
         return userOp;
     }
 
+    /**
+     * @description convert from userOperation object
+     * @param {object} obj the userOperation object
+     * @returns {UserOperation} the userOperation object
+     */
     public static fromObject(obj: any): UserOperation {
         if (!obj || typeof obj !== 'object') {
             throw new Error('invalid json');
@@ -312,11 +358,13 @@ class UserOperation {
         // #endregion verificationGasLimit
     }
 
+    
+
     /**
-     * estimate the gas
-     * @param entryPointAddress the entry point address
-     * @param estimateGasFunc the estimate gas function
-     * @returns false if failed
+     * @description estimate gas
+     * @param {string} entryPointAddress the entry point address
+     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
+     * @returns {Promise<boolean>} true or false
      */
     public async estimateGas(
         entryPointAddress: string,
@@ -342,19 +390,20 @@ class UserOperation {
     }
 
     /**
-     * get the paymaster sign hash
-     * @returns 
+     * @description get the paymaster sign hash
+     * @returns {string} the paymaster sign hash
      */
     public payMasterSignHash(): string {
         return this._userOp.payMasterSignHash(this);
     }
 
-    /**
-     * sign the user operation
-     * @param entryPoint the entry point address
-     * @param chainId the chain id
-     * @param privateKey the private key
-     */
+   /**
+    * @description sign the user operation
+    * @param {string} entryPoint the entry point address
+    * @param {number} chainId the chain id
+    * @param {string} privateKey the private key
+    * @returns {void}
+    */
     public sign(
         entryPoint: string,
         chainId: number,
@@ -364,9 +413,10 @@ class UserOperation {
 
 
     /**
-     * sign the user operation with personal sign
-     * @param signAddress the sign address
-     * @param signature the signature of the UserOpHash
+     * @description sign the user operation with signature
+     * @param {string} signAddress the sign address
+     * @param {string} signature the signature
+     * @returns {void}
      */
     public signWithSignature(signAddress: string, signature: string) {
         this.signature = this._userOp.signUserOpWithPersonalSign(signAddress, signature);
@@ -374,21 +424,22 @@ class UserOperation {
 
 
     /**
-     * get the UserOpHash (userOp hash)
-     * @param entryPointAddress the entry point address
-     * @param chainId the chain id
-     * @returns hex string
+     * @description get the UserOpHash (userOp hash)
+     * @param {string} entryPointAddress the entry point address
+     * @param {number} chainId the chain id
+     * @returns {string} the UserOpHash (userOp hash)
      */
     public getUserOpHash(entryPointAddress: string, chainId: number): string {
         return this._userOp.getUserOpHash(this, entryPointAddress, chainId);
     }
 
     /**
-     * get the UserOpHash (userOp hash) with deadline
-     * @param entryPointAddress 
-     * @param chainId 
-     * @param deadline unix timestamp
-     * @returns bytes32 hash
+     * @description get the UserOpHash (userOp hash) with deadline
+     * @param {string} entryPointAddress the entry point address
+     * @param {number} chainId the chain id
+     * @param {number} deadline the deadline
+     * @returns {string} the UserOpHash (userOp hash) with deadline
+     * @remarks deadline is a timestamp in seconds
      */
     public getUserOpHashWithDeadline(entryPointAddress: string, chainId: number, deadline: number): string {
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
@@ -396,9 +447,9 @@ class UserOperation {
     }
 
     /**
-     * get required pre fund
-     * @param basefee for EIP1559, the basefee
-     * @returns required pre fund
+     * @description get the required prefund
+     * @param {(BigNumber | NumberLike)?} basefee the basefee
+     * @returns {BigNumber} the required prefund
      */
     public requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber {
         /* 
