@@ -21,10 +21,24 @@ import { NumberLike } from "../defines/numberLike";
  */
 declare class UserOperation {
     private _userOp;
+    private _specifiedVerificationGasLimit;
+    private _specifiedPreVerificationGas;
     /**
-     * @constructor UserOperation
+     * Creates an instance of UserOperation.
+     * @param {string} [sender='']
+     * @param {NumberLike} [nonce=0]
+     * @param {string} [initCode='0x']
+     * @param {string} [callData='0x']
+     * @param {NumberLike} [callGasLimit=0]
+     * @param {NumberLike} [maxFeePerGas=0]
+     * @param {NumberLike} [maxPriorityFeePerGas=0]
+     * @param {string} [paymasterAndData='0x']
+     * @param {NumberLike} [verificationGasLimit=0]
+     * @param {NumberLike} [preVerificationGas=0]
+     * @param {string} [signature='0x']
+     * @memberof UserOperation
      */
-    constructor();
+    constructor(sender?: string, nonce?: NumberLike, initCode?: string, callData?: string, callGasLimit?: NumberLike, maxFeePerGas?: NumberLike, maxPriorityFeePerGas?: NumberLike, paymasterAndData?: string, verificationGasLimit?: NumberLike, preVerificationGas?: NumberLike, signature?: string);
     private _sender;
     get sender(): string;
     set sender(value: string);
@@ -104,7 +118,7 @@ declare class UserOperation {
     static fromObject(obj: any): UserOperation;
     private recoveryWalletOP;
     private updatePreVerificationGas;
-    private updateCallGasLimit;
+    private updateVerificationGasLimit;
     /**
      * @description estimate gas
      * @param {string} entryPointAddress the entry point address
