@@ -35,9 +35,23 @@ const userOp_1 = require("../utils/userOp");
  */
 class UserOperation {
     /**
-     * @constructor UserOperation
+     * Creates an instance of UserOperation.
+     * @param {string} [sender='']
+     * @param {NumberLike} [nonce=0]
+     * @param {string} [initCode='0x']
+     * @param {string} [callData='0x']
+     * @param {NumberLike} [callGasLimit=0]
+     * @param {NumberLike} [maxFeePerGas=0]
+     * @param {NumberLike} [maxPriorityFeePerGas=0]
+     * @param {string} [paymasterAndData='0x']
+     * @param {NumberLike} [verificationGasLimit=0]
+     * @param {NumberLike} [preVerificationGas=0]
+     * @param {string} [signature='0x']
+     * @memberof UserOperation
      */
-    constructor() {
+    constructor(sender = '', nonce = 0, initCode = '0x', callData = '0x', callGasLimit = 0, maxFeePerGas = 0, maxPriorityFeePerGas = 0, paymasterAndData = '0x', verificationGasLimit = 0, preVerificationGas = 0, signature = '0x') {
+        this._specifiedVerificationGasLimit = false;
+        this._specifiedPreVerificationGas = false;
         this._sender = '';
         this._nonce = 0;
         this._initCode = '0x';
@@ -50,6 +64,25 @@ class UserOperation {
         this._paymasterAndData = '0x';
         this._signature = '0x';
         this._userOp = new userOp_1.UserOp();
+        this._sender = sender;
+        this._nonce = nonce;
+        this._initCode = initCode;
+        this._callData = callData;
+        this._callGasLimit = callGasLimit;
+        this._verificationGasLimit = verificationGasLimit;
+        this._preVerificationGas = preVerificationGas;
+        this._maxFeePerGas = maxFeePerGas;
+        this._maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this._paymasterAndData = paymasterAndData;
+        this._signature = signature;
+        if ((0, numberLike_1.toDecString)(verificationGasLimit) != '0') {
+            this._specifiedVerificationGasLimit = true;
+        }
+        if ((0, numberLike_1.toDecString)(preVerificationGas) != '0') {
+            this._specifiedPreVerificationGas = true;
+        }
+        this.updateVerificationGasLimit();
+        this.updatePreVerificationGas();
     }
     get sender() {
         return this._sender;
@@ -59,7 +92,7 @@ class UserOperation {
             throw new Error('invalid sender address');
         }
         this._sender = value;
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get nonce() {
@@ -67,7 +100,7 @@ class UserOperation {
     }
     set nonce(value) {
         this._nonce = value;
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get initCode() {
@@ -76,7 +109,7 @@ class UserOperation {
     set initCode(value) {
         this._initCode = value;
         // update preVerificationGas & verificationGasLimit
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get callData() {
@@ -85,7 +118,7 @@ class UserOperation {
     set callData(value) {
         this._callData = value;
         // update preVerificationGas & verificationGasLimit
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get callGasLimit() {
@@ -93,7 +126,7 @@ class UserOperation {
     }
     set callGasLimit(value) {
         this._callGasLimit = value;
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get verificationGasLimit() {
@@ -113,7 +146,7 @@ class UserOperation {
     }
     set maxFeePerGas(value) {
         this._maxFeePerGas = value;
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get maxPriorityFeePerGas() {
@@ -121,7 +154,7 @@ class UserOperation {
     }
     set maxPriorityFeePerGas(value) {
         this._maxPriorityFeePerGas = value;
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get paymasterAndData() {
@@ -130,7 +163,7 @@ class UserOperation {
     set paymasterAndData(value) {
         this._paymasterAndData = value;
         // update preVerificationGas & verificationGasLimit
-        this.updateCallGasLimit();
+        this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     get signature() {
@@ -256,18 +289,7 @@ class UserOperation {
         if (typeof obj.signature !== 'string' || !obj.signature.startsWith('0x')) {
             throw new Error('invalid signature');
         }
-        const userOp = new UserOperation();
-        userOp.sender = obj.sender;
-        userOp.nonce = obj.nonce;
-        userOp.initCode = obj.initCode;
-        userOp.callData = obj.callData;
-        userOp.callGasLimit = obj.callGasLimit;
-        userOp.verificationGasLimit = obj.verificationGasLimit;
-        userOp.preVerificationGas = obj.preVerificationGas;
-        userOp.maxFeePerGas = obj.maxFeePerGas;
-        userOp.maxPriorityFeePerGas = obj.maxPriorityFeePerGas;
-        userOp.paymasterAndData = obj.paymasterAndData;
-        userOp.signature = obj.signature;
+        const userOp = new UserOperation(obj.sender, obj.nonce, obj.initCode, obj.callData, obj.callGasLimit, obj.maxFeePerGas, obj.maxPriorityFeePerGas, obj.paymasterAndData, obj.verificationGasLimit, obj.preVerificationGas, obj.signature);
         return userOp;
     }
     /**
@@ -312,18 +334,7 @@ class UserOperation {
         if (typeof obj.signature !== 'string' || !obj.signature.startsWith('0x')) {
             throw new Error('invalid signature');
         }
-        const userOp = new UserOperation();
-        userOp.sender = obj.sender;
-        userOp.nonce = obj.nonce;
-        userOp.initCode = obj.initCode;
-        userOp.callData = obj.callData;
-        userOp.callGasLimit = obj.callGasLimit;
-        userOp.verificationGasLimit = obj.verificationGasLimit;
-        userOp.preVerificationGas = obj.preVerificationGas;
-        userOp.maxFeePerGas = obj.maxFeePerGas;
-        userOp.maxPriorityFeePerGas = obj.maxPriorityFeePerGas;
-        userOp.paymasterAndData = obj.paymasterAndData;
-        userOp.signature = obj.signature;
+        const userOp = new UserOperation(obj.sender, obj.nonce, obj.initCode, obj.callData, obj.callGasLimit, obj.maxFeePerGas, obj.maxPriorityFeePerGas, obj.paymasterAndData, obj.verificationGasLimit, obj.preVerificationGas, obj.signature);
         return userOp;
     }
     recoveryWalletOP() {
@@ -334,6 +345,9 @@ class UserOperation {
         return this.callData.startsWith('0x4fb2e45d');
     }
     updatePreVerificationGas() {
+        if (this._specifiedPreVerificationGas) {
+            return;
+        }
         try {
             let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
             if (this.recoveryWalletOP()) {
@@ -345,7 +359,10 @@ class UserOperation {
             console.log(error);
         }
     }
-    updateCallGasLimit() {
+    updateVerificationGasLimit() {
+        if (this._specifiedVerificationGasLimit) {
+            return;
+        }
         let _verificationGasLimit = 50000;
         if (this.recoveryWalletOP()) {
             _verificationGasLimit += 550000; // create guardian cost
