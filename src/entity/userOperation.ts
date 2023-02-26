@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { AddressZero } from "../defines/address";
-import { NumberLike, toDecString, toHexString } from "../defines/numberLike";
+import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
 import { UserOp } from '../utils/userOp';
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
@@ -26,9 +26,6 @@ import { UserOp } from '../utils/userOp';
 class UserOperation {
 
     private _userOp: UserOp;
-
-    private _specifiedVerificationGasLimit = false;
-    private _specifiedPreVerificationGas = false;
 
     /**
      * Creates an instance of UserOperation.
@@ -59,16 +56,10 @@ class UserOperation {
         this._paymasterAndData = paymasterAndData;
         this._signature = signature;
 
-        if (toDecString(verificationGasLimit) != '0') {
-            this._specifiedVerificationGasLimit = true;
+        if (toNumber(verificationGasLimit) === 0 || toNumber(preVerificationGas) === 0) {
+            this.updateVerificationGasLimit();
+            this.updatePreVerificationGas();
         }
-        if (toDecString(preVerificationGas) != '0') {
-            this._specifiedPreVerificationGas = true;
-        }
-
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
 
     }
 
@@ -369,9 +360,6 @@ class UserOperation {
     }
 
     private updatePreVerificationGas() {
-        if (this._specifiedPreVerificationGas) {
-            return;
-        }
         try {
 
             let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
@@ -385,9 +373,6 @@ class UserOperation {
     }
 
     private updateVerificationGasLimit() {
-        if (this._specifiedVerificationGasLimit) {
-            return;
-        }
         let _verificationGasLimit = 50000;
         if (this.recoveryWalletOP()) {
             _verificationGasLimit += 550000; // create guardian cost

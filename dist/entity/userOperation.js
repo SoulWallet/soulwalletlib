@@ -50,8 +50,6 @@ class UserOperation {
      * @memberof UserOperation
      */
     constructor(sender = '', nonce = 0, initCode = '0x', callData = '0x', callGasLimit = 0, maxFeePerGas = 0, maxPriorityFeePerGas = 0, paymasterAndData = '0x', verificationGasLimit = 0, preVerificationGas = 0, signature = '0x') {
-        this._specifiedVerificationGasLimit = false;
-        this._specifiedPreVerificationGas = false;
         this._sender = '';
         this._nonce = 0;
         this._initCode = '0x';
@@ -75,14 +73,10 @@ class UserOperation {
         this._maxPriorityFeePerGas = maxPriorityFeePerGas;
         this._paymasterAndData = paymasterAndData;
         this._signature = signature;
-        if ((0, numberLike_1.toDecString)(verificationGasLimit) != '0') {
-            this._specifiedVerificationGasLimit = true;
+        if ((0, numberLike_1.toNumber)(verificationGasLimit) === 0 || (0, numberLike_1.toNumber)(preVerificationGas) === 0) {
+            this.updateVerificationGasLimit();
+            this.updatePreVerificationGas();
         }
-        if ((0, numberLike_1.toDecString)(preVerificationGas) != '0') {
-            this._specifiedPreVerificationGas = true;
-        }
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     get sender() {
         return this._sender;
@@ -345,9 +339,6 @@ class UserOperation {
         return this.callData.startsWith('0x4fb2e45d');
     }
     updatePreVerificationGas() {
-        if (this._specifiedPreVerificationGas) {
-            return;
-        }
         try {
             let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
             if (this.recoveryWalletOP()) {
@@ -360,9 +351,6 @@ class UserOperation {
         }
     }
     updateVerificationGasLimit() {
-        if (this._specifiedVerificationGasLimit) {
-            return;
-        }
         let _verificationGasLimit = 50000;
         if (this.recoveryWalletOP()) {
             _verificationGasLimit += 550000; // create guardian cost

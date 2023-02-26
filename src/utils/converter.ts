@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 17:32:20
+ * @LastEditTime: 2023-02-26 20:01:01
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -60,18 +60,11 @@ export class Converter {
         maxPriorityFeePerGas: NumberLike,
         paymasterAndData: string = "0x"
     ): Promise<UserOperation | null> {
-
-        const op = new UserOperation();
-        op.nonce = nonce;
-        op.paymasterAndData = paymasterAndData;
-        op.maxFeePerGas = maxFeePerGas;
-        op.maxPriorityFeePerGas = maxPriorityFeePerGas;
-
         if (transcations.length === 0) {
             throw new Error("transcation is empty");
         }
 
-        op.sender = (transcations[0].from).toLowerCase();
+        let sender = (transcations[0].from).toLowerCase();
 
         // #TODO if gas is null
 
@@ -88,26 +81,29 @@ export class Converter {
                 _to.push(transcations[i].to);
                 _value.push(transcations[i].value);
                 _data.push(transcations[i].data);
-                if (op.sender !== transcations[i].from.toLowerCase()) {
+                if (sender !== transcations[i].from.toLowerCase()) {
                     throw new Error("transcation sender is not same");
                 }
             }
         }
 
         //op.callGasLimit = _callGasLimit.toHexString();
-
+        let callData;
         if (transcations.length === 1) {
-            op.callData = new ethers.utils.Interface(execFromEntryPoint)
+            callData = new ethers.utils.Interface(execFromEntryPoint)
                 .encodeFunctionData("execFromEntryPoint",
                     [_to[0], _value[0], _data[0]]
                 );
         } else {
-            op.callData = new ethers.utils.Interface(execBatchFromEntryPoint)
+            callData = new ethers.utils.Interface(execBatchFromEntryPoint)
                 .encodeFunctionData("execFromEntryPoint",
                     [_to, _value, _data]
                 );
         }
-
+        const op = new UserOperation(
+            sender,
+            nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
+        );
 
         let gasEstimated = await op.estimateGas(entryPointAddress,
             etherProvider

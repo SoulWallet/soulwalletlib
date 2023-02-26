@@ -21,8 +21,6 @@ import { NumberLike } from "../defines/numberLike";
  */
 declare class UserOperation {
     private _userOp;
-    private _specifiedVerificationGasLimit;
-    private _specifiedPreVerificationGas;
     /**
      * Creates an instance of UserOperation.
      * @param {string} [sender='']
