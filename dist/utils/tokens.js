@@ -16,7 +16,7 @@ exports.ETH = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.Token =
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 15:39:26
+ * @LastEditTime: 2023-02-26 19:56:47
  */
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
@@ -29,14 +29,9 @@ class Token {
     createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, callContract, encodeABI, value = '0') {
         return __awaiter(this, void 0, void 0, function* () {
             walletAddress = ethers_1.ethers.utils.getAddress(walletAddress);
-            let userOperation = new userOperation_1.UserOperation();
-            userOperation.nonce = nonce;
-            userOperation.sender = walletAddress;
-            userOperation.paymasterAndData = paymasterAndData;
-            userOperation.maxFeePerGas = maxFeePerGas;
-            userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-            userOperation.callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint)
+            const callData = new ethers_1.ethers.utils.Interface(ABI_1.execFromEntryPoint)
                 .encodeFunctionData("execFromEntryPoint", [callContract, value, encodeABI]);
+            let userOperation = new userOperation_1.UserOperation(walletAddress, nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData);
             let gasEstimated = yield userOperation.estimateGas(entryPointAddress, etherProvider);
             if (!gasEstimated) {
                 return null;

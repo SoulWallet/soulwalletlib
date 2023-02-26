@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 15:39:26
+ * @LastEditTime: 2023-02-26 19:56:47
  */
 import { UserOperation } from "../entity/userOperation";
 import { execFromEntryPoint, execBatchFromEntryPoint, ERC1155 as erc1155, ERC20 as erc20, ERC721 as erc721 } from "../defines/ABI";
@@ -23,17 +23,12 @@ export class Token {
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callContract: string, encodeABI: string, value: string = '0') {
 
         walletAddress = ethers.utils.getAddress(walletAddress);
-
-        let userOperation: UserOperation = new UserOperation();
-        userOperation.nonce = nonce;
-        userOperation.sender = walletAddress;
-        userOperation.paymasterAndData = paymasterAndData;
-        userOperation.maxFeePerGas = maxFeePerGas;
-        userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-
-        userOperation.callData = new ethers.utils.Interface(execFromEntryPoint)
+        const callData = new ethers.utils.Interface(execFromEntryPoint)
             .encodeFunctionData("execFromEntryPoint",
                 [callContract, value, encodeABI]);
+        let userOperation: UserOperation = new UserOperation(
+            walletAddress, nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
+        );
         let gasEstimated = await userOperation.estimateGas(entryPointAddress,
             etherProvider
         );
@@ -152,7 +147,7 @@ export class ERC20 {
                         approveData[i].value === undefined ? this.MAX_INT256 : approveData[i].value
                     ]);
                     //console.log(`token:${approveData[i].token},spender:${approveData[i].spender},value:${approveData[i].value}`);
-                   
+
                     data.push(encodeABI);
                 }
                 approveCallData.callGasLimit = callGasLimit.toHexString();

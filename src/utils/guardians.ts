@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 21:42:33
+ * @LastEditTime: 2023-02-26 19:58:14
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -207,13 +207,9 @@ export class Guardian {
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callData: string) {
 
         walletAddress = ethers.utils.getAddress(walletAddress);
-        let userOperation: UserOperation = new UserOperation();
-        userOperation.nonce = nonce;
-        userOperation.sender = walletAddress;
-        userOperation.paymasterAndData = paymasterAndData;
-        userOperation.maxFeePerGas = maxFeePerGas;
-        userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-        userOperation.callData = callData;
+        let userOperation: UserOperation = new UserOperation(
+            walletAddress, nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
+        );
         let gasEstimated = await userOperation.estimateGas(entryPointAddress, etherProvider);
         if (!gasEstimated) {
             return null;

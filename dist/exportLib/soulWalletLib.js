@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 23:48:24
+ * @LastEditTime: 2023-02-26 20:02:46
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -176,15 +176,8 @@ class SoulWalletLib {
      */
     activateWalletOp(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, salt, walletFactory, singletonFactory, walletProxyConfig) {
         const walletAddress = this.calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, singletonFactory, walletProxyConfig);
-        const userOperation = new userOperation_1.UserOperation();
-        userOperation.nonce = 0;
-        userOperation.sender = walletAddress;
-        userOperation.paymasterAndData = paymasterAndData;
-        userOperation.maxFeePerGas = maxFeePerGas;
-        userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-        userOperation.initCode = this.getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
-        userOperation.callGasLimit = 0;
-        userOperation.callData = "0x";
+        const initCode = this.getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt);
+        const userOperation = new userOperation_1.UserOperation(walletAddress, 0, initCode, undefined, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData);
         return userOperation;
     }
     getPackedInitCodeUsingWalletFactory(walletFactory, walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay, guardianDelay, guardianAddress, salt, walletFactoryInterface) {

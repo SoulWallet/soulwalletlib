@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 23:48:24
+ * @LastEditTime: 2023-02-26 20:02:46
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder, BytesLike } from "ethers/lib/utils";
@@ -231,14 +231,7 @@ export class SoulWalletLib {
     ) {
         const walletAddress = this.calculateWalletAddress(walletLogicAddress, entryPointAddress, ownerAddress, upgradeDelay,
             guardianDelay, guardianAddress, salt, singletonFactory, walletProxyConfig);
-
-        const userOperation = new UserOperation();
-        userOperation.nonce = 0;
-        userOperation.sender = walletAddress;
-        userOperation.paymasterAndData = paymasterAndData;
-        userOperation.maxFeePerGas = maxFeePerGas;
-        userOperation.maxPriorityFeePerGas = maxPriorityFeePerGas;
-        userOperation.initCode = this.getPackedInitCodeUsingWalletFactory(
+        const initCode = this.getPackedInitCodeUsingWalletFactory(
             walletFactory,
             walletLogicAddress,
             entryPointAddress,
@@ -248,8 +241,8 @@ export class SoulWalletLib {
             guardianAddress,
             salt
         );
-        userOperation.callGasLimit = 0;
-        userOperation.callData = "0x";
+        const userOperation = new UserOperation(walletAddress, 0, initCode, undefined, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData);
+
         return userOperation;
     }
 
