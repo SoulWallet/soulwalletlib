@@ -268,10 +268,6 @@ export class Guardian {
         const op = await this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress,
             maxFeePerGas, maxPriorityFeePerGas, calldata);
 
-        if (op) {
-            op.verificationGasLimit = toNumber(op.verificationGasLimit) + 100000;
-        }
-
         return op;
     }
 

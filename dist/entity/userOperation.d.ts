@@ -102,7 +102,9 @@ declare class UserOperation {
      * @returns {UserOperation} the userOperation object
      */
     static fromObject(obj: any): UserOperation;
-    private calcGas;
+    private recoveryWalletOP;
+    private updatePreVerificationGas;
+    private updateCallGasLimit;
     /**
      * @description estimate gas
      * @param {string} entryPointAddress the entry point address

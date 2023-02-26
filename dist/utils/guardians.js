@@ -25,7 +25,6 @@ const guardianMultiSigWallet_1 = require("../contracts/guardianMultiSigWallet");
 const walletProxy_1 = require("../contracts/walletProxy");
 const utils_1 = require("ethers/lib/utils");
 const address_1 = require("../defines/address");
-const numberLike_1 = require("../defines/numberLike");
 const userOp_1 = require("./userOp");
 /**
  * guardian class
@@ -240,9 +239,6 @@ class Guardian {
             const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
             const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
             const op = yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
-            if (op) {
-                op.verificationGasLimit = (0, numberLike_1.toNumber)(op.verificationGasLimit) + 100000;
-            }
             return op;
         });
     }

@@ -43,8 +43,8 @@ class UserOperation {
         this._initCode = '0x';
         this._callData = '0x';
         this._callGasLimit = 0;
-        this._verificationGasLimit = 450000;
-        this._preVerificationGas = 47000;
+        this._verificationGasLimit = 0; //450000;
+        this._preVerificationGas = 0; //47000;
         this._maxFeePerGas = 0;
         this._maxPriorityFeePerGas = 0;
         this._paymasterAndData = '0x';
@@ -59,12 +59,16 @@ class UserOperation {
             throw new Error('invalid sender address');
         }
         this._sender = value;
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get nonce() {
         return this._nonce;
     }
     set nonce(value) {
         this._nonce = value;
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get initCode() {
         return this._initCode;
@@ -72,7 +76,8 @@ class UserOperation {
     set initCode(value) {
         this._initCode = value;
         // update preVerificationGas & verificationGasLimit
-        this.calcGas();
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get callData() {
         return this._callData;
@@ -80,13 +85,16 @@ class UserOperation {
     set callData(value) {
         this._callData = value;
         // update preVerificationGas & verificationGasLimit
-        this.calcGas();
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get callGasLimit() {
         return this._callGasLimit;
     }
     set callGasLimit(value) {
         this._callGasLimit = value;
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get verificationGasLimit() {
         return this._verificationGasLimit;
@@ -105,12 +113,16 @@ class UserOperation {
     }
     set maxFeePerGas(value) {
         this._maxFeePerGas = value;
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get maxPriorityFeePerGas() {
         return this._maxPriorityFeePerGas;
     }
     set maxPriorityFeePerGas(value) {
         this._maxPriorityFeePerGas = value;
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get paymasterAndData() {
         return this._paymasterAndData;
@@ -118,7 +130,8 @@ class UserOperation {
     set paymasterAndData(value) {
         this._paymasterAndData = value;
         // update preVerificationGas & verificationGasLimit
-        this.calcGas();
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     get signature() {
         return this._signature;
@@ -313,35 +326,37 @@ class UserOperation {
         userOp.signature = obj.signature;
         return userOp;
     }
-    calcGas() {
+    recoveryWalletOP() {
         /**
-        * if recovery wallet,preVerificationGas += 20000
-        * 0x4fb2e45d:transferOwner(address)
-        */
-        let isRecoveryWallet = false;
-        if (this.callData.startsWith('0x4fb2e45d')) {
-            isRecoveryWallet = true;
+          * if recovery wallet,preVerificationGas += 20000
+          * 0x4fb2e45d:transferOwner(address)
+          */
+        return this.callData.startsWith('0x4fb2e45d');
+    }
+    updatePreVerificationGas() {
+        try {
+            let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
+            if (this.recoveryWalletOP()) {
+                _preVerificationGas += 20000;
+            }
+            this._preVerificationGas = _preVerificationGas;
         }
-        // #region preVerificationGas
-        let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
-        if (isRecoveryWallet) {
-            _preVerificationGas += 20000;
+        catch (error) {
+            console.log(error);
         }
-        this.preVerificationGas = _preVerificationGas;
-        // #endregion preVerificationGas
-        // #region verificationGasLimit
+    }
+    updateCallGasLimit() {
         let _verificationGasLimit = 50000;
-        if (isRecoveryWallet) {
-            _verificationGasLimit += 500000; // create guardian cost
+        if (this.recoveryWalletOP()) {
+            _verificationGasLimit += 550000; // create guardian cost
         }
         if (this._initCode !== '0x') {
             _verificationGasLimit += 400000; // create wallet cost
         }
-        if (this.paymasterAndData.length > 2 && this.paymasterAndData !== address_1.AddressZero) {
+        if (this.paymasterAndData.length >= 42 && this.paymasterAndData !== address_1.AddressZero) {
             _verificationGasLimit += 50000; // paymaster cost ( validatePaymasterUserOp & postOp )
         }
-        this.verificationGasLimit = _verificationGasLimit;
-        // #endregion verificationGasLimit
+        this._verificationGasLimit = _verificationGasLimit;
     }
     /**
      * @description estimate gas
