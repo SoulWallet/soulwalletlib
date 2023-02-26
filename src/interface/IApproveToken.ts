@@ -4,11 +4,13 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-13 23:27:04
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 16:54:01
+ * @LastEditTime: 2023-02-24 23:46:20
  */
 
 /**
  * token approve data interface
+ *
+ * @export 
  * @interface IApproveToken
  * @property {string} token the token address
  * @property {string} spender the spender address
