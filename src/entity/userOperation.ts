@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
-import { AddressZero, SingletonFactoryAddress } from "../defines/address";
-import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
+import { AddressZero } from "../defines/address";
+import { NumberLike, toDecString, toHexString } from "../defines/numberLike";
 import { UserOp } from '../utils/userOp';
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
@@ -22,10 +22,10 @@ import { UserOp } from '../utils/userOp';
  * @property {String} paymasterAndData the paymasterAndData
  * @property {String} signature the signature
  */
+
 class UserOperation {
 
     private _userOp: UserOp;
-
 
     /**
      * @constructor UserOperation
@@ -33,8 +33,9 @@ class UserOperation {
     constructor() {
         this._userOp = new UserOp();
     }
+
     private _sender: string = '';
-    
+
     public get sender(): string {
         return this._sender;
     }
@@ -43,6 +44,9 @@ class UserOperation {
             throw new Error('invalid sender address');
         }
         this._sender = value;
+
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     private _nonce: NumberLike = 0;
     public get nonce(): NumberLike {
@@ -50,6 +54,9 @@ class UserOperation {
     }
     public set nonce(value: NumberLike) {
         this._nonce = value;
+
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     private _initCode: string = '0x';
     public get initCode(): string {
@@ -59,8 +66,10 @@ class UserOperation {
         this._initCode = value;
 
         // update preVerificationGas & verificationGasLimit
-        this.calcGas();
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
+
     private _callData: string = '0x';
     public get callData(): string {
         return this._callData;
@@ -69,7 +78,8 @@ class UserOperation {
         this._callData = value;
 
         // update preVerificationGas & verificationGasLimit
-        this.calcGas();
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     private _callGasLimit: NumberLike = 0;
     public get callGasLimit(): NumberLike {
@@ -77,15 +87,18 @@ class UserOperation {
     }
     public set callGasLimit(value: NumberLike) {
         this._callGasLimit = value;
+        
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
-    private _verificationGasLimit: NumberLike = 450000;
+    private _verificationGasLimit: NumberLike = 0;//450000;
     public get verificationGasLimit(): NumberLike {
         return this._verificationGasLimit;
     }
     public set verificationGasLimit(value: NumberLike) {
         this._verificationGasLimit = value;
     }
-    private _preVerificationGas: NumberLike = 47000;
+    private _preVerificationGas: NumberLike = 0;//47000;
     public get preVerificationGas(): NumberLike {
         return this._preVerificationGas;
     }
@@ -98,6 +111,9 @@ class UserOperation {
     }
     public set maxFeePerGas(value: NumberLike) {
         this._maxFeePerGas = value;
+        
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     private _maxPriorityFeePerGas: NumberLike = 0;
     public get maxPriorityFeePerGas(): NumberLike {
@@ -105,6 +121,9 @@ class UserOperation {
     }
     public set maxPriorityFeePerGas(value: NumberLike) {
         this._maxPriorityFeePerGas = value;
+        
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     private _paymasterAndData: string = '0x';
     public get paymasterAndData(): string {
@@ -114,7 +133,8 @@ class UserOperation {
         this._paymasterAndData = value;
 
         // update preVerificationGas & verificationGasLimit
-        this.calcGas();
+        this.updateCallGasLimit();
+        this.updatePreVerificationGas();
     }
     private _signature: string = '0x';
     public get signature(): string {
@@ -263,6 +283,8 @@ class UserOperation {
         return userOp;
     }
 
+
+
     /**
      * @description convert from userOperation object
      * @param {object} obj the userOperation object
@@ -321,44 +343,42 @@ class UserOperation {
         return userOp;
     }
 
-    private calcGas() {
+    private recoveryWalletOP() {
         /**
-        * if recovery wallet,preVerificationGas += 20000
-        * 0x4fb2e45d:transferOwner(address)
-        */
-        let isRecoveryWallet = false;
-        if (this.callData.startsWith('0x4fb2e45d')) {
-            isRecoveryWallet = true;
+          * if recovery wallet,preVerificationGas += 20000
+          * 0x4fb2e45d:transferOwner(address)
+          */
+        return this.callData.startsWith('0x4fb2e45d');
+    }
+
+    private updatePreVerificationGas() {
+        try {
+
+            let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
+            if (this.recoveryWalletOP()) {
+                _preVerificationGas += 20000;
+            }
+            this._preVerificationGas = _preVerificationGas;
+        } catch (error) {
+            console.log(error);
         }
+    }
 
-        // #region preVerificationGas
-
-        let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
-
-        if (isRecoveryWallet) {
-            _preVerificationGas += 20000;
-        }
-        this.preVerificationGas = _preVerificationGas;
-
-        // #endregion preVerificationGas
-
-        // #region verificationGasLimit
+    private updateCallGasLimit() {
         let _verificationGasLimit = 50000;
-        if (isRecoveryWallet) {
-            _verificationGasLimit += 500000; // create guardian cost
+        if (this.recoveryWalletOP()) {
+            _verificationGasLimit += 550000; // create guardian cost
         }
         if (this._initCode !== '0x') {
             _verificationGasLimit += 400000; // create wallet cost
         }
-        if (this.paymasterAndData.length > 2 && this.paymasterAndData !== AddressZero) {
+        if (this.paymasterAndData.length >= 42 && this.paymasterAndData !== AddressZero) {
             _verificationGasLimit += 50000; // paymaster cost ( validatePaymasterUserOp & postOp )
         }
-        this.verificationGasLimit = _verificationGasLimit;
-
-        // #endregion verificationGasLimit
+        this._verificationGasLimit = _verificationGasLimit;
     }
 
-    
+
 
     /**
      * @description estimate gas
@@ -397,13 +417,13 @@ class UserOperation {
         return this._userOp.payMasterSignHash(this);
     }
 
-   /**
-    * @description sign the user operation
-    * @param {string} entryPoint the entry point address
-    * @param {number} chainId the chain id
-    * @param {string} privateKey the private key
-    * @returns {void}
-    */
+    /**
+     * @description sign the user operation
+     * @param {string} entryPoint the entry point address
+     * @param {number} chainId the chain id
+     * @param {string} privateKey the private key
+     * @returns {void}
+     */
     public sign(
         entryPoint: string,
         chainId: number,
@@ -494,7 +514,5 @@ class UserOperation {
     }
 
 }
-
-
 
 export { UserOperation };
