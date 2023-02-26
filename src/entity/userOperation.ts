@@ -351,7 +351,7 @@ class UserOperation {
             _verificationGasLimit += 400000; // create wallet cost
         }
         if (this.paymasterAndData.length > 2 && this.paymasterAndData !== AddressZero) {
-            _verificationGasLimit += 20000; // paymaster cost ( validatePaymasterUserOp & postOp )
+            _verificationGasLimit += 50000; // paymaster cost ( validatePaymasterUserOp & postOp )
         }
         this.verificationGasLimit = _verificationGasLimit;
 

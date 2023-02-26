@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 16:57:04
+ * @LastEditTime: 2023-02-24 23:48:24
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder, BytesLike } from "ethers/lib/utils";
@@ -125,14 +125,19 @@ export class SoulWalletLib {
 
     /**
      * get wallet code
-     * @param {String} walletLogicAddress the wallet logic contract address
-     * @param {String} entryPointAddress the entryPoint address
-     * @param {String} ownerAddress the owner address
-     * @param {Number} upgradeDelay the upgrade delay time
-     * @param {Number} guardianDelay the guardian delay time
-     * @param {String} guardianAddress the guardian contract address
-     * @param {Object?} walletProxyConfig the wallet proxy config
-     * @returns {String} the wallet code hex string  
+     *
+     * @param {string} walletLogicAddress the wallet logic contract address
+     * @param {string} entryPointAddress the entryPoint contract address
+     * @param {string} ownerAddress the owner address
+     * @param {number} upgradeDelay the upgrade delay time
+     * @param {number} guardianDelay the guardian delay time
+     * @param {string} guardianAddress the guardian contract address
+     * @param {({
+     *             contractInterface: ContractInterface,
+     *             bytecode: BytesLike | { object: string }
+     *         })} [walletProxyConfig] the wallet proxy config
+     * @return {*}  {string}
+     * @memberof SoulWalletLib
      */
     public getWalletCode(
         walletLogicAddress: string,

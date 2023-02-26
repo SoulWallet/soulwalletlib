@@ -1,5 +1,7 @@
 /**
  * token approve data interface
+ *
+ * @export
  * @interface IApproveToken
  * @property {string} token the token address
  * @property {string} spender the spender address
