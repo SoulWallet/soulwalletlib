@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-11 12:45:04
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-11 13:02:03
+ * @LastEditTime: 2023-02-27 11:27:45
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -39,9 +39,9 @@ class HttpRequest {
     }
     static post(url, data, timeout = 1000 * 30) {
         return __awaiter(this, void 0, void 0, function* () {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
             try {
-                const controller = new AbortController();
-                const id = setTimeout(() => controller.abort(), timeout);
                 const response = yield fetch(url, {
                     method: "POST",
                     signal: controller.signal,
@@ -50,7 +50,6 @@ class HttpRequest {
                     },
                     body: JSON.stringify(data),
                 });
-                clearTimeout(id);
                 if (response.ok) {
                     const json = yield response.json();
                     return json;
@@ -58,6 +57,9 @@ class HttpRequest {
             }
             catch (error) {
                 console.log(error);
+            }
+            finally {
+                clearTimeout(id);
             }
             return null;
         });
