@@ -373,12 +373,12 @@ class UserOperation {
     }
 
     private updateVerificationGasLimit() {
-        let _verificationGasLimit = 50000;
+        let _verificationGasLimit = 100000;
         if (this.recoveryWalletOP()) {
-            _verificationGasLimit += 550000; // create guardian cost
+            _verificationGasLimit += 500000; // create guardian cost
         }
         if (this._initCode !== '0x') {
-            _verificationGasLimit += 400000; // create wallet cost
+            _verificationGasLimit += 350000; // create wallet cost
         }
         if (this.paymasterAndData.length >= 42 && this.paymasterAndData !== AddressZero) {
             _verificationGasLimit += 50000; // paymaster cost ( validatePaymasterUserOp & postOp )
