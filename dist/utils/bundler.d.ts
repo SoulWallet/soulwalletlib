@@ -40,30 +40,33 @@ export declare class Bundler {
      * get bundler supported chainid
      * @returns {Promise<String>} supported chainid
      */
-    eth_chainId(): Promise<string>;
+    eth_chainId(timeout?: number): Promise<string>;
     /**
      * get bundler supported entry points
      * @returns {Promise<String[]>} supported entry points
      */
-    eth_supportedEntryPoints(): Promise<string[]>;
+    eth_supportedEntryPoints(timeout?: number): Promise<string[]>;
     /**
      * send user operation via bundler
      * @param {UserOperation} userOp
      * @returns {Promise<String>} user operation hash
      */
-    eth_sendUserOperation(userOp: UserOperation): Promise<string>;
+    eth_sendUserOperation(userOp: UserOperation, timeout?: number): Promise<string>;
     eth_estimateUserOperationGas(userOp: UserOperation): Promise<void>;
-    eth_getUserOperationReceipt(userOpHash: string): Promise<IUserOpReceipt | null>;
+    eth_getUserOperationReceipt(userOpHash: string, timeout?: number): Promise<IUserOpReceipt | null>;
     eth_getUserOperationByHash(userOpHash: string): Promise<void>;
     private sleep;
     /**
      * send user operation via bundler
+     *
      * @param {UserOperation} userOp
-     * @param {Number} receiptTimeout receipt timeout
-     * @param {Number} receiptInterval receipt interval
-     * @returns {EventEmitter} emitter event: send, error, receipt, timeout
+     * @param {number} [timeout] default 30s
+     * @param {number} [receiptTimeout=0]
+     * @param {number} [receiptInterval=1000 * 6]
+     * @return {*}
+     * @memberof Bundler
      */
-    sendUserOperation(userOp: UserOperation, receiptTimeout?: number, receiptInterval?: number): EventEmitter;
+    sendUserOperation(userOp: UserOperation, timeout?: number, receiptTimeout?: number, receiptInterval?: number): EventEmitter;
     private decodeExecutionResult;
     private decodeFailedOp;
     private decodeValidationResult;

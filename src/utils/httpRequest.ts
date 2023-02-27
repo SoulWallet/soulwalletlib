@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-11 12:45:04
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 11:27:45
+ * @LastEditTime: 2023-02-27 23:03:54
  */
 
 export class HttpRequest {
@@ -24,12 +24,18 @@ export class HttpRequest {
         return null;
     }
     static async post(url: string, data: any, timeout: number = 1000 * 30): Promise<any> {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), timeout);
+        let signal: AbortSignal | undefined = undefined;
+        let id: NodeJS.Timeout | undefined = undefined;
+        if (timeout > 1000) {
+            const controller = new AbortController();
+            signal = controller.signal;
+            id = setTimeout(() => controller.abort(), timeout);
+        }
+
         try {
             const response = await fetch(url, {
                 method: "POST",
-                signal: controller.signal,
+                signal: signal,
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -42,7 +48,9 @@ export class HttpRequest {
         } catch (error) {
             console.log(error);
         } finally {
-            clearTimeout(id);
+            if (id) {
+                clearTimeout(id);
+            }
         }
         return null;
     }

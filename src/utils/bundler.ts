@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 17:33:07
+ * @LastEditTime: 2023-02-27 23:06:46
  */
 
 
@@ -126,14 +126,15 @@ export class Bundler {
      * get bundler supported chainid
      * @returns {Promise<String>} supported chainid
      */
-    public async eth_chainId(): Promise<string> {
+    public async eth_chainId(timeout?: number): Promise<string> {
         return this.rpcRequest<never[], string>(
             {
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_chainId',
                 params: []
-            }
+            },
+            timeout
         );
     }
 
@@ -141,14 +142,14 @@ export class Bundler {
      * get bundler supported entry points
      * @returns {Promise<String[]>} supported entry points
      */
-    public async eth_supportedEntryPoints() {
+    public async eth_supportedEntryPoints(timeout?: number) {
         return this.rpcRequest<never[], string[]>(
             {
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_supportedEntryPoints',
                 params: []
-            }
+            }, timeout
         );
     }
 
@@ -157,7 +158,7 @@ export class Bundler {
      * @param {UserOperation} userOp
      * @returns {Promise<String>} user operation hash
      */
-    public async eth_sendUserOperation(userOp: UserOperation) {
+    public async eth_sendUserOperation(userOp: UserOperation, timeout?: number) {
         return this.rpcRequest<any[], string>(
             {
                 jsonrpc: '2.0',
@@ -167,7 +168,7 @@ export class Bundler {
                     JSON.parse(userOp.toJSON()),
                     this._entryPoint
                 ]
-            }
+            }, timeout
         );
     }
 
@@ -175,14 +176,14 @@ export class Bundler {
         throw new Error('not implement');
     }
 
-    public async eth_getUserOperationReceipt(userOpHash: string) {
+    public async eth_getUserOperationReceipt(userOpHash: string, timeout?: number) {
         return this.rpcRequest<string[], IUserOpReceipt | null>(
             {
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_getUserOperationReceipt',
                 params: [userOpHash]
-            }
+            }, timeout
         );
     }
 
@@ -199,14 +200,17 @@ export class Bundler {
 
     /**
      * send user operation via bundler
-     * @param {UserOperation} userOp
-     * @param {Number} receiptTimeout receipt timeout
-     * @param {Number} receiptInterval receipt interval
-     * @returns {EventEmitter} emitter event: send, error, receipt, timeout
+     *
+     * @param {UserOperation} userOp 
+     * @param {number} [timeout] default 30s
+     * @param {number} [receiptTimeout=0]
+     * @param {number} [receiptInterval=1000 * 6]
+     * @return {*} 
+     * @memberof Bundler
      */
-    public sendUserOperation(userOp: UserOperation, receiptTimeout: number = 0, receiptInterval: number = 1000 * 6) {
+    public sendUserOperation(userOp: UserOperation, timeout?: number, receiptTimeout: number = 0, receiptInterval: number = 1000 * 6) {
         const emitter = new EventEmitter();
-        this.eth_sendUserOperation(userOp).then(async (userOpHash) => {
+        this.eth_sendUserOperation(userOp, timeout).then(async (userOpHash) => {
             emitter.emit('send', userOpHash);
 
             const startTime = Date.now();
@@ -214,7 +218,7 @@ export class Bundler {
                 // sleep 6s
                 await this.sleep(receiptInterval);
                 try {
-                    const re = await this.eth_getUserOperationReceipt(userOpHash);
+                    const re = await this.eth_getUserOperationReceipt(userOpHash, timeout);
                     if (re) {
                         emitter.emit('receipt', re);
                         return;

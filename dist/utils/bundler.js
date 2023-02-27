@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 17:33:07
+ * @LastEditTime: 2023-02-27 23:06:46
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -124,28 +124,28 @@ class Bundler {
      * get bundler supported chainid
      * @returns {Promise<String>} supported chainid
      */
-    eth_chainId() {
+    eth_chainId(timeout) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_chainId',
                 params: []
-            });
+            }, timeout);
         });
     }
     /**
      * get bundler supported entry points
      * @returns {Promise<String[]>} supported entry points
      */
-    eth_supportedEntryPoints() {
+    eth_supportedEntryPoints(timeout) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_supportedEntryPoints',
                 params: []
-            });
+            }, timeout);
         });
     }
     /**
@@ -153,7 +153,7 @@ class Bundler {
      * @param {UserOperation} userOp
      * @returns {Promise<String>} user operation hash
      */
-    eth_sendUserOperation(userOp) {
+    eth_sendUserOperation(userOp, timeout) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
                 jsonrpc: '2.0',
@@ -163,7 +163,7 @@ class Bundler {
                     JSON.parse(userOp.toJSON()),
                     this._entryPoint
                 ]
-            });
+            }, timeout);
         });
     }
     eth_estimateUserOperationGas(userOp) {
@@ -171,14 +171,14 @@ class Bundler {
             throw new Error('not implement');
         });
     }
-    eth_getUserOperationReceipt(userOpHash) {
+    eth_getUserOperationReceipt(userOpHash, timeout) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.rpcRequest({
                 jsonrpc: '2.0',
                 id: 1,
                 method: 'eth_getUserOperationReceipt',
                 params: [userOpHash]
-            });
+            }, timeout);
         });
     }
     eth_getUserOperationByHash(userOpHash) {
@@ -193,21 +193,24 @@ class Bundler {
     }
     /**
      * send user operation via bundler
+     *
      * @param {UserOperation} userOp
-     * @param {Number} receiptTimeout receipt timeout
-     * @param {Number} receiptInterval receipt interval
-     * @returns {EventEmitter} emitter event: send, error, receipt, timeout
+     * @param {number} [timeout] default 30s
+     * @param {number} [receiptTimeout=0]
+     * @param {number} [receiptInterval=1000 * 6]
+     * @return {*}
+     * @memberof Bundler
      */
-    sendUserOperation(userOp, receiptTimeout = 0, receiptInterval = 1000 * 6) {
+    sendUserOperation(userOp, timeout, receiptTimeout = 0, receiptInterval = 1000 * 6) {
         const emitter = new events_1.default();
-        this.eth_sendUserOperation(userOp).then((userOpHash) => __awaiter(this, void 0, void 0, function* () {
+        this.eth_sendUserOperation(userOp, timeout).then((userOpHash) => __awaiter(this, void 0, void 0, function* () {
             emitter.emit('send', userOpHash);
             const startTime = Date.now();
             while (receiptTimeout === 0 || Date.now() - startTime < receiptTimeout) {
                 // sleep 6s
                 yield this.sleep(receiptInterval);
                 try {
-                    const re = yield this.eth_getUserOperationReceipt(userOpHash);
+                    const re = yield this.eth_getUserOperationReceipt(userOpHash, timeout);
                     if (re) {
                         emitter.emit('receipt', re);
                         return;
