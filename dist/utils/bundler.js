@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 23:06:46
+ * @LastEditTime: 2023-02-27 23:10:14
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -201,7 +201,7 @@ class Bundler {
      * @return {*}
      * @memberof Bundler
      */
-    sendUserOperation(userOp, timeout, receiptTimeout = 0, receiptInterval = 1000 * 6) {
+    sendUserOperation(userOp, timeout = 0, receiptTimeout = 0, receiptInterval = 1000 * 6) {
         const emitter = new events_1.default();
         this.eth_sendUserOperation(userOp, timeout).then((userOpHash) => __awaiter(this, void 0, void 0, function* () {
             emitter.emit('send', userOpHash);
