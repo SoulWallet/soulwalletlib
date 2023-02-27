@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 23:06:46
+ * @LastEditTime: 2023-02-27 23:10:14
  */
 
 
@@ -208,7 +208,7 @@ export class Bundler {
      * @return {*} 
      * @memberof Bundler
      */
-    public sendUserOperation(userOp: UserOperation, timeout?: number, receiptTimeout: number = 0, receiptInterval: number = 1000 * 6) {
+    public sendUserOperation(userOp: UserOperation, timeout: number = 0, receiptTimeout: number = 0, receiptInterval: number = 1000 * 6) {
         const emitter = new EventEmitter();
         this.eth_sendUserOperation(userOp, timeout).then(async (userOpHash) => {
             emitter.emit('send', userOpHash);
