@@ -59,9 +59,11 @@ declare class UserOperation {
     get preVerificationGas(): NumberLike;
     set preVerificationGas(value: NumberLike);
     private _maxFeePerGas;
+    private _maxFeePerGasL2;
     get maxFeePerGas(): NumberLike;
     set maxFeePerGas(value: NumberLike);
     private _maxPriorityFeePerGas;
+    private _maxPriorityFeePerGasL2;
     get maxPriorityFeePerGas(): NumberLike;
     set maxPriorityFeePerGas(value: NumberLike);
     private _paymasterAndData;
@@ -118,6 +120,13 @@ declare class UserOperation {
     private updatePreVerificationGas;
     private updateVerificationGasLimit;
     /**
+     * calc l2 gas price
+     *
+     * @param {ethers.providers.BaseProvider} l2Provider
+     * @memberof UserOperation
+     */
+    calcL2GasPrice(l2Provider: ethers.providers.BaseProvider): Promise<void>;
+    /**
      * @description estimate gas
      * @param {string} entryPointAddress the entry point address
      * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
@@ -166,5 +175,11 @@ declare class UserOperation {
      * @returns {BigNumber} the required prefund
      */
     requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber;
+    /**
+   * @description get the required prefund
+   * @param {(BigNumber | NumberLike)?} basefee the basefee
+   * @returns {BigNumber} the required prefund
+   */
+    requiredPrefundL2(basefee?: BigNumber | NumberLike): BigNumber;
 }
 export { UserOperation };

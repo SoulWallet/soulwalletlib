@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 23:10:14
+ * @LastEditTime: 2023-02-28 15:52:39
  */
 
 
@@ -165,7 +165,7 @@ export class Bundler {
                 id: 1,
                 method: 'eth_sendUserOperation',
                 params: [
-                    JSON.parse(userOp.toJSON()),
+                    userOp.getStruct(),
                     this._entryPoint
                 ]
             }, timeout
@@ -308,7 +308,7 @@ export class Bundler {
             const result = await this._etherProvider.call({
                 from: AddressZero,
                 to: this._entryPoint,
-                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
+                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op.getStruct()]),
             });
             let re = this.decodeExecutionResult(result);
             if (re) return re;
@@ -335,11 +335,12 @@ export class Bundler {
      */
     async simulateValidation(op: UserOperation): Promise<IResult> {
         try {
+            const data = new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op.getStruct()]);
             const result = await this._etherProvider.call({
-                from: AddressZero,
+                //from: AddressZero,
                 to: this._entryPoint,
-                gasLimit: 10e6,
-                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
+                gasLimit: BigNumber.from(10e6),
+                data: data
             });
             let re = this.decodeValidationResult(result);
             if (re) return re;
@@ -350,6 +351,7 @@ export class Bundler {
                 error: result
             };
         } catch (e: any) {
+            debugger;
             console.error(e);
             return {
                 status: 5,
