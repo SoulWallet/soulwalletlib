@@ -11,6 +11,14 @@ export declare class UserOp {
     constructor();
     private encode;
     private DefaultGasOverheads;
+    /**
+     * @description: pack user operation for call data
+     *
+     * @param {UserOperation} op
+     * @return {*}  {Uint8Array}
+     * @memberof UserOp
+     */
+    packUserOpForCallData(op: UserOperation): string;
     callDataCost(op: UserOperation): number;
     packUserOp(op: UserOperation, forSignature?: boolean): string;
     getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string;

@@ -2,6 +2,8 @@ import { ethers, BigNumber } from "ethers";
 import { AddressZero } from "../defines/address";
 import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
 import { UserOp } from '../utils/userOp';
+import { OptimisticL1GasPriceOracle } from '../utils/optimisticGasPriceOracle';
+
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
  */
@@ -53,6 +55,11 @@ class UserOperation {
         this._preVerificationGas = preVerificationGas;
         this._maxFeePerGas = maxFeePerGas;
         this._maxPriorityFeePerGas = maxPriorityFeePerGas;
+        {
+            this._maxFeePerGasL2 = maxFeePerGas;
+            this._maxPriorityFeePerGasL2 = maxPriorityFeePerGas;
+        }
+
         this._paymasterAndData = paymasterAndData;
         this._signature = signature;
 
@@ -136,21 +143,25 @@ class UserOperation {
         this._preVerificationGas = value;
     }
     private _maxFeePerGas: NumberLike = 0;
+    private _maxFeePerGasL2: NumberLike = 0;
     public get maxFeePerGas(): NumberLike {
         return this._maxFeePerGas;
     }
     public set maxFeePerGas(value: NumberLike) {
         this._maxFeePerGas = value;
+        this._maxFeePerGasL2 = value;
 
         this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
     private _maxPriorityFeePerGas: NumberLike = 0;
+    private _maxPriorityFeePerGasL2: NumberLike = 0;
     public get maxPriorityFeePerGas(): NumberLike {
         return this._maxPriorityFeePerGas;
     }
     public set maxPriorityFeePerGas(value: NumberLike) {
         this._maxPriorityFeePerGas = value;
+        this._maxPriorityFeePerGasL2 = value;
 
         this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
@@ -386,6 +397,69 @@ class UserOperation {
         this._verificationGasLimit = _verificationGasLimit;
     }
 
+    /**
+     * calc l2 gas price
+     *
+     * @param {ethers.providers.BaseProvider} l2Provider
+     * @memberof UserOperation
+     */
+    public async calcL2GasPrice(l2Provider: ethers.providers.BaseProvider) {
+        // get ChainID
+        const chainId = await l2Provider.getNetwork().then((network) => network.chainId);
+        // 10 Optimism
+        // 420 Optimism Goerli Testnet
+        if (chainId !== 10 && chainId !== 420) {
+            return;
+        }
+        this.updateVerificationGasLimit();
+        this.updatePreVerificationGas();
+
+
+        if (chainId === 10 || chainId === 420) {
+            if (toNumber(this._maxFeePerGasL2) === 0) {
+                throw new Error('maxFeePerGas is 0');
+            }
+            if (toNumber(this._maxPriorityFeePerGasL2) !== toNumber(this._maxFeePerGasL2)) {
+                throw new Error('EIP1559 fee is not supported');
+            }
+
+            const calldataL1 = this._userOp.packUserOpForCallData(this);
+
+            /* 
+            (Gas Price * Gas) + (l1GasUsed * l1GasPrice * l1FeeScalar)
+            */
+            //OptimisticGasPriceOracle
+            const optimisticL1GasPriceOracle = new OptimisticL1GasPriceOracle(l2Provider);
+
+            // L2 cost
+            const l2Cost = this.requiredPrefundL2();
+
+            /* 
+                    uint256 l1GasUsed = getL1GasUsed(_data);
+                    uint256 l1Fee = l1GasUsed * l1BaseFee;
+                    uint256 divisor = 10**decimals;
+                    uint256 unscaled = l1Fee * scalar;
+                    uint256 scaled = unscaled / divisor;
+                    return scaled;
+            */
+            // L1 cost 
+            let l1Cost: BigNumber = await optimisticL1GasPriceOracle.getL1Fee(calldataL1);
+
+            const cost = l2Cost.add(l1Cost);
+
+            const noPaymaster = this.paymasterAndData === AddressZero || this.paymasterAndData === '0x';
+            const mul = noPaymaster ? 1 : 3;
+            const requiredGas = BigNumber.from(this.callGasLimit).add(BigNumber.from(this.verificationGasLimit).mul(mul)).add(BigNumber.from(this.preVerificationGas));
+
+            const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toString();
+
+            this._maxFeePerGas = reasonableGasPrice;
+            this._maxPriorityFeePerGas = reasonableGasPrice;
+
+        }
+
+    }
+
 
 
     /**
@@ -492,6 +566,52 @@ class UserOperation {
         let gasPrice: BigNumber;
         const maxFeePerGas = BigNumber.from(this.maxFeePerGas);
         const maxPriorityFeePerGas = BigNumber.from(this.maxPriorityFeePerGas);
+        if (maxFeePerGas.eq(maxPriorityFeePerGas)) {
+            gasPrice = maxFeePerGas;
+        } else {
+            if (basefee !== undefined) {
+                basefee = BigNumber.from(basefee);
+                const _fee = basefee.add(maxPriorityFeePerGas);
+                gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
+            } else {
+                gasPrice = maxFeePerGas;
+            }
+        }
+
+        /* 
+       //when using a Paymaster, the verificationGasLimit is used also to as a limit for the postOp call.
+       // our security model might call postOp eventually twice
+       uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
+       uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
+
+       // TODO: copy logic of gasPrice?
+       requiredPrefund = requiredGas * getUserOpGasPrice(mUserOp);
+       */
+        const noPaymaster = this.paymasterAndData === AddressZero || this.paymasterAndData === '0x';
+        const mul = noPaymaster ? 1 : 3;
+        const requiredGas = BigNumber.from(this.callGasLimit).add(BigNumber.from(this.verificationGasLimit).mul(mul)).add(BigNumber.from(this.preVerificationGas));
+        const requiredPrefund = requiredGas.mul(gasPrice);
+
+        return requiredPrefund;
+    }
+    /**
+   * @description get the required prefund
+   * @param {(BigNumber | NumberLike)?} basefee the basefee
+   * @returns {BigNumber} the required prefund
+   */
+    public requiredPrefundL2(basefee?: BigNumber | NumberLike): BigNumber {
+        /* 
+         uint256 maxFeePerGas = mUserOp.maxFeePerGas;
+        uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
+        if (maxFeePerGas == maxPriorityFeePerGas) {
+            //legacy mode (for networks that don't support basefee opcode)
+            return maxFeePerGas;
+        }
+        return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
+        */
+        let gasPrice: BigNumber;
+        const maxFeePerGas = BigNumber.from(this._maxFeePerGas);
+        const maxPriorityFeePerGas = BigNumber.from(this._maxPriorityFeePerGas);
         if (maxFeePerGas.eq(maxPriorityFeePerGas)) {
             gasPrice = maxFeePerGas;
         } else {

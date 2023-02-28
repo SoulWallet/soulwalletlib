@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 23:10:14
+ * @LastEditTime: 2023-02-28 15:52:39
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -160,7 +160,7 @@ class Bundler {
                 id: 1,
                 method: 'eth_sendUserOperation',
                 params: [
-                    JSON.parse(userOp.toJSON()),
+                    userOp.getStruct(),
                     this._entryPoint
                 ]
             }, timeout);
@@ -287,7 +287,7 @@ class Bundler {
                 const result = yield this._etherProvider.call({
                     from: address_1.AddressZero,
                     to: this._entryPoint,
-                    data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op]),
+                    data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op.getStruct()]),
                 });
                 let re = this.decodeExecutionResult(result);
                 if (re)
@@ -317,11 +317,12 @@ class Bundler {
     simulateValidation(op) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const data = new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op.getStruct()]);
                 const result = yield this._etherProvider.call({
-                    from: address_1.AddressZero,
+                    //from: AddressZero,
                     to: this._entryPoint,
-                    gasLimit: 10e6,
-                    data: new ethers_1.ethers.utils.Interface(entryPoint_1.EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]),
+                    gasLimit: ethers_1.BigNumber.from(10e6),
+                    data: data
                 });
                 let re = this.decodeValidationResult(result);
                 if (re)
@@ -335,6 +336,7 @@ class Bundler {
                 };
             }
             catch (e) {
+                debugger;
                 console.error(e);
                 return {
                     status: 5,

@@ -31,20 +31,31 @@ class UserOp {
         const values = typevalues.map((typevalue) => typevalue.type === 'bytes' && forSignature ? (0, utils_1.keccak256)(typevalue.val) : typevalue.val);
         return utils_1.defaultAbiCoder.encode(types, values);
     }
-    callDataCost(op) {
-        if (!ethers_1.ethers.utils.isAddress(op.sender)) {
-            return 0;
-        }
+    /**
+     * @description: pack user operation for call data
+     *
+     * @param {UserOperation} op
+     * @return {*}  {Uint8Array}
+     * @memberof UserOp
+     */
+    packUserOpForCallData(op) {
         let mockSignature = false;
         if (op.signature === '0x') {
             mockSignature = true;
             // Single signature
             op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
         }
-        const packed = ethers_1.ethers.utils.arrayify(this.packUserOp(op, false));
+        const packed = this.packUserOp(op, false);
         if (mockSignature) {
             op.signature = '0x';
         }
+        return packed;
+    }
+    callDataCost(op) {
+        if (!ethers_1.ethers.utils.isAddress(op.sender)) {
+            return 0;
+        }
+        const packed = ethers_1.ethers.utils.arrayify(this.packUserOpForCallData(op));
         const lengthInWord = (packed.length + 31) / 32;
         const callDataCost = packed.map(x => x === 0 ? this.DefaultGasOverheads.zeroByte : this.DefaultGasOverheads.nonZeroByte).reduce((sum, x) => sum + x);
         const ret = Math.round(callDataCost +
