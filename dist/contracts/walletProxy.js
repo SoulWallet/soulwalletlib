@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-04 23:45:24
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-21 22:10:51
+ * @LastEditTime: 2023-03-02 19:21:38
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WalletProxyContract = void 0;
