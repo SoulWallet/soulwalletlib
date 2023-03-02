@@ -20,7 +20,6 @@ import { NumberLike } from "../defines/numberLike";
  * @property {String} signature the signature
  */
 declare class UserOperation {
-    private _userOp;
     /**
      * Creates an instance of UserOperation.
      * @param {string} [sender='']
@@ -154,21 +153,23 @@ declare class UserOperation {
      */
     signWithSignature(signAddress: string, signature: string): void;
     /**
-     * @description get the UserOpHash (userOp hash)
-     * @param {string} entryPointAddress the entry point address
-     * @param {number} chainId the chain id
-     * @returns {string} the UserOpHash (userOp hash)
-     */
-    getUserOpHash(entryPointAddress: string, chainId: number): string;
+    * @description get the UserOpHash (userOp hash)
+    * @param {string} entryPointAddress the entry point address
+    * @param {number} chainId the chain id
+    * @returns {string} the UserOpHash (userOp hash)
+    */
+    getRawUserOpHash(entryPointAddress: string, chainId: number): string;
     /**
-     * @description get the UserOpHash (userOp hash) with deadline
+     * @description get the UserOpHash (userOp hash) with validAfter and validUntil
+     *
      * @param {string} entryPointAddress the entry point address
      * @param {number} chainId the chain id
-     * @param {number} deadline the deadline
-     * @returns {string} the UserOpHash (userOp hash) with deadline
-     * @remarks deadline is a timestamp in seconds
+     * @param {number} [validAfter=0] the valid after
+     * @param {number} [validUntil=0] the valid until
+     * @return {*}  {string}
+     * @memberof UserOperation
      */
-    getUserOpHashWithDeadline(entryPointAddress: string, chainId: number, deadline: number): string;
+    getUserOpHash(entryPointAddress: string, chainId: number, validAfter?: number, validUntil?: number): string;
     /**
      * @description get the required prefund
      * @param {(BigNumber | NumberLike)?} basefee the basefee

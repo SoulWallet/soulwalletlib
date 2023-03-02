@@ -4,13 +4,14 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 19:56:47
+ * @LastEditTime: 2023-03-02 17:57:59
  */
 import { UserOperation } from "../entity/userOperation";
 import { execFromEntryPoint, execBatchFromEntryPoint, ERC1155 as erc1155, ERC20 as erc20, ERC721 as erc721 } from "../defines/ABI";
 import { BigNumber, ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 import { IApproveToken } from "../interface/IApproveToken";
+import { EstimateGas } from "./estimateGas";
 
 /**
  * token interface
@@ -21,7 +22,6 @@ export class Token {
     async createOp(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike,
         entryPointAddress: string, paymasterAndData: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callContract: string, encodeABI: string, value: string = '0') {
-
         walletAddress = ethers.utils.getAddress(walletAddress);
         const callData = new ethers.utils.Interface(execFromEntryPoint)
             .encodeFunctionData("execFromEntryPoint",
@@ -90,12 +90,13 @@ export class ERC20 {
         if (approveData.value === undefined) {
             approveData.value = this.MAX_INT256;
         }
-        let callGasLimit = await etherProvider.estimateGas({
-            from: walletAddress,
-            to: approveData.token,
-            data: new ethers.utils.Interface(erc20).encodeFunctionData("approve", [approveData.spender, approveData.value])
-        });
-        return callGasLimit;
+        const _gasLimit = await EstimateGas.estimate(etherProvider,
+            {
+                from: walletAddress,
+                to: approveData.token,
+                data: new ethers.utils.Interface(erc20).encodeFunctionData("approve", [approveData.spender, approveData.value])
+            });
+        return _gasLimit.gasLimitForL2 || _gasLimit.gasLimit;
     }
 
 

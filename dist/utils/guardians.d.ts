@@ -19,7 +19,8 @@ export declare class Guardian {
     private getPackedInitCode;
     /**
      * sign a user operation with guardian signatures
-     * @param {Number} deadline deadline (block time)
+     * @param {Number} validAfter valid after (block time)
+     * @param {Number} validUntil valid until (block time)
      * @param {guardianSignature[]} signatures guardian signatures
      * @param {string} guardianLogicAddress guardian logic contract address
      * @param {string[]} guardians guardian addresses
@@ -28,16 +29,17 @@ export declare class Guardian {
      * @param {string} [guardianAddress] guardian contract address,if provided will check if equal to the calculated guardian address
      * @returns {string} signature
      */
-    packGuardiansSign(deadline: number, signature: guardianSignature[], guardianLogicAddress: string, guardians: string[], threshold: number, salt: string, guardianAddress?: string): string;
+    packGuardiansSign(validAfter: number, validUntil: number, signature: guardianSignature[], guardianLogicAddress: string, guardians: string[], threshold: number, salt: string, guardianAddress?: string): string;
     /**
      * sign a user operation with guardian signatures
      * @param {String} guardianAddress guardian contract address
      * @param {guardianSignature[]} signatures guardian signatures
-     * @param {Number} [deadline=0] deadline (block time), default 0
      * @param {String} [initCode='0x'] intiCode must given when the guardian contract is not deployed
+     * @param {Number} validAfter valid after (block time)
+     * @param {Number} validUntil valid until (block time)
      * @returns {String} signature
      */
-    packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], deadline?: number, initCode?: string): string;
+    packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], initCode?: string, validAfter?: number, validUntil?: number): string;
     /**
      * calculate Guardian address and deploy code (initCode)
      * @param {String} guardianLogicAddress guardian logic contract address

@@ -9,8 +9,8 @@ export declare enum SignatureMode {
 }
 export declare class UserOp {
     constructor();
-    private encode;
-    private DefaultGasOverheads;
+    private static encode;
+    private static DefaultGasOverheads;
     /**
      * @description: pack user operation for call data
      *
@@ -18,12 +18,12 @@ export declare class UserOp {
      * @return {*}  {Uint8Array}
      * @memberof UserOp
      */
-    packUserOpForCallData(op: UserOperation): string;
-    callDataCost(op: UserOperation): number;
-    packUserOp(op: UserOperation, forSignature?: boolean): string;
-    getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string;
-    private _signUserOp;
-    _signReuestId(userOpHash: string, privateKey: string): string;
+    static packUserOpForCallData(op: UserOperation): string;
+    static callDataCost(op: UserOperation): number;
+    static packUserOp(op: UserOperation, forSignature?: boolean): string;
+    static getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string;
+    private static _signUserOp;
+    static _signReuestId(userOpHash: string, privateKey: string): string;
     /**
      * sign a user operation with the given private key
      * @param op
@@ -32,14 +32,15 @@ export declare class UserOp {
      * @param privateKey
      * @returns signature
      */
-    signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string;
+    static signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string;
     /**
      * sign a user operation with the UserOpHash signature
      * @param signAddress signer address
      * @param signature the signature of the UserOpHash
-     * @param deadline deadline (block time), default 0
+     * @param validAfter the signature is valid after this block time
+     * @param validUntil the signature is valid until this block time
      * @returns signature
      */
-    signUserOpWithPersonalSign(signAddress: string, signature: string, deadline?: number): string;
-    payMasterSignHash(op: UserOperation): string;
+    static signUserOpWithPersonalSign(signAddress: string, signature: string, validAfter?: number, validUntil?: number): string;
+    static payMasterSignHash(op: UserOperation): string;
 }

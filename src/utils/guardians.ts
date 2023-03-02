@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 19:58:14
+ * @LastEditTime: 2023-03-02 18:02:34
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -82,7 +82,8 @@ export class Guardian {
 
     /**
      * sign a user operation with guardian signatures
-     * @param {Number} deadline deadline (block time)
+     * @param {Number} validAfter valid after (block time)
+     * @param {Number} validUntil valid until (block time)
      * @param {guardianSignature[]} signatures guardian signatures
      * @param {string} guardianLogicAddress guardian logic contract address
      * @param {string[]} guardians guardian addresses
@@ -92,7 +93,8 @@ export class Guardian {
      * @returns {string} signature
      */
     public packGuardiansSign(
-        deadline: number,
+        validAfter: number,
+        validUntil: number,
         signature: guardianSignature[],
         guardianLogicAddress: string, guardians: string[],
         threshold: number, salt: string,
@@ -104,28 +106,29 @@ export class Guardian {
                 throw new Error('guardianAddress is not equal to the calculated guardian address');
             }
         }
-        return this.packGuardiansSignByInitCode(guardianData.address, signature, deadline, guardianData.initCode);
+        return this.packGuardiansSignByInitCode(guardianData.address, signature, guardianData.initCode, validAfter, validUntil);
     }
 
     /**
      * sign a user operation with guardian signatures
      * @param {String} guardianAddress guardian contract address
      * @param {guardianSignature[]} signatures guardian signatures
-     * @param {Number} [deadline=0] deadline (block time), default 0
      * @param {String} [initCode='0x'] intiCode must given when the guardian contract is not deployed
+     * @param {Number} validAfter valid after (block time)
+     * @param {Number} validUntil valid until (block time)
      * @returns {String} signature
      */
-    public packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], deadline = 0, initCode = '0x'
+    public packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], initCode = '0x', validAfter = 0, validUntil = 0
     ): string {
-
         const signatureBytes = this.guardianSign(signature);
 
         const guardianCallData = defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
-        const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'],
+        const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'],
             [
                 SignatureMode.guardian,
                 guardianAddress,
-                deadline,
+                validAfter,
+                validUntil,
                 guardianCallData
             ]
         );

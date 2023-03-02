@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 21:13:10
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-21 23:00:26
+ * @LastEditTime: 2023-03-02 16:47:53
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SoulWalletContract = void 0;
@@ -306,12 +306,40 @@ const ABI = [
                 "type": "address[]"
             },
             {
+                "internalType": "uint256[]",
+                "name": "value",
+                "type": "uint256[]"
+            },
+            {
                 "internalType": "bytes[]",
                 "name": "func",
                 "type": "bytes[]"
             }
         ],
         "name": "execBatch",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "dest",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "value",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "bytes[]",
+                "name": "func",
+                "type": "bytes[]"
+            }
+        ],
+        "name": "execFromEntryPoint",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -830,35 +858,6 @@ const ABI = [
     {
         "inputs": [
             {
-                "internalType": "contract IERC20",
-                "name": "token",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "spender",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            }
-        ],
-        "name": "tokenApprove",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "",
                 "type": "address"
@@ -1002,11 +1001,6 @@ const ABI = [
                 "type": "bytes32"
             },
             {
-                "internalType": "address",
-                "name": "aggregator",
-                "type": "address"
-            },
-            {
                 "internalType": "uint256",
                 "name": "missingAccountFunds",
                 "type": "uint256"
@@ -1016,7 +1010,7 @@ const ABI = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "deadline",
+                "name": "validationData",
                 "type": "uint256"
             }
         ],

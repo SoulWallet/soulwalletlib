@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-28 15:52:39
+ * @LastEditTime: 2023-03-02 16:58:19
  */
 
 
@@ -237,10 +237,11 @@ export class Bundler {
     }
 
     private decodeExecutionResult(result: string): IResult | null {
-        // error ExecutionResult(uint256 preOpGas, uint256 paid, uint256 deadline, uint256 paymasterDeadline);
-        if (result.startsWith('0xa30fd31e')) {
+        // 	ExecutionResult(uint256,uint256,uint48,uint48,bool,bytes)	0x8b7ac980
+        // error ExecutionResult(uint256 preOpGas, uint256 paid, uint48 validAfter, uint48 validUntil, bool targetSuccess, bytes targetResult);
+        if (result.startsWith('0x8b7ac980')) {
             const re = defaultAbiCoder.decode(
-                ['uint256', 'uint256', 'uint256', 'uint256'],
+                ['uint256', 'uint256', 'uint48', 'uint48', 'bool', 'bytes'],
                 '0x' + result.substring(10)
             );
             return {
@@ -248,8 +249,10 @@ export class Bundler {
                 result: {
                     preOpGas: re[0],
                     paid: re[1],
-                    deadline: re[2],
-                    paymasterDeadline: re[3]
+                    validAfter: re[2],
+                    validUntil: re[3],
+                    targetSuccess: re[4],
+                    targetResult: re[5]
                 }
             }
         }
@@ -257,16 +260,14 @@ export class Bundler {
     }
 
     private decodeFailedOp(result: string): IResult | null {
-        //error FailedOp(uint256 opIndex, address paymaster, string reason)
-        if (result.startsWith('0x00fa072b')) {
-            // FailedOp(uint256,address,string)
+        //error FailedOp(uint256 opIndex, string reason) 220266b6eadfd2
+        if (result.startsWith('0x220266b6')) {
             const re = defaultAbiCoder.decode(
-                ['uint256', 'address', 'string'],
+                ['uint256', 'string'],
                 '0x' + result.substring(10)
             );
             const failedOp: IFailedOp = {
                 opIndex: re[0],
-                paymaster: re[1],
                 reason: re[2]
             }
             return {
@@ -279,15 +280,15 @@ export class Bundler {
 
     private decodeValidationResult(result: string): IResult | null {
         // ValidationResult((uint256,uint256,uint256,uint256,bytes),(uint256,uint256),(uint256,uint256),(uint256,uint256))	0x3dd956e9if (result.startsWith('0x3dd956e9')) {
-        if (result.startsWith('0x3dd956e9')) {
+        if (result.startsWith('0xe0cff05f')) {
             const re = defaultAbiCoder.decode(
-                ['(uint256,uint256,uint256,uint256,bytes)', '(uint256,uint256)', '(uint256,uint256)', '(uint256,uint256)'],
+                ['(uint256,uint256,bool,uint48,uint48,bytes)', '(uint256,uint256)', '(uint256,uint256)', '(uint256,uint256)'],
                 '0x' + result.substring(10)
             );
             return {
                 status: 0,
                 result: {
-                    op: re[0],
+                    returnInfo: re[0],
                     senderInfo: re[1],
                     factoryInfo: re[2],
                     paymasterInfo: re[3],
@@ -303,12 +304,15 @@ export class Bundler {
      * @param {UserOperation} op
      * @returns {Promise<IResult>} result
      */
-    async simulateHandleOp(op: UserOperation): Promise<IResult> {
+    async simulateHandleOp(op: UserOperation, target: string = AddressZero, targetCallData: string = '0x'): Promise<IResult> {
         try {
             const result = await this._etherProvider.call({
                 from: AddressZero,
                 to: this._entryPoint,
-                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateHandleOp", [op.getStruct()]),
+                data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData(
+                    "simulateHandleOp",
+                    [op.getStruct(), target, targetCallData]
+                ),
             });
             let re = this.decodeExecutionResult(result);
             if (re) return re;

@@ -1,5 +1,5 @@
 import { BytesLike } from "ethers/lib/utils";
-import { ContractInterface, ethers } from "ethers";
+import { BigNumber, ContractInterface, ethers } from "ethers";
 /**
  * deploy factory contract
  * @class DeployFactory
@@ -43,5 +43,5 @@ export declare class DeployFactory {
         bytecode: BytesLike | {
             object: string;
         };
-    }): Promise<string>;
+    }, gasLimit?: BigNumber): Promise<string>;
 }

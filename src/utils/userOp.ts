@@ -20,14 +20,14 @@ export class UserOp {
 
 
 
-  private encode(typevalues: Array<{ type: string, val: any }>, forSignature: boolean): string {
+  private static encode(typevalues: Array<{ type: string, val: any }>, forSignature: boolean): string {
     const types = typevalues.map(typevalue => typevalue.type === 'bytes' && forSignature ? 'bytes32' : typevalue.type)
     const values = typevalues.map((typevalue) => typevalue.type === 'bytes' && forSignature ? keccak256(typevalue.val) : typevalue.val)
     return defaultAbiCoder.encode(types, values)
   }
 
   // define in bundler (https://github.com/eth-infinitism/bundler/blob/main/packages/sdk/src/calcPreVerificationGas.ts#L44)
-  private DefaultGasOverheads = {
+  private static DefaultGasOverheads = {
     fixed: 21000,
     perUserOp: 18300,
     perUserOpWord: 4,
@@ -44,7 +44,7 @@ export class UserOp {
    * @return {*}  {Uint8Array}
    * @memberof UserOp
    */
-  public packUserOpForCallData(op: UserOperation): string {
+  public static packUserOpForCallData(op: UserOperation): string {
     let mockSignature = false;
     if (op.signature === '0x') {
       mockSignature = true;
@@ -59,7 +59,7 @@ export class UserOp {
     return packed;
   }
 
-  public callDataCost(op: UserOperation): number {
+  public static callDataCost(op: UserOperation): number {
     if (!ethers.utils.isAddress(op.sender)) {
       return 0;
     }
@@ -67,7 +67,11 @@ export class UserOp {
     const packed = ethers.utils.arrayify(this.packUserOpForCallData(op));
 
     const lengthInWord = (packed.length + 31) / 32
-    const callDataCost = packed.map(x => x === 0 ? this.DefaultGasOverheads.zeroByte : this.DefaultGasOverheads.nonZeroByte).reduce((sum, x) => sum + x)
+    const callDataCost = packed.map(x =>
+      x === 0 ?
+        this.DefaultGasOverheads.zeroByte :
+        this.DefaultGasOverheads.nonZeroByte
+    ).reduce((sum, x) => sum + x)
     const ret = Math.round(
       callDataCost +
       this.DefaultGasOverheads.fixed / this.DefaultGasOverheads.bundleSize +
@@ -79,7 +83,7 @@ export class UserOp {
   }
 
 
-  public packUserOp(op: UserOperation, forSignature = true): string {
+  public static packUserOp(op: UserOperation, forSignature = true): string {
     op.alignment();
     if (forSignature) {
       // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
@@ -124,7 +128,7 @@ export class UserOp {
     return this.encode(typevalues, forSignature)
   }
 
-  public getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string {
+  public static getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string {
     const userOpHash = keccak256(this.packUserOp(op, true));
     const enc = defaultAbiCoder.encode(
       ['bytes32', 'address', 'uint256'],
@@ -133,12 +137,12 @@ export class UserOp {
   }
 
 
-  private _signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string {
+  private static _signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string {
     const message = this.getUserOpHash(op, entryPointAddress, chainId)
     return this._signReuestId(message, privateKey);
   }
 
-  public _signReuestId(userOpHash: string, privateKey: string): string {
+  public static _signReuestId(userOpHash: string, privateKey: string): string {
     const msg1 = Buffer.concat([
       Buffer.from('\x19Ethereum Signed Message:\n32', 'ascii'),
       Buffer.from(arrayify(userOpHash))
@@ -160,7 +164,7 @@ export class UserOp {
    * @param privateKey 
    * @returns signature
    */
-  public signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string {
+  public static signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string {
     const sign = this._signUserOp(op, entryPointAddress, chainId, privateKey);
     return this.signUserOpWithPersonalSign(ethers.utils.computeAddress(privateKey), sign);
   }
@@ -169,15 +173,17 @@ export class UserOp {
    * sign a user operation with the UserOpHash signature
    * @param signAddress signer address
    * @param signature the signature of the UserOpHash
-   * @param deadline deadline (block time), default 0
+   * @param validAfter the signature is valid after this block time
+   * @param validUntil the signature is valid until this block time
    * @returns signature
    */
-  public signUserOpWithPersonalSign(signAddress: string, signature: string, deadline = 0) {
-    const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'],
+  public static signUserOpWithPersonalSign(signAddress: string, signature: string, validAfter = 0, validUntil = 0) {
+    const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'],
       [
         SignatureMode.owner,
         signAddress,
-        deadline,
+        validAfter,
+        validUntil,
         signature
       ]
     );
@@ -187,7 +193,7 @@ export class UserOp {
 
 
 
-  public payMasterSignHash(op: UserOperation): string {
+  public static payMasterSignHash(op: UserOperation): string {
     return keccak256(defaultAbiCoder.encode([
       'address', // sender
       'uint256', // nonce

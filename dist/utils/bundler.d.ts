@@ -75,7 +75,7 @@ export declare class Bundler {
      * @param {UserOperation} op
      * @returns {Promise<IResult>} result
      */
-    simulateHandleOp(op: UserOperation): Promise<IResult>;
+    simulateHandleOp(op: UserOperation, target?: string, targetCallData?: string): Promise<IResult>;
     /**
      * simulateValidation
      * @param {UserOperation} op

@@ -15,18 +15,8 @@ var SignatureMode;
 })(SignatureMode = exports.SignatureMode || (exports.SignatureMode = {}));
 class UserOp {
     constructor() {
-        // define in bundler (https://github.com/eth-infinitism/bundler/blob/main/packages/sdk/src/calcPreVerificationGas.ts#L44)
-        this.DefaultGasOverheads = {
-            fixed: 21000,
-            perUserOp: 18300,
-            perUserOpWord: 4,
-            zeroByte: 4,
-            nonZeroByte: 16,
-            bundleSize: 1,
-            sigSize: 65
-        };
     }
-    encode(typevalues, forSignature) {
+    static encode(typevalues, forSignature) {
         const types = typevalues.map(typevalue => typevalue.type === 'bytes' && forSignature ? 'bytes32' : typevalue.type);
         const values = typevalues.map((typevalue) => typevalue.type === 'bytes' && forSignature ? (0, utils_1.keccak256)(typevalue.val) : typevalue.val);
         return utils_1.defaultAbiCoder.encode(types, values);
@@ -38,7 +28,7 @@ class UserOp {
      * @return {*}  {Uint8Array}
      * @memberof UserOp
      */
-    packUserOpForCallData(op) {
+    static packUserOpForCallData(op) {
         let mockSignature = false;
         if (op.signature === '0x') {
             mockSignature = true;
@@ -51,20 +41,22 @@ class UserOp {
         }
         return packed;
     }
-    callDataCost(op) {
+    static callDataCost(op) {
         if (!ethers_1.ethers.utils.isAddress(op.sender)) {
             return 0;
         }
         const packed = ethers_1.ethers.utils.arrayify(this.packUserOpForCallData(op));
         const lengthInWord = (packed.length + 31) / 32;
-        const callDataCost = packed.map(x => x === 0 ? this.DefaultGasOverheads.zeroByte : this.DefaultGasOverheads.nonZeroByte).reduce((sum, x) => sum + x);
+        const callDataCost = packed.map(x => x === 0 ?
+            this.DefaultGasOverheads.zeroByte :
+            this.DefaultGasOverheads.nonZeroByte).reduce((sum, x) => sum + x);
         const ret = Math.round(callDataCost +
             this.DefaultGasOverheads.fixed / this.DefaultGasOverheads.bundleSize +
             this.DefaultGasOverheads.perUserOp +
             this.DefaultGasOverheads.perUserOpWord * lengthInWord);
         return ret;
     }
-    packUserOp(op, forSignature = true) {
+    static packUserOp(op, forSignature = true) {
         op.alignment();
         if (forSignature) {
             // lighter signature scheme (must match UserOperation#pack): do encode a zero-length signature, but strip afterwards the appended zero-length value
@@ -108,16 +100,16 @@ class UserOp {
         }
         return this.encode(typevalues, forSignature);
     }
-    getUserOpHash(op, entryPointAddress, chainId) {
+    static getUserOpHash(op, entryPointAddress, chainId) {
         const userOpHash = (0, utils_1.keccak256)(this.packUserOp(op, true));
         const enc = utils_1.defaultAbiCoder.encode(['bytes32', 'address', 'uint256'], [userOpHash, entryPointAddress, chainId]);
         return (0, utils_1.keccak256)(enc);
     }
-    _signUserOp(op, entryPointAddress, chainId, privateKey) {
+    static _signUserOp(op, entryPointAddress, chainId, privateKey) {
         const message = this.getUserOpHash(op, entryPointAddress, chainId);
         return this._signReuestId(message, privateKey);
     }
-    _signReuestId(userOpHash, privateKey) {
+    static _signReuestId(userOpHash, privateKey) {
         const msg1 = Buffer.concat([
             Buffer.from('\x19Ethereum Signed Message:\n32', 'ascii'),
             Buffer.from((0, utils_1.arrayify)(userOpHash))
@@ -136,7 +128,7 @@ class UserOp {
      * @param privateKey
      * @returns signature
      */
-    signUserOp(op, entryPointAddress, chainId, privateKey) {
+    static signUserOp(op, entryPointAddress, chainId, privateKey) {
         const sign = this._signUserOp(op, entryPointAddress, chainId, privateKey);
         return this.signUserOpWithPersonalSign(ethers_1.ethers.utils.computeAddress(privateKey), sign);
     }
@@ -144,19 +136,21 @@ class UserOp {
      * sign a user operation with the UserOpHash signature
      * @param signAddress signer address
      * @param signature the signature of the UserOpHash
-     * @param deadline deadline (block time), default 0
+     * @param validAfter the signature is valid after this block time
+     * @param validUntil the signature is valid until this block time
      * @returns signature
      */
-    signUserOpWithPersonalSign(signAddress, signature, deadline = 0) {
-        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'], [
+    static signUserOpWithPersonalSign(signAddress, signature, validAfter = 0, validUntil = 0) {
+        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'], [
             SignatureMode.owner,
             signAddress,
-            deadline,
+            validAfter,
+            validUntil,
             signature
         ]);
         return enc;
     }
-    payMasterSignHash(op) {
+    static payMasterSignHash(op) {
         return (0, utils_1.keccak256)(utils_1.defaultAbiCoder.encode([
             'address',
             'uint256',
@@ -183,4 +177,14 @@ class UserOp {
     }
 }
 exports.UserOp = UserOp;
+// define in bundler (https://github.com/eth-infinitism/bundler/blob/main/packages/sdk/src/calcPreVerificationGas.ts#L44)
+UserOp.DefaultGasOverheads = {
+    fixed: 21000,
+    perUserOp: 18300,
+    perUserOpWord: 4,
+    zeroByte: 4,
+    nonZeroByte: 16,
+    bundleSize: 1,
+    sigSize: 65
+};
 //# sourceMappingURL=userOp.js.map
