@@ -22,17 +22,6 @@ export declare class UserOp {
     static callDataCost(op: UserOperation): number;
     static packUserOp(op: UserOperation, forSignature?: boolean): string;
     static getUserOpHash(op: UserOperation, entryPointAddress: string, chainId: number): string;
-    private static _signUserOp;
-    static _signReuestId(userOpHash: string, privateKey: string): string;
-    /**
-     * sign a user operation with the given private key
-     * @param op
-     * @param entryPointAddress
-     * @param chainId
-     * @param privateKey
-     * @returns signature
-     */
-    static signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string;
     /**
      * sign a user operation with the UserOpHash signature
      * @param signAddress signer address

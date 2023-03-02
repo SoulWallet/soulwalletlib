@@ -14,7 +14,7 @@ const ethers_1 = require("ethers");
 const address_1 = require("../defines/address");
 const numberLike_1 = require("../defines/numberLike");
 const userOp_1 = require("../utils/userOp");
-const optimistic_1 = require("../utils/L2/optimistic");
+const optimistic_1 = require("../utils/L2/optimistic/optimistic");
 const chainId_1 = require("../defines/chainId");
 const estimateGas_1 = require("../utils/estimateGas");
 /**
@@ -442,16 +442,6 @@ class UserOperation {
         return userOp_1.UserOp.payMasterSignHash(this);
     }
     /**
-     * @description sign the user operation
-     * @param {string} entryPoint the entry point address
-     * @param {number} chainId the chain id
-     * @param {string} privateKey the private key
-     * @returns {void}
-     */
-    sign(entryPoint, chainId, privateKey) {
-        this.signature = userOp_1.UserOp.signUserOp(this, entryPoint, chainId, privateKey);
-    }
-    /**
      * @description sign the user operation with signature
      * @param {string} signAddress the sign address
      * @param {string} signature the signature
@@ -466,7 +456,7 @@ class UserOperation {
     * @param {number} chainId the chain id
     * @returns {string} the UserOpHash (userOp hash)
     */
-    getRawUserOpHash(entryPointAddress, chainId) {
+    getUserOpHash(entryPointAddress, chainId) {
         return userOp_1.UserOp.getUserOpHash(this, entryPointAddress, chainId);
     }
     /**
@@ -479,11 +469,11 @@ class UserOperation {
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    getUserOpHash(entryPointAddress, chainId, validAfter = 0, validUntil = 0) {
+    getUserOpHashWithTimeRange(entryPointAddress, chainId, validAfter = 0, validUntil = 0) {
         if (validUntil < validAfter) {
             throw new Error('validUntil must be greater than validAfter');
         }
-        const _hash = this.getRawUserOpHash(entryPointAddress, chainId);
+        const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
     }
     /**

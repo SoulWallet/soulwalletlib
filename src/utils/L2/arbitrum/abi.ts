@@ -1,15 +1,12 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.OptimisticGasPriceOracleABI = exports.ArbitrumNodeInterfaceABI = void 0;
 /*
- * @Description:
+ * @Description: 
  * @Version: 1.0
  * @Autor: z.cejay@gmail.com
- * @Date: 2023-03-02 10:10:47
+ * @Date: 2023-03-02 19:35:16
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 10:15:35
+ * @LastEditTime: 2023-03-02 19:35:17
  */
-const ArbitrumNodeInterfaceABI = [
+export const ArbitrumNodeInterfaceABI = [
     {
         "inputs": [
             {
@@ -286,111 +283,3 @@ const ArbitrumNodeInterfaceABI = [
         "type": "function"
     }
 ];
-exports.ArbitrumNodeInterfaceABI = ArbitrumNodeInterfaceABI;
-const OptimisticGasPriceOracleABI = [
-    {
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "gasPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes",
-                "name": "_data",
-                "type": "bytes"
-            }
-        ],
-        "name": "getL1Fee",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes",
-                "name": "_data",
-                "type": "bytes"
-            }
-        ],
-        "name": "getL1GasUsed",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "l1BaseFee",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "overhead",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "scalar",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    }
-];
-exports.OptimisticGasPriceOracleABI = OptimisticGasPriceOracleABI;
-//# sourceMappingURL=L2ABI.js.map

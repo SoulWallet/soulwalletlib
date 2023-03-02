@@ -49,7 +49,7 @@ export class UserOp {
     if (op.signature === '0x') {
       mockSignature = true;
       // Single signature
-      op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
+      op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
     }
 
     const packed = this.packUserOp(op, false);
@@ -136,38 +136,6 @@ export class UserOp {
     return keccak256(enc)
   }
 
-
-  private static _signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string {
-    const message = this.getUserOpHash(op, entryPointAddress, chainId)
-    return this._signReuestId(message, privateKey);
-  }
-
-  public static _signReuestId(userOpHash: string, privateKey: string): string {
-    const msg1 = Buffer.concat([
-      Buffer.from('\x19Ethereum Signed Message:\n32', 'ascii'),
-      Buffer.from(arrayify(userOpHash))
-    ])
-
-    const sig = ecsign(keccak256_buffer(msg1), Buffer.from(arrayify(privateKey)))
-    // that's equivalent of:  await signer.signMessage(message);
-    // (but without "async"
-    const signedMessage1 = toRpcSig(sig.v, sig.r, sig.s);
-    return signedMessage1;
-  }
-
-
-  /**
-   * sign a user operation with the given private key
-   * @param op 
-   * @param entryPointAddress 
-   * @param chainId 
-   * @param privateKey 
-   * @returns signature
-   */
-  public static signUserOp(op: UserOperation, entryPointAddress: string, chainId: number, privateKey: string): string {
-    const sign = this._signUserOp(op, entryPointAddress, chainId, privateKey);
-    return this.signUserOpWithPersonalSign(ethers.utils.computeAddress(privateKey), sign);
-  }
 
   /**
    * sign a user operation with the UserOpHash signature

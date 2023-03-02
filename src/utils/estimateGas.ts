@@ -4,13 +4,13 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:41:26
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:13:56
+ * @LastEditTime: 2023-03-02 19:37:01
  */
 
 import { BigNumber, ethers } from "ethers";
 import { CHAINID } from "../defines/chainId";
 import { ITransaction } from "../interface/ITransaction";
-import { ArbitrumNodeInterface } from "./L2/arbitrumNodeInterface";
+import { ArbitrumNodeInterface } from "./L2/arbitrum/arbitrumNodeInterface";
 
 export interface IEstimateGas {
     gasLimit: BigNumber;

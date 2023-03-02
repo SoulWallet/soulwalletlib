@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 20:02:46
+ * @LastEditTime: 2023-03-03 00:22:19
  */
 
 import { getCreate2Address, hexlify, hexZeroPad, keccak256, defaultAbiCoder, BytesLike } from "ethers/lib/utils";
@@ -29,6 +29,7 @@ import { WalletFactoryContract } from "../contracts/walletFactory";
 import { SingletonFactoryAddress } from "../defines/address";
 import { ERC20 as erc20 } from "../defines/ABI";
 import { JsonFragment, Fragment } from '@ethersproject/abi'
+import { EIP1271 } from "../utils/eip1271";
 
 export class SoulWalletLib {
 
@@ -92,6 +93,9 @@ export class SoulWalletLib {
 
 
     public Bundler = Bundler;
+    
+    public EIP1271 = EIP1271;
+
     public Tokens = {
         ERC1155: new ERC1155(),
         ERC20: new ERC20(),

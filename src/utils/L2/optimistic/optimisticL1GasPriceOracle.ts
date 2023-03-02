@@ -4,11 +4,11 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 11:01:51
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:01:52
+ * @LastEditTime: 2023-03-02 19:36:42
  */
 
 import { BigNumber, ethers } from 'ethers';
-import { OptimisticGasPriceOracleABI } from './L2ABI';
+import { OptimisticGasPriceOracleABI } from './abi';
 
 export class OptimisticL1GasPriceOracle {
     private _optimisticGasPriceOracle;
