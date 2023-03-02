@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:07:56
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:02:24
+ * @LastEditTime: 2023-03-02 19:37:40
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -19,8 +19,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Optimistic = void 0;
 const ethers_1 = require("ethers");
-const address_1 = require("../../defines/address");
-const userOp_1 = require("../userOp");
+const address_1 = require("../../../defines/address");
+const userOp_1 = require("../../userOp");
 const optimisticL1GasPriceOracle_1 = require("./optimisticL1GasPriceOracle");
 class Optimistic {
     static calcGasPrice(l2Provider, op) {

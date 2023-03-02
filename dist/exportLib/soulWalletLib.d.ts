@@ -10,6 +10,7 @@ import { NumberLike } from "../defines/numberLike";
 import { CodefiGasFees } from '../utils/gasFee';
 import { TokenAndPaymaster } from '../utils/tokenAndPaymaster';
 import { DeployFactory } from '../utils/deployFactory';
+import { EIP1271 } from "../utils/eip1271";
 export declare class SoulWalletLib {
     /** @private */
     private _singletonFactory;
@@ -50,6 +51,7 @@ export declare class SoulWalletLib {
         bytes32_zero: string;
     };
     Bundler: typeof Bundler;
+    EIP1271: typeof EIP1271;
     Tokens: {
         ERC1155: ERC1155;
         ERC20: ERC20;

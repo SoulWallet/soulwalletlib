@@ -2,7 +2,7 @@ import { ethers, BigNumber } from "ethers";
 import { AddressZero } from "../defines/address";
 import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
 import { UserOp } from '../utils/userOp';
-import { Optimistic } from "../utils/L2/optimistic";
+import { Optimistic } from "../utils/L2/optimistic/optimistic";
 import { CHAINID } from "../defines/chainId";
 import { EstimateGas } from "../utils/estimateGas";
 
@@ -477,21 +477,6 @@ class UserOperation {
     }
 
     /**
-     * @description sign the user operation
-     * @param {string} entryPoint the entry point address
-     * @param {number} chainId the chain id
-     * @param {string} privateKey the private key
-     * @returns {void}
-     */
-    public sign(
-        entryPoint: string,
-        chainId: number,
-        privateKey: string): void {
-        this.signature = UserOp.signUserOp(this, entryPoint, chainId, privateKey);
-    }
-
-
-    /**
      * @description sign the user operation with signature
      * @param {string} signAddress the sign address
      * @param {string} signature the signature
@@ -507,7 +492,7 @@ class UserOperation {
     * @param {number} chainId the chain id
     * @returns {string} the UserOpHash (userOp hash)
     */
-    public getRawUserOpHash(entryPointAddress: string, chainId: number): string {
+    public getUserOpHash(entryPointAddress: string, chainId: number): string {
         return UserOp.getUserOpHash(this, entryPointAddress, chainId);
     }
 
@@ -521,11 +506,11 @@ class UserOperation {
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    public getUserOpHash(entryPointAddress: string, chainId: number, validAfter = 0, validUntil = 0): string {
+    public getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, validAfter = 0, validUntil = 0): string {
         if (validUntil < validAfter) {
             throw new Error('validUntil must be greater than validAfter');
         }
-        const _hash = this.getRawUserOpHash(entryPointAddress, chainId);
+        const _hash = this.getUserOpHash(entryPointAddress, chainId);
         return ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
     }
 

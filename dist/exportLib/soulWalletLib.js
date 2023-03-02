@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-05 16:08:23
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 20:02:46
+ * @LastEditTime: 2023-03-03 00:22:19
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -60,6 +60,7 @@ const bytes32_1 = require("../defines/bytes32");
 const walletFactory_1 = require("../contracts/walletFactory");
 const address_1 = require("../defines/address");
 const ABI_1 = require("../defines/ABI");
+const eip1271_1 = require("../utils/eip1271");
 class SoulWalletLib {
     /**
      * @constructor SoulWalletLib
@@ -68,6 +69,7 @@ class SoulWalletLib {
      */
     constructor(singletonFactory) {
         this.Bundler = bundler_1.Bundler;
+        this.EIP1271 = eip1271_1.EIP1271;
         this.Tokens = {
             ERC1155: new tokens_1.ERC1155(),
             ERC20: new tokens_1.ERC20(),

@@ -4,10 +4,10 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 11:02:34
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:02:34
+ * @LastEditTime: 2023-03-02 19:36:28
  */
 import { BigNumber, ethers } from 'ethers';
-import { ArbitrumNodeInterfaceABI } from './L2ABI';
+import { ArbitrumNodeInterfaceABI } from './abi';
 
 export interface IEstimateComponents {
     baseFee: BigNumber;

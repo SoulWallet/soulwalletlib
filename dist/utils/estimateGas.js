@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:41:26
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:13:56
+ * @LastEditTime: 2023-03-02 19:37:01
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -19,7 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EstimateGas = void 0;
 const chainId_1 = require("../defines/chainId");
-const arbitrumNodeInterface_1 = require("./L2/arbitrumNodeInterface");
+const arbitrumNodeInterface_1 = require("./L2/arbitrum/arbitrumNodeInterface");
 class EstimateGas {
     static estimate(etherProvider, transaction) {
         return __awaiter(this, void 0, void 0, function* () {

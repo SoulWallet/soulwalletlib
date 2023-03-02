@@ -138,14 +138,6 @@ declare class UserOperation {
      */
     payMasterSignHash(): string;
     /**
-     * @description sign the user operation
-     * @param {string} entryPoint the entry point address
-     * @param {number} chainId the chain id
-     * @param {string} privateKey the private key
-     * @returns {void}
-     */
-    sign(entryPoint: string, chainId: number, privateKey: string): void;
-    /**
      * @description sign the user operation with signature
      * @param {string} signAddress the sign address
      * @param {string} signature the signature
@@ -158,7 +150,7 @@ declare class UserOperation {
     * @param {number} chainId the chain id
     * @returns {string} the UserOpHash (userOp hash)
     */
-    getRawUserOpHash(entryPointAddress: string, chainId: number): string;
+    getUserOpHash(entryPointAddress: string, chainId: number): string;
     /**
      * @description get the UserOpHash (userOp hash) with validAfter and validUntil
      *
@@ -169,7 +161,7 @@ declare class UserOperation {
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    getUserOpHash(entryPointAddress: string, chainId: number, validAfter?: number, validUntil?: number): string;
+    getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, validAfter?: number, validUntil?: number): string;
     /**
      * @description get the required prefund
      * @param {(BigNumber | NumberLike)?} basefee the basefee

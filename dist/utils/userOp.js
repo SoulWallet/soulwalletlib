@@ -6,7 +6,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserOp = exports.SignatureMode = void 0;
 const utils_1 = require("ethers/lib/utils");
-const ethereumjs_util_1 = require("ethereumjs-util");
 const ethers_1 = require("ethers");
 var SignatureMode;
 (function (SignatureMode) {
@@ -33,7 +32,7 @@ class UserOp {
         if (op.signature === '0x') {
             mockSignature = true;
             // Single signature
-            op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
+            op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
         }
         const packed = this.packUserOp(op, false);
         if (mockSignature) {
@@ -104,33 +103,6 @@ class UserOp {
         const userOpHash = (0, utils_1.keccak256)(this.packUserOp(op, true));
         const enc = utils_1.defaultAbiCoder.encode(['bytes32', 'address', 'uint256'], [userOpHash, entryPointAddress, chainId]);
         return (0, utils_1.keccak256)(enc);
-    }
-    static _signUserOp(op, entryPointAddress, chainId, privateKey) {
-        const message = this.getUserOpHash(op, entryPointAddress, chainId);
-        return this._signReuestId(message, privateKey);
-    }
-    static _signReuestId(userOpHash, privateKey) {
-        const msg1 = Buffer.concat([
-            Buffer.from('\x19Ethereum Signed Message:\n32', 'ascii'),
-            Buffer.from((0, utils_1.arrayify)(userOpHash))
-        ]);
-        const sig = (0, ethereumjs_util_1.ecsign)((0, ethereumjs_util_1.keccak256)(msg1), Buffer.from((0, utils_1.arrayify)(privateKey)));
-        // that's equivalent of:  await signer.signMessage(message);
-        // (but without "async"
-        const signedMessage1 = (0, ethereumjs_util_1.toRpcSig)(sig.v, sig.r, sig.s);
-        return signedMessage1;
-    }
-    /**
-     * sign a user operation with the given private key
-     * @param op
-     * @param entryPointAddress
-     * @param chainId
-     * @param privateKey
-     * @returns signature
-     */
-    static signUserOp(op, entryPointAddress, chainId, privateKey) {
-        const sign = this._signUserOp(op, entryPointAddress, chainId, privateKey);
-        return this.signUserOpWithPersonalSign(ethers_1.ethers.utils.computeAddress(privateKey), sign);
     }
     /**
      * sign a user operation with the UserOpHash signature

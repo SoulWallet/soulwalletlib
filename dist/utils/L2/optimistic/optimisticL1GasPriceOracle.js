@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 11:01:51
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:01:52
+ * @LastEditTime: 2023-03-02 19:36:42
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -19,10 +19,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OptimisticL1GasPriceOracle = void 0;
 const ethers_1 = require("ethers");
-const L2ABI_1 = require("./L2ABI");
+const abi_1 = require("./abi");
 class OptimisticL1GasPriceOracle {
     constructor(provider, gasPriceOracle = '0x420000000000000000000000000000000000000F') {
-        this._optimisticGasPriceOracle = new ethers_1.ethers.Contract(gasPriceOracle, L2ABI_1.OptimisticGasPriceOracleABI, provider);
+        this._optimisticGasPriceOracle = new ethers_1.ethers.Contract(gasPriceOracle, abi_1.OptimisticGasPriceOracleABI, provider);
     }
     decimals() {
         return __awaiter(this, void 0, void 0, function* () {
