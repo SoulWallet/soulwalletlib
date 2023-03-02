@@ -4,47 +4,64 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-12 21:57:09
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 17:25:36
+ * @LastEditTime: 2023-03-02 16:14:09
  */
 
 import { BigNumber } from "ethers";
 
 
-/**
- * @interface IExecutionResult
- * @property {BigNumber} preOpGas
- * @property {BigNumber} paid
- * @property {BigNumber} deadline
- * @property {BigNumber} paymasterDeadline
- * 
- */
 export interface IExecutionResult {
     preOpGas: BigNumber,
     paid: BigNumber,
-    deadline: BigNumber,
-    paymasterDeadline: BigNumber
+    validAfter: BigNumber,
+    validUntil: BigNumber,
+    targetSuccess: boolean,
+    targetResult: string,
 }
 
 export interface IFailedOp {
     opIndex: BigNumber;
-    paymaster: string;
     reason: string;
 }
 
 export interface IReturnInfo {
     /* 
-    struct ReturnInfo {
-        uint256 preOpGas;
-        uint256 prefund;
-        uint256 deadline;
-        uint256 paymasterDeadline;
-        bytes paymasterContext;
-    }
+    {
+              "internalType": "uint256",
+              "name": "preOpGas",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "prefund",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "sigFailed",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint48",
+              "name": "validAfter",
+              "type": "uint48"
+            },
+            {
+              "internalType": "uint48",
+              "name": "validUntil",
+              "type": "uint48"
+            },
+            {
+              "internalType": "bytes",
+              "name": "paymasterContext",
+              "type": "bytes"
+            }
     */
     preOpGas: BigNumber,
     prefund: BigNumber,
-    deadline: BigNumber,
-    paymasterDeadline: BigNumber,
+    sigFailed: boolean,
+    validAfter: BigNumber,
+    validUntil: BigNumber,
     paymasterContext: string
 }
 
@@ -61,7 +78,7 @@ export interface IStakeInfo {
 }
 
 export interface IValidationResult {
-    op: IReturnInfo;
+    returnInfo: IReturnInfo;
     senderInfo: IStakeInfo;
     factoryInfo: IStakeInfo;
     paymasterInfo: IStakeInfo;

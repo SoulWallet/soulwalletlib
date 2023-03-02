@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-08 16:13:28
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 17:35:25
+ * @LastEditTime: 2023-03-01 10:48:48
  */
 
 import { BytesLike, getCreate2Address, keccak256 } from "ethers/lib/utils";
@@ -93,7 +93,7 @@ export class DeployFactory {
     public async deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver: number = 1, walletFactoryConfig?: {
         contractInterface: ContractInterface,
         bytecode: BytesLike | { object: string }
-    }) {
+    }, gasLimit = BigNumber.from(6000000)) {
 
         const { factoryAddress, initCodeWithArgs } = this.getFactory(logicContractAddress, salt, ver, walletFactoryConfig);
 
@@ -106,12 +106,12 @@ export class DeployFactory {
 
         const singletonFactoryContract = new ethers.Contract(this._singletonFactory, SingletonFactory.ABI, etherProvider);
         const calldata = singletonFactoryContract.interface.encodeFunctionData('deploy', [initCodeWithArgs, salt]);
-        const gasLimit = BigNumber.from(6000000).toHexString();
+        const _gasLimit = gasLimit.toHexString();
         // send tx
         const tx = {
             to: this._singletonFactory,
             data: calldata,
-            gasLimit
+            gasLimit: _gasLimit
         };
         const signedTx = await signer.sendTransaction(tx);
         await signedTx.wait();

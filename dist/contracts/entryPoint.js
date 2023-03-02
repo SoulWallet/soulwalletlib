@@ -15,14 +15,24 @@ const ABI = [
                 "type": "uint256"
             },
             {
-                "internalType": "uint256",
-                "name": "deadline",
-                "type": "uint256"
+                "internalType": "uint48",
+                "name": "validAfter",
+                "type": "uint48"
             },
             {
-                "internalType": "uint256",
-                "name": "paymasterDeadline",
-                "type": "uint256"
+                "internalType": "uint48",
+                "name": "validUntil",
+                "type": "uint48"
+            },
+            {
+                "internalType": "bool",
+                "name": "targetSuccess",
+                "type": "bool"
+            },
+            {
+                "internalType": "bytes",
+                "name": "targetResult",
+                "type": "bytes"
             }
         ],
         "name": "ExecutionResult",
@@ -34,11 +44,6 @@ const ABI = [
                 "internalType": "uint256",
                 "name": "opIndex",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "paymaster",
-                "type": "address"
             },
             {
                 "internalType": "string",
@@ -86,14 +91,19 @@ const ABI = [
                         "type": "uint256"
                     },
                     {
-                        "internalType": "uint256",
-                        "name": "deadline",
-                        "type": "uint256"
+                        "internalType": "bool",
+                        "name": "sigFailed",
+                        "type": "bool"
                     },
                     {
-                        "internalType": "uint256",
-                        "name": "paymasterDeadline",
-                        "type": "uint256"
+                        "internalType": "uint48",
+                        "name": "validAfter",
+                        "type": "uint48"
+                    },
+                    {
+                        "internalType": "uint48",
+                        "name": "validUntil",
+                        "type": "uint48"
                     },
                     {
                         "internalType": "bytes",
@@ -175,14 +185,19 @@ const ABI = [
                         "type": "uint256"
                     },
                     {
-                        "internalType": "uint256",
-                        "name": "deadline",
-                        "type": "uint256"
+                        "internalType": "bool",
+                        "name": "sigFailed",
+                        "type": "bool"
                     },
                     {
-                        "internalType": "uint256",
-                        "name": "paymasterDeadline",
-                        "type": "uint256"
+                        "internalType": "uint48",
+                        "name": "validAfter",
+                        "type": "uint48"
+                    },
+                    {
+                        "internalType": "uint48",
+                        "name": "validUntil",
+                        "type": "uint48"
                     },
                     {
                         "internalType": "bytes",
@@ -249,7 +264,7 @@ const ABI = [
                 "components": [
                     {
                         "internalType": "address",
-                        "name": "actualAggregator",
+                        "name": "aggregator",
                         "type": "address"
                     },
                     {
@@ -332,7 +347,7 @@ const ABI = [
         "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "address",
                 "name": "aggregator",
                 "type": "address"
@@ -531,8 +546,31 @@ const ABI = [
     {
         "inputs": [
             {
+                "internalType": "bytes",
+                "name": "initCode",
+                "type": "bytes"
+            },
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "paymasterAndData",
+                "type": "bytes"
+            }
+        ],
+        "name": "_validateSenderAndPaymaster",
+        "outputs": [],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint32",
-                "name": "_unstakeDelaySec",
+                "name": "unstakeDelaySec",
                 "type": "uint32"
             }
         ],
@@ -1075,6 +1113,16 @@ const ABI = [
                 "internalType": "struct UserOperation",
                 "name": "op",
                 "type": "tuple"
+            },
+            {
+                "internalType": "address",
+                "name": "target",
+                "type": "address"
+            },
+            {
+                "internalType": "bytes",
+                "name": "targetCallData",
+                "type": "bytes"
             }
         ],
         "name": "simulateHandleOp",

@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 20:01:01
+ * @LastEditTime: 2023-03-02 11:05:53
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -47,19 +47,20 @@ class Converter {
             if (transcations.length === 0) {
                 throw new Error("transcation is empty");
             }
-            let sender = (transcations[0].from).toLowerCase();
+            let sender = (transcations[0].from || '').toLowerCase();
             // #TODO if gas is null
             //let _callGasLimit: BigNumber = BigNumber.from(transcations[0].gas);
             const _to = [transcations[0].to];
-            const _value = [transcations[0].value];
+            const _value = [ethers_1.BigNumber.from(transcations[0].value).toHexString()];
             const _data = [transcations[0].data];
             if (transcations.length > 1) {
                 for (let i = 1; i < transcations.length; i++) {
                     // _callGasLimit.add(BigNumber.from(transcations[i]));
                     _to.push(transcations[i].to);
-                    _value.push(transcations[i].value);
+                    _value.push(ethers_1.BigNumber.from(transcations[i].value).toHexString());
                     _data.push(transcations[i].data);
-                    if (sender !== transcations[i].from.toLowerCase()) {
+                    const _sender = (transcations[i].from || '').toLowerCase();
+                    if (sender !== _sender) {
                         throw new Error("transcation sender is not same");
                     }
                 }

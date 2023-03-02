@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-08 16:13:28
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-24 17:35:25
+ * @LastEditTime: 2023-03-01 10:48:48
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -82,7 +82,7 @@ class DeployFactory {
      * @param {walletFactoryConfig?} walletFactoryConfig wallet factory config
      * @returns {Promise<string>} factory address
      */
-    deploy(logicContractAddress, etherProvider, signer, salt, ver = 1, walletFactoryConfig) {
+    deploy(logicContractAddress, etherProvider, signer, salt, ver = 1, walletFactoryConfig, gasLimit = ethers_1.BigNumber.from(6000000)) {
         return __awaiter(this, void 0, void 0, function* () {
             const { factoryAddress, initCodeWithArgs } = this.getFactory(logicContractAddress, salt, ver, walletFactoryConfig);
             salt = salt || bytes32_1.bytes32_zero;
@@ -92,12 +92,12 @@ class DeployFactory {
             }
             const singletonFactoryContract = new ethers_1.ethers.Contract(this._singletonFactory, singletonFactory_1.SingletonFactory.ABI, etherProvider);
             const calldata = singletonFactoryContract.interface.encodeFunctionData('deploy', [initCodeWithArgs, salt]);
-            const gasLimit = ethers_1.BigNumber.from(6000000).toHexString();
+            const _gasLimit = gasLimit.toHexString();
             // send tx
             const tx = {
                 to: this._singletonFactory,
                 data: calldata,
-                gasLimit
+                gasLimit: _gasLimit
             };
             const signedTx = yield signer.sendTransaction(tx);
             yield signedTx.wait();

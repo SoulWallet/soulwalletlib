@@ -4,28 +4,14 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 20:01:01
+ * @LastEditTime: 2023-03-02 11:05:53
  */
 
 import { UserOperation } from "../entity/userOperation";
 import { execFromEntryPoint, execBatchFromEntryPoint } from "../defines/ABI";
 import { BigNumber, ethers } from "ethers";
 import { NumberLike } from "../defines/numberLike";
-
-/**
- * transcation interface
- * @interface ITransaction
- * @property {string} from the from address
- * @property {string} data the data
- * @property {string} to the to address
- * @property {string} value the value
- */
-export interface ITransaction {
-    from: string;
-    data: string;
-    to: string;
-    value: string;
-}
+import { ITransaction } from "../interface/ITransaction";
 
 
 /**
@@ -64,7 +50,7 @@ export class Converter {
             throw new Error("transcation is empty");
         }
 
-        let sender = (transcations[0].from).toLowerCase();
+        let sender = (transcations[0].from || '').toLowerCase();
 
         // #TODO if gas is null
 
@@ -72,16 +58,17 @@ export class Converter {
         //let _callGasLimit: BigNumber = BigNumber.from(transcations[0].gas);
 
         const _to: string[] = [transcations[0].to];
-        const _value: string[] = [transcations[0].value];
+        const _value: string[] = [BigNumber.from(transcations[0].value).toHexString()];
         const _data: string[] = [transcations[0].data];
 
         if (transcations.length > 1) {
             for (let i = 1; i < transcations.length; i++) {
                 // _callGasLimit.add(BigNumber.from(transcations[i]));
                 _to.push(transcations[i].to);
-                _value.push(transcations[i].value);
+                _value.push(BigNumber.from(transcations[i].value).toHexString());
                 _data.push(transcations[i].data);
-                if (sender !== transcations[i].from.toLowerCase()) {
+                const _sender = (transcations[i].from || '').toLowerCase();
+                if (sender !== _sender) {
                     throw new Error("transcation sender is not same");
                 }
             }

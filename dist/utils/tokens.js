@@ -16,11 +16,12 @@ exports.ETH = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.Token =
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 19:56:47
+ * @LastEditTime: 2023-03-02 17:57:59
  */
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
 const ethers_1 = require("ethers");
+const estimateGas_1 = require("./estimateGas");
 /**
  * token interface
  * @class Token
@@ -83,12 +84,12 @@ class ERC20 {
             if (approveData.value === undefined) {
                 approveData.value = this.MAX_INT256;
             }
-            let callGasLimit = yield etherProvider.estimateGas({
+            const _gasLimit = yield estimateGas_1.EstimateGas.estimate(etherProvider, {
                 from: walletAddress,
                 to: approveData.token,
                 data: new ethers_1.ethers.utils.Interface(ABI_1.ERC20).encodeFunctionData("approve", [approveData.spender, approveData.value])
             });
-            return callGasLimit;
+            return _gasLimit.gasLimitForL2 || _gasLimit.gasLimit;
         });
     }
     /**

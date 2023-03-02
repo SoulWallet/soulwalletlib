@@ -14,7 +14,9 @@ const ethers_1 = require("ethers");
 const address_1 = require("../defines/address");
 const numberLike_1 = require("../defines/numberLike");
 const userOp_1 = require("../utils/userOp");
-const optimisticGasPriceOracle_1 = require("../utils/optimisticGasPriceOracle");
+const optimistic_1 = require("../utils/L2/optimistic");
+const chainId_1 = require("../defines/chainId");
+const estimateGas_1 = require("../utils/estimateGas");
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol
  */
@@ -64,7 +66,6 @@ class UserOperation {
         this._maxPriorityFeePerGasL2 = 0;
         this._paymasterAndData = '0x';
         this._signature = '0x';
-        this._userOp = new userOp_1.UserOp();
         this._sender = sender;
         this._nonce = nonce;
         this._initCode = initCode;
@@ -349,7 +350,7 @@ class UserOperation {
     }
     updatePreVerificationGas() {
         try {
-            let _preVerificationGas = this._userOp.callDataCost(this) + 10000;
+            let _preVerificationGas = userOp_1.UserOp.callDataCost(this) + 10000;
             if (this.recoveryWalletOP()) {
                 _preVerificationGas += 20000;
             }
@@ -380,47 +381,32 @@ class UserOperation {
      */
     calcL2GasPrice(l2Provider) {
         return __awaiter(this, void 0, void 0, function* () {
+            if ((0, numberLike_1.toNumber)(this._maxFeePerGasL2) === 0) {
+                throw new Error('maxFeePerGas is 0');
+            }
             // get ChainID
             const chainId = yield l2Provider.getNetwork().then((network) => network.chainId);
-            // 10 Optimism
-            // 420 Optimism Goerli Testnet
-            if (chainId !== 10 && chainId !== 420) {
+            let chainName = '';
+            if (chainId === chainId_1.CHAINID.OPTIMISM || chainId === chainId_1.CHAINID.OPTIMISM_GOERLI) {
+                chainName = 'OPTIMISM';
+            }
+            else if (chainId === chainId_1.CHAINID.ARBITRUM || chainId === chainId_1.CHAINID.ARBITRUM_GOERLI) {
+                chainName = 'ARBITRUM';
+            }
+            else {
                 return;
             }
             this.updateVerificationGasLimit();
             this.updatePreVerificationGas();
-            if (chainId === 10 || chainId === 420) {
-                if ((0, numberLike_1.toNumber)(this._maxFeePerGasL2) === 0) {
-                    throw new Error('maxFeePerGas is 0');
-                }
+            if ('OPTIMISM' === chainName) {
                 if ((0, numberLike_1.toNumber)(this._maxPriorityFeePerGasL2) !== (0, numberLike_1.toNumber)(this._maxFeePerGasL2)) {
                     throw new Error('EIP1559 fee is not supported');
                 }
-                const calldataL1 = this._userOp.packUserOpForCallData(this);
-                /*
-                (Gas Price * Gas) + (l1GasUsed * l1GasPrice * l1FeeScalar)
-                */
-                //OptimisticGasPriceOracle
-                const optimisticL1GasPriceOracle = new optimisticGasPriceOracle_1.OptimisticL1GasPriceOracle(l2Provider);
-                // L2 cost
-                const l2Cost = this.requiredPrefundL2();
-                /*
-                        uint256 l1GasUsed = getL1GasUsed(_data);
-                        uint256 l1Fee = l1GasUsed * l1BaseFee;
-                        uint256 divisor = 10**decimals;
-                        uint256 unscaled = l1Fee * scalar;
-                        uint256 scaled = unscaled / divisor;
-                        return scaled;
-                */
-                // L1 cost 
-                let l1Cost = yield optimisticL1GasPriceOracle.getL1Fee(calldataL1);
-                const cost = l2Cost.add(l1Cost);
-                const noPaymaster = this.paymasterAndData === address_1.AddressZero || this.paymasterAndData === '0x';
-                const mul = noPaymaster ? 1 : 3;
-                const requiredGas = ethers_1.BigNumber.from(this.callGasLimit).add(ethers_1.BigNumber.from(this.verificationGasLimit).mul(mul)).add(ethers_1.BigNumber.from(this.preVerificationGas));
-                const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toString();
+                const reasonableGasPrice = yield optimistic_1.Optimistic.calcGasPrice(l2Provider, this);
                 this._maxFeePerGas = reasonableGasPrice;
                 this._maxPriorityFeePerGas = reasonableGasPrice;
+            }
+            else if ('ARBITRUM' === chainName) {
             }
         });
     }
@@ -430,19 +416,16 @@ class UserOperation {
      * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
      * @returns {Promise<boolean>} true or false
      */
-    estimateGas(entryPointAddress, etherProvider
-    // estimateGasFunc: (txInfo: ethers.utils.Deferrable<ethers.providers.TransactionRequest>) => Promise<BigNumber> //(transaction:ethers.providers.TransactionRequest):Promise<number>
-    // (transaction: ethers.utils.Deferrable<ethers.providers.TransactionRequest>): Promise<ether.BigNumber>
-    ) {
+    estimateGas(entryPointAddress, etherProvider) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const estimateGasRe = yield etherProvider.estimateGas({
+                const _gasLimit = yield estimateGas_1.EstimateGas.estimate(etherProvider, {
                     from: entryPointAddress,
                     to: this.sender,
                     data: this.callData,
                     gasLimit: 20000000
                 });
-                this.callGasLimit = estimateGasRe.toNumber();
+                this.callGasLimit = (_gasLimit.gasLimitForL2 || _gasLimit.gasLimit).toHexString();
                 return true;
             }
             catch (error) {
@@ -456,7 +439,7 @@ class UserOperation {
      * @returns {string} the paymaster sign hash
      */
     payMasterSignHash() {
-        return this._userOp.payMasterSignHash(this);
+        return userOp_1.UserOp.payMasterSignHash(this);
     }
     /**
      * @description sign the user operation
@@ -466,7 +449,7 @@ class UserOperation {
      * @returns {void}
      */
     sign(entryPoint, chainId, privateKey) {
-        this.signature = this._userOp.signUserOp(this, entryPoint, chainId, privateKey);
+        this.signature = userOp_1.UserOp.signUserOp(this, entryPoint, chainId, privateKey);
     }
     /**
      * @description sign the user operation with signature
@@ -475,28 +458,33 @@ class UserOperation {
      * @returns {void}
      */
     signWithSignature(signAddress, signature) {
-        this.signature = this._userOp.signUserOpWithPersonalSign(signAddress, signature);
+        this.signature = userOp_1.UserOp.signUserOpWithPersonalSign(signAddress, signature);
     }
     /**
-     * @description get the UserOpHash (userOp hash)
-     * @param {string} entryPointAddress the entry point address
-     * @param {number} chainId the chain id
-     * @returns {string} the UserOpHash (userOp hash)
-     */
-    getUserOpHash(entryPointAddress, chainId) {
-        return this._userOp.getUserOpHash(this, entryPointAddress, chainId);
+    * @description get the UserOpHash (userOp hash)
+    * @param {string} entryPointAddress the entry point address
+    * @param {number} chainId the chain id
+    * @returns {string} the UserOpHash (userOp hash)
+    */
+    getRawUserOpHash(entryPointAddress, chainId) {
+        return userOp_1.UserOp.getUserOpHash(this, entryPointAddress, chainId);
     }
     /**
-     * @description get the UserOpHash (userOp hash) with deadline
+     * @description get the UserOpHash (userOp hash) with validAfter and validUntil
+     *
      * @param {string} entryPointAddress the entry point address
      * @param {number} chainId the chain id
-     * @param {number} deadline the deadline
-     * @returns {string} the UserOpHash (userOp hash) with deadline
-     * @remarks deadline is a timestamp in seconds
+     * @param {number} [validAfter=0] the valid after
+     * @param {number} [validUntil=0] the valid until
+     * @return {*}  {string}
+     * @memberof UserOperation
      */
-    getUserOpHashWithDeadline(entryPointAddress, chainId, deadline) {
-        const _hash = this.getUserOpHash(entryPointAddress, chainId);
-        return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint64'], [_hash, deadline]);
+    getUserOpHash(entryPointAddress, chainId, validAfter = 0, validUntil = 0) {
+        if (validUntil < validAfter) {
+            throw new Error('validUntil must be greater than validAfter');
+        }
+        const _hash = this.getRawUserOpHash(entryPointAddress, chainId);
+        return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
     }
     /**
      * @description get the required prefund

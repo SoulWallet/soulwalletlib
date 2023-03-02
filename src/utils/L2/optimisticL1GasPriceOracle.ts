@@ -2,18 +2,18 @@
  * @Description: 
  * @Version: 1.0
  * @Autor: z.cejay@gmail.com
- * @Date: 2023-02-28 11:50:05
+ * @Date: 2023-03-02 11:01:51
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-28 12:07:05
+ * @LastEditTime: 2023-03-02 11:01:52
  */
 
 import { BigNumber, ethers } from 'ethers';
-import { OptimisticGasPriceOracle } from '../contracts/optimisticGasPriceOracle';
+import { OptimisticGasPriceOracleABI } from './L2ABI';
 
 export class OptimisticL1GasPriceOracle {
     private _optimisticGasPriceOracle;
     constructor(provider: ethers.providers.BaseProvider, gasPriceOracle = '0x420000000000000000000000000000000000000F') {
-        this._optimisticGasPriceOracle = new ethers.Contract(gasPriceOracle, OptimisticGasPriceOracle.ABI, provider);
+        this._optimisticGasPriceOracle = new ethers.Contract(gasPriceOracle, OptimisticGasPriceOracleABI, provider);
     }
     public async decimals(): Promise<BigNumber> {
         return await this._optimisticGasPriceOracle.decimals();

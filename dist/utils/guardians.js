@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-26 19:58:14
+ * @LastEditTime: 2023-03-02 18:02:34
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -81,7 +81,8 @@ class Guardian {
     }
     /**
      * sign a user operation with guardian signatures
-     * @param {Number} deadline deadline (block time)
+     * @param {Number} validAfter valid after (block time)
+     * @param {Number} validUntil valid until (block time)
      * @param {guardianSignature[]} signatures guardian signatures
      * @param {string} guardianLogicAddress guardian logic contract address
      * @param {string[]} guardians guardian addresses
@@ -90,30 +91,32 @@ class Guardian {
      * @param {string} [guardianAddress] guardian contract address,if provided will check if equal to the calculated guardian address
      * @returns {string} signature
      */
-    packGuardiansSign(deadline, signature, guardianLogicAddress, guardians, threshold, salt, guardianAddress) {
+    packGuardiansSign(validAfter, validUntil, signature, guardianLogicAddress, guardians, threshold, salt, guardianAddress) {
         const guardianData = this.calculateGuardianAndInitCode(guardianLogicAddress, guardians, threshold, salt);
         if (guardianAddress) {
             if (guardianData.address != guardianAddress) {
                 throw new Error('guardianAddress is not equal to the calculated guardian address');
             }
         }
-        return this.packGuardiansSignByInitCode(guardianData.address, signature, deadline, guardianData.initCode);
+        return this.packGuardiansSignByInitCode(guardianData.address, signature, guardianData.initCode, validAfter, validUntil);
     }
     /**
      * sign a user operation with guardian signatures
      * @param {String} guardianAddress guardian contract address
      * @param {guardianSignature[]} signatures guardian signatures
-     * @param {Number} [deadline=0] deadline (block time), default 0
      * @param {String} [initCode='0x'] intiCode must given when the guardian contract is not deployed
+     * @param {Number} validAfter valid after (block time)
+     * @param {Number} validUntil valid until (block time)
      * @returns {String} signature
      */
-    packGuardiansSignByInitCode(guardianAddress, signature, deadline = 0, initCode = '0x') {
+    packGuardiansSignByInitCode(guardianAddress, signature, initCode = '0x', validAfter = 0, validUntil = 0) {
         const signatureBytes = this.guardianSign(signature);
         const guardianCallData = utils_1.defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
-        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint64', 'bytes'], [
+        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'], [
             userOp_1.SignatureMode.guardian,
             guardianAddress,
-            deadline,
+            validAfter,
+            validUntil,
             guardianCallData
         ]);
         return enc;

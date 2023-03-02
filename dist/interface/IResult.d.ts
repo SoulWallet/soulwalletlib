@@ -1,28 +1,22 @@
 import { BigNumber } from "ethers";
-/**
- * @interface IExecutionResult
- * @property {BigNumber} preOpGas
- * @property {BigNumber} paid
- * @property {BigNumber} deadline
- * @property {BigNumber} paymasterDeadline
- *
- */
 export interface IExecutionResult {
     preOpGas: BigNumber;
     paid: BigNumber;
-    deadline: BigNumber;
-    paymasterDeadline: BigNumber;
+    validAfter: BigNumber;
+    validUntil: BigNumber;
+    targetSuccess: boolean;
+    targetResult: string;
 }
 export interface IFailedOp {
     opIndex: BigNumber;
-    paymaster: string;
     reason: string;
 }
 export interface IReturnInfo {
     preOpGas: BigNumber;
     prefund: BigNumber;
-    deadline: BigNumber;
-    paymasterDeadline: BigNumber;
+    sigFailed: boolean;
+    validAfter: BigNumber;
+    validUntil: BigNumber;
     paymasterContext: string;
 }
 export interface IStakeInfo {
@@ -30,7 +24,7 @@ export interface IStakeInfo {
     unstakeDelaySec: BigNumber;
 }
 export interface IValidationResult {
-    op: IReturnInfo;
+    returnInfo: IReturnInfo;
     senderInfo: IStakeInfo;
     factoryInfo: IStakeInfo;
     paymasterInfo: IStakeInfo;
