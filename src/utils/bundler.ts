@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 16:58:19
+ * @LastEditTime: 2023-03-03 09:44:07
  */
 
 
@@ -268,7 +268,7 @@ export class Bundler {
             );
             const failedOp: IFailedOp = {
                 opIndex: re[0],
-                reason: re[2]
+                reason: re[1]
             }
             return {
                 status: 1,
