@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 23:29:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-03 00:55:51
+ * @LastEditTime: 2023-03-03 12:31:57
  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -48,6 +48,9 @@ class EIP1271 {
         if (hashMessage.length !== 66) {
             throw new Error("hashMessage must be 66 characters long");
         }
+        if (validAfter === 0 && validUntil === 0) {
+            return hashMessage;
+        }
         return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [hashMessage, validAfter, validUntil]);
     }
     /**
@@ -80,6 +83,9 @@ class EIP1271 {
      * @memberof EIP1271
      */
     static packedSignWithTimeRange(signature, validAfter = 0, validUntil = 0) {
+        if (validAfter === 0 && validUntil === 0) {
+            return signature;
+        }
         return utils_1.defaultAbiCoder.encode(['bytes', 'uint48', 'uint48'], [signature, validAfter, validUntil]);
     }
 }

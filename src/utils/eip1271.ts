@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 23:29:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-03 00:55:51
+ * @LastEditTime: 2023-03-03 12:31:57
  */
 
 import { ethers } from "ethers";
@@ -28,6 +28,9 @@ export class EIP1271 {
     ) {
         if (hashMessage.length !== 66) {
             throw new Error("hashMessage must be 66 characters long");
+        }
+        if (validAfter === 0 && validUntil === 0) {
+            return hashMessage;
         }
         return ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [hashMessage, validAfter, validUntil]);
     }
@@ -66,6 +69,9 @@ export class EIP1271 {
         signature: string,
         validAfter = 0,
         validUntil = 0) {
+        if (validAfter === 0 && validUntil === 0) {
+            return signature;
+        }
         return defaultAbiCoder.encode(['bytes', 'uint48', 'uint48'], [signature, validAfter, validUntil]);
     }
 
