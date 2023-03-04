@@ -17,6 +17,7 @@ const userOp_1 = require("../utils/userOp");
 const optimistic_1 = require("../utils/L2/optimistic/optimistic");
 const chainId_1 = require("../defines/chainId");
 const estimateGas_1 = require("../utils/estimateGas");
+const arbitrum_1 = require("../utils/L2/arbitrum/arbitrum");
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol
  */
@@ -61,9 +62,7 @@ class UserOperation {
         this._verificationGasLimit = 0; //450000;
         this._preVerificationGas = 0; //47000;
         this._maxFeePerGas = 0;
-        this._maxFeePerGasL2 = 0;
         this._maxPriorityFeePerGas = 0;
-        this._maxPriorityFeePerGasL2 = 0;
         this._paymasterAndData = '0x';
         this._signature = '0x';
         this._sender = sender;
@@ -75,10 +74,6 @@ class UserOperation {
         this._preVerificationGas = preVerificationGas;
         this._maxFeePerGas = maxFeePerGas;
         this._maxPriorityFeePerGas = maxPriorityFeePerGas;
-        {
-            this._maxFeePerGasL2 = maxFeePerGas;
-            this._maxPriorityFeePerGasL2 = maxPriorityFeePerGas;
-        }
         this._paymasterAndData = paymasterAndData;
         this._signature = signature;
         if ((0, numberLike_1.toNumber)(verificationGasLimit) === 0 || (0, numberLike_1.toNumber)(preVerificationGas) === 0) {
@@ -148,7 +143,6 @@ class UserOperation {
     }
     set maxFeePerGas(value) {
         this._maxFeePerGas = value;
-        this._maxFeePerGasL2 = value;
         this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
@@ -157,7 +151,6 @@ class UserOperation {
     }
     set maxPriorityFeePerGas(value) {
         this._maxPriorityFeePerGas = value;
-        this._maxPriorityFeePerGasL2 = value;
         this.updateVerificationGasLimit();
         this.updatePreVerificationGas();
     }
@@ -374,16 +367,18 @@ class UserOperation {
         this._verificationGasLimit = _verificationGasLimit;
     }
     /**
-     * calc l2 gas price
+     *
      *
      * @param {ethers.providers.BaseProvider} l2Provider
+     * @param {NumberLike} maxFeePerGas
+     * @param {NumberLike} maxPriorityFeePerGas
+     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57'] only for arbitrum
+     * @param {string} [estimateGasHelper='0x58c620C9059914B8989250f3B760F0ff4c27b055'] only for arbitrum
+     * @return {*}
      * @memberof UserOperation
      */
-    calcL2GasPrice(l2Provider) {
+    calcL2GasPrice(l2Provider, basefee, maxFeePerGas, maxPriorityFeePerGas, entryPointAddress = '0x0576a174D229E3cFA37253523E645A78A0C91B57', estimateGasHelper = '0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e') {
         return __awaiter(this, void 0, void 0, function* () {
-            if ((0, numberLike_1.toNumber)(this._maxFeePerGasL2) === 0) {
-                throw new Error('maxFeePerGas is 0');
-            }
             // get ChainID
             const chainId = yield l2Provider.getNetwork().then((network) => network.chainId);
             let chainName = '';
@@ -396,10 +391,12 @@ class UserOperation {
             else {
                 return;
             }
+            this._maxFeePerGas = maxFeePerGas;
+            this._maxPriorityFeePerGas = maxPriorityFeePerGas;
             this.updateVerificationGasLimit();
             this.updatePreVerificationGas();
             if ('OPTIMISM' === chainName) {
-                if ((0, numberLike_1.toNumber)(this._maxPriorityFeePerGasL2) !== (0, numberLike_1.toNumber)(this._maxFeePerGasL2)) {
+                if ((0, numberLike_1.toNumber)(this._maxPriorityFeePerGas) !== (0, numberLike_1.toNumber)(this._maxFeePerGas)) {
                     throw new Error('EIP1559 fee is not supported');
                 }
                 const reasonableGasPrice = yield optimistic_1.Optimistic.calcGasPrice(l2Provider, this);
@@ -407,6 +404,9 @@ class UserOperation {
                 this._maxPriorityFeePerGas = reasonableGasPrice;
             }
             else if ('ARBITRUM' === chainName) {
+                const reasonableGasPrice = yield arbitrum_1.Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper);
+                this._maxFeePerGas = reasonableGasPrice;
+                this._maxPriorityFeePerGas = reasonableGasPrice;
             }
         });
     }
@@ -477,11 +477,13 @@ class UserOperation {
         return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
     }
     /**
-     * @description get the required prefund
-     * @param {(BigNumber | NumberLike)?} basefee the basefee
-     * @returns {BigNumber} the required prefund
+     *
+     *
+     * @param {(BigNumber | NumberLike)} [basefee]
+     * @return {*}  {BigNumber}
+     * @memberof UserOperation
      */
-    requiredPrefund(basefee) {
+    maxGasPrice(basefee) {
         /*
          uint256 maxFeePerGas = mUserOp.maxFeePerGas;
         uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
@@ -500,73 +502,45 @@ class UserOperation {
         else {
             if (basefee !== undefined) {
                 basefee = ethers_1.BigNumber.from(basefee);
-                const _fee = basefee.add(maxPriorityFeePerGas);
+                const _fee = (basefee.add(maxPriorityFeePerGas));
                 gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
             }
             else {
                 gasPrice = maxFeePerGas;
             }
         }
-        /*
-       //when using a Paymaster, the verificationGasLimit is used also to as a limit for the postOp call.
-       // our security model might call postOp eventually twice
-       uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
-       uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
-
-       // TODO: copy logic of gasPrice?
-       requiredPrefund = requiredGas * getUserOpGasPrice(mUserOp);
-       */
-        const noPaymaster = this.paymasterAndData === address_1.AddressZero || this.paymasterAndData === '0x';
-        const mul = noPaymaster ? 1 : 3;
-        const requiredGas = ethers_1.BigNumber.from(this.callGasLimit).add(ethers_1.BigNumber.from(this.verificationGasLimit).mul(mul)).add(ethers_1.BigNumber.from(this.preVerificationGas));
-        const requiredPrefund = requiredGas.mul(gasPrice);
-        return requiredPrefund;
+        return gasPrice;
     }
     /**
-   * @description get the required prefund
-   * @param {(BigNumber | NumberLike)?} basefee the basefee
-   * @returns {BigNumber} the required prefund
-   */
-    requiredPrefundL2(basefee) {
-        /*
-         uint256 maxFeePerGas = mUserOp.maxFeePerGas;
-        uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
-        if (maxFeePerGas == maxPriorityFeePerGas) {
-            //legacy mode (for networks that don't support basefee opcode)
-            return maxFeePerGas;
-        }
-        return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
-        */
-        let gasPrice;
-        const maxFeePerGas = ethers_1.BigNumber.from(this._maxFeePerGas);
-        const maxPriorityFeePerGas = ethers_1.BigNumber.from(this._maxPriorityFeePerGas);
-        if (maxFeePerGas.eq(maxPriorityFeePerGas)) {
-            gasPrice = maxFeePerGas;
-        }
-        else {
-            if (basefee !== undefined) {
-                basefee = ethers_1.BigNumber.from(basefee);
-                const _fee = basefee.add(maxPriorityFeePerGas);
-                gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
-            }
-            else {
-                gasPrice = maxFeePerGas;
-            }
-        }
+     *
+     *
+     * @return {*}  {BigNumber}
+     * @memberof UserOperation
+     */
+    requiredGas() {
         /*
        //when using a Paymaster, the verificationGasLimit is used also to as a limit for the postOp call.
        // our security model might call postOp eventually twice
        uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
        uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
-
+    
        // TODO: copy logic of gasPrice?
        requiredPrefund = requiredGas * getUserOpGasPrice(mUserOp);
        */
         const noPaymaster = this.paymasterAndData === address_1.AddressZero || this.paymasterAndData === '0x';
         const mul = noPaymaster ? 1 : 3;
         const requiredGas = ethers_1.BigNumber.from(this.callGasLimit).add(ethers_1.BigNumber.from(this.verificationGasLimit).mul(mul)).add(ethers_1.BigNumber.from(this.preVerificationGas));
-        const requiredPrefund = requiredGas.mul(gasPrice);
-        return requiredPrefund;
+        return requiredGas;
+    }
+    /**
+        * @description get the required prefund
+        * @param {(BigNumber | NumberLike)?} basefee the basefee
+        * @returns {BigNumber} the required prefund
+        */
+    requiredPrefund(basefee) {
+        const gasPrice = this.maxGasPrice(basefee);
+        const requiredGas = this.requiredGas();
+        return gasPrice.mul(requiredGas);
     }
 }
 exports.UserOperation = UserOperation;

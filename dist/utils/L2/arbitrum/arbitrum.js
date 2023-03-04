@@ -10,9 +10,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Arbitrum = void 0;
+/*
+ * @Description:
+ * @Version: 1.0
+ * @Autor: z.cejay@gmail.com
+ * @Date: 2023-03-02 10:08:05
+ * @LastEditors: cejay
+ * @LastEditTime: 2023-03-03 18:37:30
+ */
+const ethers_1 = require("ethers");
+const estimateGasHelper_1 = require("../../../contracts/estimateGasHelper");
+const arbitrumNodeInterface_1 = require("./arbitrumNodeInterface");
 class Arbitrum {
-    static calcGasPrice(l2Provider, op) {
+    /**
+     *
+     *
+     * @static
+     * @param {ethers.providers.BaseProvider} l2Provider
+     * @param {UserOperation} op
+     * @param {(BigNumber | NumberLike)} basefee
+     * @param {string} entryPointAddress
+     * @param {string} estimateGasHelper
+     * @return {*}  {Promise<string>}
+     * @memberof Arbitrum
+     */
+    static calcGasPrice(l2Provider, op, basefee, entryPointAddress, estimateGasHelper) {
         return __awaiter(this, void 0, void 0, function* () {
+            // estimateGas with EstimateGasHelper
+            let encodeABI = new ethers_1.ethers.utils.Interface(estimateGasHelper_1.EstimateGasHelper.ABI).encodeFunctionData("simulateValidation", [entryPointAddress, op]);
+            const _gasLimit = yield arbitrumNodeInterface_1.ArbitrumNodeInterface.gasEstimateComponents(l2Provider, estimateGasHelper, encodeABI);
+            const gasLimitForL1 = _gasLimit.gasEstimateForL1;
+            const requiredGasL2 = op.requiredGas();
+            const maxGasPriceL2 = op.maxGasPrice(basefee);
+            const constL1 = gasLimitForL1.mul(maxGasPriceL2);
+            const constL1PreGas = constL1.div(requiredGasL2);
+            const reasonableGasPrice = (maxGasPriceL2.add(constL1PreGas)).toHexString();
+            return reasonableGasPrice;
         });
     }
 }
