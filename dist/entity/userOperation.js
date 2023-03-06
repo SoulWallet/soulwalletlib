@@ -482,41 +482,6 @@ class UserOperation {
     /**
      *
      *
-     * @param {(BigNumber | NumberLike)} [basefee]
-     * @return {*}  {BigNumber}
-     * @memberof UserOperation
-     */
-    maxGasPrice(basefee) {
-        /*
-         uint256 maxFeePerGas = mUserOp.maxFeePerGas;
-        uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
-        if (maxFeePerGas == maxPriorityFeePerGas) {
-            //legacy mode (for networks that don't support basefee opcode)
-            return maxFeePerGas;
-        }
-        return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
-        */
-        let gasPrice;
-        const maxFeePerGas = ethers_1.BigNumber.from(this.maxFeePerGas);
-        const maxPriorityFeePerGas = ethers_1.BigNumber.from(this.maxPriorityFeePerGas);
-        if (maxFeePerGas.eq(maxPriorityFeePerGas)) {
-            gasPrice = maxFeePerGas;
-        }
-        else {
-            if (basefee !== undefined) {
-                basefee = ethers_1.BigNumber.from(basefee);
-                const _fee = (basefee.add(maxPriorityFeePerGas));
-                gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
-            }
-            else {
-                gasPrice = maxFeePerGas;
-            }
-        }
-        return gasPrice;
-    }
-    /**
-     *
-     *
      * @return {*}  {BigNumber}
      * @memberof UserOperation
      */
@@ -537,11 +502,10 @@ class UserOperation {
     }
     /**
         * @description get the required prefund
-        * @param {(BigNumber | NumberLike)?} basefee the basefee
         * @returns {BigNumber} the required prefund
         */
-    requiredPrefund(basefee) {
-        const gasPrice = this.maxGasPrice(basefee);
+    requiredPrefund() {
+        const gasPrice = ethers_1.BigNumber.from(this.maxFeePerGas);
         const requiredGas = this.requiredGas();
         return gasPrice.mul(requiredGas);
     }

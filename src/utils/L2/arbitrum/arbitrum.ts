@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:08:05
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-06 17:16:19
+ * @LastEditTime: 2023-03-06 23:26:22
  */
 import { BigNumber, ethers } from 'ethers';
 import { EstimateGasHelper } from '../../../contracts/estimateGasHelper';
@@ -44,7 +44,7 @@ export class Arbitrum {
         const gasLimitForL1 = _gasLimit.gasEstimateForL1;
 
         const requiredGasL2 = op.requiredGas();
-        const maxGasPriceL2 = op.maxGasPrice(basefee);
+        const maxGasPriceL2 = BigNumber.from(op.maxFeePerGas);
         const constL1 = gasLimitForL1.mul(maxGasPriceL2);
         const constL1PreGas = constL1.div(requiredGasL2);
         const reasonableGasPrice = maxGasPriceL2.add(constL1PreGas);
@@ -52,7 +52,7 @@ export class Arbitrum {
         const _basefee = BigNumber.from(basefee);
         if (reasonableGasPrice.gt(_basefee)) {
             return {
-                maxFeePerGas: reasonableGasPrice.mul(120).div(100).toHexString(),// +20% of maxFeePerGas
+                maxFeePerGas: reasonableGasPrice.toHexString(),
                 maxPriorityFeePerGas: reasonableGasPrice.sub(_basefee).toHexString()
             };
         }

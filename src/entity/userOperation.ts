@@ -434,7 +434,7 @@ class UserOperation {
             }
             reasonableGasPrice = await Optimistic.calcGasPrice(l2Provider, this);
         } else if ('ARBITRUM' === chainName) {
-            reasonableGasPrice = await Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper,entryPointAddress);
+            reasonableGasPrice = await Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper, entryPointAddress);
 
         } else {
             throw new Error('chainid is not supported');
@@ -520,41 +520,6 @@ class UserOperation {
         return ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
     }
 
-
-    /**
-     *
-     *
-     * @param {(BigNumber | NumberLike)} [basefee]
-     * @return {*}  {BigNumber}
-     * @memberof UserOperation
-     */
-    public maxGasPrice(basefee?: BigNumber | NumberLike): BigNumber {
-        /* 
-         uint256 maxFeePerGas = mUserOp.maxFeePerGas;
-        uint256 maxPriorityFeePerGas = mUserOp.maxPriorityFeePerGas;
-        if (maxFeePerGas == maxPriorityFeePerGas) {
-            //legacy mode (for networks that don't support basefee opcode)
-            return maxFeePerGas;
-        }
-        return min(maxFeePerGas, maxPriorityFeePerGas + block.basefee);
-        */
-        let gasPrice: BigNumber;
-        const maxFeePerGas = BigNumber.from(this.maxFeePerGas);
-        const maxPriorityFeePerGas = BigNumber.from(this.maxPriorityFeePerGas);
-        if (maxFeePerGas.eq(maxPriorityFeePerGas)) {
-            gasPrice = maxFeePerGas;
-        } else {
-            if (basefee !== undefined) {
-                basefee = BigNumber.from(basefee);
-                const _fee = (basefee.add(maxPriorityFeePerGas));
-                gasPrice = _fee.gt(maxFeePerGas) ? maxFeePerGas : _fee;
-            } else {
-                gasPrice = maxFeePerGas;
-            }
-        }
-        return gasPrice;
-    }
-
     /**
      *
      *
@@ -578,11 +543,10 @@ class UserOperation {
     }
     /**
         * @description get the required prefund
-        * @param {(BigNumber | NumberLike)?} basefee the basefee
         * @returns {BigNumber} the required prefund
         */
-    public requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber {
-        const gasPrice = this.maxGasPrice(basefee);
+    public requiredPrefund(): BigNumber {
+        const gasPrice = BigNumber.from(this.maxFeePerGas);
         const requiredGas = this.requiredGas();
         return gasPrice.mul(requiredGas);
     }
