@@ -434,7 +434,7 @@ class UserOperation {
             }
             reasonableGasPrice = await Optimistic.calcGasPrice(l2Provider, this);
         } else if ('ARBITRUM' === chainName) {
-            reasonableGasPrice = await Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper);
+            reasonableGasPrice = await Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper,entryPointAddress);
 
         } else {
             throw new Error('chainid is not supported');

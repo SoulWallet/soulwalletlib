@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:08:05
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-05 14:51:36
+ * @LastEditTime: 2023-03-06 17:16:19
  */
 import { BigNumber, ethers } from 'ethers';
 import { EstimateGasHelper } from '../../../contracts/estimateGasHelper';
@@ -34,12 +34,13 @@ export class Arbitrum {
         op: UserOperation,
         basefee: BigNumber | NumberLike,
         entryPointAddress: string,
-        estimateGasHelper: string
+        estimateGasHelper: string,
+        from: string | undefined
     ): Promise<IGasPrice> {
         // estimateGas with EstimateGasHelper
         let encodeABI = new ethers.utils.Interface(EstimateGasHelper.ABI).encodeFunctionData("simulateValidation", [entryPointAddress, op]);
 
-        const _gasLimit = await ArbitrumNodeInterface.gasEstimateComponents(l2Provider, estimateGasHelper, encodeABI);
+        const _gasLimit = await ArbitrumNodeInterface.gasEstimateComponents(l2Provider, from, estimateGasHelper, encodeABI);
         const gasLimitForL1 = _gasLimit.gasEstimateForL1;
 
         const requiredGasL2 = op.requiredGas();

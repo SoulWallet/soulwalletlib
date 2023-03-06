@@ -16,12 +16,12 @@ exports.ArbitrumNodeInterface = void 0;
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 11:02:34
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 19:36:28
+ * @LastEditTime: 2023-03-06 17:08:05
  */
 const ethers_1 = require("ethers");
 const abi_1 = require("./abi");
 class ArbitrumNodeInterface {
-    static gasEstimateComponents(etherProvider, to, calldata, contractCreation = false) {
+    static gasEstimateComponents(etherProvider, from, to, calldata, contractCreation = false) {
         return __awaiter(this, void 0, void 0, function* () {
             const encodeABI = new ethers_1.ethers.utils.Interface(abi_1.ArbitrumNodeInterfaceABI).encodeFunctionData("gasEstimateComponents", [
                 to,
@@ -30,7 +30,8 @@ class ArbitrumNodeInterface {
             ]);
             const gasLimit = yield etherProvider.call({
                 to: ArbitrumNodeInterface.arbitrumNodeInterface,
-                data: encodeABI
+                data: encodeABI,
+                from: from
             });
             const decodeABI = new ethers_1.ethers.utils.Interface(abi_1.ArbitrumNodeInterfaceABI).decodeFunctionResult("gasEstimateComponents", gasLimit);
             return {

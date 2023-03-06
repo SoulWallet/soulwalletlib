@@ -16,7 +16,7 @@ exports.ETH = exports.ERC1155 = exports.ERC721 = exports.ERC20 = exports.Token =
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 21:45:49
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 17:57:59
+ * @LastEditTime: 2023-03-06 15:41:23
  */
 const userOperation_1 = require("../entity/userOperation");
 const ABI_1 = require("../defines/ABI");
@@ -27,6 +27,22 @@ const estimateGas_1 = require("./estimateGas");
  * @class Token
  */
 class Token {
+    /**
+     *
+     *
+     * @param {ethers.providers.BaseProvider} etherProvider
+     * @param {string} walletAddress
+     * @param {NumberLike} nonce
+     * @param {string} entryPointAddress
+     * @param {string} paymasterAndData
+     * @param {NumberLike} maxFeePerGas
+     * @param {NumberLike} maxPriorityFeePerGas
+     * @param {string} callContract
+     * @param {string} encodeABI
+     * @param {string} [value='0']
+     * @return {*}
+     * @memberof Token
+     */
     createOp(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, callContract, encodeABI, value = '0') {
         return __awaiter(this, void 0, void 0, function* () {
             walletAddress = ethers_1.ethers.utils.getAddress(walletAddress);
