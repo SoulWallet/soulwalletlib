@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:07:56
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 19:37:40
+ * @LastEditTime: 2023-03-05 14:49:07
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -23,6 +23,15 @@ const address_1 = require("../../../defines/address");
 const userOp_1 = require("../../userOp");
 const optimisticL1GasPriceOracle_1 = require("./optimisticL1GasPriceOracle");
 class Optimistic {
+    /**
+     *
+     *
+     * @static
+     * @param {ethers.providers.BaseProvider} l2Provider
+     * @param {UserOperation} op
+     * @return {*}  {Promise<IGasPrice>}
+     * @memberof Optimistic
+     */
     static calcGasPrice(l2Provider, op) {
         return __awaiter(this, void 0, void 0, function* () {
             const calldataL1 = userOp_1.UserOp.packUserOpForCallData(op);
@@ -32,7 +41,7 @@ class Optimistic {
             //OptimisticGasPriceOracle
             const optimisticL1GasPriceOracle = new optimisticL1GasPriceOracle_1.OptimisticL1GasPriceOracle(l2Provider);
             // L2 cost
-            const l2Cost = op.requiredPrefundL2();
+            const l2Cost = op.requiredPrefund();
             /*
                     uint256 l1GasUsed = getL1GasUsed(_data);
                     uint256 l1Fee = l1GasUsed * l1BaseFee;
@@ -47,9 +56,11 @@ class Optimistic {
             const noPaymaster = op.paymasterAndData === address_1.AddressZero || op.paymasterAndData === '0x';
             const mul = noPaymaster ? 1 : 3;
             const requiredGas = ethers_1.BigNumber.from(op.callGasLimit).add(ethers_1.BigNumber.from(op.verificationGasLimit).mul(mul)).add(ethers_1.BigNumber.from(op.preVerificationGas));
-            const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toString();
-            return reasonableGasPrice;
-            ``;
+            const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toHexString();
+            return {
+                maxFeePerGas: reasonableGasPrice,
+                maxPriorityFeePerGas: reasonableGasPrice,
+            };
         });
     }
 }

@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:07:56
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 19:37:40
+ * @LastEditTime: 2023-03-05 14:49:07
  */
 
 
@@ -12,11 +12,22 @@ import { BigNumber, ethers } from 'ethers';
 import { AddressZero } from '../../../defines/address';
 import { UserOperation } from '../../../entity/userOperation';
 import { UserOp } from '../../userOp';
+import { IGasPrice } from '../IgasPrice';
 import { OptimisticL1GasPriceOracle } from './optimisticL1GasPriceOracle';
 
-
 export class Optimistic {
-    public static async calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation) {
+
+
+    /**
+     *
+     *
+     * @static
+     * @param {ethers.providers.BaseProvider} l2Provider
+     * @param {UserOperation} op
+     * @return {*}  {Promise<IGasPrice>}
+     * @memberof Optimistic
+     */
+    public static async calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation): Promise<IGasPrice> {
         const calldataL1 = UserOp.packUserOpForCallData(op);
 
         /* 
@@ -26,7 +37,7 @@ export class Optimistic {
         const optimisticL1GasPriceOracle = new OptimisticL1GasPriceOracle(l2Provider);
 
         // L2 cost
-        const l2Cost = op.requiredPrefundL2();
+        const l2Cost = op.requiredPrefund();
 
         /* 
                 uint256 l1GasUsed = getL1GasUsed(_data);
@@ -45,8 +56,11 @@ export class Optimistic {
         const mul = noPaymaster ? 1 : 3;
         const requiredGas = BigNumber.from(op.callGasLimit).add(BigNumber.from(op.verificationGasLimit).mul(mul)).add(BigNumber.from(op.preVerificationGas));
 
-        const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toString();
+        const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toHexString();
 
-        return reasonableGasPrice;``
+        return {
+            maxFeePerGas: reasonableGasPrice,
+            maxPriorityFeePerGas: reasonableGasPrice,
+        };
     }
 }

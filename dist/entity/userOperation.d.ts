@@ -58,11 +58,9 @@ declare class UserOperation {
     get preVerificationGas(): NumberLike;
     set preVerificationGas(value: NumberLike);
     private _maxFeePerGas;
-    private _maxFeePerGasL2;
     get maxFeePerGas(): NumberLike;
     set maxFeePerGas(value: NumberLike);
     private _maxPriorityFeePerGas;
-    private _maxPriorityFeePerGasL2;
     get maxPriorityFeePerGas(): NumberLike;
     set maxPriorityFeePerGas(value: NumberLike);
     private _paymasterAndData;
@@ -119,12 +117,18 @@ declare class UserOperation {
     private updatePreVerificationGas;
     private updateVerificationGasLimit;
     /**
-     * calc l2 gas price
+     *
      *
      * @param {ethers.providers.BaseProvider} l2Provider
+     * @param {(BigNumber | NumberLike)} basefee basefee(wei)
+     * @param {NumberLike} maxFeePerGas maxFeePerGas(wei)
+     * @param {NumberLike} maxPriorityFeePerGas maxPriorityFeePerGas(wei)
+     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57']
+     * @param {string} [estimateGasHelper='0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e']
+     * @return {*}
      * @memberof UserOperation
      */
-    calcL2GasPrice(l2Provider: ethers.providers.BaseProvider): Promise<void>;
+    calcL2GasPrice(l2Provider: ethers.providers.BaseProvider, basefee: BigNumber | NumberLike, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, entryPointAddress?: string, estimateGasHelper?: string): Promise<void>;
     /**
      * @description estimate gas
      * @param {string} entryPointAddress the entry point address
@@ -163,16 +167,25 @@ declare class UserOperation {
      */
     getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, validAfter?: number, validUntil?: number): string;
     /**
-     * @description get the required prefund
-     * @param {(BigNumber | NumberLike)?} basefee the basefee
-     * @returns {BigNumber} the required prefund
+     *
+     *
+     * @param {(BigNumber | NumberLike)} [basefee]
+     * @return {*}  {BigNumber}
+     * @memberof UserOperation
      */
-    requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber;
+    maxGasPrice(basefee?: BigNumber | NumberLike): BigNumber;
     /**
-   * @description get the required prefund
-   * @param {(BigNumber | NumberLike)?} basefee the basefee
-   * @returns {BigNumber} the required prefund
-   */
-    requiredPrefundL2(basefee?: BigNumber | NumberLike): BigNumber;
+     *
+     *
+     * @return {*}  {BigNumber}
+     * @memberof UserOperation
+     */
+    requiredGas(): BigNumber;
+    /**
+        * @description get the required prefund
+        * @param {(BigNumber | NumberLike)?} basefee the basefee
+        * @returns {BigNumber} the required prefund
+        */
+    requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber;
 }
 export { UserOperation };
