@@ -76,7 +76,7 @@ class UserOp {
                 name: 'userOp',
                 type: 'tuple'
             };
-            let encoded = utils_1.defaultAbiCoder.encode([userOpType], [Object.assign(Object.assign({}, op), { signature: '0x' })]);
+            let encoded = utils_1.defaultAbiCoder.encode([userOpType], [Object.assign(Object.assign({}, op), { _signature: '0x' })]);
             // remove leading word (total length) and trailing word (zero-length signature)
             encoded = '0x' + encoded.slice(66, encoded.length - 64);
             return encoded;

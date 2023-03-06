@@ -104,7 +104,7 @@ export class UserOp {
         name: 'userOp',
         type: 'tuple'
       }
-      let encoded = defaultAbiCoder.encode([userOpType as any], [{ ...op, signature: '0x' }])
+      let encoded = defaultAbiCoder.encode([userOpType as any], [{ ...op, _signature: '0x' }]);
       // remove leading word (total length) and trailing word (zero-length signature)
       encoded = '0x' + encoded.slice(66, encoded.length - 64)
       return encoded
