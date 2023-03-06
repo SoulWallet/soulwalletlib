@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:07:56
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-03 17:41:51
+ * @LastEditTime: 2023-03-05 14:49:07
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -29,7 +29,7 @@ class Optimistic {
      * @static
      * @param {ethers.providers.BaseProvider} l2Provider
      * @param {UserOperation} op
-     * @return {*}  {Promise<string>}
+     * @return {*}  {Promise<IGasPrice>}
      * @memberof Optimistic
      */
     static calcGasPrice(l2Provider, op) {
@@ -56,9 +56,11 @@ class Optimistic {
             const noPaymaster = op.paymasterAndData === address_1.AddressZero || op.paymasterAndData === '0x';
             const mul = noPaymaster ? 1 : 3;
             const requiredGas = ethers_1.BigNumber.from(op.callGasLimit).add(ethers_1.BigNumber.from(op.verificationGasLimit).mul(mul)).add(ethers_1.BigNumber.from(op.preVerificationGas));
-            const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toString();
-            return reasonableGasPrice;
-            ``;
+            const reasonableGasPrice = cost.div(requiredGas).mul(120).div(100).toHexString();
+            return {
+                maxFeePerGas: reasonableGasPrice,
+                maxPriorityFeePerGas: reasonableGasPrice,
+            };
         });
     }
 }

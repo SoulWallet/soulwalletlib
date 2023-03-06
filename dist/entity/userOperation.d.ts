@@ -120,10 +120,11 @@ declare class UserOperation {
      *
      *
      * @param {ethers.providers.BaseProvider} l2Provider
-     * @param {NumberLike} maxFeePerGas
-     * @param {NumberLike} maxPriorityFeePerGas
-     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57'] only for arbitrum
-     * @param {string} [estimateGasHelper='0x58c620C9059914B8989250f3B760F0ff4c27b055'] only for arbitrum
+     * @param {(BigNumber | NumberLike)} basefee basefee(wei)
+     * @param {NumberLike} maxFeePerGas maxFeePerGas(wei)
+     * @param {NumberLike} maxPriorityFeePerGas maxPriorityFeePerGas(wei)
+     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57']
+     * @param {string} [estimateGasHelper='0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e']
      * @return {*}
      * @memberof UserOperation
      */

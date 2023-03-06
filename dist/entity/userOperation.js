@@ -370,10 +370,11 @@ class UserOperation {
      *
      *
      * @param {ethers.providers.BaseProvider} l2Provider
-     * @param {NumberLike} maxFeePerGas
-     * @param {NumberLike} maxPriorityFeePerGas
-     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57'] only for arbitrum
-     * @param {string} [estimateGasHelper='0x58c620C9059914B8989250f3B760F0ff4c27b055'] only for arbitrum
+     * @param {(BigNumber | NumberLike)} basefee basefee(wei)
+     * @param {NumberLike} maxFeePerGas maxFeePerGas(wei)
+     * @param {NumberLike} maxPriorityFeePerGas maxPriorityFeePerGas(wei)
+     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57']
+     * @param {string} [estimateGasHelper='0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e']
      * @return {*}
      * @memberof UserOperation
      */
@@ -395,19 +396,21 @@ class UserOperation {
             this._maxPriorityFeePerGas = maxPriorityFeePerGas;
             this.updateVerificationGasLimit();
             this.updatePreVerificationGas();
+            let reasonableGasPrice;
             if ('OPTIMISM' === chainName) {
                 if ((0, numberLike_1.toNumber)(this._maxPriorityFeePerGas) !== (0, numberLike_1.toNumber)(this._maxFeePerGas)) {
                     throw new Error('EIP1559 fee is not supported');
                 }
-                const reasonableGasPrice = yield optimistic_1.Optimistic.calcGasPrice(l2Provider, this);
-                this._maxFeePerGas = reasonableGasPrice;
-                this._maxPriorityFeePerGas = reasonableGasPrice;
+                reasonableGasPrice = yield optimistic_1.Optimistic.calcGasPrice(l2Provider, this);
             }
             else if ('ARBITRUM' === chainName) {
-                const reasonableGasPrice = yield arbitrum_1.Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper);
-                this._maxFeePerGas = reasonableGasPrice;
-                this._maxPriorityFeePerGas = reasonableGasPrice;
+                reasonableGasPrice = yield arbitrum_1.Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper);
             }
+            else {
+                throw new Error('chainid is not supported');
+            }
+            this._maxFeePerGas = reasonableGasPrice.maxFeePerGas;
+            this._maxPriorityFeePerGas = reasonableGasPrice.maxPriorityFeePerGas;
         });
     }
     /**

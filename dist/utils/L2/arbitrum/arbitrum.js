@@ -16,7 +16,7 @@ exports.Arbitrum = void 0;
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:08:05
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-03 18:37:30
+ * @LastEditTime: 2023-03-05 14:51:36
  */
 const ethers_1 = require("ethers");
 const estimateGasHelper_1 = require("../../../contracts/estimateGasHelper");
@@ -31,7 +31,7 @@ class Arbitrum {
      * @param {(BigNumber | NumberLike)} basefee
      * @param {string} entryPointAddress
      * @param {string} estimateGasHelper
-     * @return {*}  {Promise<string>}
+     * @return {*}  {Promise<IGasPrice>}
      * @memberof Arbitrum
      */
     static calcGasPrice(l2Provider, op, basefee, entryPointAddress, estimateGasHelper) {
@@ -44,8 +44,18 @@ class Arbitrum {
             const maxGasPriceL2 = op.maxGasPrice(basefee);
             const constL1 = gasLimitForL1.mul(maxGasPriceL2);
             const constL1PreGas = constL1.div(requiredGasL2);
-            const reasonableGasPrice = (maxGasPriceL2.add(constL1PreGas)).toHexString();
-            return reasonableGasPrice;
+            const reasonableGasPrice = maxGasPriceL2.add(constL1PreGas);
+            const _basefee = ethers_1.BigNumber.from(basefee);
+            if (reasonableGasPrice.gt(_basefee)) {
+                return {
+                    maxFeePerGas: reasonableGasPrice.mul(120).div(100).toHexString(),
+                    maxPriorityFeePerGas: reasonableGasPrice.sub(_basefee).toHexString()
+                };
+            }
+            return {
+                maxFeePerGas: op.maxFeePerGas,
+                maxPriorityFeePerGas: op.maxPriorityFeePerGas
+            };
         });
     }
 }

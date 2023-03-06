@@ -1,6 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
 import { NumberLike } from '../../../defines/numberLike';
 import { UserOperation } from '../../../entity/userOperation';
+import { IGasPrice } from '../IgasPrice';
 export declare class Arbitrum {
     /**
      *
@@ -11,8 +12,8 @@ export declare class Arbitrum {
      * @param {(BigNumber | NumberLike)} basefee
      * @param {string} entryPointAddress
      * @param {string} estimateGasHelper
-     * @return {*}  {Promise<string>}
+     * @return {*}  {Promise<IGasPrice>}
      * @memberof Arbitrum
      */
-    static calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation, basefee: BigNumber | NumberLike, entryPointAddress: string, estimateGasHelper: string): Promise<string>;
+    static calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation, basefee: BigNumber | NumberLike, entryPointAddress: string, estimateGasHelper: string): Promise<IGasPrice>;
 }
