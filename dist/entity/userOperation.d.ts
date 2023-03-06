@@ -169,23 +169,14 @@ declare class UserOperation {
     /**
      *
      *
-     * @param {(BigNumber | NumberLike)} [basefee]
-     * @return {*}  {BigNumber}
-     * @memberof UserOperation
-     */
-    maxGasPrice(basefee?: BigNumber | NumberLike): BigNumber;
-    /**
-     *
-     *
      * @return {*}  {BigNumber}
      * @memberof UserOperation
      */
     requiredGas(): BigNumber;
     /**
         * @description get the required prefund
-        * @param {(BigNumber | NumberLike)?} basefee the basefee
         * @returns {BigNumber} the required prefund
         */
-    requiredPrefund(basefee?: BigNumber | NumberLike): BigNumber;
+    requiredPrefund(): BigNumber;
 }
 export { UserOperation };
