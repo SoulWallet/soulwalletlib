@@ -15,5 +15,5 @@ export declare class Arbitrum {
      * @return {*}  {Promise<IGasPrice>}
      * @memberof Arbitrum
      */
-    static calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation, basefee: BigNumber | NumberLike, entryPointAddress: string, estimateGasHelper: string): Promise<IGasPrice>;
+    static calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation, basefee: BigNumber | NumberLike, entryPointAddress: string, estimateGasHelper: string, from: string | undefined): Promise<IGasPrice>;
 }

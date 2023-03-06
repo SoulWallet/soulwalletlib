@@ -7,5 +7,5 @@ export interface IEstimateComponents {
 }
 export declare class ArbitrumNodeInterface {
     static arbitrumNodeInterface: string;
-    static gasEstimateComponents(etherProvider: ethers.providers.BaseProvider, to: string, calldata: string, contractCreation?: boolean): Promise<IEstimateComponents>;
+    static gasEstimateComponents(etherProvider: ethers.providers.BaseProvider, from: string | undefined, to: string, calldata: string, contractCreation?: boolean): Promise<IEstimateComponents>;
 }

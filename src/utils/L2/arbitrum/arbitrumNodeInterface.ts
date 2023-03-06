@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 11:02:34
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 19:36:28
+ * @LastEditTime: 2023-03-06 17:08:05
  */
 import { BigNumber, ethers } from 'ethers';
 import { ArbitrumNodeInterfaceABI } from './abi';
@@ -21,6 +21,7 @@ export class ArbitrumNodeInterface {
 
     public static async gasEstimateComponents(
         etherProvider: ethers.providers.BaseProvider,
+        from: string | undefined,
         to: string,
         calldata: string, contractCreation = false
     ): Promise<IEstimateComponents> {
@@ -31,7 +32,8 @@ export class ArbitrumNodeInterface {
         ]);
         const gasLimit = await etherProvider.call({
             to: ArbitrumNodeInterface.arbitrumNodeInterface,
-            data: encodeABI
+            data: encodeABI,
+            from: from
         });
         const decodeABI = new ethers.utils.Interface(ArbitrumNodeInterfaceABI).decodeFunctionResult("gasEstimateComponents", gasLimit);
         return {

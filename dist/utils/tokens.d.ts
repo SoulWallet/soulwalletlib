@@ -7,6 +7,22 @@ import { IApproveToken } from "../interface/IApproveToken";
  * @class Token
  */
 export declare class Token {
+    /**
+     *
+     *
+     * @param {ethers.providers.BaseProvider} etherProvider
+     * @param {string} walletAddress
+     * @param {NumberLike} nonce
+     * @param {string} entryPointAddress
+     * @param {string} paymasterAndData
+     * @param {NumberLike} maxFeePerGas
+     * @param {NumberLike} maxPriorityFeePerGas
+     * @param {string} callContract
+     * @param {string} encodeABI
+     * @param {string} [value='0']
+     * @return {*}
+     * @memberof Token
+     */
     createOp(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike, entryPointAddress: string, paymasterAndData: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callContract: string, encodeABI: string, value?: string): Promise<UserOperation | null>;
 }
 /**

@@ -404,7 +404,7 @@ class UserOperation {
                 reasonableGasPrice = yield optimistic_1.Optimistic.calcGasPrice(l2Provider, this);
             }
             else if ('ARBITRUM' === chainName) {
-                reasonableGasPrice = yield arbitrum_1.Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper);
+                reasonableGasPrice = yield arbitrum_1.Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper, entryPointAddress);
             }
             else {
                 throw new Error('chainid is not supported');

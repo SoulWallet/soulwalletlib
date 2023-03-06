@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 10:41:26
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 19:37:01
+ * @LastEditTime: 2023-03-06 17:12:28
  */
 
 import { BigNumber, ethers } from "ethers";
@@ -31,7 +31,7 @@ export class EstimateGas {
         let gasLimitForL2: BigNumber | undefined;
         const chainId = await etherProvider.getNetwork().then((network) => network.chainId);
         if (chainId === CHAINID.ARBITRUM || chainId === CHAINID.ARBITRUM_GOERLI) {
-            const _gasLimit = await ArbitrumNodeInterface.gasEstimateComponents(etherProvider, transaction.to, transaction.data);
+            const _gasLimit = await ArbitrumNodeInterface.gasEstimateComponents(etherProvider, transaction.from, transaction.to, transaction.data);
             gasLimitForL1 = _gasLimit.gasEstimateForL1;
             gasLimitForL2 = gasLimit.sub(gasLimitForL1);
         }
