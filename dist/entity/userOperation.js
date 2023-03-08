@@ -18,6 +18,7 @@ const optimistic_1 = require("../utils/L2/optimistic/optimistic");
 const chainId_1 = require("../defines/chainId");
 const estimateGas_1 = require("../utils/estimateGas");
 const arbitrum_1 = require("../utils/L2/arbitrum/arbitrum");
+const signatures_1 = require("../utils/signatures");
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol
  */
@@ -445,13 +446,17 @@ class UserOperation {
         return userOp_1.UserOp.payMasterSignHash(this);
     }
     /**
-     * @description sign the user operation with signature
-     * @param {string} signAddress the sign address
-     * @param {string} signature the signature
-     * @returns {void}
+     *
+     *
+     * @param {string} signer
+     * @param {string} signature
+     * @param {SignatureMode} [signatureMode=SignatureMode.owner]
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
+     * @memberof UserOperation
      */
-    signWithSignature(signAddress, signature) {
-        this.signature = userOp_1.UserOp.signUserOpWithPersonalSign(signAddress, signature);
+    signWithSignature(signer, signature, signatureMode = signatures_1.SignatureMode.owner, validAfter = 0, validUntil = 0) {
+        this.signature = signatures_1.Signatures.encodeSignature(signatureMode, signer, signature, validAfter, validUntil);
     }
     /**
     * @description get the UserOpHash (userOp hash)
@@ -463,21 +468,23 @@ class UserOperation {
         return userOp_1.UserOp.getUserOpHash(this, entryPointAddress, chainId);
     }
     /**
-     * @description get the UserOpHash (userOp hash) with validAfter and validUntil
+     * get the UserOp Hash to be signed (packed UserOpHash with with time range)
      *
-     * @param {string} entryPointAddress the entry point address
-     * @param {number} chainId the chain id
-     * @param {number} [validAfter=0] the valid after
-     * @param {number} [validUntil=0] the valid until
+     * @param {string} entryPointAddress
+     * @param {number} chainId
+     * @param {string} signer
+     * @param {SignatureMode} [signatureMode=SignatureMode.owner]
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    getUserOpHashWithTimeRange(entryPointAddress, chainId, validAfter = 0, validUntil = 0) {
+    getUserOpHashWithTimeRange(entryPointAddress, chainId, signer, signatureMode = signatures_1.SignatureMode.owner, validAfter = 0, validUntil = 0) {
         if (validUntil < validAfter) {
             throw new Error('validUntil must be greater than validAfter');
         }
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
-        return ethers_1.ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
+        return signatures_1.Signatures.packSignatureHash(_hash, signer, signatureMode, validAfter, validUntil);
     }
     /**
      *

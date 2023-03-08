@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-08-04 21:05:35
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 10:45:05
+ * @LastEditTime: 2023-03-08 16:28:38
  */
 
 import { SoulWalletLib } from './exportLib/soulWalletLib';
@@ -13,6 +13,8 @@ import { IResult, IValidationResult, IStakeInfo, IReturnInfo, IFailedOp, IExecut
 import { IUserOpReceipt, ITransactionReceipt, ITransactionReceiptLog } from './interface/IUserOpReceipt';
 import { IApproveToken } from './interface/IApproveToken';
 import { ITransaction } from './interface/ITransaction';
+import { Bundler } from './utils/bundler';
+import { SignatureMode, Signatures } from './utils/signatures';
 
 /**
  * @module soulwalletlib
@@ -34,7 +36,10 @@ import { ITransaction } from './interface/ITransaction';
  */
 export {
     SoulWalletLib,
+    Bundler,
     UserOperation,
+    SignatureMode,
+    Signatures,
     IResult,
     IValidationResult,
     IStakeInfo,

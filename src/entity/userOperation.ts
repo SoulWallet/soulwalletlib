@@ -6,6 +6,7 @@ import { Optimistic } from "../utils/L2/optimistic/optimistic";
 import { CHAINID } from "../defines/chainId";
 import { EstimateGas } from "../utils/estimateGas";
 import { Arbitrum } from "../utils/L2/arbitrum/arbitrum";
+import { SignatureMode, Signatures } from "../utils/signatures";
 
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
@@ -482,14 +483,25 @@ class UserOperation {
         return UserOp.payMasterSignHash(this);
     }
 
+    
     /**
-     * @description sign the user operation with signature
-     * @param {string} signAddress the sign address
-     * @param {string} signature the signature
-     * @returns {void}
+     *
+     *
+     * @param {string} signer
+     * @param {string} signature
+     * @param {SignatureMode} [signatureMode=SignatureMode.owner]
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
+     * @memberof UserOperation
      */
-    public signWithSignature(signAddress: string, signature: string) {
-        this.signature = UserOp.signUserOpWithPersonalSign(signAddress, signature);
+    public signWithSignature(
+        signer: string,
+        signature: string,
+        signatureMode: SignatureMode = SignatureMode.owner,
+        validAfter: number = 0,
+        validUntil: number = 0,
+    ) {
+        this.signature = Signatures.encodeSignature(signatureMode, signer, signature, validAfter, validUntil)
     }
 
     /**
@@ -501,23 +513,26 @@ class UserOperation {
     public getUserOpHash(entryPointAddress: string, chainId: number): string {
         return UserOp.getUserOpHash(this, entryPointAddress, chainId);
     }
-
+    
     /**
-     * @description get the UserOpHash (userOp hash) with validAfter and validUntil
+     * get the UserOp Hash to be signed (packed UserOpHash with with time range) 
      *
-     * @param {string} entryPointAddress the entry point address
-     * @param {number} chainId the chain id
-     * @param {number} [validAfter=0] the valid after
-     * @param {number} [validUntil=0] the valid until
+     * @param {string} entryPointAddress
+     * @param {number} chainId
+     * @param {string} signer
+     * @param {SignatureMode} [signatureMode=SignatureMode.owner]
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    public getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, validAfter = 0, validUntil = 0): string {
+    public getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, signer: string,signatureMode: SignatureMode = SignatureMode.owner,validAfter = 0, validUntil = 0): string {
         if (validUntil < validAfter) {
             throw new Error('validUntil must be greater than validAfter');
         }
+
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
-        return ethers.utils.solidityKeccak256(['bytes32', 'uint48', 'uint48'], [_hash, validAfter, validUntil]);
+        return Signatures.packSignatureHash(_hash,signer,signatureMode,validAfter,validUntil);
     }
 
     /**

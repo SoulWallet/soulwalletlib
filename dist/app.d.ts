@@ -4,6 +4,8 @@ import { IResult, IValidationResult, IStakeInfo, IReturnInfo, IFailedOp, IExecut
 import { IUserOpReceipt, ITransactionReceipt, ITransactionReceiptLog } from './interface/IUserOpReceipt';
 import { IApproveToken } from './interface/IApproveToken';
 import { ITransaction } from './interface/ITransaction';
+import { Bundler } from './utils/bundler';
+import { SignatureMode, Signatures } from './utils/signatures';
 /**
  * @module soulwalletlib
  * @description SoulWalletLib
@@ -22,4 +24,4 @@ import { ITransaction } from './interface/ITransaction';
  * @property {ITransaction} ITransaction transaction interface
  *
  */
-export { SoulWalletLib, UserOperation, IResult, IValidationResult, IStakeInfo, IReturnInfo, IFailedOp, IExecutionResult, IUserOpReceipt, ITransactionReceipt, ITransactionReceiptLog, IApproveToken, ITransaction };
+export { SoulWalletLib, Bundler, UserOperation, SignatureMode, Signatures, IResult, IValidationResult, IStakeInfo, IReturnInfo, IFailedOp, IExecutionResult, IUserOpReceipt, ITransactionReceipt, ITransactionReceiptLog, IApproveToken, ITransaction };
