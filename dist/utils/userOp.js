@@ -4,14 +4,9 @@
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/test/UserOp.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserOp = exports.SignatureMode = void 0;
+exports.UserOp = void 0;
 const utils_1 = require("ethers/lib/utils");
 const ethers_1 = require("ethers");
-var SignatureMode;
-(function (SignatureMode) {
-    SignatureMode[SignatureMode["owner"] = 0] = "owner";
-    SignatureMode[SignatureMode["guardian"] = 1] = "guardian";
-})(SignatureMode = exports.SignatureMode || (exports.SignatureMode = {}));
 class UserOp {
     constructor() {
     }
@@ -103,24 +98,6 @@ class UserOp {
         const userOpHash = (0, utils_1.keccak256)(this.packUserOp(op, true));
         const enc = utils_1.defaultAbiCoder.encode(['bytes32', 'address', 'uint256'], [userOpHash, entryPointAddress, chainId]);
         return (0, utils_1.keccak256)(enc);
-    }
-    /**
-     * sign a user operation with the UserOpHash signature
-     * @param signAddress signer address
-     * @param signature the signature of the UserOpHash
-     * @param validAfter the signature is valid after this block time
-     * @param validUntil the signature is valid until this block time
-     * @returns signature
-     */
-    static signUserOpWithPersonalSign(signAddress, signature, validAfter = 0, validUntil = 0) {
-        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'], [
-            SignatureMode.owner,
-            signAddress,
-            validAfter,
-            validUntil,
-            signature
-        ]);
-        return enc;
     }
     static payMasterSignHash(op) {
         return (0, utils_1.keccak256)(utils_1.defaultAbiCoder.encode([
