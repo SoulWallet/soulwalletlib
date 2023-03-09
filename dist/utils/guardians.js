@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 18:02:34
+ * @LastEditTime: 2023-03-08 14:53:56
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -25,7 +25,7 @@ const guardianMultiSigWallet_1 = require("../contracts/guardianMultiSigWallet");
 const walletProxy_1 = require("../contracts/walletProxy");
 const utils_1 = require("ethers/lib/utils");
 const address_1 = require("../defines/address");
-const userOp_1 = require("./userOp");
+const signatures_1 = require("./signatures");
 /**
  * guardian class
  * @class Guardian
@@ -102,24 +102,19 @@ class Guardian {
     }
     /**
      * sign a user operation with guardian signatures
-     * @param {String} guardianAddress guardian contract address
-     * @param {guardianSignature[]} signatures guardian signatures
-     * @param {String} [initCode='0x'] intiCode must given when the guardian contract is not deployed
-     * @param {Number} validAfter valid after (block time)
-     * @param {Number} validUntil valid until (block time)
-     * @returns {String} signature
+     *
+     * @param {string} guardianAddress
+     * @param {guardianSignature[]} signature
+     * @param {string} [initCode='0x']
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
+     * @return {*}  {string}
+     * @memberof Guardian
      */
     packGuardiansSignByInitCode(guardianAddress, signature, initCode = '0x', validAfter = 0, validUntil = 0) {
         const signatureBytes = this.guardianSign(signature);
         const guardianCallData = utils_1.defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
-        const enc = utils_1.defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'], [
-            userOp_1.SignatureMode.guardian,
-            guardianAddress,
-            validAfter,
-            validUntil,
-            guardianCallData
-        ]);
-        return enc;
+        return signatures_1.Signatures.encodeSignature(signatures_1.SignatureMode.guardian, guardianAddress, guardianCallData, validAfter, validUntil);
     }
     /**
      * calculate Guardian address and deploy code (initCode)

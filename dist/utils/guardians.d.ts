@@ -32,12 +32,14 @@ export declare class Guardian {
     packGuardiansSign(validAfter: number, validUntil: number, signature: guardianSignature[], guardianLogicAddress: string, guardians: string[], threshold: number, salt: string, guardianAddress?: string): string;
     /**
      * sign a user operation with guardian signatures
-     * @param {String} guardianAddress guardian contract address
-     * @param {guardianSignature[]} signatures guardian signatures
-     * @param {String} [initCode='0x'] intiCode must given when the guardian contract is not deployed
-     * @param {Number} validAfter valid after (block time)
-     * @param {Number} validUntil valid until (block time)
-     * @returns {String} signature
+     *
+     * @param {string} guardianAddress
+     * @param {guardianSignature[]} signature
+     * @param {string} [initCode='0x']
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
+     * @return {*}  {string}
+     * @memberof Guardian
      */
     packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], initCode?: string, validAfter?: number, validUntil?: number): string;
     /**

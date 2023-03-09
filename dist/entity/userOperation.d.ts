@@ -1,5 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { NumberLike } from "../defines/numberLike";
+import { SignatureMode } from "../utils/signatures";
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol
  */
@@ -142,12 +143,16 @@ declare class UserOperation {
      */
     payMasterSignHash(): string;
     /**
-     * @description sign the user operation with signature
-     * @param {string} signAddress the sign address
-     * @param {string} signature the signature
-     * @returns {void}
+     *
+     *
+     * @param {string} signer
+     * @param {string} signature
+     * @param {SignatureMode} [signatureMode=SignatureMode.owner]
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
+     * @memberof UserOperation
      */
-    signWithSignature(signAddress: string, signature: string): void;
+    signWithSignature(signer: string, signature: string, signatureMode?: SignatureMode, validAfter?: number, validUntil?: number): void;
     /**
     * @description get the UserOpHash (userOp hash)
     * @param {string} entryPointAddress the entry point address
@@ -156,16 +161,18 @@ declare class UserOperation {
     */
     getUserOpHash(entryPointAddress: string, chainId: number): string;
     /**
-     * @description get the UserOpHash (userOp hash) with validAfter and validUntil
+     * get the UserOp Hash to be signed (packed UserOpHash with with time range)
      *
-     * @param {string} entryPointAddress the entry point address
-     * @param {number} chainId the chain id
-     * @param {number} [validAfter=0] the valid after
-     * @param {number} [validUntil=0] the valid until
+     * @param {string} entryPointAddress
+     * @param {number} chainId
+     * @param {string} signer
+     * @param {SignatureMode} [signatureMode=SignatureMode.owner]
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, validAfter?: number, validUntil?: number): string;
+    getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, signer: string, signatureMode?: SignatureMode, validAfter?: number, validUntil?: number): string;
     /**
      *
      *

@@ -8,10 +8,6 @@ import { ecsign, toRpcSig, fromRpcSig, keccak256 as keccak256_buffer } from 'eth
 import { UserOperation } from '../entity/userOperation'
 import { BigNumber, ethers } from "ethers";
 
-export enum SignatureMode {
-  owner = 0,
-  guardian = 1
-}
 export class UserOp {
 
 
@@ -136,27 +132,6 @@ export class UserOp {
     return keccak256(enc)
   }
 
-
-  /**
-   * sign a user operation with the UserOpHash signature
-   * @param signAddress signer address
-   * @param signature the signature of the UserOpHash
-   * @param validAfter the signature is valid after this block time
-   * @param validUntil the signature is valid until this block time
-   * @returns signature
-   */
-  public static signUserOpWithPersonalSign(signAddress: string, signature: string, validAfter = 0, validUntil = 0) {
-    const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'],
-      [
-        SignatureMode.owner,
-        signAddress,
-        validAfter,
-        validUntil,
-        signature
-      ]
-    );
-    return enc;
-  }
 
 
 

@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 18:02:34
+ * @LastEditTime: 2023-03-08 14:53:56
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -15,7 +15,7 @@ import { WalletProxyContract } from "../contracts/walletProxy";
 import { BytesLike, defaultAbiCoder, getCreate2Address, keccak256 } from "ethers/lib/utils";
 import { AddressZero } from "../defines/address";
 import { NumberLike, toNumber } from "../defines/numberLike";
-import { SignatureMode } from "./userOp";
+import { SignatureMode, Signatures } from "./signatures";
 
 
 /**
@@ -111,28 +111,20 @@ export class Guardian {
 
     /**
      * sign a user operation with guardian signatures
-     * @param {String} guardianAddress guardian contract address
-     * @param {guardianSignature[]} signatures guardian signatures
-     * @param {String} [initCode='0x'] intiCode must given when the guardian contract is not deployed
-     * @param {Number} validAfter valid after (block time)
-     * @param {Number} validUntil valid until (block time)
-     * @returns {String} signature
+     *
+     * @param {string} guardianAddress
+     * @param {guardianSignature[]} signature
+     * @param {string} [initCode='0x']
+     * @param {number} [validAfter=0]
+     * @param {number} [validUntil=0]
+     * @return {*}  {string}
+     * @memberof Guardian
      */
     public packGuardiansSignByInitCode(guardianAddress: string, signature: guardianSignature[], initCode = '0x', validAfter = 0, validUntil = 0
     ): string {
         const signatureBytes = this.guardianSign(signature);
-
         const guardianCallData = defaultAbiCoder.encode(['bytes', 'bytes'], [signatureBytes, initCode]);
-        const enc = defaultAbiCoder.encode(['uint8', 'address', 'uint48', 'uint48', 'bytes'],
-            [
-                SignatureMode.guardian,
-                guardianAddress,
-                validAfter,
-                validUntil,
-                guardianCallData
-            ]
-        );
-        return enc;
+        return Signatures.encodeSignature(SignatureMode.guardian, guardianAddress, guardianCallData, validAfter, validUntil);
     }
 
 
