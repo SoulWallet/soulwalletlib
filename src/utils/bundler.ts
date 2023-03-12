@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-03 09:44:07
+ * @LastEditTime: 2023-03-12 22:45:21
  */
 
 
@@ -19,7 +19,17 @@ import { EntryPointContract } from '../contracts/entryPoint';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { HttpRequest } from './httpRequest';
 import { IUserOpReceipt } from "../interface/IUserOpReceipt";
-import { IFailedOp, IResult } from "../interface/IResult";
+import { IFailedOp, IResult, IValidationResult } from "../interface/IResult";
+import { SignatureMode, Signatures } from "./signatures";
+import { IEstimateUserOpGasResult } from "../interface/IEstimateUserOpGasResult";
+import { CHAINID } from "../defines/chainId";
+import { Log } from '@ethersproject/providers'
+import { IUserOperation } from "../interface/IUserOperation";
+import { UserOp } from "./userOp";
+import { Optimistic } from "./L2/optimistic/optimistic";
+import { Arbitrum } from "./L2/arbitrum/arbitrum";
+import { toNumber } from "../defines/numberLike";
+import { EstimateGas } from "./estimateGas";
 
 
 
@@ -39,21 +49,29 @@ export class Bundler {
     private _entryPoint: string = '';
     private _etherProvider: ethers.providers.BaseProvider;
     private _bundlerApi?: string;
+    private _eoaPrivateKey?: string;
+    private _wallet?: ethers.Wallet;
+    private _entryPointContract?: ethers.Contract;
     private _timeout: ApiTimeOut = new ApiTimeOut();
+    private _chainId: number = -1;
 
     /**
      * Bundler utils
      * @constructor Bundler
      * @param {String} entryPoint the entry point address
      * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
-     * @param {String?} bundlerApi the bundler api url
+     * @param {String} bundlerApiOrEOAPrivateKey the bundler api url or the EOA private key
      * @param {ApiTimeOut?} timeout the timeout
      * @returns {Bundler}
      */
-    constructor(entryPoint: string, etherProvider: ethers.providers.BaseProvider, bundlerApi?: string, timeout?: ApiTimeOut) {
+    constructor(entryPoint: string, etherProvider: ethers.providers.BaseProvider, bundlerApiOrEOAPrivateKey: string, timeout?: ApiTimeOut) {
         this._entryPoint = entryPoint;
         this._etherProvider = etherProvider;
-        this._bundlerApi = bundlerApi;
+        if (bundlerApiOrEOAPrivateKey.startsWith('0x')) {
+            this._eoaPrivateKey = bundlerApiOrEOAPrivateKey;
+        } else {
+            this._bundlerApi = bundlerApiOrEOAPrivateKey;
+        }
         if (timeout) {
             this._timeout = timeout;
         }
@@ -91,8 +109,6 @@ export class Bundler {
             return;
         }
         try {
-            let _chainId = 0;
-
             // test web3Api
             {
                 // get chainId
@@ -100,19 +116,27 @@ export class Bundler {
                 if (!_network.chainId) {
                     throw new Error('web3Api error');
                 }
-                _chainId = _network.chainId;
+                this._chainId = _network.chainId;
             }
 
+
             // test bundlerApi
-            {
-                const _chainIdNumber = BigNumber.from(await this.eth_chainId()).toNumber();
-                if (_chainId !== _chainIdNumber) {
+            if (this._bundlerApi) {
+                const chainId = BigNumber.from(await this.eth_chainId()).toNumber();
+                if (chainId !== this._chainId) {
                     throw new Error('bundlerApi error');
                 }
                 const _eps = await this.eth_supportedEntryPoints();
                 if (!_eps.includes(this._entryPoint)) {
                     throw new Error('bundlerApi error');
                 }
+            }
+
+            if (this._eoaPrivateKey) {
+                this._wallet = new ethers.Wallet(this._eoaPrivateKey, this._etherProvider);
+                this._entryPointContract = new ethers.Contract(this._entryPoint, EntryPointContract.ABI, this._wallet);
+            } else {
+                this._entryPointContract = new ethers.Contract(this._entryPoint, EntryPointContract.ABI);
             }
 
             this._init = true;
@@ -127,15 +151,23 @@ export class Bundler {
      * @returns {Promise<String>} supported chainid
      */
     public async eth_chainId(timeout?: number): Promise<string> {
-        return this.rpcRequest<never[], string>(
-            {
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'eth_chainId',
-                params: []
-            },
-            timeout
-        );
+        if (this._bundlerApi) {
+            return this.rpcRequest<never[], string>(
+                {
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'eth_chainId',
+                    params: []
+                },
+                timeout
+            );
+        }
+        if (this._eoaPrivateKey) {
+            return this._chainId.toString();
+        }
+
+        throw new Error('bundlerApi or eoaPrivateKey is not set');
+
     }
 
     /**
@@ -143,14 +175,22 @@ export class Bundler {
      * @returns {Promise<String[]>} supported entry points
      */
     public async eth_supportedEntryPoints(timeout?: number) {
-        return this.rpcRequest<never[], string[]>(
-            {
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'eth_supportedEntryPoints',
-                params: []
-            }, timeout
-        );
+        if (this._bundlerApi) {
+            return this.rpcRequest<never[], string[]>(
+                {
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'eth_supportedEntryPoints',
+                    params: []
+                }, timeout
+            );
+        }
+        if (this._eoaPrivateKey) {
+            return [this._entryPoint];
+        }
+
+        throw new Error('bundlerApi or eoaPrivateKey is not set');
+
     }
 
     /**
@@ -159,32 +199,208 @@ export class Bundler {
      * @returns {Promise<String>} user operation hash
      */
     public async eth_sendUserOperation(userOp: UserOperation, timeout?: number) {
-        return this.rpcRequest<any[], string>(
-            {
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'eth_sendUserOperation',
-                params: [
-                    userOp.getStruct(),
-                    this._entryPoint
-                ]
-            }, timeout
-        );
+        if (this._bundlerApi) {
+            return this.rpcRequest<any[], string>(
+                {
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'eth_sendUserOperation',
+                    params: [
+                        userOp.getStruct(),
+                        this._entryPoint
+                    ]
+                }, timeout
+            );
+        }
+        if (this._eoaPrivateKey) {
+            this._entryPointContract?.handleOps(
+                [userOp.getStruct()], this._wallet?.address
+            );
+            return userOp.getUserOpHash(this._entryPoint, this._chainId);
+        }
+        throw new Error('bundlerApi or eoaPrivateKey is not set');
     }
 
-    public async eth_estimateUserOperationGas(userOp: UserOperation) {
-        throw new Error('not implement');
+
+    private recoveryWallet(calldata: string) {
+        /**
+          * if recovery wallet,preVerificationGas += 20000
+          * 0x4fb2e45d:transferOwner(address)
+          */
+        return calldata.startsWith('0x4fb2e45d');
+    }
+
+    /**
+     *
+     *
+     * @param {UserOperation} userOp
+     * @param {number} [timeout]
+     * @return {*}  {Promise<IEstimateUserOpGasResult>}
+     * @memberof Bundler
+     */
+    public async eth_estimateUserOperationGas(userOp: UserOperation, timeout?: number): Promise<IEstimateUserOpGasResult> {
+        /*
+            The bundler we're using may not support L2 yet, 
+            so if the current network is L2, current lib will handle it self
+        */
+        const _userOp = this.semiValidSignature(userOp);
+
+        let chainName: '' | 'OPTIMISM' | 'ARBITRUM' = '';
+        if (this._chainId === CHAINID.OPTIMISM || this._chainId === CHAINID.OPTIMISM_GOERLI) {
+            chainName = 'OPTIMISM'
+        } else if (this._chainId === CHAINID.ARBITRUM || this._chainId === CHAINID.ARBITRUM_GOERLI) {
+            chainName = 'ARBITRUM';
+        }
+        const estimateUserOpGasResult: IEstimateUserOpGasResult = {
+            preVerificationGas: '0x0',
+            verificationGas: '0x0',
+            validAfter: undefined,
+            validUntil: undefined,
+            callGasLimit: '0x0'
+        };
+
+        if (this._bundlerApi) {
+            const _estimateUserOpGasResult = await this.rpcRequest<any[], IEstimateUserOpGasResult>(
+                {
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'eth_estimateUserOperationGas',
+                    params: [
+                        _userOp,
+                        this._entryPoint
+                    ]
+                }, timeout
+            );
+            estimateUserOpGasResult.preVerificationGas = _estimateUserOpGasResult.preVerificationGas;
+            estimateUserOpGasResult.verificationGas = _estimateUserOpGasResult.verificationGas;
+            estimateUserOpGasResult.validAfter = _estimateUserOpGasResult.validAfter;
+            estimateUserOpGasResult.validUntil = _estimateUserOpGasResult.validUntil;
+            estimateUserOpGasResult.callGasLimit = _estimateUserOpGasResult.callGasLimit;
+        }
+        if (this._eoaPrivateKey) {
+            _userOp.paymasterAndData = '0x';
+            _userOp.maxFeePerGas = 0;
+            _userOp.maxPriorityFeePerGas = 0;
+            _userOp.preVerificationGas = 0;
+            _userOp.verificationGasLimit = 10e6;
+            const result = await this._simulateValidation(_userOp);
+            if (result.status === 1) {
+                // FailedOp
+                debugger;
+                const failedOp = result.result as IFailedOp;
+                throw new Error(failedOp.reason);
+            }
+            if (result.status !== 0) {
+                debugger;
+                throw new Error('error');
+            }
+
+            const returnInfo = result.result as IValidationResult;
+            estimateUserOpGasResult.validAfter = BigNumber.from(returnInfo.returnInfo.validAfter).toHexString();
+            estimateUserOpGasResult.validUntil = BigNumber.from(returnInfo.returnInfo.validUntil).toHexString();
+
+            const callGasLimit = await this._etherProvider.estimateGas({
+                from: this._entryPoint,
+                to: _userOp.sender,
+                data: _userOp.callData
+            });
+            estimateUserOpGasResult.callGasLimit = callGasLimit.mul(120).div(100).toHexString();
+            estimateUserOpGasResult.preVerificationGas = BigNumber.from(UserOp.callDataCost(userOp)).toHexString();
+            estimateUserOpGasResult.verificationGas = returnInfo.returnInfo.preOpGas.toHexString();
+        }
+
+        if (estimateUserOpGasResult.preVerificationGas === '0x0') {
+            debugger;
+            throw new Error('error');
+        }
+
+        if (chainName === 'OPTIMISM') {
+            //throw new Error('not support yet');
+        } else if (chainName === 'ARBITRUM') {
+            const _callGasLimit = UserOp.callDataCost(userOp);
+            const _preVerificationGas = BigNumber.from(estimateUserOpGasResult.preVerificationGas).toNumber();
+            if (Math.abs(_callGasLimit - _preVerificationGas) < _preVerificationGas * 0.1) {
+                // current bundler may not support ARBITRUM 
+                _userOp.paymasterAndData = '0x';
+                _userOp.maxFeePerGas = 0;
+                _userOp.maxPriorityFeePerGas = 0;
+                _userOp.preVerificationGas = 0;
+                _userOp.verificationGasLimit = 10e6;
+                const L1GasLimit = await Arbitrum.L1GasLimit(
+                    this._etherProvider,
+                    _userOp
+                );
+                estimateUserOpGasResult.preVerificationGas = BigNumber.from(_preVerificationGas + L1GasLimit).toHexString();
+            }
+        }
+        let _verificationGas = BigNumber.from(estimateUserOpGasResult.verificationGas).toNumber();
+        let _preVerificationGas = BigNumber.from(estimateUserOpGasResult.preVerificationGas).toNumber();
+        _preVerificationGas += 5000
+        _verificationGas += 20000;
+        if (userOp.initCode !== '0x') {
+            _verificationGas += 30000;
+        }
+        if (userOp.callData !== '0x') {
+            _preVerificationGas + ((userOp.callData.length / 2) - 1) * 16;
+
+            if (this.recoveryWallet(userOp.callData)) {
+                _verificationGas += 400000;
+                _preVerificationGas += 20000;
+            }
+        }
+
+        if (userOp.paymasterAndData.length >= 42 && userOp.paymasterAndData !== AddressZero) {
+            _verificationGas += 20000;
+            _preVerificationGas += ((userOp.paymasterAndData.length / 2) - 1) * 16;
+        }
+        estimateUserOpGasResult.verificationGas = BigNumber.from(_verificationGas).toHexString();
+        estimateUserOpGasResult.preVerificationGas = BigNumber.from(_preVerificationGas).toHexString();
+
+        return estimateUserOpGasResult;
+    }
+
+
+    private async _getUserOperationEvent(userOpHash: string) {
+        if (!this._entryPointContract) {
+            throw new Error('entryPointContract is not set');
+        }
+        // TODO: eth_getLogs is throttled. must be acceptable for finding a UserOperation by hash
+        const event = await this._entryPointContract?.queryFilter(this._entryPointContract.filters.UserOperationEvent(userOpHash))
+        return event[0]
     }
 
     public async eth_getUserOperationReceipt(userOpHash: string, timeout?: number) {
-        return this.rpcRequest<string[], IUserOpReceipt | null>(
-            {
-                jsonrpc: '2.0',
-                id: 1,
-                method: 'eth_getUserOperationReceipt',
-                params: [userOpHash]
-            }, timeout
-        );
+        if (this._bundlerApi) {
+            return this.rpcRequest<string[], IUserOpReceipt | null>(
+                {
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'eth_getUserOperationReceipt',
+                    params: [userOpHash]
+                }, timeout
+            );
+        }
+        if (this._eoaPrivateKey) {
+            const event = await this._getUserOperationEvent(userOpHash);
+            if (event == null) {
+                return null
+            }
+            if (!event.args) {
+                throw new Error('event.args is null');
+            }
+            const receipt = await event.getTransactionReceipt();
+            return {
+                userOpHash: userOpHash,
+                sender: event.args.sender,
+                nonce: event.args.nonce,
+                actualGasCost: event.args.actualGasCost,
+                actualGasUsed: event.args.actualGasUsed,
+                success: event.args.success,
+                logs: [],
+                receipt: receipt
+            }
+        }
+        throw new Error('bundlerApi or eoaPrivateKey is not set');
     }
 
     public async eth_getUserOperationByHash(userOpHash: string) {
@@ -288,16 +504,49 @@ export class Bundler {
             return {
                 status: 0,
                 result: {
-                    returnInfo: re[0],
-                    senderInfo: re[1],
-                    factoryInfo: re[2],
-                    paymasterInfo: re[3],
+                    returnInfo: {
+                        preOpGas: re[0][0],
+                        prefund: re[0][1],
+                        sigFailed: re[0][2],
+                        validAfter: re[0][3],
+                        validUntil: re[0][4],
+                        paymasterContext: re[0][5]
+                    },
+                    senderInfo: {
+                        stake: re[1][0],
+                        unstakeDelaySec: re[1][1]
+                    },
+                    factoryInfo: {
+                        stake: re[2][0],
+                        unstakeDelaySec: re[2][1]
+                    },
+                    paymasterInfo: {
+                        stake: re[3][0],
+                        unstakeDelaySec: re[3][1]
+                    }
                 }
             };
 
         }
         return null;
     }
+
+
+    /**
+     * “semi-valid” signature for calculating the gas cost
+     *
+     * @param {UserOperation} op
+     * @return {*}  {UserOperation}
+     * @memberof Bundler
+     */
+    semiValidSignature(op: UserOperation) {
+        const opStruct = op.getStruct();
+        if (op.signature === '0x') {
+            opStruct.signature = op.getSemiValidSign();
+        }
+        return opStruct;
+    }
+
 
     /**
      * simulateHandleOp
@@ -311,7 +560,7 @@ export class Bundler {
                 to: this._entryPoint,
                 data: new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData(
                     "simulateHandleOp",
-                    [op.getStruct(), target, targetCallData]
+                    [this.semiValidSignature(op), target, targetCallData]
                 ),
             });
             let re = this.decodeExecutionResult(result);
@@ -332,18 +581,24 @@ export class Bundler {
 
     }
 
+
+
     /**
      * simulateValidation
      * @param {UserOperation} op
      * @returns {Promise<IResult>} result
      */
     async simulateValidation(op: UserOperation): Promise<IResult> {
+        return this._simulateValidation(this.semiValidSignature(op));
+    }
+
+    private async _simulateValidation(op: IUserOperation): Promise<IResult> {
         try {
-            const data = new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op.getStruct()]);
+            const data = new ethers.utils.Interface(EntryPointContract.ABI).encodeFunctionData("simulateValidation", [op]);
             const result = await this._etherProvider.call({
                 //from: AddressZero,
                 to: this._entryPoint,
-                gasLimit: BigNumber.from(10e6),
+                gasLimit: BigNumber.from(10e10),
                 data: data
             });
             let re = this.decodeValidationResult(result);

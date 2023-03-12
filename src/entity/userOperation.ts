@@ -1,5 +1,5 @@
 import { ethers, BigNumber } from "ethers";
-import { AddressZero } from "../defines/address";
+import { AddressZero, EntryPointAddress, SingletonFactoryAddress } from "../defines/address";
 import { NumberLike, toDecString, toHexString, toNumber } from "../defines/numberLike";
 import { UserOp } from '../utils/userOp';
 import { Optimistic } from "../utils/L2/optimistic/optimistic";
@@ -7,6 +7,10 @@ import { CHAINID } from "../defines/chainId";
 import { EstimateGas } from "../utils/estimateGas";
 import { Arbitrum } from "../utils/L2/arbitrum/arbitrum";
 import { SignatureMode, Signatures } from "../utils/signatures";
+import { IUserOperation } from "../interface/IUserOperation";
+import { EntryPointContract } from "../contracts/entryPoint";
+import { Guardian } from "../utils/guardians";
+import { PersonalSign } from "../utils/personalSign";
 
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol    
@@ -58,12 +62,6 @@ class UserOperation {
         this._maxPriorityFeePerGas = maxPriorityFeePerGas;
         this._paymasterAndData = paymasterAndData;
         this._signature = signature;
-
-        if (toNumber(verificationGasLimit) === 0 || toNumber(preVerificationGas) === 0) {
-            this.updateVerificationGasLimit();
-            this.updatePreVerificationGas();
-        }
-
     }
 
 
@@ -77,9 +75,6 @@ class UserOperation {
             throw new Error('invalid sender address');
         }
         this._sender = value;
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _nonce: NumberLike = 0;
     public get nonce(): NumberLike {
@@ -87,9 +82,6 @@ class UserOperation {
     }
     public set nonce(value: NumberLike) {
         this._nonce = value;
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _initCode: string = '0x';
     public get initCode(): string {
@@ -97,10 +89,6 @@ class UserOperation {
     }
     public set initCode(value: string) {
         this._initCode = value;
-
-        // update preVerificationGas & verificationGasLimit
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
 
     private _callData: string = '0x';
@@ -109,10 +97,6 @@ class UserOperation {
     }
     public set callData(value: string) {
         this._callData = value;
-
-        // update preVerificationGas & verificationGasLimit
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _callGasLimit: NumberLike = 0;
     public get callGasLimit(): NumberLike {
@@ -120,9 +104,6 @@ class UserOperation {
     }
     public set callGasLimit(value: NumberLike) {
         this._callGasLimit = value;
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _verificationGasLimit: NumberLike = 0;//450000;
     public get verificationGasLimit(): NumberLike {
@@ -144,9 +125,6 @@ class UserOperation {
     }
     public set maxFeePerGas(value: NumberLike) {
         this._maxFeePerGas = value;
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _maxPriorityFeePerGas: NumberLike = 0;
     public get maxPriorityFeePerGas(): NumberLike {
@@ -154,9 +132,6 @@ class UserOperation {
     }
     public set maxPriorityFeePerGas(value: NumberLike) {
         this._maxPriorityFeePerGas = value;
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _paymasterAndData: string = '0x';
     public get paymasterAndData(): string {
@@ -164,10 +139,6 @@ class UserOperation {
     }
     public set paymasterAndData(value: string) {
         this._paymasterAndData = value;
-
-        // update preVerificationGas & verificationGasLimit
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
     }
     private _signature: string = '0x';
     public get signature(): string {
@@ -205,7 +176,7 @@ class UserOperation {
      * @description convert to userOperation struct
      * @returns {object} the userOperation struct
      */
-    public getStruct() {
+    public getStruct(): IUserOperation {
         this.alignment();
         return {
             sender: this.sender,
@@ -354,125 +325,44 @@ class UserOperation {
         return userOp;
     }
 
-    private recoveryWalletOP() {
-        /**
-          * if recovery wallet,preVerificationGas += 20000
-          * 0x4fb2e45d:transferOwner(address)
-          */
-        return this.callData.startsWith('0x4fb2e45d');
-    }
-
-    private updatePreVerificationGas() {
-        try {
-
-            let _preVerificationGas = UserOp.callDataCost(this) + 10000;
-            if (this.recoveryWalletOP()) {
-                _preVerificationGas += 20000;
-            }
-            this._preVerificationGas = _preVerificationGas;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    private updateVerificationGasLimit() {
-        let _verificationGasLimit = 100000;
-        if (this.recoveryWalletOP()) {
-            _verificationGasLimit += 500000; // create guardian cost
-        }
-        if (this._initCode !== '0x') {
-            _verificationGasLimit += 350000; // create wallet cost
-        }
-        if (this.paymasterAndData.length >= 42 && this.paymasterAndData !== AddressZero) {
-            _verificationGasLimit += 50000; // paymaster cost ( validatePaymasterUserOp & postOp )
-        }
-        this._verificationGasLimit = _verificationGasLimit;
-    }
-
-
     /**
      * 
      *
-     * @param {ethers.providers.BaseProvider} l2Provider
-     * @param {(BigNumber | NumberLike)} basefee basefee(wei)
-     * @param {NumberLike} maxFeePerGas maxFeePerGas(wei)
-     * @param {NumberLike} maxPriorityFeePerGas maxPriorityFeePerGas(wei)
-     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57']
-     * @param {string} [estimateGasHelper='0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e']
-     * @return {*} 
+     * @return {*}  {string}
      * @memberof UserOperation
      */
-    public async calcL2GasPrice(
-        l2Provider: ethers.providers.BaseProvider,
-        basefee: BigNumber | NumberLike,
-        maxFeePerGas: NumberLike,
-        maxPriorityFeePerGas: NumberLike,
-        entryPointAddress = '0x0576a174D229E3cFA37253523E645A78A0C91B57',
-        estimateGasHelper = '0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e'
-    ) {
-
-        // get ChainID
-        const chainId = await l2Provider.getNetwork().then((network) => network.chainId);
-        let chainName: '' | 'OPTIMISM' | 'ARBITRUM' = '';
-        if (chainId === CHAINID.OPTIMISM || chainId === CHAINID.OPTIMISM_GOERLI) {
-            chainName = 'OPTIMISM'
-        } else if (chainId === CHAINID.ARBITRUM || chainId === CHAINID.ARBITRUM_GOERLI) {
-            chainName = 'ARBITRUM';
-        } else {
-            return;
-        }
-
-        this._maxFeePerGas = maxFeePerGas;
-        this._maxPriorityFeePerGas = maxPriorityFeePerGas;
-
-        this.updateVerificationGasLimit();
-        this.updatePreVerificationGas();
-
-        let reasonableGasPrice;
-        if ('OPTIMISM' === chainName) {
-            if (toNumber(this._maxPriorityFeePerGas) !== toNumber(this._maxFeePerGas)) {
-                throw new Error('EIP1559 fee is not supported');
+    public getSemiValidSign(): string {
+        if (this._callData.startsWith('0x4fb2e45d')) {
+            const hash: string = ethers.utils.hexlify(ethers.utils.randomBytes(32));
+            const guardian = new Guardian(SingletonFactoryAddress);
+            const guardianCount = 20;
+            const guardianAddress = [];
+            const guardianWallets = [];
+            for (let index = 0; index < guardianCount; index++) {
+                const _wallet = ethers.Wallet.createRandom();
+                guardianWallets.push(_wallet);
+                guardianAddress.push(_wallet.address);
             }
-            reasonableGasPrice = await Optimistic.calcGasPrice(l2Provider, this);
-        } else if ('ARBITRUM' === chainName) {
-            reasonableGasPrice = await Arbitrum.calcGasPrice(l2Provider, this, basefee, entryPointAddress, estimateGasHelper, entryPointAddress);
-
+            const gurdianAddressAndInitCode = guardian.calculateGuardianAndInitCode(SingletonFactoryAddress, guardianAddress, guardianCount, "");
+            const guardianSignArr: any[] = [];
+            for (let index = 0; index < guardianCount; index++) {
+                guardianSignArr.push(
+                    {
+                        contract: false,
+                        address: guardianAddress[index],
+                        signature: PersonalSign.signMessage(hash, guardianWallets[index].privateKey)
+                    }
+                );
+            }
+            return guardian.packGuardiansSignByInitCode(gurdianAddressAndInitCode.address, guardianSignArr, gurdianAddressAndInitCode.initCode);
         } else {
-            throw new Error('chainid is not supported');
-        }
-        this._maxFeePerGas = reasonableGasPrice.maxFeePerGas;
-        this._maxPriorityFeePerGas = reasonableGasPrice.maxPriorityFeePerGas;
-
-    }
-
-
-
-    /**
-     * @description estimate gas
-     * @param {string} entryPointAddress the entry point address
-     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
-     * @returns {Promise<boolean>} true or false
-     */
-    public async estimateGas(
-        entryPointAddress: string,
-        etherProvider: ethers.providers.BaseProvider
-    ) {
-        try {
-            const _gasLimit = await EstimateGas.estimate(etherProvider,
-                {
-                    from: entryPointAddress,
-                    to: this.sender,
-                    data: this.callData,
-                    gasLimit: 20000000
-                }
+            return Signatures.encodeSignature(SignatureMode.owner,
+                this.sender,
+                "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                268435455,
+                268435455
             )
-            this.callGasLimit = (_gasLimit.gasLimitForL2 || _gasLimit.gasLimit).toHexString();
-            return true;
-        } catch (error) {
-            console.log(error);
-            return false;
         }
-
     }
 
     /**
@@ -483,7 +373,7 @@ class UserOperation {
         return UserOp.payMasterSignHash(this);
     }
 
-    
+
     /**
      *
      *
@@ -513,7 +403,7 @@ class UserOperation {
     public getUserOpHash(entryPointAddress: string, chainId: number): string {
         return UserOp.getUserOpHash(this, entryPointAddress, chainId);
     }
-    
+
     /**
      * get the UserOp Hash to be signed (packed UserOpHash with with time range) 
      *
@@ -526,13 +416,13 @@ class UserOperation {
      * @return {*}  {string}
      * @memberof UserOperation
      */
-    public getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, signer: string,signatureMode: SignatureMode = SignatureMode.owner,validAfter = 0, validUntil = 0): string {
+    public getUserOpHashWithTimeRange(entryPointAddress: string, chainId: number, signer: string, signatureMode: SignatureMode = SignatureMode.owner, validAfter = 0, validUntil = 0): string {
         if (validUntil < validAfter) {
             throw new Error('validUntil must be greater than validAfter');
         }
 
         const _hash = this.getUserOpHash(entryPointAddress, chainId);
-        return Signatures.packSignatureHash(_hash,signer,signatureMode,validAfter,validUntil);
+        return Signatures.packSignatureHash(_hash, signer, signatureMode, validAfter, validUntil);
     }
 
     /**
@@ -556,15 +446,43 @@ class UserOperation {
         const requiredGas = BigNumber.from(this.callGasLimit).add(BigNumber.from(this.verificationGasLimit).mul(mul)).add(BigNumber.from(this.preVerificationGas));
         return requiredGas;
     }
+
     /**
-        * @description get the required prefund
-        * @returns {BigNumber} the required prefund
-        */
-    public requiredPrefund(): BigNumber {
+     * get the required prefund
+     *
+     * @param {ethers.providers.BaseProvider} provider
+     * @param {string} [entryPoint]
+     * @return {*} 
+     * @memberof UserOperation
+     */
+    public async requiredPrefund(provider?: ethers.providers.BaseProvider, entryPoint?: string): Promise<{ requiredPrefund: BigNumber, requiredGas: BigNumber, deposit: BigNumber }> {
         const gasPrice = BigNumber.from(this.maxFeePerGas);
         const requiredGas = this.requiredGas();
-        return gasPrice.mul(requiredGas);
+        const requiredPrefund = gasPrice.mul(requiredGas);
+        let deposit: BigNumber = BigNumber.from(0);
+        if (entryPoint && provider) {
+
+            /*
+                function getDepositInfo(address account) public view returns (DepositInfo memory info)
+                struct DepositInfo {
+                    uint112 deposit;
+                    bool staked;
+                    uint112 stake;
+                    uint32 unstakeDelaySec;
+                    uint48 withdrawTime;
+                }
+            */
+            const entryPointContract = new ethers.Contract(entryPoint, EntryPointContract.ABI, provider);
+            const depositInfo = await entryPointContract.callStatic.getDepositInfo(this.sender);
+            deposit = BigNumber.from(depositInfo.deposit);
+        }
+        return {
+            requiredPrefund,
+            requiredGas,
+            deposit
+        };
     }
+
 }
 
 export { UserOperation };

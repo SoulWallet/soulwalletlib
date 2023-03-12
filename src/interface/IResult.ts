@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-12 21:57:09
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 16:14:09
+ * @LastEditTime: 2023-03-10 17:46:37
  */
 
 import { BigNumber } from "ethers";
@@ -60,8 +60,8 @@ export interface IReturnInfo {
     preOpGas: BigNumber,
     prefund: BigNumber,
     sigFailed: boolean,
-    validAfter: BigNumber,
-    validUntil: BigNumber,
+    validAfter: number,
+    validUntil: number,
     paymasterContext: string
 }
 

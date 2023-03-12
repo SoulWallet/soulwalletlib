@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-02 11:05:53
+ * @LastEditTime: 2023-03-10 19:21:43
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -28,24 +28,20 @@ export class Converter {
 
     /**
      * convert transcations to userOperation
-     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
-     * @param {string} entryPointAddress the entry point address
      * @param {ITransaction[]} transcations the transcations
      * @param {NumberLike} nonce the nonce
      * @param {NumberLike} maxFeePerGas the max fee per gas
      * @param {NumberLike} maxPriorityFeePerGas the max priority fee per gas
      * @param {string?} paymasterAndData the paymaster and data
-     * @returns {Promise<UserOperation | null>} the userOperation
+     * @returns {UserOperation} the userOperation
      */
-    public async fromTransaction(
-        etherProvider: ethers.providers.BaseProvider,
-        entryPointAddress: string,
+    public fromTransaction(
         transcations: ITransaction[],
         nonce: NumberLike,
         maxFeePerGas: NumberLike,
         maxPriorityFeePerGas: NumberLike,
         paymasterAndData: string = "0x"
-    ): Promise<UserOperation | null> {
+    ): UserOperation {
         if (transcations.length === 0) {
             throw new Error("transcation is empty");
         }
@@ -92,12 +88,12 @@ export class Converter {
             nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
         );
 
-        let gasEstimated = await op.estimateGas(entryPointAddress,
-            etherProvider
-        );
-        if (!gasEstimated) {
-            return null;
-        }
+        // let gasEstimated = await op.estimateGas(entryPointAddress,
+        //     etherProvider
+        // );
+        // if (!gasEstimated) {
+        //     return null;
+        // }
 
         return op;
     }

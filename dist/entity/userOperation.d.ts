@@ -1,6 +1,7 @@
 import { ethers, BigNumber } from "ethers";
 import { NumberLike } from "../defines/numberLike";
 import { SignatureMode } from "../utils/signatures";
+import { IUserOperation } from "../interface/IUserOperation";
 /**
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/contracts/UserOperation.sol
  */
@@ -79,19 +80,7 @@ declare class UserOperation {
      * @description convert to userOperation struct
      * @returns {object} the userOperation struct
      */
-    getStruct(): {
-        sender: string;
-        nonce: NumberLike;
-        initCode: string;
-        callData: string;
-        callGasLimit: NumberLike;
-        verificationGasLimit: NumberLike;
-        preVerificationGas: NumberLike;
-        maxFeePerGas: NumberLike;
-        maxPriorityFeePerGas: NumberLike;
-        paymasterAndData: string;
-        signature: string;
-    };
+    getStruct(): IUserOperation;
     /**
      * @description convert NumberLike property to hex string
      * @returns {void}
@@ -114,29 +103,13 @@ declare class UserOperation {
      * @returns {UserOperation} the userOperation object
      */
     static fromObject(obj: any): UserOperation;
-    private recoveryWalletOP;
-    private updatePreVerificationGas;
-    private updateVerificationGasLimit;
     /**
      *
      *
-     * @param {ethers.providers.BaseProvider} l2Provider
-     * @param {(BigNumber | NumberLike)} basefee basefee(wei)
-     * @param {NumberLike} maxFeePerGas maxFeePerGas(wei)
-     * @param {NumberLike} maxPriorityFeePerGas maxPriorityFeePerGas(wei)
-     * @param {string} [entryPointAddress='0x0576a174D229E3cFA37253523E645A78A0C91B57']
-     * @param {string} [estimateGasHelper='0x120A64777b5bc61BD8b4C6e984aaFF8A85AFfE5e']
-     * @return {*}
+     * @return {*}  {string}
      * @memberof UserOperation
      */
-    calcL2GasPrice(l2Provider: ethers.providers.BaseProvider, basefee: BigNumber | NumberLike, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, entryPointAddress?: string, estimateGasHelper?: string): Promise<void>;
-    /**
-     * @description estimate gas
-     * @param {string} entryPointAddress the entry point address
-     * @param {ethers.providers.BaseProvider} etherProvider the ethers.js provider e.g. ethers.provider
-     * @returns {Promise<boolean>} true or false
-     */
-    estimateGas(entryPointAddress: string, etherProvider: ethers.providers.BaseProvider): Promise<boolean>;
+    getSemiValidSign(): string;
     /**
      * @description get the paymaster sign hash
      * @returns {string} the paymaster sign hash
@@ -181,9 +154,17 @@ declare class UserOperation {
      */
     requiredGas(): BigNumber;
     /**
-        * @description get the required prefund
-        * @returns {BigNumber} the required prefund
-        */
-    requiredPrefund(): BigNumber;
+     * get the required prefund
+     *
+     * @param {ethers.providers.BaseProvider} provider
+     * @param {string} [entryPoint]
+     * @return {*}
+     * @memberof UserOperation
+     */
+    requiredPrefund(provider?: ethers.providers.BaseProvider, entryPoint?: string): Promise<{
+        requiredPrefund: BigNumber;
+        requiredGas: BigNumber;
+        deposit: BigNumber;
+    }>;
 }
 export { UserOperation };

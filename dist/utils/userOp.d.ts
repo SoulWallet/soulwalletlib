@@ -8,12 +8,12 @@ export declare class UserOp {
     private static encode;
     private static DefaultGasOverheads;
     /**
-     * @description: pack user operation for call data
-     *
-     * @param {UserOperation} op
-     * @return {*}  {Uint8Array}
-     * @memberof UserOp
-     */
+   * @description: pack user operation for call data
+   *
+   * @param {UserOperation} op
+   * @return {*}  {Uint8Array}
+   * @memberof UserOp
+   */
     static packUserOpForCallData(op: UserOperation): string;
     static callDataCost(op: UserOperation): number;
     static packUserOp(op: UserOperation, forSignature?: boolean): string;
