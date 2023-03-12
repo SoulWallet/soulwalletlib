@@ -15,8 +15,8 @@ export interface IReturnInfo {
     preOpGas: BigNumber;
     prefund: BigNumber;
     sigFailed: boolean;
-    validAfter: BigNumber;
-    validUntil: BigNumber;
+    validAfter: number;
+    validUntil: number;
     paymasterContext: string;
 }
 export interface IStakeInfo {

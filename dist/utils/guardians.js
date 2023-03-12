@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-08 14:53:56
+ * @LastEditTime: 2023-03-10 19:22:15
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -182,57 +182,47 @@ class Guardian {
             };
         });
     }
-    _guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, callData) {
-        return __awaiter(this, void 0, void 0, function* () {
-            walletAddress = ethers_1.ethers.utils.getAddress(walletAddress);
-            let userOperation = new userOperation_1.UserOperation(walletAddress, nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData);
-            let gasEstimated = yield userOperation.estimateGas(entryPointAddress, etherProvider);
-            if (!gasEstimated) {
-                return null;
-            }
-            return userOperation;
-        });
+    _guardian(walletAddress, nonce, paymasterAndData, maxFeePerGas, maxPriorityFeePerGas, callData) {
+        walletAddress = ethers_1.ethers.utils.getAddress(walletAddress);
+        let userOperation = new userOperation_1.UserOperation(walletAddress, nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData);
+        // let gasEstimated = await userOperation.estimateGas(entryPointAddress, etherProvider);
+        // if (!gasEstimated) {
+        //     return null;
+        // }
+        return userOperation;
     }
     /**
      * set guardian
-     * @param {ethers.providers.BaseProvider} etherProvider
      * @param {String} walletAddress wallet address
      * @param {String} guardian new guardian address
      * @param {Number} nonce nonce
-     * @param {String} entryPointAddress entry point address
      * @param {String} paymasterAddress paymaster address
      * @param {Number} maxFeePerGas max fee per gas
      * @param {Number} maxPriorityFeePerGas max priority fee per gas
      * @returns {Promise<UserOperation>} userOperation
      */
-    setGuardian(etherProvider, walletAddress, guardian, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas) {
-        return __awaiter(this, void 0, void 0, function* () {
-            guardian = ethers_1.ethers.utils.getAddress(guardian);
-            const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
-            const calldata = iface.encodeFunctionData("setGuardian", [guardian]);
-            return yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
-        });
+    setGuardian(walletAddress, guardian, nonce, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas) {
+        guardian = ethers_1.ethers.utils.getAddress(guardian);
+        const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
+        const calldata = iface.encodeFunctionData("setGuardian", [guardian]);
+        return this._guardian(walletAddress, nonce, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
     }
     /**
      * transfer owner
-     * @param {ethers.providers.BaseProvider} etherProvider
      * @param {String} walletAddress wallet address
      * @param {Number} nonce nonce
-     * @param {String} entryPointAddress entry point address
      * @param {String} paymasterAddress paymaster address
      * @param {Number} maxFeePerGas max fee per gas
      * @param {Number} maxPriorityFeePerGas max priority fee per gas
      * @param {String} newOwner new owner address
      * @returns {Promise<UserOperation>} userOperation
      */
-    transferOwner(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, newOwner) {
-        return __awaiter(this, void 0, void 0, function* () {
-            newOwner = ethers_1.ethers.utils.getAddress(newOwner);
-            const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
-            const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
-            const op = yield this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
-            return op;
-        });
+    transferOwner(walletAddress, nonce, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, newOwner) {
+        newOwner = ethers_1.ethers.utils.getAddress(newOwner);
+        const iface = new ethers_1.ethers.utils.Interface(soulWallet_1.SoulWalletContract.ABI);
+        const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
+        const op = this._guardian(walletAddress, nonce, paymasterAddress, maxFeePerGas, maxPriorityFeePerGas, calldata);
+        return op;
     }
     /**
      * pack guardian signature

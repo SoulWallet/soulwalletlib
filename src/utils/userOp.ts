@@ -3,10 +3,10 @@
  * @link https://github.com/eth-infinitism/account-abstraction/blob/develop/test/UserOp.ts
  */
 
-import { arrayify, defaultAbiCoder, keccak256, recoverAddress } from 'ethers/lib/utils'
-import { ecsign, toRpcSig, fromRpcSig, keccak256 as keccak256_buffer } from 'ethereumjs-util'
+import { ethers } from 'ethers'
+import { defaultAbiCoder, keccak256 } from 'ethers/lib/utils'
 import { UserOperation } from '../entity/userOperation'
-import { BigNumber, ethers } from "ethers";
+import { SignatureMode, Signatures } from './signatures'
 
 export class UserOp {
 
@@ -34,18 +34,18 @@ export class UserOp {
   }
 
   /**
-   * @description: pack user operation for call data
-   *
-   * @param {UserOperation} op
-   * @return {*}  {Uint8Array}
-   * @memberof UserOp
-   */
+ * @description: pack user operation for call data
+ *
+ * @param {UserOperation} op
+ * @return {*}  {Uint8Array}
+ * @memberof UserOp
+ */
   public static packUserOpForCallData(op: UserOperation): string {
     let mockSignature = false;
     if (op.signature === '0x') {
       mockSignature = true;
       // Single signature
-      op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
+      op.signature = op.getSemiValidSign();
     }
 
     const packed = this.packUserOp(op, false);
@@ -54,6 +54,7 @@ export class UserOp {
     }
     return packed;
   }
+
 
   public static callDataCost(op: UserOperation): number {
     if (!ethers.utils.isAddress(op.sender)) {

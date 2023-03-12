@@ -5,8 +5,8 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserOp = void 0;
-const utils_1 = require("ethers/lib/utils");
 const ethers_1 = require("ethers");
+const utils_1 = require("ethers/lib/utils");
 class UserOp {
     constructor() {
     }
@@ -16,18 +16,18 @@ class UserOp {
         return utils_1.defaultAbiCoder.encode(types, values);
     }
     /**
-     * @description: pack user operation for call data
-     *
-     * @param {UserOperation} op
-     * @return {*}  {Uint8Array}
-     * @memberof UserOp
-     */
+   * @description: pack user operation for call data
+   *
+   * @param {UserOperation} op
+   * @return {*}  {Uint8Array}
+   * @memberof UserOp
+   */
     static packUserOpForCallData(op) {
         let mockSignature = false;
         if (op.signature === '0x') {
             mockSignature = true;
             // Single signature
-            op.signature = '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000';
+            op.signature = op.getSemiValidSign();
         }
         const packed = this.packUserOp(op, false);
         if (mockSignature) {

@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-03-02 11:02:34
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-06 17:08:05
+ * @LastEditTime: 2023-03-12 22:46:08
  */
 import { BigNumber, ethers } from 'ethers';
 import { ArbitrumNodeInterfaceABI } from './abi';

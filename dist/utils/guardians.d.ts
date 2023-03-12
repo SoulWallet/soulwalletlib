@@ -71,30 +71,26 @@ export declare class Guardian {
     private _guardian;
     /**
      * set guardian
-     * @param {ethers.providers.BaseProvider} etherProvider
      * @param {String} walletAddress wallet address
      * @param {String} guardian new guardian address
      * @param {Number} nonce nonce
-     * @param {String} entryPointAddress entry point address
      * @param {String} paymasterAddress paymaster address
      * @param {Number} maxFeePerGas max fee per gas
      * @param {Number} maxPriorityFeePerGas max priority fee per gas
      * @returns {Promise<UserOperation>} userOperation
      */
-    setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string, nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): Promise<UserOperation | null>;
+    setGuardian(walletAddress: string, guardian: string, nonce: NumberLike, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike): UserOperation;
     /**
      * transfer owner
-     * @param {ethers.providers.BaseProvider} etherProvider
      * @param {String} walletAddress wallet address
      * @param {Number} nonce nonce
-     * @param {String} entryPointAddress entry point address
      * @param {String} paymasterAddress paymaster address
      * @param {Number} maxFeePerGas max fee per gas
      * @param {Number} maxPriorityFeePerGas max priority fee per gas
      * @param {String} newOwner new owner address
      * @returns {Promise<UserOperation>} userOperation
      */
-    transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string): Promise<UserOperation | null>;
+    transferOwner(walletAddress: string, nonce: NumberLike, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string): UserOperation;
     /**
      * pack guardian signature
      * @param {guardianSignature[]} signature

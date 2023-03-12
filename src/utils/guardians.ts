@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-08 14:53:56
+ * @LastEditTime: 2023-03-10 19:22:15
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -197,66 +197,62 @@ export class Guardian {
     }
 
 
-    private async _guardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, nonce: NumberLike,
-        entryPointAddress: string, paymasterAndData: string,
+    private _guardian(walletAddress: string, nonce: NumberLike,
+        paymasterAndData: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, callData: string) {
 
         walletAddress = ethers.utils.getAddress(walletAddress);
         let userOperation: UserOperation = new UserOperation(
             walletAddress, nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
         );
-        let gasEstimated = await userOperation.estimateGas(entryPointAddress, etherProvider);
-        if (!gasEstimated) {
-            return null;
-        }
+        // let gasEstimated = await userOperation.estimateGas(entryPointAddress, etherProvider);
+        // if (!gasEstimated) {
+        //     return null;
+        // }
 
         return userOperation;
     }
 
     /**
      * set guardian
-     * @param {ethers.providers.BaseProvider} etherProvider
      * @param {String} walletAddress wallet address
      * @param {String} guardian new guardian address
      * @param {Number} nonce nonce
-     * @param {String} entryPointAddress entry point address
      * @param {String} paymasterAddress paymaster address
      * @param {Number} maxFeePerGas max fee per gas
      * @param {Number} maxPriorityFeePerGas max priority fee per gas
      * @returns {Promise<UserOperation>} userOperation
      */
-    public async setGuardian(etherProvider: ethers.providers.BaseProvider, walletAddress: string, guardian: string,
-        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike) {
+    public setGuardian(walletAddress: string, guardian: string,
+        nonce: NumberLike, paymasterAddress: string, maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike) {
         guardian = ethers.utils.getAddress(guardian);
 
         const iface = new ethers.utils.Interface(SoulWalletContract.ABI);
         const calldata = iface.encodeFunctionData("setGuardian", [guardian]);
 
-        return await this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress,
+        return this._guardian(walletAddress, nonce, paymasterAddress,
             maxFeePerGas, maxPriorityFeePerGas, calldata);
     }
 
     /**
      * transfer owner
-     * @param {ethers.providers.BaseProvider} etherProvider
      * @param {String} walletAddress wallet address
      * @param {Number} nonce nonce
-     * @param {String} entryPointAddress entry point address
      * @param {String} paymasterAddress paymaster address
      * @param {Number} maxFeePerGas max fee per gas
      * @param {Number} maxPriorityFeePerGas max priority fee per gas
      * @param {String} newOwner new owner address
      * @returns {Promise<UserOperation>} userOperation
      */
-    public async transferOwner(etherProvider: ethers.providers.BaseProvider, walletAddress: string,
-        nonce: NumberLike, entryPointAddress: string, paymasterAddress: string,
+    public transferOwner(walletAddress: string,
+        nonce: NumberLike, paymasterAddress: string,
         maxFeePerGas: NumberLike, maxPriorityFeePerGas: NumberLike, newOwner: string) {
         newOwner = ethers.utils.getAddress(newOwner);
 
         const iface = new ethers.utils.Interface(SoulWalletContract.ABI);
         const calldata = iface.encodeFunctionData("transferOwner", [newOwner]);
 
-        const op = await this._guardian(etherProvider, walletAddress, nonce, entryPointAddress, paymasterAddress,
+        const op = this._guardian(walletAddress, nonce, paymasterAddress,
             maxFeePerGas, maxPriorityFeePerGas, calldata);
 
         return op;

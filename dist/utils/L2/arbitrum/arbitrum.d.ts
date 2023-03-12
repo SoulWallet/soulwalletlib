@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
 import { NumberLike } from '../../../defines/numberLike';
 import { UserOperation } from '../../../entity/userOperation';
-import { IGasPrice } from '../IgasPrice';
+import { IUserOperation } from '../../../interface/IUserOperation';
 export declare class Arbitrum {
     /**
      *
@@ -11,9 +11,21 @@ export declare class Arbitrum {
      * @param {UserOperation} op
      * @param {(BigNumber | NumberLike)} basefee
      * @param {string} entryPointAddress
-     * @param {string} estimateGasHelper
-     * @return {*}  {Promise<IGasPrice>}
+     * @return {*}  {Promise<number>}
      * @memberof Arbitrum
      */
-    static calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation, basefee: BigNumber | NumberLike, entryPointAddress: string, estimateGasHelper: string, from: string | undefined): Promise<IGasPrice>;
+    static calcGasPrice(l2Provider: ethers.providers.BaseProvider, op: UserOperation, basefee: BigNumber | NumberLike, entryPointAddress: string, from: string | undefined): Promise<number>;
+    /**
+     *
+     *
+     * @static
+     * @param {ethers.providers.BaseProvider} l2Provider
+     * @param {IUserOperation} op
+     * @param {(BigNumber | NumberLike)} basefee
+     * @param {string} entryPointAddress
+     * @param {(string | undefined)} from
+     * @return {*}  {Promise<number>}
+     * @memberof Arbitrum
+     */
+    static L1GasLimit(l2Provider: ethers.providers.BaseProvider, op: IUserOperation): Promise<number>;
 }

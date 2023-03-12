@@ -6,6 +6,7 @@ import { IApproveToken } from './interface/IApproveToken';
 import { ITransaction } from './interface/ITransaction';
 import { Bundler } from './utils/bundler';
 import { SignatureMode, Signatures } from './utils/signatures';
+import { NumberLike } from './defines/numberLike';
 /**
  * @module soulwalletlib
  * @description SoulWalletLib
@@ -24,4 +25,4 @@ import { SignatureMode, Signatures } from './utils/signatures';
  * @property {ITransaction} ITransaction transaction interface
  *
  */
-export { SoulWalletLib, Bundler, UserOperation, SignatureMode, Signatures, IResult, IValidationResult, IStakeInfo, IReturnInfo, IFailedOp, IExecutionResult, IUserOpReceipt, ITransactionReceipt, ITransactionReceiptLog, IApproveToken, ITransaction };
+export { SoulWalletLib, Bundler, UserOperation, SignatureMode, Signatures, IResult, IValidationResult, IStakeInfo, IReturnInfo, IFailedOp, IExecutionResult, IUserOpReceipt, ITransactionReceipt, ITransactionReceiptLog, IApproveToken, ITransaction, NumberLike };
