@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-12 22:45:21
+ * @LastEditTime: 2023-03-15 11:03:16
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -290,9 +290,9 @@ class Bundler {
                 //throw new Error('not support yet');
             }
             else if (chainName === 'ARBITRUM') {
-                const _callGasLimit = userOp_1.UserOp.callDataCost(userOp);
+                const _preVerificationGasLocal = userOp_1.UserOp.callDataCost(userOp);
                 const _preVerificationGas = ethers_1.BigNumber.from(estimateUserOpGasResult.preVerificationGas).toNumber();
-                if (Math.abs(_callGasLimit - _preVerificationGas) < _preVerificationGas * 0.1) {
+                if (Math.abs(_preVerificationGasLocal - _preVerificationGas) < _preVerificationGas * 0.1) {
                     // current bundler may not support ARBITRUM 
                     _userOp.paymasterAndData = '0x';
                     _userOp.maxFeePerGas = 0;
@@ -318,7 +318,7 @@ class Bundler {
                 }
             }
             if (userOp.paymasterAndData.length >= 42 && userOp.paymasterAndData !== address_1.AddressZero) {
-                _verificationGas += 20000;
+                _verificationGas += 45000;
                 _preVerificationGas += ((userOp.paymasterAndData.length / 2) - 1) * 16;
             }
             estimateUserOpGasResult.verificationGas = ethers_1.BigNumber.from(_verificationGas).toHexString();
