@@ -100,8 +100,11 @@ export class DecodeCallData {
             functionSignature: 'transferOwner(address)',
             typesArray: ['address']
         });
-
-
+        this.bytes4Methods.set('0x8a0dac4a', {
+            functionName: 'setGuardian',
+            functionSignature: 'setGuardian(address)',
+            typesArray: ['address']
+        });
 
     }
 
