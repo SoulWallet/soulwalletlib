@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-15 11:03:16
+ * @LastEditTime: 2023-03-15 12:01:50
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -318,7 +318,7 @@ class Bundler {
                 }
             }
             if (userOp.paymasterAndData.length >= 42 && userOp.paymasterAndData !== address_1.AddressZero) {
-                _verificationGas += 45000;
+                _verificationGas += 50000;
                 _preVerificationGas += ((userOp.paymasterAndData.length / 2) - 1) * 16;
             }
             estimateUserOpGasResult.verificationGas = ethers_1.BigNumber.from(_verificationGas).toHexString();

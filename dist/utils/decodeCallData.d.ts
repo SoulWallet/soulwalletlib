@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 /**
  * decode call data
  * @class DecodeCallData
@@ -23,15 +23,16 @@ export declare class DecodeCallData {
     private saveToStorage;
     private readFromStorage;
     private read4BytesMethod;
+    private decode4BytesMethod;
     /**
      * decode callData
      * @param {string} callData
      * @returns {Promise<IDecode[]>}
      */
     decode(callData: string): Promise<IDecode[]>;
-    private _decode;
 }
 interface IDecode {
+    bytes4: string;
     /**
      * function name
      */
@@ -51,6 +52,6 @@ interface IDecode {
     /**
      * other params
      */
-    params: any;
+    params: ethers.utils.Result;
 }
 export {};
