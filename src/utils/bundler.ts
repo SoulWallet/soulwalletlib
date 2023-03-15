@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-15 11:03:16
+ * @LastEditTime: 2023-03-15 12:01:50
  */
 
 
@@ -350,7 +350,7 @@ export class Bundler {
         }
 
         if (userOp.paymasterAndData.length >= 42 && userOp.paymasterAndData !== AddressZero) {
-            _verificationGas += 45000;
+            _verificationGas += 50000;
             _preVerificationGas += ((userOp.paymasterAndData.length / 2) - 1) * 16;
         }
         estimateUserOpGasResult.verificationGas = BigNumber.from(_verificationGas).toHexString();
