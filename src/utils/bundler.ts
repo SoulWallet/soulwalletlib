@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-12 22:45:21
+ * @LastEditTime: 2023-03-15 11:03:16
  */
 
 
@@ -317,9 +317,9 @@ export class Bundler {
         if (chainName === 'OPTIMISM') {
             //throw new Error('not support yet');
         } else if (chainName === 'ARBITRUM') {
-            const _callGasLimit = UserOp.callDataCost(userOp);
+            const _preVerificationGasLocal = UserOp.callDataCost(userOp);
             const _preVerificationGas = BigNumber.from(estimateUserOpGasResult.preVerificationGas).toNumber();
-            if (Math.abs(_callGasLimit - _preVerificationGas) < _preVerificationGas * 0.1) {
+            if (Math.abs(_preVerificationGasLocal - _preVerificationGas) < _preVerificationGas * 0.1) {
                 // current bundler may not support ARBITRUM 
                 _userOp.paymasterAndData = '0x';
                 _userOp.maxFeePerGas = 0;
@@ -350,7 +350,7 @@ export class Bundler {
         }
 
         if (userOp.paymasterAndData.length >= 42 && userOp.paymasterAndData !== AddressZero) {
-            _verificationGas += 20000;
+            _verificationGas += 45000;
             _preVerificationGas += ((userOp.paymasterAndData.length / 2) - 1) * 16;
         }
         estimateUserOpGasResult.verificationGas = BigNumber.from(_verificationGas).toHexString();
