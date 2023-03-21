@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-11-07 21:08:08
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-10 19:21:43
+ * @LastEditTime: 2023-03-21 11:11:14
  */
 
 import { UserOperation } from "../entity/userOperation";
@@ -47,6 +47,7 @@ export class Converter {
         }
 
         let sender = (transcations[0].from || '').toLowerCase();
+        let callGasLimits: NumberLike[] = []
 
         // #TODO if gas is null
 
@@ -56,6 +57,9 @@ export class Converter {
         const _to: string[] = [transcations[0].to];
         const _value: string[] = [BigNumber.from(transcations[0].value).toHexString()];
         const _data: string[] = [transcations[0].data];
+        if (transcations[0].gasLimit) {
+            callGasLimits.push(transcations[0].gasLimit);
+        }
 
         if (transcations.length > 1) {
             for (let i = 1; i < transcations.length; i++) {
@@ -63,6 +67,10 @@ export class Converter {
                 _to.push(transcations[i].to);
                 _value.push(BigNumber.from(transcations[i].value).toHexString());
                 _data.push(transcations[i].data);
+                const _gasLimit = transcations[i].gasLimit;
+                if (_gasLimit) {
+                    callGasLimits.push(_gasLimit);
+                }
                 const _sender = (transcations[i].from || '').toLowerCase();
                 if (sender !== _sender) {
                     throw new Error("transcation sender is not same");
@@ -83,9 +91,18 @@ export class Converter {
                     [_to, _value, _data]
                 );
         }
+        let callGasLimit = BigNumber.from(0);
+        if (callGasLimits.length === transcations.length) {
+            for (let i = 0; i < callGasLimits.length; i++) {
+                callGasLimit = callGasLimit.add(callGasLimits[i]);
+            }
+            if(callGasLimit.gt(0)){
+                callGasLimit = callGasLimit.add(30000);
+            }
+        }
         const op = new UserOperation(
             sender,
-            nonce, undefined, callData, undefined, maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
+            nonce, undefined, callData, callGasLimit.toHexString(), maxFeePerGas, maxPriorityFeePerGas, paymasterAndData
         );
 
         // let gasEstimated = await op.estimateGas(entryPointAddress,
