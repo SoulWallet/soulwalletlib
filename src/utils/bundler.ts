@@ -4,12 +4,11 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-15 12:01:50
+ * @LastEditTime: 2023-03-21 15:14:44
  */
 
 
 import { ethers, BigNumber } from "ethers";
-
 import { UserOperation } from "../entity/userOperation";
 import { IRPCRequest } from "../interface/IRPCRequest";
 import { IRPCResponse } from "../interface/IRPCResponse";
@@ -20,24 +19,18 @@ import { defaultAbiCoder } from 'ethers/lib/utils';
 import { HttpRequest } from './httpRequest';
 import { IUserOpReceipt } from "../interface/IUserOpReceipt";
 import { IFailedOp, IResult, IValidationResult } from "../interface/IResult";
-import { SignatureMode, Signatures } from "./signatures";
 import { IEstimateUserOpGasResult } from "../interface/IEstimateUserOpGasResult";
 import { CHAINID } from "../defines/chainId";
-import { Log } from '@ethersproject/providers'
 import { IUserOperation } from "../interface/IUserOperation";
 import { UserOp } from "./userOp";
-import { Optimistic } from "./L2/optimistic/optimistic";
 import { Arbitrum } from "./L2/arbitrum/arbitrum";
-import { toNumber } from "../defines/numberLike";
-import { EstimateGas } from "./estimateGas";
-
 
 
 export class ApiTimeOut {
-    web3ApiRequestTimeout = 1000 * 10;
-    web3ApiResponseTimeout = 1000 * 10;
-    bundlerApiRequestTimeout = 1000 * 10;
-    bundlerApiResponseTimeout = 1000 * 10;
+    web3ApiRequestTimeout = 1000 * 60 * 10;
+    web3ApiResponseTimeout = 1000 * 60 * 10;
+    bundlerApiRequestTimeout = 1000 * 60 * 10;
+    bundlerApiResponseTimeout = 1000 * 60 * 10;
 }
 
 

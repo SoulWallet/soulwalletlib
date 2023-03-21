@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-11 12:45:04
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 23:03:54
+ * @LastEditTime: 2023-03-21 15:12:40
  */
 
 export class HttpRequest {
@@ -23,13 +23,19 @@ export class HttpRequest {
         }
         return null;
     }
-    static async post(url: string, data: any, timeout: number = 1000 * 30): Promise<any> {
+    static async post(url: string, data: any, timeout: number = 1000 * 60 * 10): Promise<any> {
         let signal: AbortSignal | undefined = undefined;
         let id: NodeJS.Timeout | undefined = undefined;
         if (timeout > 1000) {
             const controller = new AbortController();
             signal = controller.signal;
-            id = setTimeout(() => controller.abort(), timeout);
+            id = setTimeout(() => {
+                try {
+                    controller.abort()
+                } catch (error) {
+                    console.log(error);
+                }
+            }, timeout);
         }
 
         try {

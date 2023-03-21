@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-11 12:45:04
  * @LastEditors: cejay
- * @LastEditTime: 2023-02-27 23:03:54
+ * @LastEditTime: 2023-03-21 15:12:40
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -37,14 +37,21 @@ class HttpRequest {
             return null;
         });
     }
-    static post(url, data, timeout = 1000 * 30) {
+    static post(url, data, timeout = 1000 * 60 * 10) {
         return __awaiter(this, void 0, void 0, function* () {
             let signal = undefined;
             let id = undefined;
             if (timeout > 1000) {
                 const controller = new AbortController();
                 signal = controller.signal;
-                id = setTimeout(() => controller.abort(), timeout);
+                id = setTimeout(() => {
+                    try {
+                        controller.abort();
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
+                }, timeout);
             }
             try {
                 const response = yield fetch(url, {

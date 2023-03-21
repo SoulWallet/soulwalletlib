@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-15 12:01:50
+ * @LastEditTime: 2023-03-21 15:14:44
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -32,10 +32,10 @@ const userOp_1 = require("./userOp");
 const arbitrum_1 = require("./L2/arbitrum/arbitrum");
 class ApiTimeOut {
     constructor() {
-        this.web3ApiRequestTimeout = 1000 * 10;
-        this.web3ApiResponseTimeout = 1000 * 10;
-        this.bundlerApiRequestTimeout = 1000 * 10;
-        this.bundlerApiResponseTimeout = 1000 * 10;
+        this.web3ApiRequestTimeout = 1000 * 60 * 10;
+        this.web3ApiResponseTimeout = 1000 * 60 * 10;
+        this.bundlerApiRequestTimeout = 1000 * 60 * 10;
+        this.bundlerApiResponseTimeout = 1000 * 60 * 10;
     }
 }
 exports.ApiTimeOut = ApiTimeOut;
