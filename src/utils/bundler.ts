@@ -4,7 +4,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-21 15:14:44
+ * @LastEditTime: 2023-03-22 17:15:08
  */
 
 
@@ -329,7 +329,7 @@ export class Bundler {
         let _verificationGas = BigNumber.from(estimateUserOpGasResult.verificationGas).toNumber();
         let _preVerificationGas = BigNumber.from(estimateUserOpGasResult.preVerificationGas).toNumber();
         _preVerificationGas += 5000
-        _verificationGas += 20000;
+        _verificationGas += 50000;
         if (userOp.initCode !== '0x') {
             _verificationGas += 30000;
         }
@@ -348,6 +348,10 @@ export class Bundler {
         }
         estimateUserOpGasResult.verificationGas = BigNumber.from(_verificationGas).toHexString();
         estimateUserOpGasResult.preVerificationGas = BigNumber.from(_preVerificationGas).toHexString();
+        const _callgasLimit = BigNumber.from(estimateUserOpGasResult.callGasLimit);
+        if (_callgasLimit.gt(0)) {
+            estimateUserOpGasResult.callGasLimit = _callgasLimit.add(21000).toHexString();
+        }
 
         return estimateUserOpGasResult;
     }

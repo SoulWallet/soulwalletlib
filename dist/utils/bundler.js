@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-21 15:14:44
+ * @LastEditTime: 2023-03-22 17:15:08
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -306,7 +306,7 @@ class Bundler {
             let _verificationGas = ethers_1.BigNumber.from(estimateUserOpGasResult.verificationGas).toNumber();
             let _preVerificationGas = ethers_1.BigNumber.from(estimateUserOpGasResult.preVerificationGas).toNumber();
             _preVerificationGas += 5000;
-            _verificationGas += 20000;
+            _verificationGas += 50000;
             if (userOp.initCode !== '0x') {
                 _verificationGas += 30000;
             }
@@ -323,6 +323,10 @@ class Bundler {
             }
             estimateUserOpGasResult.verificationGas = ethers_1.BigNumber.from(_verificationGas).toHexString();
             estimateUserOpGasResult.preVerificationGas = ethers_1.BigNumber.from(_preVerificationGas).toHexString();
+            const _callgasLimit = ethers_1.BigNumber.from(estimateUserOpGasResult.callGasLimit);
+            if (_callgasLimit.gt(0)) {
+                estimateUserOpGasResult.callGasLimit = _callgasLimit.add(21000).toHexString();
+            }
             return estimateUserOpGasResult;
         });
     }
