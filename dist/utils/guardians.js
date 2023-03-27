@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2022-09-21 20:28:54
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-10 19:22:15
+ * @LastEditTime: 2023-03-28 02:04:36
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -254,7 +254,9 @@ class Guardian {
                 const _signature = {
                     signer: signatureItem.address,
                     rsvSig: `${r}${s}${v}`,
-                    offsetSig: `0000000000000000000000000000000000000000000000000000000000000041${signatureItem.signature}`,
+                    offsetSig: `${ethers_1.ethers.utils
+                        .hexZeroPad(ethers_1.ethers.utils.hexlify(signatureItem.signature.length / 2), 32)
+                        .slice(2)}${signatureItem.signature}`,
                 };
                 guardianSignature.push(_signature);
             }
