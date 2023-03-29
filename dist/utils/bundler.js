@@ -5,7 +5,7 @@
  * @Autor: z.cejay@gmail.com
  * @Date: 2023-02-09 14:57:06
  * @LastEditors: cejay
- * @LastEditTime: 2023-03-22 17:15:08
+ * @LastEditTime: 2023-03-30 00:43:27
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -325,7 +325,7 @@ class Bundler {
             estimateUserOpGasResult.preVerificationGas = ethers_1.BigNumber.from(_preVerificationGas).toHexString();
             const _callgasLimit = ethers_1.BigNumber.from(estimateUserOpGasResult.callGasLimit);
             if (_callgasLimit.gt(0)) {
-                estimateUserOpGasResult.callGasLimit = _callgasLimit.add(21000).toHexString();
+                estimateUserOpGasResult.callGasLimit = _callgasLimit.add(50000).toHexString();
             }
             return estimateUserOpGasResult;
         });
