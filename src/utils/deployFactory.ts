@@ -93,7 +93,7 @@ export class DeployFactory {
     public async deploy(logicContractAddress: string, etherProvider: ethers.providers.BaseProvider, signer: ethers.Signer, salt?: string, ver: number = 1, walletFactoryConfig?: {
         contractInterface: ContractInterface,
         bytecode: BytesLike | { object: string }
-    }, gasLimit = BigNumber.from(6000000)) {
+    }, gasLimit = BigNumber.from(6000000)): Promise<string> {
 
         const { factoryAddress, initCodeWithArgs } = this.getFactory(logicContractAddress, salt, ver, walletFactoryConfig);
 
@@ -101,8 +101,11 @@ export class DeployFactory {
 
         let code = await etherProvider.getCode(factoryAddress);
         if (code !== '0x') {
+            console.log('Lib code + factory address', code, factoryAddress);
             return factoryAddress;
         }
+
+        console.log('Lib code', code);
 
         const singletonFactoryContract = new ethers.Contract(this._singletonFactory, SingletonFactory.ABI, etherProvider);
         const calldata = singletonFactoryContract.interface.encodeFunctionData('deploy', [initCodeWithArgs, salt]);
@@ -114,6 +117,7 @@ export class DeployFactory {
             gasLimit: _gasLimit
         };
         const signedTx = await signer.sendTransaction(tx);
+        console.log('DeployFactory deploy tx hash', signedTx.hash);
         await signedTx.wait();
 
         code = await etherProvider.getCode(factoryAddress);

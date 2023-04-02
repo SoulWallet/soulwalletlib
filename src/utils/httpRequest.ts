@@ -6,16 +6,17 @@
  * @LastEditors: cejay
  * @LastEditTime: 2023-03-21 15:12:40
  */
+import axios from 'axios';
 
 export class HttpRequest {
     static async get(url: string, timeout: number = 1000 * 30): Promise<any> {
         try {
             const controller = new AbortController();
             const id = setTimeout(() => controller.abort(), timeout);
-            const response = await fetch(url, { signal: controller.signal });
+            const response = await axios.get(url, { signal: controller.signal });
             clearTimeout(id);
-            if (response.ok) {
-                const json = await response.json();
+            if (response.status === 200) {
+                const json = await response.data;
                 return json;
             }
         } catch (error) {
@@ -39,16 +40,15 @@ export class HttpRequest {
         }
 
         try {
-            const response = await fetch(url, {
-                method: "POST",
+            const response = await axios.post(url, {
                 signal: signal,
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
             });
-            if (response.ok) {
-                const json = await response.json();
+            if (response.status === 200) {
+                const json = await response.data;
                 return json;
             }
         } catch (error) {
