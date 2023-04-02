@@ -1,13 +1,15 @@
 {
   "name": "soul-wallet-lib",
-  "version": "v0.1.0-alpha.32",
+  "version": "0.1.0",
   "description": "The EIP-4337 library for Soul-Wallet",
   "main": "dist/app.js",
+  "types": "dist/app.d.ts",
   "scripts": {
     "start": "ts-node src/app.ts",
     "build": "rm -rf dist && tsc --project tsconfig.json",
     "test": "mocha",
-    "docs": "npx typedoc src/app.ts"
+    "docs": "npx typedoc src/app.ts",
+    "build:watch": "tsc --project tsconfig.json --watch"
   },
   "repository": {
     "type": "git",
