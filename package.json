@@ -1,0 +1,26 @@
+{
+  "name": "@soulwallet/soulwallet",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^7.0.2",
+    "typescript": "^5.1.3"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "lerna run tsc",
+    "clean": "lerna run clean && rm -rf ./packages/*/lib/*",
+    "reBuild": "npm run clean && npm run build  ",
+    "generateABI": "lerna run generateABI",
+    "geth": "docker-compose -f ./eth-node/docker-compose.yaml up --force-recreate -V",
+    "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
+    "bundler": "cd bundler/ && yarn run bundler"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

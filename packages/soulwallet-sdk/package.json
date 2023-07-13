@@ -1,0 +1,45 @@
+{
+    "name": "@soulwallet/sdk",
+    "version": "0.1.0",
+    "description": "> TODO: description",
+    "author": "Jayden <z.cejay@gmail.com>",
+    "homepage": "https://github.com/jayden-sudo/soulwalletlib#readme",
+    "license": "ISC",
+    "main": "lib/main.js",
+    "types": "lib/main.d.ts",
+    "type": "module",
+    "directories": {
+        "lib": "lib",
+        "test": "__tests__"
+    },
+    "files": [
+        "lib"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jayden-sudo/soulwalletlib.git"
+    },
+    "scripts": {
+        "tsc": "tsc",
+        "test": "ts-node ./__tests__/main.test.ts"
+    },
+    "bugs": {
+        "url": "https://github.com/jayden-sudo/soulwalletlib/issues"
+    },
+    "dependencies": {
+        "@account-abstraction/contracts": "^0.6",
+        "@account-abstraction/sdk": "^0.6",
+        "@account-abstraction/utils": "^0.6.0",
+        "@soulwallet/abi": "*",
+        "bn.js": "^5.2.1",
+        "ethers": "^6.6.1"
+    },
+    "devDependencies": {
+        "@types/bn.js": "^5.1.1",
+        "@types/shelljs": "^0.8.12",
+        "shelljs": "^0.8.5"
+    }
+}
