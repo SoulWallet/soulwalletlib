@@ -47,10 +47,17 @@ export class TypeGuard {
 
     static onlyBytes(bytes: string) {
         // start with 0x, and at least 2 hex chars, and length is even number
+        if (bytes === "0x") {
+            return;
+        }
         const regex = /^0x[a-fA-F0-9]{2,}$/;
         if (!regex.test(bytes)) {
             throw new Error("bytes is invalid");
         }
+        if (bytes.length % 2 !== 0) {
+            throw new Error("bytes is invalid");
+        }
+
 
     }
 

@@ -9,7 +9,7 @@ export abstract class ISoulWallet {
      *
      * @abstract
      * @param {number} index
-     * @param {string} initialKey
+     * @param {string} initialKey {address}
      * @param {string} initialGuardianHash
      * @param {number} [initialGuardianSafePeriod]
      * @return {*}  {Promise<string>}
@@ -28,7 +28,7 @@ export abstract class ISoulWallet {
      *
      * @abstract
      * @param {number} index
-     * @param {string} initialKey
+     * @param {string} initialKey {address}
      * @param {string} initialGuardianHash
      * @param {string} [calldata]
      * @param {number} [initialGuardianSafePeriod]

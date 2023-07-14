@@ -43,7 +43,7 @@ for (let i = 0; i < abiSource.length; i++) {
     const abiFilePath = resolve(__dirname, 'src', 'ABI', 'ABI_' + className + '.ts');
     fs.writeFileSync(abiFilePath, `export default ${abiJson};`);
 
-    mainTsImport += `import ABI_${className} from "./ABI/ABI_${className}.ts";\n`;
+    mainTsImport += `import ABI_${className} from "./ABI/ABI_${className}";\n`;
     mainTsExport += '    ABI_' + className + ',\n';
 }
 const mainTsFilePath = resolve(__dirname, 'src', 'main.ts');

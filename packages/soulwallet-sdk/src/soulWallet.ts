@@ -1,8 +1,8 @@
 import { BN } from "bn.js"
+import { ethers } from "ethers";
 import { GuardHookInputData, ISoulWallet, UserOperation } from "./interface/ISoulWallet";
 import { TypeGuard } from "./tools/typeGuard";
 import { StorageCache } from "./tools/storageCache";
-import { ethers } from "ethers";
 import { ABI_SoulWalletFactory, ABI_SoulWallet } from "@soulwallet/abi";
 import { NotPromise, packUserOp, getUserOpHash } from '@account-abstraction/utils'
 import { L1KeyStore } from "./L1KeyStore";
@@ -56,12 +56,12 @@ export class SoulWallet extends ISoulWallet {
     async getOnChainConfig(): Promise<onChainConfig> {
         const key = `onChainConfig_${this.soulWalletFactoryAddress}`;
         // read from cache
-        let _onChainConfig = StorageCache.getInstance().get<onChainConfig>(key);
+        let _onChainConfig = StorageCache.getInstance().get<onChainConfig | undefined>(key, undefined);
         if (!_onChainConfig) {
             const _soulWalletFactory = new ethers.Contract(this.soulWalletFactoryAddress, ABI_SoulWalletFactory, this.provider);
-            const soulWalletLogic: string = await _soulWalletFactory.WALLETIMPL();
+            const soulWalletLogic: string = await _soulWalletFactory.getFunction("walletImpl").staticCall();
             const _soulWallet = new ethers.Contract(soulWalletLogic, ABI_SoulWallet, this.provider);
-            const entryPoint: string = await _soulWallet.entryPoint();
+            const entryPoint: string = await _soulWallet.getFunction("entryPoint").staticCall();
 
             _onChainConfig = new onChainConfig();
 
@@ -86,7 +86,7 @@ export class SoulWallet extends ISoulWallet {
                 'eth_supportedEntryPoints',
                 []
             );
-            if (!supportedEntryPoint.includes(entryPoint)) {
+            if (!supportedEntryPoint.toLowerCase().includes(entryPoint.toLocaleLowerCase())) {
                 throw new Error(
                     `Bundler network doesn't support entryPoint ${entryPoint}`
                 );
@@ -140,7 +140,7 @@ export class SoulWallet extends ISoulWallet {
         */
         // number to bytes32 string, e.g: 1 -> 0x0000000000000000000000000000000000000000000000000000000000000001
         const _salt = ethers.zeroPadValue(index.toString(16), 32);
-        const _walletAddress = await _soulWallet.getWalletAddress(_initializeData, _salt);
+        const _walletAddress = await _soulWallet.getFunction("getWalletAddress").staticCall(_initializeData, _salt);
         return _walletAddress;
     }
 

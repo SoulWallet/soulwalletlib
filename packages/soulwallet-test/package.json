@@ -1,13 +1,12 @@
 {
-  "name": "@soulwallet/abi",
+  "name": "@soulwallet/test",
   "version": "0.1.0",
   "description": "> TODO: description",
   "author": "Jayden <z.cejay@gmail.com>",
   "homepage": "https://github.com/jayden-sudo/soulwalletlib#readme",
   "license": "ISC",
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
   "type": "module",
+  "private": true,
   "directories": {
     "lib": "lib"
   },
@@ -23,12 +22,22 @@
   },
   "scripts": {
     "tsc": "tsc",
-    "generateABI": "ts-node src/generateABI.ts"
+    "test": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts"
   },
   "bugs": {
     "url": "https://github.com/jayden-sudo/soulwalletlib/issues"
   },
+  "dependencies": {
+    "@account-abstraction/contracts": "^0.6",
+    "@account-abstraction/sdk": "^0.6",
+    "@account-abstraction/utils": "^0.6.0",
+    "@soulwallet/abi": "workspace:*",
+    "@soulwallet/sdk": "workspace:*",
+    "bn.js": "^5.2.1",
+    "ethers": "^6.6.1"
+  },
   "devDependencies": {
+    "@types/bn.js": "^5.1.1",
     "@types/node": "^20.3.1",
     "@types/shelljs": "^0.8.12",
     "shelljs": "^0.8.5"

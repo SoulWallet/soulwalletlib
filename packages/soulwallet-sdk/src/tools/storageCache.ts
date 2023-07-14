@@ -13,7 +13,7 @@ export class StorageCache {
         return StorageCache.instance;
     }
 
-    private static storage: Record<string, any>;
+    private storage: Record<string, any> = {};
 
     private constructor() {
     }
@@ -27,7 +27,7 @@ export class StorageCache {
      * @memberof storageCache
      */
     public set<T>(key: string, value: T) {
-        StorageCache.storage[key] = value;
+        this.storage[key] = value;
     }
 
     /**
@@ -35,10 +35,14 @@ export class StorageCache {
      *
      * @template T
      * @param {string} key
+     * @param {T} defaultValue
      * @return {*}  {T}
-     * @memberof storageCache
+     * @memberof StorageCache
      */
-    public get<T>(key: string): T {
-        return StorageCache.storage[key];
+    public get<T>(key: string, defaultValue: T): T {
+        if (key in this.storage) {
+            return this.storage[key];
+        }
+        return defaultValue;
     }
 } 

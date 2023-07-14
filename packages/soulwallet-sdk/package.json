@@ -23,8 +23,7 @@
         "url": "git+https://github.com/jayden-sudo/soulwalletlib.git"
     },
     "scripts": {
-        "tsc": "tsc",
-        "test": "ts-node ./__tests__/main.test.ts"
+        "tsc": "tsc"
     },
     "bugs": {
         "url": "https://github.com/jayden-sudo/soulwalletlib/issues"
@@ -33,7 +32,8 @@
         "@account-abstraction/contracts": "^0.6",
         "@account-abstraction/sdk": "^0.6",
         "@account-abstraction/utils": "^0.6.0",
-        "@soulwallet/abi": "*",
+        "@soulwallet/abi": "workspace:*",
+        "@soulwallet/sdk": "workspace:*",
         "bn.js": "^5.2.1",
         "ethers": "^6.6.1"
     },
