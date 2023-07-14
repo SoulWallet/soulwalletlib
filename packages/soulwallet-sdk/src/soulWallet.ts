@@ -7,6 +7,7 @@ import { ABI_SoulWalletFactory, ABI_SoulWallet } from "@soulwallet/abi";
 import { NotPromise, packUserOp, getUserOpHash } from '@account-abstraction/utils'
 import { L1KeyStore } from "./L1KeyStore";
 import { HookInputData, Signature } from "./tools/signature";
+import { Hex } from "./tools/hex";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -86,7 +87,10 @@ export class SoulWallet extends ISoulWallet {
                 'eth_supportedEntryPoints',
                 []
             );
-            if (!supportedEntryPoint.toLowerCase().includes(entryPoint.toLocaleLowerCase())) {
+            if (!Array.isArray(supportedEntryPoint)) {
+                throw new Error("Invalid bundler RPC response");
+            }
+            if (supportedEntryPoint.join().toLowerCase().indexOf(entryPoint.toLowerCase()) === -1) {
                 throw new Error(
                     `Bundler network doesn't support entryPoint ${entryPoint}`
                 );
@@ -109,7 +113,7 @@ export class SoulWallet extends ISoulWallet {
         */
 
         // default dely time is 2 days
-        const securityControlModuleAndData = this.securityControlModuleAddress + ethers.zeroPadValue((2 * this.days).toString(16), 64).substring(2).toLowerCase();
+        const securityControlModuleAndData = this.securityControlModuleAddress + Hex.paddingZero(2 * this.days, 32).substring(2).toLowerCase();
         const keyStoreModuleAndData = this.keyStoreModuleAddress.toLowerCase() + keyStoreSlot.substring(2).toLowerCase();
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
             ethers.ZeroAddress,
@@ -139,7 +143,7 @@ export class SoulWallet extends ISoulWallet {
          function getWalletAddress(bytes memory _initializer, bytes32 _salt) external view returns (address proxy)
         */
         // number to bytes32 string, e.g: 1 -> 0x0000000000000000000000000000000000000000000000000000000000000001
-        const _salt = ethers.zeroPadValue(index.toString(16), 32);
+        const _salt = Hex.paddingZero(index, 32);
         const _walletAddress = await _soulWallet.getFunction("getWalletAddress").staticCall(_initializeData, _salt);
         return _walletAddress;
     }
@@ -156,7 +160,7 @@ export class SoulWallet extends ISoulWallet {
         const keyStoreSlot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
         const _initializeData = await this.initializeData(keyStoreSlot);
         const initCode = `${this.soulWalletFactoryAddress}${new ethers.Interface(ABI_SoulWalletFactory)
-            .encodeFunctionData("createWallet", [_initializeData, index.toString])
+            .encodeFunctionData("createWallet", [_initializeData, Hex.paddingZero(index, 32)])
             .substring(2)
             }`;
         let userOperationStruct: UserOperation = {

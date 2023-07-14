@@ -50,11 +50,9 @@ export class TypeGuard {
         if (bytes === "0x") {
             return;
         }
-        const regex = /^0x[a-fA-F0-9]{2,}$/;
+
+        const regex = /^0x([0-9a-f][0-9a-f])*$/i;
         if (!regex.test(bytes)) {
-            throw new Error("bytes is invalid");
-        }
-        if (bytes.length % 2 !== 0) {
             throw new Error("bytes is invalid");
         }
 

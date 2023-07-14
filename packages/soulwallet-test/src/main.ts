@@ -30,16 +30,16 @@ async function main() {
         }
 
         // kill process named `anvil` 
-        // shell.exec('pkill anvil');
+        shell.exec('pkill anvil');
 
-        // //run `anvil` in a background process 
-        // const anvilProcess = shell.exec('anvil', { async: true });
-        // // wait for anvil to start
-        // await new Promise((resolve) => setTimeout(resolve, 2000));
-        // // check if anvil is running
-        // if (anvilProcess.exitCode !== null) {
-        //     throw new Error('anvil failed to start');
-        // }
+        //run `anvil` in a background process 
+        const anvilProcess = shell.exec('anvil', { async: true });
+        // wait for anvil to start
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        // check if anvil is running
+        if (anvilProcess.exitCode !== null) {
+            throw new Error('anvil failed to start');
+        }
 
         const eth_blockNumber = await new ethers.JsonRpcProvider(RPC).send(
             'eth_blockNumber',
@@ -191,8 +191,8 @@ async function main() {
         // kill bundler (process named start with `npm run bundler`)
         shell.exec('pkill -f "npm run bundler"');
 
-        // // kill process named `anvil` 
-        // shell.exec('pkill anvil');
+        // kill process named `anvil` 
+        shell.exec('pkill anvil');
     }
 
 }
