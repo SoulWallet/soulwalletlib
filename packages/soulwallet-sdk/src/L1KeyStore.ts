@@ -3,6 +3,7 @@ import { IL1KeyStore } from "./interface/IL1KeyStore";
 import { TypeGuard } from "./tools/typeGuard";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
+import { Hex } from "./tools/hex";
 
 
 export class L1KeyStore extends IL1KeyStore {
@@ -47,7 +48,7 @@ export class L1KeyStore extends IL1KeyStore {
 
         // bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod
         // keccak256(abi.encode(initialKey, initialGuardianHash, guardianSafePeriod));  
-        const _initialKey = ethers.zeroPadBytes(initialKey, 32)
+        const _initialKey = Hex.paddingZero(initialKey, 32)
         const abiEncoded = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKey, initialGuardianHash, initialGuardianSafePeriod]);
         const keccak256 = ethers.keccak256(abiEncoded);
         return keccak256;

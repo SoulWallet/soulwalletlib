@@ -1,5 +1,6 @@
 import { TypeGuard } from './typeGuard';
 import { BN } from "bn.js";
+import { Hex } from "./hex";
 
 export class HookInputData {
     /**
@@ -203,11 +204,20 @@ export class Signature {
         if (guardHookInputDataBytes.length > 0 || validationData.gt(new BN(0))) {
             const signType = "01";
             // validationData to 32 bytes hex string
-            const validationDataHex = validationData.toString(16).padStart(64, '0');
-            const packedSignature = `0x${signType}${validationDataHex}${signature.substring(2)}${guardHookInputDataBytes}`;
+            const validationDataHex = Hex.paddingZero(validationData.toString('hex'), 32).slice(2);
+            const packedSignature = `0x${signType}${validationDataHex}${signature.substring(2)}${guardHookInputDataBytes}`.toLowerCase();
             return packedSignature;
         } else {
             return signature;
         }
+    }
+
+
+    static semiValidSignature(): string {
+        const signType = "01";
+        const signature = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        const validationData = new BN(68719476735).shln(160).add(new BN(1599999999).shln(160 + 48));
+        const validationDataHex = Hex.paddingZero(validationData.toString('hex'), 32).slice(2);
+        return `0x${signType}${validationDataHex}${signature.substring(2)}`.toLowerCase();
     }
 }

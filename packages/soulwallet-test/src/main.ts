@@ -91,8 +91,10 @@ async function main() {
                 const subLine = line.substring(13).split(' ');
                 const contractName = subLine[0];
                 for (let i = 1; i < subLine.length; i++) {
-                    const address = subLine[i];
+                    let address = subLine[i];
                     if (address.startsWith('0x')) {
+                        // address to checksum address
+                        address = ethers.getAddress(address);
                         console.log(`${contractName} address: ${address}`);
                         contractInstance[contractName] = address;
                         break;
@@ -153,7 +155,7 @@ async function main() {
             */
             const shellResult = '' + shell.exec(`curl ${BUNDLER} -X POST -H "Content-Type: application/json" --data '{"method":"eth_supportedEntryPoints","params":[],"id":1,"jsonrpc":"2.0"}'`);
             if (shellResult.includes("result")) {
-                if (!shellResult.toLowerCase().includes(contractInstance['EntryPoint'])) {
+                if (!shellResult.includes(contractInstance['EntryPoint'])) {
                     throw new Error('EntryPoint not supported');
                 }
                 console.log("check bundler with JsonRpcProvider");

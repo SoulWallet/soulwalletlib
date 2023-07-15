@@ -4,7 +4,7 @@ import { GuardHookInputData, ISoulWallet, UserOperation } from "./interface/ISou
 import { TypeGuard } from "./tools/typeGuard";
 import { StorageCache } from "./tools/storageCache";
 import { ABI_SoulWalletFactory, ABI_SoulWallet } from "@soulwallet/abi";
-import { NotPromise, packUserOp, getUserOpHash } from '@account-abstraction/utils'
+import { NotPromise, packUserOp, getUserOpHash, deepHexlify } from '@account-abstraction/utils'
 import { L1KeyStore } from "./L1KeyStore";
 import { HookInputData, Signature } from "./tools/signature";
 import { Hex } from "./tools/hex";
@@ -18,6 +18,7 @@ export class onChainConfig {
 
 export class SoulWallet extends ISoulWallet {
     readonly days = 86400;
+    readonly defalutInitialGuardianSafePeriod = 2 * this.days;
 
     readonly provider: ethers.JsonRpcProvider;
     readonly bundler: ethers.JsonRpcProvider;
@@ -99,10 +100,7 @@ export class SoulWallet extends ISoulWallet {
         return _onChainConfig;
     }
 
-    async initializeData(
-        keyStoreSlot: string) {
-        const _onChainConfig = await this.getOnChainConfig();
-        const _soulWallet = new ethers.Contract(_onChainConfig.soulWalletLogic, ABI_SoulWallet, this.provider);
+    async initializeData(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod) {
         /* 
             function initialize(
                 address anOwner,
@@ -113,10 +111,18 @@ export class SoulWallet extends ISoulWallet {
         */
 
         // default dely time is 2 days
-        const securityControlModuleAndData = this.securityControlModuleAddress + Hex.paddingZero(2 * this.days, 32).substring(2).toLowerCase();
-        const keyStoreModuleAndData = this.keyStoreModuleAddress.toLowerCase() + keyStoreSlot.substring(2).toLowerCase();
+        const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
+        /* 
+         (bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod) = abi.decode(_data, (bytes32, bytes32, uint64));
+        */
+        const _initialKey = Hex.paddingZero(initialKey, 32)
+        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKey, initialGuardianHash, initialGuardianSafePeriod]);
+        const keyStoreModuleAndData = (this.keyStoreModuleAddress + keyStoreInitData.substring(2)).toLowerCase();
+
+        const _onChainConfig = await this.getOnChainConfig();
+        const _soulWallet = new ethers.Contract(_onChainConfig.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            ethers.ZeroAddress,
+            initialKey,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,
@@ -136,8 +142,8 @@ export class SoulWallet extends ISoulWallet {
         initialGuardianHash: string,
         initialGuardianSafePeriod?: number
     ): Promise<string> {
-        const keyStoreSlot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
-        const _initializeData = await this.initializeData(keyStoreSlot);
+        //const keyStoreSlot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+        const _initializeData = await this.initializeData(initialKey, initialGuardianHash, initialGuardianSafePeriod);
         const _soulWallet = new ethers.Contract(this.soulWalletFactoryAddress, ABI_SoulWalletFactory, this.provider);
         /* 
          function getWalletAddress(bytes memory _initializer, bytes32 _salt) external view returns (address proxy)
@@ -156,14 +162,12 @@ export class SoulWallet extends ISoulWallet {
         initialGuardianSafePeriod?: number
     ): Promise<UserOperation> {
         TypeGuard.onlyBytes(callData);
-
-        const keyStoreSlot = L1KeyStore.getSlot(initialKey, initialGuardianHash, initialGuardianSafePeriod);
-        const _initializeData = await this.initializeData(keyStoreSlot);
+        const _initializeData = await this.initializeData(initialKey, initialGuardianHash, initialGuardianSafePeriod);
         const initCode = `${this.soulWalletFactoryAddress}${new ethers.Interface(ABI_SoulWalletFactory)
             .encodeFunctionData("createWallet", [_initializeData, Hex.paddingZero(index, 32)])
             .substring(2)
-            }`;
-        let userOperationStruct: UserOperation = {
+            }`.toLowerCase();
+        const _userOperation: UserOperation = {
             /* 
              sender: PromiseOrValue<string>;
                 nonce: PromiseOrValue<BigNumberish>;
@@ -197,7 +201,9 @@ export class SoulWallet extends ISoulWallet {
 
         };
 
-        return userOperationStruct;
+        await this.estimateUserOperationGas(_userOperation);
+
+        return _userOperation;
     }
 
     async getUserOpHash(userOp: UserOperation): Promise<string> {
@@ -230,21 +236,28 @@ export class SoulWallet extends ISoulWallet {
         const _onChainConfig = await this.getOnChainConfig();
         const semiValidSignature = userOp.signature === "0x";
         if (semiValidSignature) {
-            userOp.signature = "0x00";
+            if (userOp.initCode !== "0x") {
+                // deploy
+                // no need guardHook input data 
+                userOp.signature = Signature.semiValidSignature();
+            } else {
+                throw new Error("not implement now!");
+            }
         }
 
         const userOpGas = await this.bundler.send(
             'eth_estimateUserOperationGas',
             [
-                userOp,
+                deepHexlify(userOp),
                 _onChainConfig.entryPoint
             ]
         );
-        /* 
-        preVerificationGas,
-        verificationGas,
-        deadline,
-        callGasLimit
+        /*  
+            callGasLimit: '0x5208'
+            preVerificationGas: '0xb9f8'
+            validAfter: '0x5f5e0fff'
+            validUntil: '0xfffffffff'
+            verificationGasLimit: '0x91608'
         */
         userOp.preVerificationGas = userOpGas.preVerificationGas;
         userOp.verificationGasLimit = userOpGas.verificationGas;
