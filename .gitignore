@@ -6,3 +6,4 @@ npm-debug.log
 packages/*/lib
 tsconfig.tsbuildinfo
 soulwallet-soulwallet-*.tgz
+

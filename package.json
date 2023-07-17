@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "tsc": "tsc",
-    "javascript-obfuscator":"javascript-obfuscator",
+    "javascript-obfuscator": "javascript-obfuscator",
     "ts-node": "ts-node",
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm -r run tsc",
