@@ -83,6 +83,21 @@ export class SoulWallet extends ISoulWallet {
             } else {
                 throw new Error("chainId is not a safe integer");
             }
+
+            const _bundlerChainIdBigint = (await this.bundler.getNetwork()).chainId;
+            const _bundlerChainId: number = Number(_bundlerChainIdBigint);
+            if (Number.isSafeInteger(_bundlerChainId)) {
+                if (_bundlerChainId === 0) {
+                    throw new Error("Invalid chainId");
+                }
+            } else {
+                throw new Error("chainId is not a safe integer");
+            }
+
+            if (_chainId !== _bundlerChainId) {
+                throw new Error("chainId mismatch");
+            }
+
             _onChainConfig.chainId = _chainId;
             _onChainConfig.entryPoint = entryPoint;
             _onChainConfig.soulWalletLogic = soulWalletLogic;
@@ -102,6 +117,11 @@ export class SoulWallet extends ISoulWallet {
             }
         }
         return _onChainConfig;
+    }
+
+    async entryPoint(): Promise<string> {
+        const _onChainConfig = await this.getOnChainConfig();
+        return _onChainConfig.entryPoint;
     }
 
     async initializeData(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod) {

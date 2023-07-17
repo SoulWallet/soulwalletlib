@@ -5,8 +5,8 @@ import { IBundler, ResultWithErrors, UserOpDetail, UserOpGas, UserOpReceipt } fr
 import { UserOpErrorCodes, UserOpErrors } from "./interface/IUserOpErrors.js";
 
 export class Bundler implements IBundler {
-
     private bundler: ethers.JsonRpcProvider;
+
     constructor(bundler: ethers.JsonRpcProvider | string) {
         if (typeof bundler === 'string') {
             this.bundler = new ethers.JsonRpcProvider(bundler);

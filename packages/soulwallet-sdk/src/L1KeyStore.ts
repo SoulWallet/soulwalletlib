@@ -20,13 +20,20 @@ export class L1KeyStore extends IL1KeyStore {
      * @param {string} L1KeyStoreContractAddress
      * @memberof IL1KeyStore
      */
-    constructor(_L1Provider: string, _L1KeyStoreContractAddress: string) {
+    constructor(_L1Provider: string | ethers.JsonRpcProvider, _L1KeyStoreContractAddress: string) {
         super();
-        TypeGuard.httpOrHttps(_L1Provider);
+
         TypeGuard.onlyAddress(_L1KeyStoreContractAddress);
 
+        if (typeof _L1Provider === 'string') {
+            TypeGuard.httpOrHttps(_L1Provider);
+            this.L1Provider = new ethers.JsonRpcProvider(_L1Provider);
+        } else {
+            this.L1Provider = _L1Provider;
+        }
+
         this.L1KeyStoreContractAddress = _L1KeyStoreContractAddress;
-        this.L1Provider = new ethers.JsonRpcProvider(_L1Provider);
+
         this.L1KeyStoreContract = new ethers.Contract(this.L1KeyStoreContractAddress, ABI_KeyStore, this.L1Provider);
     }
 
@@ -53,11 +60,23 @@ export class L1KeyStore extends IL1KeyStore {
         return keccak256;
     }
 
-    calcGuardianHash(guardians: string[], threshold: number, salt: string): string {
+    /**
+     *
+     *
+     * @abstract
+     * @param {string[]} guardians EOA/Smart contract address array (auto sort)
+     * @param {number} threshold
+     * @param {string} salt hex string (bytes32),default is 0
+     * @return {*}  {string} keccak256 hash of the guardian set
+     * @memberof IL1KeyStore
+     */
+    static calcGuardianHash(guardians: string[], threshold: number, salt: string = ethers.ZeroHash): string {
         /* 
         (address[] memory guardians, uint256 threshold, uint256 salt) =
             abi.decode(rawGuardian, (address[], uint256, uint256));
         */
+
+
 
         guardians.sort((a, b) => {
             TypeGuard.onlyAddress(a);
@@ -71,7 +90,7 @@ export class L1KeyStore extends IL1KeyStore {
                 return 1;
             }
         });
-        TypeGuard.maxToUint256(salt);
+        TypeGuard.onlyBytes32(salt);
 
         const abiEncoded = new ethers.AbiCoder().encode(["address[]", "uint256", "uint256"], [guardians, threshold, salt]);
         const keccak256 = ethers.keccak256(abiEncoded);
@@ -82,7 +101,8 @@ export class L1KeyStore extends IL1KeyStore {
         TypeGuard.onlyBytes32(slot);
         // function getKey(bytes32 slot) external view returns (bytes32 key);
         const data = await this.L1KeyStoreContract.getKey(slot);
-        return data;
+        // bytes32 to address
+        return ethers.getAddress('0x' + data.slice(26));
     }
 
 }

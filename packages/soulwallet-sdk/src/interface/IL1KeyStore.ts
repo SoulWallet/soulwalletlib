@@ -7,19 +7,6 @@
  * @class IL1KeyStore
  */
 export abstract class IL1KeyStore {
-
-    /**
-     *
-     *
-     * @abstract
-     * @param {string[]} guardians EOA/Smart contract address array (auto sort)
-     * @param {number} threshold
-     * @param {string} salt hex string,default is 0x
-     * @return {*}  {string} keccak256 hash of the guardian set
-     * @memberof IL1KeyStore
-     */
-    abstract calcGuardianHash(guardians: string[], threshold: number, salt: string): string;
-
     /**
      *
      *

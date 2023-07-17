@@ -9,6 +9,15 @@ export abstract class ISoulWallet {
      *
      *
      * @abstract
+     * @return {*}  {Promise<string>}
+     * @memberof ISoulWallet
+     */
+    abstract entryPoint(): Promise<string>;
+
+    /**
+     *
+     *
+     * @abstract
      * @param {number} index
      * @param {string} initialKey {address}
      * @param {string} initialGuardianHash

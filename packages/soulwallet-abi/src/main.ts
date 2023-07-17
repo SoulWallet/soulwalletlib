@@ -13,6 +13,7 @@ import ABI_OpKnownStateRootWithHistory from "./ABI/ABI_OpKnownStateRootWithHisto
 import ABI_ArbKnownStateRootWithHistory from "./ABI/ABI_ArbKnownStateRootWithHistory.js";
 import ABI_KeyStoreModule from "./ABI/ABI_KeyStoreModule.js";
 import ABI_KeystoreProof from "./ABI/ABI_KeystoreProof.js";
+import ABI_ERC20Paymaster from "./ABI/ABI_ERC20Paymaster.js";
 import ABI_EntryPoint from "./ABI/ABI_EntryPoint.js";
 
 
@@ -32,6 +33,7 @@ export {
     ABI_ArbKnownStateRootWithHistory,
     ABI_KeyStoreModule,
     ABI_KeystoreProof,
+    ABI_ERC20Paymaster,
     ABI_EntryPoint,
  };
 //Please do not modify manually,use `git submodule update --init --recursive && pnpm run generateABI`

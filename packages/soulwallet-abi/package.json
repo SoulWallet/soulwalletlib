@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": "Jayden <z.cejay@gmail.com>",
-  "homepage": "https://github.com/jayden-sudo/soulwalletlib#readme",
+  "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
   "license": "ISC",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jayden-sudo/soulwalletlib.git"
+    "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
   },
   "scripts": {
     "tsc": "tsc;rm lib/generateABI*",
@@ -28,7 +28,7 @@
     "generateABI": "ts-node src/generateABI.ts"
   },
   "bugs": {
-    "url": "https://github.com/jayden-sudo/soulwalletlib/issues"
+    "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
