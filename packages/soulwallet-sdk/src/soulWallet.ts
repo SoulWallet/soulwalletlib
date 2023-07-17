@@ -1,4 +1,3 @@
-import { BN } from "bn.js"
 import { ethers } from "ethers";
 import { GuardHookInputData, ISoulWallet, UserOperation } from "./interface/ISoulWallet";
 import { TypeGuard } from "./tools/typeGuard";
@@ -8,6 +7,8 @@ import { NotPromise, packUserOp, getUserOpHash, deepHexlify } from '@account-abs
 import { L1KeyStore } from "./L1KeyStore";
 import { HookInputData, Signature } from "./tools/signature";
 import { Hex } from "./tools/hex";
+import { GasOverhead } from "./tools/gasOverhead";
+import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -28,6 +29,7 @@ export class SoulWallet extends ISoulWallet {
     readonly securityControlModuleAddress: string;
 
     readonly preVerificationGasDeploy: number = 10000000;
+
 
     constructor(
         _provider: string,
@@ -201,14 +203,21 @@ export class SoulWallet extends ISoulWallet {
 
         };
 
-        await this.estimateUserOperationGas(_userOperation);
 
         return _userOperation;
     }
 
-    async getUserOpHash(userOp: UserOperation): Promise<string> {
+    async userOpHash(userOp: UserOperation): Promise<string> {
         const _onChainConfig = await this.getOnChainConfig();
         return getUserOpHash(userOp, _onChainConfig.entryPoint, _onChainConfig.chainId);
+    }
+
+    async packUserOpHash(userOp: UserOperation, validAfter?: number, validUntil?: number): Promise<{
+        packedUserOpHash: string,
+        validationData: string
+    }> {
+        const userOPHash = await this.userOpHash(userOp);
+        return Signature.packUserOpHash(userOPHash, validAfter, validUntil);
     }
 
     private async guardHookList(walletAddress: string): Promise<string[]> {
@@ -218,53 +227,119 @@ export class SoulWallet extends ISoulWallet {
         return _guardHookList;
     }
 
-    async packUserOpSignature(signature: string, signatureValidPeriod?: number, guardHookInputData?: GuardHookInputData): Promise<string> {
+    async packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<string> {
+        let hookInputData: HookInputData | undefined = undefined;
         if (guardHookInputData !== undefined) {
             TypeGuard.onlyAddress(guardHookInputData.sender);
-
-            const hookInputData: HookInputData = new HookInputData();
+            hookInputData = new HookInputData();
             hookInputData.guardHooks = await this.guardHookList(guardHookInputData.sender);
             hookInputData.inputData = guardHookInputData.inputData;
+        }
+        return Signature.packSignature(signature, validationData, hookInputData);
+    }
 
-            return Signature.packSignature(signature, signatureValidPeriod, hookInputData);
-        } else {
-            return Signature.packSignature(signature, signatureValidPeriod);
+    async estimateUserOperationGas(userOp: UserOperation): Promise<UserOpErrors | undefined> {
+        try {
+            const _onChainConfig = await this.getOnChainConfig();
+            const semiValidSignature = userOp.signature === "0x";
+            if (semiValidSignature) {
+                if (userOp.initCode !== "0x") {
+                    // deploy
+                    // no need guardHook input data 
+                    userOp.signature = Signature.semiValidSignature();
+                } else {
+                    throw new Error("not implement now!");
+                }
+            }
+
+            try {
+                const userOpGas = await this.bundler.send(
+                    'eth_estimateUserOperationGas',
+                    [
+                        deepHexlify(userOp),
+                        _onChainConfig.entryPoint
+                    ]
+                );
+                /*  
+                    callGasLimit: '0x5208'
+                    preVerificationGas: '0xb9f8'
+                    validAfter: '0x5f5e0fff'
+                    validUntil: '0xfffffffff'
+                    verificationGasLimit: '0x91608'
+                */
+                userOp.preVerificationGas = userOpGas.preVerificationGas;
+                userOp.verificationGasLimit = userOpGas.verificationGasLimit;
+                userOp.callGasLimit = userOpGas.callGasLimit;
+                GasOverhead.calcGasOverhead(userOp);
+
+                return undefined;
+            } catch (error: any) {
+                if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
+                    return new UserOpErrors(error.error.code, error.error.message);
+                } else {
+                    return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
+                }
+            } finally {
+                if (semiValidSignature) {
+                    userOp.signature = "0x";
+                }
+            }
+        } catch (error: any) {
+            console.error(error);
+
+            let errmsg: string = '';
+            if (error.message) {
+                errmsg = error.message;
+            } else if (typeof error === 'string') {
+                errmsg = error;
+            } else if (typeof error === 'object') {
+                errmsg = JSON.stringify(error);
+            } else {
+                errmsg = 'unknown error';
+            }
+            return new UserOpErrors(UserOpErrorCodes.UnknownError, errmsg);
         }
     }
 
-    async estimateUserOperationGas(userOp: UserOperation): Promise<void> {
-        const _onChainConfig = await this.getOnChainConfig();
-        const semiValidSignature = userOp.signature === "0x";
-        if (semiValidSignature) {
-            if (userOp.initCode !== "0x") {
-                // deploy
-                // no need guardHook input data 
-                userOp.signature = Signature.semiValidSignature();
-            } else {
-                throw new Error("not implement now!");
+    async sendUserOperation(userOp: UserOperation): Promise<UserOpErrors | undefined> {
+        try {
+            const _onChainConfig = await this.getOnChainConfig();
+            try {
+
+                const userOpHash = await this.bundler.send(
+                    'eth_sendUserOperation',
+                    [
+                        deepHexlify(userOp),
+                        _onChainConfig.entryPoint
+                    ]
+                );
+                const userOPHashLocal = await this.userOpHash(userOp);
+                if (userOpHash.toLowerCase() !== userOPHashLocal.toLowerCase()) {
+                    throw new Error("userOpHash !== userOPHashLocal");
+                }
+                return undefined;
+            } catch (error: any) {
+                if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
+                    return new UserOpErrors(error.error.code, error.error.message);
+                } else {
+                    return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
+                }
             }
+        } catch (error: any) {
+            console.error(error);
+
+            let errmsg: string = '';
+            if (error.message) {
+                errmsg = error.message;
+            } else if (typeof error === 'string') {
+                errmsg = error;
+            } else if (typeof error === 'object') {
+                errmsg = JSON.stringify(error);
+            } else {
+                errmsg = 'unknown error';
+            }
+            return new UserOpErrors(UserOpErrorCodes.UnknownError, errmsg);
         }
 
-        const userOpGas = await this.bundler.send(
-            'eth_estimateUserOperationGas',
-            [
-                deepHexlify(userOp),
-                _onChainConfig.entryPoint
-            ]
-        );
-        /*  
-            callGasLimit: '0x5208'
-            preVerificationGas: '0xb9f8'
-            validAfter: '0x5f5e0fff'
-            validUntil: '0xfffffffff'
-            verificationGasLimit: '0x91608'
-        */
-        userOp.preVerificationGas = userOpGas.preVerificationGas;
-        userOp.verificationGasLimit = userOpGas.verificationGas;
-        userOp.callGasLimit = userOpGas.callGasLimit;
-
-        if (semiValidSignature) {
-            userOp.signature = "0x";
-        }
     }
 }

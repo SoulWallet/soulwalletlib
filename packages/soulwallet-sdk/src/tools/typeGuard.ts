@@ -1,5 +1,3 @@
-import { BN } from "bn.js"
-
 export class TypeGuard {
 
     static onlyAddress(address: string) {
@@ -17,22 +15,22 @@ export class TypeGuard {
     }
 
     static maxToUint64(num: string) {
-        const bn = new BN(num);
+        const bn = BigInt(num);
         /* 
         type(uint64).max = 0xffffffffffffffff
         */
-        if (bn.gt(new BN("0xffffffffffffffff"))) {
+        if (bn > (BigInt("0xffffffffffffffff"))) {
             throw new Error("num is too large");
         }
         return bn;
     }
 
     static maxToUint256(num: string) {
-        const bn = new BN(num);
+        const bn = BigInt(num);
         /* 
         type(uint256).max = 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
         */
-        if (bn.gt(new BN("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))) {
+        if (bn > (BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"))) {
             throw new Error("num is too large");
         }
         return bn;

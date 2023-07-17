@@ -34,11 +34,9 @@
         "@account-abstraction/utils": "^0.6.0",
         "@soulwallet/abi": "workspace:*",
         "@soulwallet/sdk": "workspace:*",
-        "bn.js": "^5.2.1",
-        "ethers": "^6.6.1"
+        "ethers": "^6.6.4"
     },
     "devDependencies": {
-        "@types/bn.js": "^5.1.1",
         "@types/shelljs": "^0.8.12",
         "shelljs": "^0.8.5"
     }

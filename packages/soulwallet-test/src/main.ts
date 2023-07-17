@@ -5,6 +5,7 @@ import shell from 'shelljs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve, join } from 'path';
 import { ethers } from 'ethers';
+import { PersonalSign } from './personalSign';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,7 +16,8 @@ async function main() {
     const bundlerDir = resolve(__baseDir, 'bundler');
     const RPC = 'http://127.0.0.1:8545';
     const BUNDLER = 'http://127.0.0.1:3000/rpc';
-
+    // from /configs/mnemonic.txt
+    const defaultWallet = new ethers.Wallet('0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80');
 
     // let soulWallet = new SoulWallet(RPC, BUNDLER, ethers.ZeroAddress, ethers.ZeroAddress, ethers.ZeroAddress, ethers.ZeroAddress);
     // console.log(soulWallet);
@@ -132,6 +134,7 @@ async function main() {
             "mnemonic": mnemonicFilePath,
             "maxBundleGas": 5e6,
             "minStake": "1",
+            "unsafe": true,
             "minUnstakeDelay": 0,
             "autoBundleInterval": 3,
             "autoBundleMempoolSize": 10
@@ -184,7 +187,8 @@ async function main() {
             contractInstance['SoulwalletFactory'],
             contractInstance['DefaultCallbackHandler'],
             contractInstance['KeyStoreModule'],
-            contractInstance['SecurityControlModule']
+            contractInstance['SecurityControlModule'],
+            defaultWallet
         ).run();
 
     }
@@ -210,6 +214,7 @@ class Deploy {
     readonly defalutCallbackHandlerAddress: string;
     readonly keyStoreModuleAddress: string;
     readonly securityControlModuleAddress: string;
+    readonly defaultWallet: ethers.Wallet;
 
     constructor(
         _provider: string,
@@ -217,14 +222,19 @@ class Deploy {
         _soulWalletFactoryAddress: string,
         _defalutCallbackHandlerAddress: string,
         _keyStoreModuleAddress: string,
-        _securityControlModuleAddress: string) {
+        _securityControlModuleAddress: string,
+        _defaultWallet: ethers.Wallet) {
         this.provider = _provider;
         this.bundler = _bundler;
         this.soulWalletFactoryAddress = _soulWalletFactoryAddress;
         this.defalutCallbackHandlerAddress = _defalutCallbackHandlerAddress;
         this.keyStoreModuleAddress = _keyStoreModuleAddress;
         this.securityControlModuleAddress = _securityControlModuleAddress;
+        this.defaultWallet = _defaultWallet;
     }
+
+
+
 
     async run(): Promise<void> {
         const soulWallet = new SoulWallet(this.provider, this.bundler, this.soulWalletFactoryAddress, this.defalutCallbackHandlerAddress, this.keyStoreModuleAddress, this.securityControlModuleAddress);
@@ -236,6 +246,29 @@ class Deploy {
             signer.address,
             ethers.ZeroHash
         );
+
+        const retErr1 = await soulWallet.estimateUserOperationGas(userOp);
+        if (retErr1) {
+            throw new Error(retErr1.toString());
+        }
+
+        const validAfter: number = Math.floor(Date.now() / 1000);
+        const validUntil = validAfter + 3600;
+        const packedUserOpHash = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
+
+        // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
+        const signature = PersonalSign.signMessage(packedUserOpHash.packedUserOpHash, signer.privateKey);
+        const packedSignature = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
+        userOp.signature = packedSignature;
+
+        const retErr2 = await soulWallet.sendUserOperation(userOp);
+        if (retErr2) {
+            throw new Error(retErr2.toString());
+        }
+
+        // wait for tx to be mined
+
+
         console.log(userOp);
     }
 }

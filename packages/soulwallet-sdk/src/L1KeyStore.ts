@@ -1,4 +1,3 @@
-import { BN } from "bn.js"
 import { IL1KeyStore } from "./interface/IL1KeyStore";
 import { TypeGuard } from "./tools/typeGuard";
 import { ethers } from "ethers";
@@ -62,11 +61,11 @@ export class L1KeyStore extends IL1KeyStore {
 
         guardians.sort((a, b) => {
             TypeGuard.onlyAddress(a);
-            const aBig = new BN(a);
-            const bBig = new BN(b);
-            if (aBig.eq(bBig)) {
+            const aBig = BigInt(a);
+            const bBig = BigInt(b);
+            if (aBig === bBig) {
                 throw new Error(`guardian address is same: ${a}`);
-            } else if (aBig.lt(bBig)) {
+            } else if (aBig < bBig) {
                 return -1;
             } else {
                 return 1;

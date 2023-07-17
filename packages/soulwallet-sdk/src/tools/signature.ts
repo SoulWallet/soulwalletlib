@@ -1,6 +1,6 @@
 import { TypeGuard } from './typeGuard';
-import { BN } from "bn.js";
 import { Hex } from "./hex";
+import { ethers } from 'ethers';
 
 export class HookInputData {
     /**
@@ -121,41 +121,20 @@ export class Signature {
         }
     }
 
+
     /**
-     * 
+     *
      *
      * @static
-     * @param {string} signature 65 bytes signature
-     * @param {number} [signatureValidPeriod] 0 means no validation, seconds
-     * @param {Record<string, string>} [guardHookInputData] key: guardHookPlugin address, value: input data. 
-     * @return {*}  {string} packed signature
+     * @param {string} signature signature signature 65 bytes signature
+     * @param {string} [validationData] validationData validationData 32 bytes validationData
+     * @param {HookInputData} [guardHookInputData] key: guardHookPlugin address, value: input data. 
+     * @return {*}  {string}
      * @memberof Signature
      */
-    static packSignature(signature: string, signatureValidPeriod?: number, guardHookInputData?: HookInputData): string {
+    static packSignature(signature: string, validationData: string, guardHookInputData?: HookInputData): string {
         Signature.onlyEOASignature(signature);
-        if (signatureValidPeriod === undefined && guardHookInputData === undefined) {
-            return signature;
-        }
-        if (signatureValidPeriod === undefined) {
-            signatureValidPeriod = 0;
-        }
-        if (!Number.isSafeInteger(signatureValidPeriod)) {
-            throw new Error('invalid signatureValidPeriod');
-        }
 
-        // max to 2^(48 - 2) = 2 years
-        if (signatureValidPeriod > Math.pow(2, 48 - 2)) {
-            throw new Error('invalid signatureValidPeriod');
-        }
-
-        let validationData = new BN(0);
-        //const aggregator = new BN(0);
-        if (signatureValidPeriod > 0) {
-            const validAfter = new BN(Math.floor(Date.now() / 1000));
-            const validUntil = validAfter.add(new BN(signatureValidPeriod));
-            validationData = validUntil.shln(160).add(validAfter.shln(160 + 48))
-            /*.add(aggregator)*/;
-        }
 
         let guardHookInputDataBytes: string = '';
         if (guardHookInputData !== undefined) {
@@ -201,10 +180,11 @@ export class Signature {
                 guardHookInputDataBytes += inputData[guardianHookPluginAddress].substring(2);
             }
         }
-        if (guardHookInputDataBytes.length > 0 || validationData.gt(new BN(0))) {
+        const _validationData = BigInt(validationData);
+        if (guardHookInputDataBytes.length > 0 || _validationData > 0) {
             const signType = "01";
             // validationData to 32 bytes hex string
-            const validationDataHex = Hex.paddingZero(validationData.toString('hex'), 32).slice(2);
+            const validationDataHex = Hex.paddingZero(_validationData, 32).slice(2);
             const packedSignature = `0x${signType}${validationDataHex}${signature.substring(2)}${guardHookInputDataBytes}`.toLowerCase();
             return packedSignature;
         } else {
@@ -212,12 +192,75 @@ export class Signature {
         }
     }
 
+    /**
+     *
+     *
+     * @static
+     * @param {string} userOpHash
+     * @param {number} [validAfter]
+     * @param {number} [validUntil]
+     * @return {*}  {string}
+     * @memberof Signature
+     */
+    static packUserOpHash(userOpHash: string, validAfter?: number, validUntil?: number): {
+        packedUserOpHash: string,
+        validationData: string
+    } {
+        TypeGuard.onlyBytes32(userOpHash);
+
+        if (validAfter !== undefined && validUntil !== undefined) {
+            if (validAfter >= validUntil) {
+                throw new Error('invalid validAfter and validUntil');
+            }
+        } else if (validAfter !== undefined || validUntil !== undefined) {
+            throw new Error('invalid validAfter and validUntil');
+        } else {
+            return {
+                packedUserOpHash: userOpHash,
+                validationData: '0x0'
+            };
+        }
+
+        if (!Number.isSafeInteger(validAfter)) {
+            throw new Error('invalid validAfter');
+        }
+        if (!Number.isSafeInteger(validUntil)) {
+            throw new Error('invalid validUntil');
+        }
+
+        // max to 2^(48 - 2) = 2 years
+        if (validAfter > Math.pow(2, 48 - 2)) {
+            throw new Error('invalid validAfter');
+        }
+        if (validUntil > Math.pow(2, 48 - 2)) {
+            throw new Error('invalid validUntil');
+        }
+
+        let validationData = BigInt(0);
+        //const aggregator = BigInt(0); 
+        const _validAfter = BigInt(validAfter);
+        const _validUntil = BigInt(validUntil);
+        validationData = (_validUntil << BigInt(160)) + (_validAfter << BigInt(160 + 48))  /*.add(aggregator)*/;
+        const validationDataHex = `0x${validationData.toString(16)}`;
+
+        //  packedUserOpHash = keccak256(abi.encodePacked(hash, validationData));
+        const _packedUserOpHash = ethers.solidityPacked(["bytes32", "uint256"], [userOpHash, validationDataHex]);
+        // const abiEncoded = new ethers.AbiCoder().encode(["bytes32", "uint256"], [userOpHash, validationData]);
+        // const keccak256 = ethers.keccak256(abiEncoded);
+        // const _packedUserOpHash = keccak256(Buffer.concat([Buffer.from(userOpHash.slice(2), 'hex'), validationData.toBuffer()]));
+        return {
+            packedUserOpHash: ethers.keccak256(_packedUserOpHash),
+            validationData: validationDataHex
+        };
+
+    }
+
 
     static semiValidSignature(): string {
         const signType = "01";
         const signature = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-        const validationData = new BN(68719476735).shln(160).add(new BN(1599999999).shln(160 + 48));
-        const validationDataHex = Hex.paddingZero(validationData.toString('hex'), 32).slice(2);
+        const validationData = (BigInt(68719476735) << BigInt(160)) + (BigInt(1599999999) << BigInt(160 + 48));
+        const validationDataHex = Hex.paddingZero(validationData, 32).slice(2);
         return `0x${signType}${validationDataHex}${signature.substring(2)}`.toLowerCase();
     }
 }
