@@ -22,7 +22,7 @@
     "url": "git+https://github.com/jayden-sudo/soulwalletlib.git"
   },
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "tsc;rm lib/generateABI*",
     "javascript-obfuscator":"javascript-obfuscator",
     "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
     "generateABI": "ts-node src/generateABI.ts"

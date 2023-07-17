@@ -3,12 +3,13 @@ import { GuardHookInputData, ISoulWallet, UserOperation } from "./interface/ISou
 import { TypeGuard } from "./tools/typeGuard.js";
 import { StorageCache } from "./tools/storageCache.js";
 import { ABI_SoulWalletFactory, ABI_SoulWallet, ABI_EntryPoint } from "@soulwallet/abi";
-import { NotPromise, packUserOp, getUserOpHash, deepHexlify } from '@account-abstraction/utils'
+import { getUserOpHash } from '@account-abstraction/utils'
 import { L1KeyStore } from "./L1KeyStore.js";
 import { HookInputData, Signature } from "./tools/signature.js";
 import { Hex } from "./tools/hex.js";
 import { GasOverhead } from "./tools/gasOverhead.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
+import { Bundler } from "./bundler.js";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -29,6 +30,8 @@ export class SoulWallet extends ISoulWallet {
     readonly securityControlModuleAddress: string;
 
     readonly preVerificationGasDeploy: number = 10000000;
+
+    readonly Bundler: Bundler;
 
 
     constructor(
@@ -54,6 +57,8 @@ export class SoulWallet extends ISoulWallet {
         this.defalutCallbackHandlerAddress = _defalutCallbackHandlerAddress;
         this.keyStoreModuleAddress = _keyStoreModuleAddress;
         this.securityControlModuleAddress = _securityControlModuleAddress;
+
+        this.Bundler = new Bundler(this.bundler);
     }
 
 
@@ -86,14 +91,11 @@ export class SoulWallet extends ISoulWallet {
             StorageCache.getInstance().set(key, _onChainConfig);
 
             // check bundler RPC
-            const supportedEntryPoint = await this.bundler.send(
-                'eth_supportedEntryPoints',
-                []
-            );
-            if (!Array.isArray(supportedEntryPoint)) {
-                throw new Error("Invalid bundler RPC response");
+            const ret = await this.Bundler.eth_supportedEntryPoints();
+            if (!ret.succ) {
+                throw new Error("Bundler RPC error");
             }
-            if (supportedEntryPoint.join().toLowerCase().indexOf(entryPoint.toLowerCase()) === -1) {
+            if (ret.result!.join().toLowerCase().indexOf(entryPoint.toLowerCase()) === -1) {
                 throw new Error(
                     `Bundler network doesn't support entryPoint ${entryPoint}`
                 );
@@ -291,9 +293,9 @@ export class SoulWallet extends ISoulWallet {
     }
 
     async estimateUserOperationGas(userOp: UserOperation): Promise<UserOpErrors | undefined> {
+        const semiValidSignature = userOp.signature === "0x";
         try {
             const _onChainConfig = await this.getOnChainConfig();
-            const semiValidSignature = userOp.signature === "0x";
             if (semiValidSignature) {
                 if (userOp.initCode !== "0x") {
                     // deploy
@@ -304,41 +306,16 @@ export class SoulWallet extends ISoulWallet {
                 }
             }
 
-            try {
-                const userOpGas = await this.bundler.send(
-                    'eth_estimateUserOperationGas',
-                    [
-                        deepHexlify(userOp),
-                        _onChainConfig.entryPoint
-                    ]
-                );
-                /*  
-                    callGasLimit: '0x5208'
-                    preVerificationGas: '0xb9f8'
-                    validAfter: '0x5f5e0fff'
-                    validUntil: '0xfffffffff'
-                    verificationGasLimit: '0x91608'
-                */
-                userOp.preVerificationGas = userOpGas.preVerificationGas;
-                userOp.verificationGasLimit = userOpGas.verificationGasLimit;
-                userOp.callGasLimit = userOpGas.callGasLimit;
-                GasOverhead.calcGasOverhead(userOp);
-
-                return undefined;
-            } catch (error: any) {
-                if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                    return new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined);
-                } else {
-                    return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
-                }
-            } finally {
-                if (semiValidSignature) {
-                    userOp.signature = "0x";
-                }
+            const userOpGasRet = await this.Bundler.eth_estimateUserOperationGas(_onChainConfig.entryPoint, userOp);
+            if (!userOpGasRet.succ) {
+                return userOpGasRet.errors!;
             }
+            userOp.preVerificationGas = userOpGasRet.result!.preVerificationGas;
+            userOp.verificationGasLimit = userOpGasRet.result!.verificationGasLimit;
+            userOp.callGasLimit = userOpGasRet.result!.callGasLimit;
+            GasOverhead.calcGasOverhead(userOp);
         } catch (error: any) {
             console.error(error);
-
             let errmsg: string = '';
             if (error.message) {
                 errmsg = error.message;
@@ -350,33 +327,25 @@ export class SoulWallet extends ISoulWallet {
                 errmsg = 'unknown error';
             }
             return new UserOpErrors(UserOpErrorCodes.UnknownError, errmsg);
+        } finally {
+            if (semiValidSignature) {
+                userOp.signature = "0x";
+            }
         }
     }
 
     async sendUserOperation(userOp: UserOperation): Promise<UserOpErrors | undefined> {
         try {
             const _onChainConfig = await this.getOnChainConfig();
-            try {
-
-                const userOpHash = await this.bundler.send(
-                    'eth_sendUserOperation',
-                    [
-                        deepHexlify(userOp),
-                        _onChainConfig.entryPoint
-                    ]
-                );
-                const userOPHashLocal = await this.userOpHash(userOp);
-                if (userOpHash.toLowerCase() !== userOPHashLocal.toLowerCase()) {
-                    throw new Error("userOpHash !== userOPHashLocal");
-                }
-                return undefined;
-            } catch (error: any) {
-                if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                    return new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined);
-                } else {
-                    return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
-                }
+            const sendUserOpRet = await this.Bundler.eth_sendUserOperation(_onChainConfig.entryPoint, userOp);
+            if (!sendUserOpRet.succ) {
+                return sendUserOpRet.errors!;
             }
+            const userOPHashLocal = await this.userOpHash(userOp);
+            if (sendUserOpRet.result!.toLowerCase() !== userOPHashLocal.toLowerCase()) {
+                throw new Error("userOpHash !== userOPHashLocal");
+            }
+            return undefined;
         } catch (error: any) {
             console.error(error);
 

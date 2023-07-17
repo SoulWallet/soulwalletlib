@@ -8,6 +8,7 @@
     "ts-node": "ts-node",
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm -r run tsc",
+    "rebuild": "rm -rf ./packages/*/lib;pnpm -r run tsc",
     "release": "pnpm -r run release",
     "preTest": "cd soul-wallet-contract/ && chmod +x .env && npm install && npm run build && cd ../bundler/ && yarn && yarn preprocess",
     "test": "pnpm -r run test --filter 'test'",

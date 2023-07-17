@@ -5,8 +5,8 @@
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/jayden-sudo/soulwalletlib#readme",
     "license": "ISC",
-    "main": "lib/main.js",
-    "types": "lib/main.d.ts",
+    "main": "lib/export.js",
+    "types": "lib/export.d.ts",
     "type": "module",
     "directories": {
         "lib": "lib",
