@@ -1,43 +1,33 @@
 {
-  "name": "soul-wallet-lib",
-  "version": "v0.1.0-alpha.32",
-  "description": "The EIP-4337 library for Soul-Wallet",
-  "main": "dist/app.js",
+  "name": "@soulwallet/soulwallet",
+  "private": true,
+  "version": "0.0.1",
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "build": "rm -rf dist && tsc --project tsconfig.json",
-    "test": "mocha",
-    "docs": "npx typedoc src/app.ts"
+    "tsc": "tsc",
+    "javascript-obfuscator":"javascript-obfuscator",
+    "ts-node": "ts-node",
+    "preinstall": "npx only-allow pnpm",
+    "build": "pnpm -r run tsc",
+    "rebuild": "rm -rf ./packages/*/lib;pnpm -r run tsc",
+    "release": "pnpm -r run release",
+    "preTest": "cd soul-wallet-contract/ && chmod +x .env && npm install && npm run build && cd ../bundler/ && yarn && yarn preprocess",
+    "test": "pnpm -r run test --filter 'test'",
+    "generateABI": "pnpm -r run generateABI --filter 'soulwallet-abi'",
+    "clean": "lerna run clean && rm -rf ./packages/*/lib/*",
+    "reBuild": "npm run clean && npm run build  ",
+    "geth": "docker-compose -f ./eth-node/docker-compose.yaml up --force-recreate -V",
+    "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
+    "bundler": "cd bundler/ && yarn run bundler"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
-  },
-  "keywords": [
-    "AA",
-    "wallet",
-    "contract",
-    "EIP4337"
-  ],
-  "author": "soul",
-  "license": "MPL-2.0",
-  "bugs": {
-    "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
-  },
-  "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib",
   "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.14.1",
-    "mocha": "^10.2.0",
+    "@changesets/cli": "^2.26.2",
+    "@types/node": "^20.4.2",
     "ts-node": "^10.9.1",
-    "typedoc": "^0.23.25",
-    "typedoc-plugin-markdown": "^3.14.0",
-    "typedoc-plugin-missing-exports": "^1.0.0",
-    "typescript": "^4.7.4"
+    "typescript": "^5.1.6",
+    "javascript-obfuscator": "^4.0.2"
   },
-  "dependencies": {
-    "dotenv": "8.6.0",
-    "ethereumjs-util": "^7.1.5",
-    "ethers": "^5.7.1"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

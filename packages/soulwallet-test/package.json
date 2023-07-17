@@ -1,0 +1,44 @@
+{
+  "name": "@soulwallet/test",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "Jayden <z.cejay@gmail.com>",
+  "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
+  "license": "ISC",
+  "type": "module",
+  "private": true,
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
+  },
+  "scripts": {
+    "test": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
+  },
+  "dependencies": {
+    "@account-abstraction/contracts": "^0.6",
+    "@account-abstraction/sdk": "^0.6",
+    "@account-abstraction/utils": "^0.6.0",
+    "@soulwallet/abi": "workspace:*",
+    "@soulwallet/sdk": "workspace:*",
+    "bn.js": "^5.2.1",
+    "ethereumjs-util": "^7.1.5",
+    "ethers": "^6.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "@types/shelljs": "^0.8.12",
+    "shelljs": "^0.8.5"
+  }
+}

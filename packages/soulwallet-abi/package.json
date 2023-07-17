@@ -1,0 +1,38 @@
+{
+  "name": "@soulwallet/abi",
+  "version": "0.0.1",
+  "description": "> TODO: description",
+  "author": "Jayden <z.cejay@gmail.com>",
+  "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
+  "license": "ISC",
+  "main": "lib/main.js",
+  "types": "lib/main.d.ts",
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
+  },
+  "scripts": {
+    "tsc": "tsc;rm lib/generateABI*",
+    "javascript-obfuscator":"javascript-obfuscator",
+    "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
+    "generateABI": "ts-node src/generateABI.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "@types/shelljs": "^0.8.12",
+    "shelljs": "^0.8.5"
+  }
+}
