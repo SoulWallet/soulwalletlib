@@ -1,7 +1,7 @@
 import { UserOperationStruct } from "@account-abstraction/contracts";
 import { NotPromise } from '@account-abstraction/utils'
 export type UserOperation = NotPromise<UserOperationStruct>;
-import { UserOpErrors } from "./IUserOpErrors";
+import { UserOpErrors } from "./IUserOpErrors.js";
 
 export abstract class ISoulWallet {
 

@@ -1,3 +1,5 @@
+//Please do not modify manually,use `git submodule update --init --recursive && pnpm run generateABI`
+
 export default [
     {
         "inputs": [],

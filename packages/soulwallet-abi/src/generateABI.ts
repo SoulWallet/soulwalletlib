@@ -36,18 +36,20 @@ shell.rm('-rf', resolve(__dirname, 'src', 'ABI/*.ts'));
 let mainTsImport = '';
 let mainTsExport = '\n';
 
+const warning = '//Please do not modify manually,use `git submodule update --init --recursive && pnpm run generateABI`\n\n';
+
 for (let i = 0; i < abiSource.length; i++) {
     const [source, className] = abiSource[i];
     const abiJson = generateABI(source, className);
 
     const abiFilePath = resolve(__dirname, 'src', 'ABI', 'ABI_' + className + '.ts');
-    fs.writeFileSync(abiFilePath, `export default ${abiJson};`);
+    fs.writeFileSync(abiFilePath, `${warning}export default ${abiJson};`);
 
-    mainTsImport += `import ABI_${className} from "./ABI/ABI_${className}";\n`;
+    mainTsImport += `import ABI_${className} from "./ABI/ABI_${className}.js";\n`;
     mainTsExport += '    ABI_' + className + ',\n';
 }
 const mainTsFilePath = resolve(__dirname, 'src', 'main.ts');
-fs.writeFileSync(mainTsFilePath, mainTsImport + '\n\nexport { ' + mainTsExport + ' };' + '\n//Please do not modify manually,use `git submodule update --init --recursive && lerna run generateABI`');
+fs.writeFileSync(mainTsFilePath, mainTsImport + '\n\nexport { ' + mainTsExport + ' };' + '\n' + warning);
 
 function generateABI(contractPath: string, className: string) {
     const solcCommand = `solc --via-ir --optimize --base-path './' @account-abstraction/=lib/account-abstraction/ @openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/ @openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/ @source/=contracts/ @solmate/=lib/solmate/src/ @arbitrum/nitro-contracts=lib/nitro-contracts/ --pretty-json --combined-json abi ${contractPath}`;

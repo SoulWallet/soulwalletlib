@@ -1,8 +1,8 @@
-import { IL1KeyStore } from "./interface/IL1KeyStore";
-import { TypeGuard } from "./tools/typeGuard";
+import { IL1KeyStore } from "./interface/IL1KeyStore.js";
+import { TypeGuard } from "./tools/typeGuard.js";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
-import { Hex } from "./tools/hex";
+import { Hex } from "./tools/hex.js";
 
 
 export class L1KeyStore extends IL1KeyStore {

@@ -1,5 +1,5 @@
-import { SoulWallet } from "./soulWallet";
-import { L1KeyStore } from "./L1KeyStore";
+import { SoulWallet } from "./soulWallet.js";
+import { L1KeyStore } from "./L1KeyStore.js";
 
 export {
     SoulWallet,

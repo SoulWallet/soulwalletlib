@@ -5,7 +5,7 @@ import shell from 'shelljs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve, join } from 'path';
 import { ethers } from 'ethers';
-import { PersonalSign } from './personalSign';
+import { PersonalSign } from './personalSign.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -267,6 +267,17 @@ class Deploy {
         }
 
         // wait for tx to be mined
+        const jsonProvider = new ethers.JsonRpcProvider(this.provider);
+        while (true) {
+            const contractAddr = userOp.sender;
+            const code = await jsonProvider.getCode(contractAddr);
+            if (code !== '0x') {
+                break;
+            }
+            console.log('waiting for tx to be mined');
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+        console.log('tx mined');
 
 
         console.log(userOp);

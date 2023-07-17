@@ -1,5 +1,5 @@
-import { TypeGuard } from './typeGuard';
-import { Hex } from "./hex";
+import { TypeGuard } from './typeGuard.js';
+import { Hex } from "./hex.js";
 import { ethers } from 'ethers';
 
 export class HookInputData {

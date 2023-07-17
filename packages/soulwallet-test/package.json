@@ -21,7 +21,6 @@
     "url": "git+https://github.com/jayden-sudo/soulwalletlib.git"
   },
   "scripts": {
-    "tsc": "tsc",
     "test": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts"
   },
   "bugs": {

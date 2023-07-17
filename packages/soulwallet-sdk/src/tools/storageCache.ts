@@ -1,9 +1,11 @@
-/**
- * 
- *
- * @export
- * @class storageCache
- */
+class CachedData {
+    public value: any;
+    public expire: number;
+    constructor(value: any, expire: number) {
+        this.value = value;
+        this.expire = expire;
+    }
+}
 export class StorageCache {
     private static instance: StorageCache;
 
@@ -13,9 +15,14 @@ export class StorageCache {
         return StorageCache.instance;
     }
 
-    private storage: Record<string, any> = {};
+    private storage: Record<string, CachedData> = {};
+    private storageKey: string = "soulwallet-sdk-cache";
+    private useLocalStorage: boolean = false;
 
     private constructor() {
+        if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+            this.useLocalStorage = true;
+        }
     }
 
     /**
@@ -24,10 +31,17 @@ export class StorageCache {
      * @template T
      * @param {string} key
      * @param {T} value
-     * @memberof storageCache
+     * @param {number} [expire=0] 0 means never expire, unit: second, default: 7 days
+     * @memberof StorageCache
      */
-    public set<T>(key: string, value: T) {
-        this.storage[key] = value;
+    public set<T>(key: string, value: T, expire: number = 86400 * 7) {
+        const k = this.storageKey + '|' + key;
+        const v = new CachedData(value, expire === 0 ? 0 : (Date.now() + (expire * 1000)));
+        if (this.useLocalStorage) {
+            window.localStorage.setItem(k, JSON.stringify(v));
+        } else {
+            this.storage[k] = v;
+        }
     }
 
     /**
@@ -40,9 +54,30 @@ export class StorageCache {
      * @memberof StorageCache
      */
     public get<T>(key: string, defaultValue: T): T {
-        if (key in this.storage) {
-            return this.storage[key];
+        const k = this.storageKey + '|' + key;
+
+        let v: CachedData | undefined = undefined;
+        if (this.useLocalStorage) {
+            const s = window.localStorage.getItem(k);
+            if (s) {
+                try {
+                    v = JSON.parse(s) as CachedData;
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
+        else {
+            if (k in this.storage) {
+                v = this.storage[k];
+            }
+        }
+        if (v) {
+            if (v.expire === 0 || v.expire > Date.now()) {
+                return v.value;
+            }
+        }
+
         return defaultValue;
     }
 } 
