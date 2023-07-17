@@ -48,6 +48,13 @@ for (let i = 0; i < abiSource.length; i++) {
     mainTsImport += `import ABI_${className} from "./ABI/ABI_${className}.js";\n`;
     mainTsExport += '    ABI_' + className + ',\n';
 }
+// entrypoint
+const entryPointABI = fs.readFileSync(resolve(__dirname, 'src', 'entrypoint', 'v0.6.json'), 'utf-8');
+const entryPointAbiFilePath = resolve(__dirname, 'src', 'ABI', 'ABI_EntryPoint.ts');
+fs.writeFileSync(entryPointAbiFilePath, `${warning}export default ${entryPointABI};`);
+mainTsImport += `import ABI_EntryPoint from "./ABI/ABI_EntryPoint.js";\n`;
+mainTsExport += '    ABI_EntryPoint,\n';
+
 const mainTsFilePath = resolve(__dirname, 'src', 'main.ts');
 fs.writeFileSync(mainTsFilePath, mainTsImport + '\n\nexport { ' + mainTsExport + ' };' + '\n' + warning);
 

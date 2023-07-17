@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { GuardHookInputData, ISoulWallet, UserOperation } from "./interface/ISoulWallet.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { StorageCache } from "./tools/storageCache.js";
-import { ABI_SoulWalletFactory, ABI_SoulWallet } from "@soulwallet/abi";
+import { ABI_SoulWalletFactory, ABI_SoulWallet, ABI_EntryPoint } from "@soulwallet/abi";
 import { NotPromise, packUserOp, getUserOpHash, deepHexlify } from '@account-abstraction/utils'
 import { L1KeyStore } from "./L1KeyStore.js";
 import { HookInputData, Signature } from "./tools/signature.js";
@@ -156,6 +156,58 @@ export class SoulWallet extends ISoulWallet {
         return _walletAddress;
     }
 
+    async preFund(userOp: UserOperation): Promise<{
+        deposit: string,
+        prefund: string,
+        missfund: string
+    }> {
+        /*
+        function _getRequiredPrefund(MemoryUserOp memory mUserOp) internal pure returns (uint256 requiredPrefund) {
+        unchecked {
+            //when using a Paymaster, the verificationGasLimit is used also to as a limit for the postOp call.
+            // our security model might call postOp eventually twice
+            uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
+            uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
+
+            requiredPrefund = requiredGas * mUserOp.maxFeePerGas;
+        }
+        }
+        */
+        // userOp.maxFeePerGas, userOp.preVerificationGas, userOp.verificationGasLimit must > 0
+        const ZERO = BigInt(0);
+        const maxFeePerGas = BigInt(userOp.maxFeePerGas);
+        const preVerificationGas = BigInt(userOp.preVerificationGas);
+        const verificationGasLimit = BigInt(userOp.verificationGasLimit);
+        const callGasLimit = BigInt(userOp.callGasLimit);
+        if (maxFeePerGas === ZERO || preVerificationGas === ZERO || verificationGasLimit === ZERO) {
+            throw new Error("maxFeePerGas, preVerificationGas, verificationGasLimit must > 0");
+        }
+
+        // uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
+        const mul = userOp.paymasterAndData !== '0x' ? 3 : 1;
+        // uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
+        const requiredGas = callGasLimit + verificationGasLimit * BigInt(mul) + preVerificationGas;
+        // requiredPrefund = requiredGas * mUserOp.maxFeePerGas;
+        const requiredPrefund = requiredGas * maxFeePerGas;
+
+        //return '0x' + requiredPrefund.toString(16);
+
+        const _onChainConfig = await this.getOnChainConfig();
+
+        const _entrypoint = new ethers.Contract(_onChainConfig.entryPoint, ABI_EntryPoint, this.provider);
+
+        // balanceOf(): uint256 
+        const _deposit: bigint = await _entrypoint.getFunction("balanceOf").staticCall(userOp.sender);
+
+        const _missfund = _deposit < requiredPrefund ? requiredPrefund - _deposit : ZERO;
+
+        return {
+            deposit: '0x' + _deposit.toString(16),
+            prefund: '0x' + requiredPrefund.toString(16),
+            missfund: '0x' + _missfund.toString(16)
+        };
+    }
+
     async createUnsignedDeployWalletUserOp(
         index: number,
         initialKey: string,
@@ -275,7 +327,7 @@ export class SoulWallet extends ISoulWallet {
                 return undefined;
             } catch (error: any) {
                 if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                    return new UserOpErrors(error.error.code, error.error.message);
+                    return new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined);
                 } else {
                     return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
                 }
@@ -320,7 +372,7 @@ export class SoulWallet extends ISoulWallet {
                 return undefined;
             } catch (error: any) {
                 if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                    return new UserOpErrors(error.error.code, error.error.message);
+                    return new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined);
                 } else {
                     return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
                 }

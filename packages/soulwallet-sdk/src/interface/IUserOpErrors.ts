@@ -1,10 +1,12 @@
 export class UserOpErrors {
   code: number;
   message: string;
+  data: any | undefined;
 
-  constructor(code: number, message: string) {
+  constructor(code: number, message: string, data?: any | undefined) {
     this.code = code;
     this.message = message;
+    this.data = data;
   }
 
   toString(): string {

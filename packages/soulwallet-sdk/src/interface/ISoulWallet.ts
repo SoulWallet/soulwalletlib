@@ -103,6 +103,25 @@ export abstract class ISoulWallet {
      * @memberof ISoulWallet
      */
     abstract sendUserOperation(userOp: UserOperation): Promise<UserOpErrors | undefined>;
+
+
+    /**
+     *
+     *
+     * @abstract
+     * @param {UserOperation} userOp
+     * @return {*}  {Promise<{
+     *         deposit: string,
+     *         prefund: string,
+     *         missfund: string
+     *     }>} hex string, unit: wei
+     * @memberof ISoulWallet
+     */
+    abstract preFund(userOp: UserOperation): Promise<{
+        deposit: string,
+        prefund: string,
+        missfund: string
+    }>;
 }
 
 

@@ -17,7 +17,7 @@ async function main() {
     const RPC = 'http://127.0.0.1:8545';
     const BUNDLER = 'http://127.0.0.1:3000/rpc';
     // from /configs/mnemonic.txt
-    const defaultWallet = new ethers.Wallet('0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80');
+    const defaultWallet = new ethers.Wallet('0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80', new ethers.JsonRpcProvider(RPC));
 
     // let soulWallet = new SoulWallet(RPC, BUNDLER, ethers.ZeroAddress, ethers.ZeroAddress, ethers.ZeroAddress, ethers.ZeroAddress);
     // console.log(soulWallet);
@@ -247,9 +247,29 @@ class Deploy {
             ethers.ZeroHash
         );
 
+        // userOp.maxFeePerGas 100gwei
+        // userOp.maxPriorityFeePerGas 100gwei
+        const gasPrice = '100';// gwei
+        userOp.maxFeePerGas = ethers.parseUnits(gasPrice, 'gwei');
+        userOp.maxPriorityFeePerGas = ethers.parseUnits(gasPrice, 'gwei');
+
+        const jsonProvider = new ethers.JsonRpcProvider(this.provider);
+        const contractAddr = userOp.sender;
+
         const retErr1 = await soulWallet.estimateUserOperationGas(userOp);
         if (retErr1) {
             throw new Error(retErr1.toString());
+        }
+
+        // send eth to contractAddr , from this.defaultWallet
+        {
+            const preFund = await soulWallet.preFund(userOp);
+
+            const tx = await this.defaultWallet.sendTransaction({
+                to: contractAddr,
+                value: preFund.missfund
+            });
+            await tx.wait();
         }
 
         const validAfter: number = Math.floor(Date.now() / 1000);
@@ -261,15 +281,19 @@ class Deploy {
         const packedSignature = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
         userOp.signature = packedSignature;
 
+
+
+        // get balance of contractAddr
+        const balance_before = await jsonProvider.getBalance(contractAddr);
+        console.log(`balance before: ${ethers.formatEther(balance_before)} ETH`);
+
         const retErr2 = await soulWallet.sendUserOperation(userOp);
         if (retErr2) {
             throw new Error(retErr2.toString());
         }
 
         // wait for tx to be mined
-        const jsonProvider = new ethers.JsonRpcProvider(this.provider);
         while (true) {
-            const contractAddr = userOp.sender;
             const code = await jsonProvider.getCode(contractAddr);
             if (code !== '0x') {
                 break;
@@ -278,8 +302,12 @@ class Deploy {
             await new Promise((resolve) => setTimeout(resolve, 1000));
         }
         console.log('tx mined');
+        const balance_after = await jsonProvider.getBalance(contractAddr);
+        console.log(`balance after: ${ethers.formatEther(balance_after)} ETH`);
 
+        // const preFund = await soulWallet.preFund(userOp);
+        // console.log(`deposit: ${ethers.formatEther(preFund.deposit)} ETH`);
 
-        console.log(userOp);
+        console.log(`activate wallet on L1 (gas price:${gasPrice} gwei) cost: ${ethers.formatEther(balance_before)} ETH`);
     }
 }
