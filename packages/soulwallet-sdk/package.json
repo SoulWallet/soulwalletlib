@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/sdk",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/jayden-sudo/soulwalletlib#readme",
@@ -23,7 +23,9 @@
         "url": "git+https://github.com/jayden-sudo/soulwalletlib.git"
     },
     "scripts": {
-        "tsc": "tsc"
+        "tsc": "tsc",
+        "javascript-obfuscator":"javascript-obfuscator",
+        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
     },
     "bugs": {
         "url": "https://github.com/jayden-sudo/soulwalletlib/issues"
