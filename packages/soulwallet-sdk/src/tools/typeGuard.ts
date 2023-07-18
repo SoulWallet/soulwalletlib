@@ -30,6 +30,18 @@ export class TypeGuard {
         return new ResultWithErrors<bigint, string>(true, bn);
     }
 
+    static maxToUint192(num: string): ResultWithErrors<bigint, string> {
+        const bn = BigInt(num);
+        /* 
+        type(uint192).max =  0xffffffffffffffffffffffffffffffffffffffffffffffff
+        */
+        if (bn > (BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffff"))) {
+            // throw new Error("num is too large");
+            return new ResultWithErrors<bigint, string>(false, undefined, "num is too large");
+        }
+        return new ResultWithErrors<bigint, string>(true, bn);
+    }
+
     static maxToUint256(num: string): ResultWithErrors<bigint, string> {
         const bn = BigInt(num);
         /* 

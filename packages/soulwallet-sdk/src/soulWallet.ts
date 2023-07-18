@@ -3,15 +3,13 @@ import { GuardHookInputData, ISoulWallet, Transaction, UserOperation } from "./i
 import { TypeGuard } from "./tools/typeGuard.js";
 import { StorageCache } from "./tools/storageCache.js";
 import { ABI_SoulWalletFactory, ABI_SoulWallet, ABI_EntryPoint } from "@soulwallet/abi";
-import { NotPromise, getUserOpHash } from '@account-abstraction/utils'
-import { L1KeyStore } from "./L1KeyStore.js";
+import { getUserOpHash } from '@account-abstraction/utils'
 import { HookInputData, Signature } from "./tools/signature.js";
 import { Hex } from "./tools/hex.js";
 import { GasOverhead } from "./tools/gasOverhead.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
 import { ResultWithErrors } from "./interface/returnWithErrors.js";
-import { UserOperationStruct } from "@account-abstraction/contracts";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -118,6 +116,19 @@ export class SoulWallet extends ISoulWallet {
             }
         }
         return new ResultWithErrors(true, _onChainConfig);
+    }
+
+    private _entryPointContract: ethers.Contract | undefined;
+
+    private async getEntryPointContract(): Promise<ResultWithErrors<ethers.Contract, string>> {
+        if (this._entryPointContract === undefined) {
+            const _onChainConfig = await this.getOnChainConfig();
+            if (!_onChainConfig.succ) {
+                return new ResultWithErrors<ethers.Contract, string>(false, undefined, _onChainConfig.errors!);
+            }
+            this._entryPointContract = new ethers.Contract(_onChainConfig.result!.entryPoint, ABI_EntryPoint, this.provider);
+        }
+        return new ResultWithErrors<ethers.Contract, string>(true, this._entryPointContract);
     }
 
     async entryPoint(): Promise<ResultWithErrors<string, any>> {
@@ -232,10 +243,17 @@ export class SoulWallet extends ISoulWallet {
             }
 
 
-            const _entrypoint = new ethers.Contract(_onChainConfig.result!.entryPoint, ABI_EntryPoint, this.provider);
+            const _entrypointRet = await this.getEntryPointContract();
+            if (!_entrypointRet.succ) {
+                return new ResultWithErrors<{
+                    deposit: string,
+                    prefund: string,
+                    missfund: string
+                }, any>(false, undefined, _entrypointRet.errors!);
+            }
 
             // balanceOf(): uint256 
-            const _deposit: bigint = await _entrypoint.getFunction("balanceOf").staticCall(userOp.sender);
+            const _deposit: bigint = await _entrypointRet.result!.getFunction("balanceOf").staticCall(userOp.sender);
 
             const _missfund = _deposit < requiredPrefund ? requiredPrefund - _deposit : ZERO;
 
@@ -373,7 +391,8 @@ export class SoulWallet extends ISoulWallet {
                     // no need guardHook input data 
                     userOp.signature = Signature.semiValidSignature();
                 } else {
-                    throw new Error("not implement now!");
+                    // #TODO : if guardianHook input data is not empty
+                    userOp.signature = Signature.semiValidSignature();
                 }
             }
             const userOpGasRet = await this.Bundler.eth_estimateUserOperationGas(_onChainConfig.result!.entryPoint, userOp);
@@ -382,7 +401,19 @@ export class SoulWallet extends ISoulWallet {
             }
             userOp.preVerificationGas = userOpGasRet.result!.preVerificationGas;
             userOp.verificationGasLimit = userOpGasRet.result!.verificationGasLimit;
-            userOp.callGasLimit = userOpGasRet.result!.callGasLimit;
+            // Value of 'gas': Even number: automatic setting, 
+            //                 Odd number: manually specified. Do not override!
+            const _callGasLimit = BigInt(userOp.callGasLimit);
+            const isEven = _callGasLimit % BigInt(2) === BigInt(0);
+            if (isEven) {
+                // auto
+                let _newCallGasLimit = BigInt(userOpGasRet.result!.callGasLimit);
+                if (_newCallGasLimit % BigInt(2) === BigInt(1)) {
+                    // odd number -> even number
+                    _newCallGasLimit += BigInt(1);
+                }
+                userOp.callGasLimit = `0x${_newCallGasLimit.toString(16)}`;
+            }
             GasOverhead.calcGasOverhead(userOp);
             return new ResultWithErrors<true, UserOpErrors>(true, true);
         } finally {
@@ -412,7 +443,144 @@ export class SoulWallet extends ISoulWallet {
 
     }
 
-    async fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, txs: Transaction[]): Promise<ResultWithErrors<UserOperation, any>> {
-        throw new Error("not implement now!");
+    async getNonce(walletAddr: string, key?: string): Promise<ResultWithErrors<string, any>> {
+        let _key = "0x0";
+        if (key !== undefined) {
+            const ret = TypeGuard.maxToUint192(key);
+            if (!ret.succ) {
+                return new ResultWithErrors<string, any>(false, undefined, ret.errors);
+            }
+            _key = '0x' + ret.result!.toString(16);
+        }
+        const _entrypointRet = await this.getEntryPointContract();
+        if (!_entrypointRet.succ) {
+            return new ResultWithErrors<string, any>(false, undefined, _entrypointRet.errors!);
+        }
+        try {
+            const _nonce: bigint = await _entrypointRet.result!.getFunction("getNonce").staticCall(walletAddr, _key);
+            return new ResultWithErrors<string, any>(true, `0x${_nonce.toString(16)}`);
+        } catch (error) {
+            return new ResultWithErrors<string, any>(false, undefined, error);
+        }
+    }
+
+    private async walletDeployed(walletAddress: string): Promise<ResultWithErrors<boolean, string>> {
+        const _onChainConfig = await this.getOnChainConfig();
+        if (!_onChainConfig.succ) {
+            return new ResultWithErrors<boolean, string>(false, undefined, _onChainConfig.errors!);
+        }
+        const key = `${walletAddress}-${_onChainConfig.result!.chainId}`;
+
+        if (StorageCache.getInstance().get<boolean>(key, false)) {
+            return new ResultWithErrors<boolean, string>(true, true);
+        }
+        try {
+            const code = await this.provider.getCode(walletAddress);
+            const deployed = code !== "0x";
+            if (deployed) {
+                StorageCache.getInstance().set(key, true);
+            }
+            return new ResultWithErrors<boolean, string>(true, deployed);
+        } catch (e: any) {
+            return new ResultWithErrors<boolean, string>(false, undefined, e.toString());
+        }
+    }
+
+    async fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<ResultWithErrors<UserOperation, any>> {
+        if (txs.length === 0) {
+            return new ResultWithErrors<UserOperation, any>(false, undefined, "txs.length === 0");
+        }
+        if (!TypeGuard.onlyAddress(from).succ) {
+            return new ResultWithErrors<UserOperation, any>(false, undefined, `invalid from: ${from}`);
+        }
+        const _walletDeployed = await this.walletDeployed(from);
+        if (!_walletDeployed.succ) {
+            return new ResultWithErrors<UserOperation, any>(false, undefined, _walletDeployed.errors!);
+        }
+        if (!_walletDeployed.result!) {
+            return new ResultWithErrors<UserOperation, any>(false, undefined, `wallet not deployed: ${from}`);
+        }
+
+        let callGasLimit: bigint = BigInt(0);
+        for (const tx of txs) {
+            if (tx.gasLimit === undefined) {
+                callGasLimit = BigInt(0);
+                break;
+            }
+            callGasLimit += BigInt(tx.gasLimit);
+        }
+        {
+            if (callGasLimit % BigInt(2) === BigInt(1)) {
+                // odd number -> even number
+                callGasLimit += BigInt(1);
+            }
+        }
+
+        const nonceRet = await this.getNonce(from, nonceKey);
+        if (!nonceRet.succ) {
+            return new ResultWithErrors<UserOperation, any>(false, undefined, nonceRet.errors!);
+        }
+        let callData: string = '0x';
+        {
+            /*
+                function execute(address dest, uint256 value, bytes calldata func) external;
+                function executeBatch(address[] calldata dest, bytes[] calldata func) external;
+                function executeBatch(address[] calldata dest, uint256[] calldata value, bytes[] calldata func) external;
+            */
+            const abi = new ethers.Interface(ABI_SoulWallet);
+
+            let to: string[] = [];
+            let value: string[] = [];
+            let data: string[] = [];
+            let hasValue = false;
+            for (let i = 0; i < txs.length; i++) {
+                const _to = txs[i].to;
+                if (!TypeGuard.onlyAddress(_to).succ) return new ResultWithErrors<UserOperation, any>(false, undefined, `invalid to: ${to}`);
+                to.push(_to);
+
+                const _valueTmp = txs[i].value;
+                const _value = _valueTmp === undefined ? '0x0' : '0x' + BigInt(_valueTmp).toString(16);
+                if (_value !== '0x0') hasValue = true;
+                value.push(_value);
+
+                const _dataTmp = txs[i].data;
+                const _data = _dataTmp === undefined ? '0x' : _dataTmp;
+                if (!TypeGuard.onlyBytes(_data).succ) return new ResultWithErrors<UserOperation, any>(false, undefined, `invalid data: ${_data}`);
+                data.push(_data);
+            }
+
+            if (txs.length > 1) {
+                if (hasValue) {
+                    callData = abi.encodeFunctionData("executeBatch", [to, value, data]);
+                } else {
+                    callData = abi.encodeFunctionData("executeBatch", [to, data]);
+                }
+            } else {
+                callData = abi.encodeFunctionData("execute", [to[0], value[0], data[0]]);
+            }
+        }
+
+        const _userOperation: UserOperation = {
+            sender: from,
+            nonce: nonceRet.result!,
+            /* 
+             address factory = address(bytes20(initCode[0 : 20]));
+             bytes memory initCallData = initCode[20 :];
+             call(gas(), factory, 0, add(initCallData, 0x20), mload(initCallData), 0, 32)
+              function createWallet(bytes memory _initializer, bytes32 _salt)
+            */
+            initCode: '0x',
+            callData: callData,
+            callGasLimit: '0x' + callGasLimit.toString(16),
+            verificationGasLimit: 0,
+            preVerificationGas: 0,
+            maxFeePerGas: '0x' + BigInt(maxFeePerGas).toString(16),
+            maxPriorityFeePerGas: '0x' + BigInt(maxPriorityFeePerGas).toString(16),
+            paymasterAndData: "0x",
+            signature: "0x"
+        };
+
+        return new ResultWithErrors<UserOperation, any>(true, _userOperation);
+
     }
 }
