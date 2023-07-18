@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
+    "typedoc":"typedoc",
+    "docs":"pnpm -r run docs",
     "tsc": "tsc",
     "javascript-obfuscator": "javascript-obfuscator",
     "ts-node": "ts-node",
@@ -24,7 +26,10 @@
     "@types/node": "^20.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",
-    "javascript-obfuscator": "^4.0.2"
+    "javascript-obfuscator": "^4.0.2",
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-markdown": "^3.15.3",
+    "typedoc-plugin-missing-exports": "^2.0.0"
   },
   "keywords": [],
   "author": "",
