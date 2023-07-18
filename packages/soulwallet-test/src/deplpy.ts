@@ -37,11 +37,16 @@ export class Deploy {
         // new wallet
         const signer = ethers.Wallet.createRandom();
 
-        const userOp = await soulWallet.createUnsignedDeployWalletUserOp(
+        const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
             0,
             signer.address,
             ethers.ZeroHash
         );
+        if (!userOpRet.succ) {
+            throw new Error(userOpRet.errors);
+        }
+
+        const userOp = userOpRet.result!;
 
         // userOp.maxFeePerGas 100gwei
         // userOp.maxPriorityFeePerGas 100gwei
@@ -53,14 +58,17 @@ export class Deploy {
         const contractAddr = userOp.sender;
 
         const retErr1 = await soulWallet.estimateUserOperationGas(userOp);
-        if (retErr1) {
-            throw new Error(retErr1.toString());
+        if (!retErr1.succ) {
+            throw new Error(retErr1.errors!.toString());
         }
 
         // send eth to contractAddr , from this.defaultWallet
         {
-            const preFund = await soulWallet.preFund(userOp);
-
+            const preFundRet = await soulWallet.preFund(userOp);
+            if (!preFundRet.succ) {
+                throw new Error(preFundRet.errors);
+            }
+            const preFund = preFundRet.result!;
             const tx = await this.defaultWallet.sendTransaction({
                 to: contractAddr,
                 value: preFund.missfund
@@ -70,8 +78,11 @@ export class Deploy {
 
         const validAfter: number = Math.floor(Date.now() / 1000);
         const validUntil = validAfter + 3600;
-        const packedUserOpHash = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
-
+        const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
+        if (!packedUserOpHashRet.succ) {
+            throw new Error(packedUserOpHashRet.errors);
+        }
+        const packedUserOpHash = packedUserOpHashRet.result!;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signature = PersonalSign.signMessage(packedUserOpHash.packedUserOpHash, signer.privateKey);
         const packedSignature = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
@@ -84,8 +95,8 @@ export class Deploy {
         console.log(`balance before: ${ethers.formatEther(balance_before)} ETH`);
 
         const retErr2 = await soulWallet.sendUserOperation(userOp);
-        if (retErr2) {
-            throw new Error(retErr2.toString());
+        if (!retErr2.succ) {
+            throw new Error(retErr2.errors!.toString());
         }
 
         // wait for tx to be mined

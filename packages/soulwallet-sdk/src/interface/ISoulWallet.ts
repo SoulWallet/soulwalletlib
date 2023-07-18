@@ -2,6 +2,14 @@ import { UserOperationStruct } from "@account-abstraction/contracts";
 import { NotPromise } from '@account-abstraction/utils'
 export type UserOperation = NotPromise<UserOperationStruct>;
 import { UserOpErrors } from "./IUserOpErrors.js";
+import { ResultWithErrors } from "./returnWithErrors.js";
+
+export interface Transaction {
+    to: string;
+    value?: string;
+    data?: string;
+    gasLimit?: string;
+}
 
 export abstract class ISoulWallet {
 
@@ -12,7 +20,7 @@ export abstract class ISoulWallet {
      * @return {*}  {Promise<string>}
      * @memberof ISoulWallet
      */
-    abstract entryPoint(): Promise<string>;
+    abstract entryPoint(): Promise<ResultWithErrors<string, any>>;
 
     /**
      *
@@ -30,7 +38,7 @@ export abstract class ISoulWallet {
         initialKey: string,
         initialGuardianHash: string,
         initialGuardianSafePeriod?: number
-    ): Promise<string>;
+    ): Promise<ResultWithErrors<string, any>>;
 
 
     /**
@@ -51,7 +59,7 @@ export abstract class ISoulWallet {
         initialGuardianHash: string,
         callData?: string,
         initialGuardianSafePeriod?: number
-    ): Promise<UserOperation>;
+    ): Promise<ResultWithErrors<UserOperation, any>>;
 
     /**
      *
@@ -61,7 +69,7 @@ export abstract class ISoulWallet {
      * @return {*}  {string}
      * @memberof ISoulWallet
      */
-    abstract userOpHash(userOp: UserOperation): Promise<string>;
+    abstract userOpHash(userOp: UserOperation): Promise<ResultWithErrors<string, any>>;
 
     /**
      *
@@ -76,10 +84,12 @@ export abstract class ISoulWallet {
      *     }>}
      * @memberof ISoulWallet
      */
-    abstract packUserOpHash(userOp: UserOperation, validAfter?: number, validUntil?: number): Promise<{
-        packedUserOpHash: string,
-        validationData: string
-    }>;
+    abstract packUserOpHash(userOp: UserOperation, validAfter?: number, validUntil?: number): Promise<
+        ResultWithErrors<{
+            packedUserOpHash: string,
+            validationData: string
+        }, any>
+    >;
 
     /**
      *
@@ -101,7 +111,7 @@ export abstract class ISoulWallet {
      * @return {*}  {(Promise<UserOpErrors | undefined>)}
      * @memberof ISoulWallet
      */
-    abstract estimateUserOperationGas(userOp: UserOperation): Promise<UserOpErrors | undefined>;
+    abstract estimateUserOperationGas(userOp: UserOperation): Promise<ResultWithErrors<true, UserOpErrors>>;
 
     /**
      *
@@ -111,7 +121,7 @@ export abstract class ISoulWallet {
      * @return {*}  {(Promise<UserOpErrors | undefined>)}
      * @memberof ISoulWallet
      */
-    abstract sendUserOperation(userOp: UserOperation): Promise<UserOpErrors | undefined>;
+    abstract sendUserOperation(userOp: UserOperation): Promise<ResultWithErrors<true, UserOpErrors>>;
 
 
     /**
@@ -126,11 +136,24 @@ export abstract class ISoulWallet {
      *     }>} hex string, unit: wei
      * @memberof ISoulWallet
      */
-    abstract preFund(userOp: UserOperation): Promise<{
+    abstract preFund(userOp: UserOperation): Promise<ResultWithErrors<{
         deposit: string,
         prefund: string,
         missfund: string
-    }>;
+    }, any>>;
+
+
+    /**
+     *
+     *
+     * @abstract
+     * @param {string} maxFeePerGas
+     * @param {string} maxPriorityFeePerGas
+     * @param {Transaction[]} txs
+     * @return {*}  {Promise<ResultWithErrors<UserOperation, any>>}
+     * @memberof ISoulWallet
+     */
+    abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, txs: Transaction[]): Promise<ResultWithErrors<UserOperation, any>>;
 }
 
 

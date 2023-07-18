@@ -115,7 +115,7 @@ export class Signature {
     */
 
     static onlyEOASignature(signature: string): void {
-        TypeGuard.onlyBytes(signature);
+        if (!TypeGuard.onlyBytes(signature).succ) throw new Error('invalid EOA signature');
         if (signature.length !== 132) {
             throw new Error('invalid EOA signature');
         }
@@ -150,17 +150,17 @@ export class Signature {
             {
                 for (let i = 0; i < guardHookInputData.guardHooks.length; i++) {
                     const guardianHookPluginAddress: string = guardHookInputData.guardHooks[i].toLocaleLowerCase()
-                    TypeGuard.onlyAddress(guardianHookPluginAddress);
+                    if (!TypeGuard.onlyAddress(guardianHookPluginAddress).succ) throw new Error('invalid guardHookInputData');
                     guardHooks.push(guardianHookPluginAddress);
                 }
                 for (let key in guardHookInputData.inputData) {
                     const guardianHookPluginAddress: string = key.toLocaleLowerCase();
-                    TypeGuard.onlyAddress(guardianHookPluginAddress);
+                    if (!TypeGuard.onlyAddress(guardianHookPluginAddress).succ) throw new Error('invalid guardHookInputData');
                     if (!guardHooks.includes(key)) {
                         throw new Error('invalid guardHookInputData');
                     }
                     const inputDataValue = guardHookInputData.inputData[key].toLocaleLowerCase();
-                    TypeGuard.onlyBytes(inputDataValue);
+                    if (!TypeGuard.onlyBytes(inputDataValue).succ) throw new Error('invalid guardHookInputData');
                     inputData[key] = inputDataValue;
                 }
             }
@@ -206,7 +206,7 @@ export class Signature {
         packedUserOpHash: string,
         validationData: string
     } {
-        TypeGuard.onlyBytes32(userOpHash);
+        if (!TypeGuard.onlyBytes32(userOpHash).succ) throw new Error('invalid userOpHash');
 
         if (validAfter !== undefined && validUntil !== undefined) {
             if (validAfter >= validUntil) {

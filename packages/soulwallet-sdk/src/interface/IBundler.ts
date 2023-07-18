@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { UserOperation } from "./ISoulWallet.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
+import { ResultWithErrors } from "./returnWithErrors.js";
 
 
 /**
@@ -65,27 +66,7 @@ export interface UserOpReceipt extends UserOperation {
     receipt: ethers.TransactionReceipt;
 }
 
-/**
- *
- *
- * @export
- * @class ResultWithErrors
- * @template T1 
- * @template T2
- */
-export class ResultWithErrors<T1, T2>{
-    succ: boolean = false;
-    errors: T2 | undefined = undefined;
-    result: T1 | undefined = undefined;
-    constructor(succ: boolean, result: T1 | undefined, errors: T2 | undefined = undefined) {
-        this.succ = succ;
-        this.errors = errors;
-        this.result = result;
-        if (result === undefined && errors === undefined) {
-            throw new Error("ResultWithErrors: result and errors can't be both undefined");
-        }
-    }
-}
+
 
 /**
  *
