@@ -23,6 +23,8 @@
         "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
     },
     "scripts": {
+        "typedoc":"typedoc",
+        "docs":"npx typedoc --plugin typedoc-plugin-markdown src/export.ts",
         "tsc": "tsc",
         "javascript-obfuscator":"javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
