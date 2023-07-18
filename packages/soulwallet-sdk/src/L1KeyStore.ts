@@ -3,6 +3,7 @@ import { TypeGuard } from "./tools/typeGuard.js";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
+import { ResultWithErrors } from "./interface/returnWithErrors.js";
 
 
 export class L1KeyStore extends IL1KeyStore {
@@ -23,10 +24,16 @@ export class L1KeyStore extends IL1KeyStore {
     constructor(_L1Provider: string | ethers.JsonRpcProvider, _L1KeyStoreContractAddress: string) {
         super();
 
-        TypeGuard.onlyAddress(_L1KeyStoreContractAddress);
+        const ret = TypeGuard.onlyAddress(_L1KeyStoreContractAddress);
+        if (!ret.succ) {
+            throw new Error(ret.errors);
+        }
 
         if (typeof _L1Provider === 'string') {
-            TypeGuard.httpOrHttps(_L1Provider);
+            const ret = TypeGuard.httpOrHttps(_L1Provider);
+            if (!ret.succ) {
+                throw new Error(ret.errors);
+            }
             this.L1Provider = new ethers.JsonRpcProvider(_L1Provider);
         } else {
             this.L1Provider = _L1Provider;
@@ -37,20 +44,30 @@ export class L1KeyStore extends IL1KeyStore {
         this.L1KeyStoreContract = new ethers.Contract(this.L1KeyStoreContractAddress, ABI_KeyStore, this.L1Provider);
     }
 
-    private static guardianSafePeriodGuard(guardianSafePeriod: number) {
+    private static guardianSafePeriodGuard(guardianSafePeriod: number): ResultWithErrors<true, string> {
         if (guardianSafePeriod < (this.days * 2)) {
-            throw new Error("initialGuardianSafePeriod is too small");
+            return new ResultWithErrors<true, string>(false, undefined, "initialGuardianSafePeriod is too small");
         }
         if (guardianSafePeriod > (this.days * 30)) {
-            throw new Error("initialGuardianSafePeriod is too large");
+            return new ResultWithErrors<true, string>(false, undefined, "initialGuardianSafePeriod is too large");
         }
+        return new ResultWithErrors<true, string>(true, true);
     }
 
 
     static getSlot(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
-        TypeGuard.onlyAddress(initialKey);
-        TypeGuard.onlyBytes32(initialGuardianHash);
-        this.guardianSafePeriodGuard(initialGuardianSafePeriod);
+        let ret = TypeGuard.onlyAddress(initialKey);
+        if (!ret.succ) {
+            throw new Error(ret.errors);
+        }
+        ret = TypeGuard.onlyBytes32(initialGuardianHash);
+        if (!ret.succ) {
+            throw new Error(ret.errors);
+        }
+        ret = this.guardianSafePeriodGuard(initialGuardianSafePeriod);
+        if (!ret.succ) {
+            throw new Error(ret.errors);
+        }
 
         // bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod
         // keccak256(abi.encode(initialKey, initialGuardianHash, guardianSafePeriod));  
@@ -79,7 +96,13 @@ export class L1KeyStore extends IL1KeyStore {
 
 
         guardians.sort((a, b) => {
-            TypeGuard.onlyAddress(a);
+            {
+                const ret = TypeGuard.onlyAddress(a);
+                if (!ret.succ) {
+                    throw new Error(ret.errors);
+                }
+            }
+
             const aBig = BigInt(a);
             const bBig = BigInt(b);
             if (aBig === bBig) {
@@ -90,19 +113,29 @@ export class L1KeyStore extends IL1KeyStore {
                 return 1;
             }
         });
-        TypeGuard.onlyBytes32(salt);
+        let ret = TypeGuard.onlyBytes32(salt);
+        if (!ret.succ) {
+            throw new Error(ret.errors);
+        }
 
         const abiEncoded = new ethers.AbiCoder().encode(["address[]", "uint256", "uint256"], [guardians, threshold, salt]);
         const keccak256 = ethers.keccak256(abiEncoded);
         return keccak256;
     }
 
-    async getKey(slot: string): Promise<string> {
-        TypeGuard.onlyBytes32(slot);
-        // function getKey(bytes32 slot) external view returns (bytes32 key);
-        const data = await this.L1KeyStoreContract.getKey(slot);
-        // bytes32 to address
-        return ethers.getAddress('0x' + data.slice(26));
+    async getKey(slot: string): Promise<ResultWithErrors<string, any>> {
+        const ret = TypeGuard.onlyBytes32(slot);
+        if (!ret.succ) {
+            return new ResultWithErrors<string, any>(false, undefined, ret.errors);
+        }
+        try {
+            // function getKey(bytes32 slot) external view returns (bytes32 key);
+            const data = await this.L1KeyStoreContract.getKey(slot);
+            // bytes32 to address
+            return new ResultWithErrors(true, ethers.getAddress('0x' + data.slice(26)));
+        } catch (error) {
+            return new ResultWithErrors<string, any>(false, undefined, error);
+        }
     }
 
 }
