@@ -62,7 +62,7 @@ export interface UserOpReceipt extends UserOperation {
     actualGasUsed: string;
     success: boolean;
     reason: string;
-    logs: string[];
+    logs: ethers.Log[];
     receipt: ethers.TransactionReceipt;
 }
 

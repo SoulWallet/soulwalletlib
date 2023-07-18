@@ -142,18 +142,32 @@ export abstract class ISoulWallet {
         missfund: string
     }, any>>;
 
-
     /**
      *
      *
      * @abstract
      * @param {string} maxFeePerGas
      * @param {string} maxPriorityFeePerGas
+     * @param {string} from
      * @param {Transaction[]} txs
+     * @param {string} [nonceKey]
      * @return {*}  {Promise<ResultWithErrors<UserOperation, any>>}
      * @memberof ISoulWallet
      */
-    abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, txs: Transaction[]): Promise<ResultWithErrors<UserOperation, any>>;
+    abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<ResultWithErrors<UserOperation, any>>;
+
+
+    /**
+     *
+     *
+     * @abstract
+     * @param {string} walletAddr
+     * @param {string} [key] default: "0x0"
+     * @return {*}  {Promise<ResultWithErrors<string, any>>}
+     * @memberof ISoulWallet
+     */
+    abstract getNonce(walletAddr: string, key?: string): Promise<ResultWithErrors<string, any>>;
+
 }
 
 

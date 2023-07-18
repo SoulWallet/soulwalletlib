@@ -1,6 +1,6 @@
 import { SoulWallet } from "./soulWallet.js";
 import { L1KeyStore } from "./L1KeyStore.js";
-import { UserOperation } from "./interface/ISoulWallet.js";
+import { Transaction, UserOperation } from "./interface/ISoulWallet.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { UserOpReceipt, UserOpDetail, UserOpGas } from "./interface/IBundler.js";
 import { ResultWithErrors } from "./interface/returnWithErrors.js";
@@ -16,5 +16,6 @@ export {
     UserOpReceipt,
     UserOpDetail,
     UserOpGas,
-    Bundler
+    Bundler,
+    Transaction
 }
