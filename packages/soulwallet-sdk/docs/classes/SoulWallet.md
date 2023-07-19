@@ -1,4 +1,4 @@
-[@soulwallet/sdk](../README.md) / [Exports](../modules.md) / SoulWallet
+[@soulwallet/sdk](../README.md) / [Modules](../modules.md) / SoulWallet
 
 # Class: SoulWallet
 
@@ -70,7 +70,7 @@ ISoulWallet.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L37)
+[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L37)
 
 ## Properties
 
@@ -80,7 +80,7 @@ ISoulWallet.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L34)
+[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L34)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:121](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L121)
+[packages/soulwallet-sdk/src/soulWallet.ts:121](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L121)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:26](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L26)
+[packages/soulwallet-sdk/src/soulWallet.ts:26](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L26)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:22](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L22)
+[packages/soulwallet-sdk/src/soulWallet.ts:22](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L22)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:28](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L28)
+[packages/soulwallet-sdk/src/soulWallet.ts:28](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L28)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:23](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L23)
+[packages/soulwallet-sdk/src/soulWallet.ts:23](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L23)
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:29](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L29)
+[packages/soulwallet-sdk/src/soulWallet.ts:29](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L29)
 
 ___
 
@@ -150,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:32](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L32)
+[packages/soulwallet-sdk/src/soulWallet.ts:32](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L32)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:25](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L25)
+[packages/soulwallet-sdk/src/soulWallet.ts:25](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L25)
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:30](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L30)
+[packages/soulwallet-sdk/src/soulWallet.ts:30](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L30)
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:27](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L27)
+[packages/soulwallet-sdk/src/soulWallet.ts:27](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L27)
 
 ## Methods
 
@@ -207,7 +207,7 @@ ISoulWallet.calcWalletAddress
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:181](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L181)
+[packages/soulwallet-sdk/src/soulWallet.ts:181](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L181)
 
 ___
 
@@ -235,7 +235,7 @@ ISoulWallet.createUnsignedDeployWalletUserOp
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:276](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L276)
+[packages/soulwallet-sdk/src/soulWallet.ts:276](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L276)
 
 ___
 
@@ -253,7 +253,7 @@ ISoulWallet.entryPoint
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:134](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L134)
+[packages/soulwallet-sdk/src/soulWallet.ts:134](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L134)
 
 ___
 
@@ -277,7 +277,7 @@ ISoulWallet.estimateUserOperationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:381](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L381)
+[packages/soulwallet-sdk/src/soulWallet.ts:381](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L381)
 
 ___
 
@@ -305,7 +305,7 @@ ISoulWallet.fromTransaction
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:489](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L489)
+[packages/soulwallet-sdk/src/soulWallet.ts:489](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L489)
 
 ___
 
@@ -319,7 +319,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:123](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L123)
+[packages/soulwallet-sdk/src/soulWallet.ts:123](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L123)
 
 ___
 
@@ -344,7 +344,7 @@ ISoulWallet.getNonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:446](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L446)
+[packages/soulwallet-sdk/src/soulWallet.ts:446](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L446)
 
 ___
 
@@ -358,7 +358,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:65](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L65)
+[packages/soulwallet-sdk/src/soulWallet.ts:65](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L65)
 
 ___
 
@@ -378,7 +378,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:360](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L360)
+[packages/soulwallet-sdk/src/soulWallet.ts:360](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L360)
 
 ___
 
@@ -400,7 +400,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:142](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L142)
+[packages/soulwallet-sdk/src/soulWallet.ts:142](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L142)
 
 ___
 
@@ -426,7 +426,7 @@ ISoulWallet.packUserOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:345](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L345)
+[packages/soulwallet-sdk/src/soulWallet.ts:345](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L345)
 
 ___
 
@@ -452,7 +452,7 @@ ISoulWallet.packUserOpSignature
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:367](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L367)
+[packages/soulwallet-sdk/src/soulWallet.ts:367](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L367)
 
 ___
 
@@ -476,7 +476,7 @@ ISoulWallet.preFund
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:202](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L202)
+[packages/soulwallet-sdk/src/soulWallet.ts:202](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L202)
 
 ___
 
@@ -500,7 +500,7 @@ ISoulWallet.sendUserOperation
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:426](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L426)
+[packages/soulwallet-sdk/src/soulWallet.ts:426](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L426)
 
 ___
 
@@ -524,7 +524,7 @@ ISoulWallet.userOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:336](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L336)
+[packages/soulwallet-sdk/src/soulWallet.ts:336](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L336)
 
 ___
 
@@ -544,4 +544,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:467](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/soulWallet.ts#L467)
+[packages/soulwallet-sdk/src/soulWallet.ts:467](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/soulWallet.ts#L467)

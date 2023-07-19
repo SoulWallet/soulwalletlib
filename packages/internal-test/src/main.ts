@@ -1,5 +1,4 @@
 'use strict';
-import { L1KeyStore, SoulWallet } from "@soulwallet/sdk";
 import { existsSync, writeFileSync } from 'fs';
 import shell from 'shelljs';
 import { fileURLToPath } from 'url';
@@ -7,6 +6,7 @@ import { dirname, resolve, join } from 'path';
 import { ethers } from 'ethers';
 import { Deploy } from "./deplpy.js";
 import { SocialRecovery } from "./socialRecovery.js";
+import { Decode } from './decode.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -182,6 +182,8 @@ async function main() {
     }
     {
         //run testcase
+
+        await new Decode().run();
 
 
         await new SocialRecovery(

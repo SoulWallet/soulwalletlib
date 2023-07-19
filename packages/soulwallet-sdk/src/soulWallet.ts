@@ -9,7 +9,7 @@ import { Hex } from "./tools/hex.js";
 import { GasOverhead } from "./tools/gasOverhead.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
-import { ResultWithErrors } from "./interface/returnWithErrors.js";
+import { ResultWithErrors } from "internal-interface";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -551,9 +551,9 @@ export class SoulWallet extends ISoulWallet {
 
             if (txs.length > 1) {
                 if (hasValue) {
-                    callData = abi.encodeFunctionData("executeBatch", [to, value, data]);
+                    callData = abi.encodeFunctionData("executeBatchexecuteBatch(address[],uint256[],bytes[])", [to, value, data]);
                 } else {
-                    callData = abi.encodeFunctionData("executeBatch", [to, data]);
+                    callData = abi.encodeFunctionData("executeBatch(address[],bytes[])", [to, data]);
                 }
             } else {
                 callData = abi.encodeFunctionData("execute", [to[0], value[0], data[0]]);

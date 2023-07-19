@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { UserOperation } from "./ISoulWallet.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { ResultWithErrors } from "./returnWithErrors.js";
+import { ResultWithErrors } from "internal-interface";
 
 
 /**

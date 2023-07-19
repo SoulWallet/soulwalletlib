@@ -1,1 +1,1 @@
-@soulwallet/sdk / [Exports](modules.md)
+@soulwallet/sdk / [Modules](modules.md)

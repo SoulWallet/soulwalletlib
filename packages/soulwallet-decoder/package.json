@@ -23,15 +23,26 @@
         "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
     },
     "scripts": {
-        "tsc": "tsc",
-        "javascript-obfuscator":"javascript-obfuscator",
-        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
+        "typedoc": "typedoc",
+        "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
+        "tsc": "tsc;rm -rf lib/dev",
+        "javascript-obfuscator": "javascript-obfuscator",
+        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
+        "generateBytes4": "ts-node src/dev/generateBytes4.ts"
     },
     "bugs": {
         "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
     },
     "dependencies": {
-        "@soulwallet/abi": "workspace:*"
+        "@soulwallet/abi": "workspace:*",
+        "internal-interface": "workspace:*",
+        "@soulwallet/assets": "workspace:*",
+        "ethers": "^6.6.4"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "@types/node": "^20.3.1",
+        "ethers": "^6.6.4",
+        "@types/shelljs": "^0.8.12",
+        "shelljs": "^0.8.5"
+    }
 }

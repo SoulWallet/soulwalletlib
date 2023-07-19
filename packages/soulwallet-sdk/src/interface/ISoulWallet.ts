@@ -2,7 +2,7 @@ import { UserOperationStruct } from "@account-abstraction/contracts";
 import { NotPromise } from '@account-abstraction/utils'
 export type UserOperation = NotPromise<UserOperationStruct>;
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { ResultWithErrors } from "./returnWithErrors.js";
+import { ResultWithErrors } from "internal-interface";
 
 export interface Transaction {
     to: string;
