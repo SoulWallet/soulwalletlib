@@ -1,7 +1,7 @@
 {
   "name": "@soulwallet/soulwallet",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "typedoc": "typedoc",
     "docs": "pnpm -r run docs",
