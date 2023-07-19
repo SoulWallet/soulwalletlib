@@ -1,4 +1,4 @@
-import { ResultWithErrors } from "./returnWithErrors.js";
+import { ResultWithErrors } from "internal-interface";
 
 /**
  * @interface IL1KeyStore

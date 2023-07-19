@@ -1,4 +1,4 @@
-[@soulwallet/sdk](../README.md) / [Exports](../modules.md) / ResultWithErrors
+[@soulwallet/sdk](../README.md) / [Modules](../modules.md) / ResultWithErrors
 
 # Class: ResultWithErrors<SUCC, ERR\>
 
@@ -38,42 +38,42 @@
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `succ` | `boolean` | `undefined` |
-| `result` | `undefined` \| `SUCC` | `undefined` |
-| `errors` | `undefined` \| `ERR` | `undefined` |
+| Name | Type |
+| :------ | :------ |
+| `succ` | `boolean` |
+| `result` | `undefined` \| `SUCC` |
+| `errors?` | `ERR` |
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/returnWithErrors.ts:13](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/interface/returnWithErrors.ts#L13)
+packages/internal-interface/lib/returnWithErrors.d.ts:13
 
 ## Properties
 
 ### errors
 
-• **errors**: `undefined` \| `ERR` = `undefined`
+• **errors**: `undefined` \| `ERR`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/returnWithErrors.ts:11](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/interface/returnWithErrors.ts#L11)
+packages/internal-interface/lib/returnWithErrors.d.ts:11
 
 ___
 
 ### result
 
-• **result**: `undefined` \| `SUCC` = `undefined`
+• **result**: `undefined` \| `SUCC`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/returnWithErrors.ts:12](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/interface/returnWithErrors.ts#L12)
+packages/internal-interface/lib/returnWithErrors.d.ts:12
 
 ___
 
 ### succ
 
-• **succ**: `boolean` = `false`
+• **succ**: `boolean`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/returnWithErrors.ts:10](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/interface/returnWithErrors.ts#L10)
+packages/internal-interface/lib/returnWithErrors.d.ts:10

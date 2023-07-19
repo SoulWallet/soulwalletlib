@@ -23,11 +23,11 @@
   },
   "scripts": {
     "typedoc":"typedoc",
-    "docs":"npx typedoc --plugin typedoc-plugin-markdown src/main.ts",
-    "tsc": "tsc;rm lib/generateABI*",
+    "docs":"npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
+    "tsc": "tsc;rm -rf lib/dev",
     "javascript-obfuscator":"javascript-obfuscator",
     "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
-    "generateABI": "ts-node src/generateABI.ts"
+    "generateABI": "ts-node src/dev/generateABI.ts"
   },
   "bugs": {
     "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"

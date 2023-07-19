@@ -1,3 +1,3 @@
-@soulwallet/abi / [Exports](modules.md)
+@soulwallet/abi / [Modules](modules.md)
 
 # `soulwallet-abi`

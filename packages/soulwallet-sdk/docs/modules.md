@@ -1,4 +1,4 @@
-[@soulwallet/sdk](README.md) / Exports
+[@soulwallet/sdk](README.md) / Modules
 
 # @soulwallet/sdk
 
@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:3](https://github.com/jayden-sudo/soulwalletlib/blob/7619b45/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L3)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:3](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L3)

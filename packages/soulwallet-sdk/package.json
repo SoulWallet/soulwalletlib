@@ -24,7 +24,7 @@
     },
     "scripts": {
         "typedoc":"typedoc",
-        "docs":"npx typedoc --plugin typedoc-plugin-markdown src/export.ts",
+        "docs":"npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/export.ts",
         "tsc": "tsc",
         "javascript-obfuscator":"javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
@@ -38,6 +38,7 @@
         "@account-abstraction/utils": "^0.6.0",
         "@soulwallet/abi": "workspace:*",
         "@soulwallet/sdk": "workspace:*",
+        "internal-interface": "workspace:*",
         "ethers": "^6.6.4"
     },
     "devDependencies": {

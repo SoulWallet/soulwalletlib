@@ -1,0 +1,42 @@
+{
+    "name": "@soulwallet/assets",
+    "version": "0.0.1",
+    "description": "> TODO: description",
+    "author": "Jayden <z.cejay@gmail.com>",
+    "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
+    "license": "ISC",
+    "main": "lib/main.js",
+    "types": "lib/main.d.ts",
+    "type": "module",
+    "directories": {
+        "lib": "lib",
+        "test": "__tests__"
+    },
+    "files": [
+        "lib"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
+    },
+    "scripts": {
+        "typedoc": "typedoc",
+        "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
+        "tsc": "tsc;rm -rf lib/dev",
+        "javascript-obfuscator": "javascript-obfuscator",
+        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
+        "generateTokens": "ts-node src/dev/generateTokens.ts"
+    },
+    "bugs": {
+        "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
+    },
+    "dependencies": { 
+        "internal-interface": "workspace:*"
+    },
+    "devDependencies": {
+        "@types/node": "^20.3.1"
+    }
+}

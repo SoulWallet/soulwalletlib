@@ -1,4 +1,4 @@
-import { ResultWithErrors } from "../interface/returnWithErrors.js";
+import { ResultWithErrors } from "internal-interface";
 
 export class TypeGuard {
 

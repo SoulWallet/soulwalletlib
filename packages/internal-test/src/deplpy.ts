@@ -128,6 +128,8 @@ export class Deploy {
         if (!entryPointAddrRet.succ) {
             throw new Error(entryPointAddrRet.errors);
         }
+
+
         {
             const tx = await this.defaultWallet.sendTransaction({
                 to: contractAddr,

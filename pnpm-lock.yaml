@@ -22,49 +22,16 @@ importers:
       typedoc-plugin-missing-exports: 2.0.0_typedoc@0.24.8
       typescript: 5.1.6
 
-  packages/soulwallet-abi:
-    specifiers:
-      '@types/node': ^20.3.1
-      '@types/shelljs': ^0.8.12
-      shelljs: ^0.8.5
-    devDependencies:
-      '@types/node': 20.4.2
-      '@types/shelljs': 0.8.12
-      shelljs: 0.8.5
+  packages/internal-interface:
+    specifiers: {}
 
-  packages/soulwallet-decoder:
-    specifiers:
-      '@soulwallet/abi': workspace:*
-    dependencies:
-      '@soulwallet/abi': link:../soulwallet-abi
-
-  packages/soulwallet-sdk:
+  packages/internal-test:
     specifiers:
       '@account-abstraction/contracts': ^0.6
       '@account-abstraction/sdk': ^0.6
       '@account-abstraction/utils': ^0.6.0
       '@soulwallet/abi': workspace:*
-      '@soulwallet/sdk': workspace:*
-      '@types/shelljs': ^0.8.12
-      ethers: ^6.6.4
-      shelljs: ^0.8.5
-    dependencies:
-      '@account-abstraction/contracts': 0.6.0
-      '@account-abstraction/sdk': 0.6.0
-      '@account-abstraction/utils': 0.6.0
-      '@soulwallet/abi': link:../soulwallet-abi
-      '@soulwallet/sdk': 'link:'
-      ethers: 6.6.4
-    devDependencies:
-      '@types/shelljs': 0.8.12
-      shelljs: 0.8.5
-
-  packages/soulwallet-test:
-    specifiers:
-      '@account-abstraction/contracts': ^0.6
-      '@account-abstraction/sdk': ^0.6
-      '@account-abstraction/utils': ^0.6.0
-      '@soulwallet/abi': workspace:*
+      '@soulwallet/decoder': workspace:*
       '@soulwallet/sdk': workspace:*
       '@types/node': ^20.3.1
       '@types/shelljs': ^0.8.12
@@ -77,12 +44,74 @@ importers:
       '@account-abstraction/sdk': 0.6.0
       '@account-abstraction/utils': 0.6.0
       '@soulwallet/abi': link:../soulwallet-abi
+      '@soulwallet/decoder': link:../soulwallet-decoder
       '@soulwallet/sdk': link:../soulwallet-sdk
       bn.js: 5.2.1
       ethereumjs-util: 7.1.5
       ethers: 6.6.4
     devDependencies:
       '@types/node': 20.4.2
+      '@types/shelljs': 0.8.12
+      shelljs: 0.8.5
+
+  packages/soulwallet-abi:
+    specifiers:
+      '@types/node': ^20.3.1
+      '@types/shelljs': ^0.8.12
+      shelljs: ^0.8.5
+    devDependencies:
+      '@types/node': 20.4.2
+      '@types/shelljs': 0.8.12
+      shelljs: 0.8.5
+
+  packages/soulwallet-assets:
+    specifiers:
+      '@types/node': ^20.3.1
+      internal-interface: workspace:*
+    dependencies:
+      internal-interface: link:../internal-interface
+    devDependencies:
+      '@types/node': 20.4.2
+
+  packages/soulwallet-decoder:
+    specifiers:
+      '@soulwallet/abi': workspace:*
+      '@soulwallet/assets': workspace:*
+      '@types/node': ^20.3.1
+      '@types/shelljs': ^0.8.12
+      ethers: ^6.6.4
+      internal-interface: workspace:*
+      shelljs: ^0.8.5
+    dependencies:
+      '@soulwallet/abi': link:../soulwallet-abi
+      '@soulwallet/assets': link:../soulwallet-assets
+      ethers: 6.6.4
+      internal-interface: link:../internal-interface
+    devDependencies:
+      '@types/node': 20.4.2
+      '@types/shelljs': 0.8.12
+      shelljs: 0.8.5
+
+  packages/soulwallet-sdk:
+    specifiers:
+      '@account-abstraction/contracts': ^0.6
+      '@account-abstraction/sdk': ^0.6
+      '@account-abstraction/utils': ^0.6.0
+      '@soulwallet/abi': workspace:*
+      '@soulwallet/sdk': workspace:*
+      '@types/shelljs': ^0.8.12
+      ethers: ^6.6.4
+      internal-interface: workspace:*
+      shelljs: ^0.8.5
+    dependencies:
+      '@account-abstraction/contracts': 0.6.0
+      '@account-abstraction/sdk': 0.6.0
+      '@account-abstraction/utils': 0.6.0
+      '@soulwallet/abi': link:../soulwallet-abi
+      '@soulwallet/sdk': 'link:'
+      ethers: 6.6.4
+      internal-interface: link:../internal-interface
+    devDependencies:
       '@types/shelljs': 0.8.12
       shelljs: 0.8.5
 
