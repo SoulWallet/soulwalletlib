@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import fs from 'fs';
-import { TokenInfo } from '../interface/tokenInfo.js';
+import { UriCompression } from '../uriCompression.js';
 
 
 const __dirname = resolve();
@@ -26,7 +26,7 @@ async function main() {
     let eachTokenArr: string = '';
     for (let index = 0; index < tokenListArray.length; index++) {
         const token = tokenListArray[index];
-        eachTokenArr += `b.set('${token.address.toLowerCase()}|${token.chainId}', { chainId: ${token.chainId}, type: 2, address: '${token.address}', name: '${token.name}', symbol: '${token.symbol}', decimals: ${token.decimals}, logoURI: '${token.logoURI}' });\n`;
+        eachTokenArr += `b.set('${token.address.toLowerCase()}|${token.chainId}',{t:2,n:'${token.name}',s:'${token.symbol}',d:${token.decimals},l:'${UriCompression.compressUri(token.logoURI)}'})\n`;
     }
 
     // read from 'tokens.template'

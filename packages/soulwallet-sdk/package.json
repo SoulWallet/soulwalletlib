@@ -37,7 +37,6 @@
         "@account-abstraction/sdk": "^0.6",
         "@account-abstraction/utils": "^0.6.0",
         "@soulwallet/abi": "workspace:*",
-        "@soulwallet/sdk": "workspace:*",
         "@soulwallet/result": "workspace:*",
         "ethers": "^6.6.4"
     },
