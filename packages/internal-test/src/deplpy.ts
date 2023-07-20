@@ -43,11 +43,11 @@ export class Deploy {
             signer.address,
             ethers.ZeroHash
         );
-        if (!userOpRet.succ) {
-            throw new Error(userOpRet.errors);
+        if (userOpRet.isErr()) {
+            throw new Error(userOpRet.ERR);
         }
 
-        const userOp = userOpRet.result!;
+        const userOp = userOpRet.OK;
 
         // userOp.maxFeePerGas 100gwei
         // userOp.maxPriorityFeePerGas 100gwei
@@ -59,17 +59,17 @@ export class Deploy {
         const contractAddr = userOp.sender;
 
         const retErr1 = await soulWallet.estimateUserOperationGas(userOp);
-        if (!retErr1.succ) {
-            throw new Error(retErr1.errors!.toString());
+        if (retErr1.isErr()) {
+            throw new Error(retErr1.ERR.toString());
         }
 
         // send eth to contractAddr , from this.defaultWallet
         {
             const preFundRet = await soulWallet.preFund(userOp);
-            if (!preFundRet.succ) {
-                throw new Error(preFundRet.errors);
+            if (preFundRet.isErr()) {
+                throw new Error(preFundRet.ERR);
             }
-            const preFund = preFundRet.result!;
+            const preFund = preFundRet.OK;
             const tx = await this.defaultWallet.sendTransaction({
                 to: contractAddr,
                 value: preFund.missfund
@@ -80,10 +80,10 @@ export class Deploy {
         const validAfter: number = Math.floor(Date.now() / 1000);
         const validUntil = validAfter + 3600;
         const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
-        if (!packedUserOpHashRet.succ) {
-            throw new Error(packedUserOpHashRet.errors);
+        if (packedUserOpHashRet.isErr()) {
+            throw new Error(packedUserOpHashRet.ERR);
         }
-        const packedUserOpHash = packedUserOpHashRet.result!;
+        const packedUserOpHash = packedUserOpHashRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signature = PersonalSign.signMessage(packedUserOpHash.packedUserOpHash, signer.privateKey);
         const packedSignature = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
@@ -96,8 +96,8 @@ export class Deploy {
         console.log(`balance before: ${ethers.formatEther(balance_before)} ETH`);
 
         const retErr2 = await soulWallet.sendUserOperation(userOp);
-        if (!retErr2.succ) {
-            throw new Error(retErr2.errors!.toString());
+        if (retErr2.isErr()) {
+            throw new Error(retErr2.ERR.toString());
         }
 
         // wait for tx to be mined
@@ -125,8 +125,8 @@ export class Deploy {
         const newAccount = ethers.Wallet.createRandom();
         const callData = abi_entryPoint.encodeFunctionData("depositTo", [newAccount.address]);
         const entryPointAddrRet = await soulWallet.entryPoint();
-        if (!entryPointAddrRet.succ) {
-            throw new Error(entryPointAddrRet.errors);
+        if (entryPointAddrRet.isErr()) {
+            throw new Error(entryPointAddrRet.ERR);
         }
 
 
@@ -138,7 +138,7 @@ export class Deploy {
             await tx.wait();
         }
         const tx: Transaction = {
-            to: entryPointAddrRet.result!,
+            to: entryPointAddrRet.OK,
             value: ethers.parseEther('1').toString(),
             data: callData
         };
@@ -149,24 +149,24 @@ export class Deploy {
             contractAddr,
             [tx]
         );
-        if (!userOpTxRet.succ) {
-            throw new Error(userOpTxRet.errors);
+        if (userOpTxRet.isErr()) {
+            throw new Error(userOpTxRet.ERR);
         }
-        const userOpTx = userOpTxRet.result!;
+        const userOpTx = userOpTxRet.OK;
 
         const estimateRet = await soulWallet.estimateUserOperationGas(userOpTx);
 
-        if (!estimateRet.succ) {
-            console.table(estimateRet.errors);
+        if (estimateRet.isErr()) {
+            console.table(estimateRet.ERR);
             throw new Error('estimate gas failed');
         }
 
         // sign
         const packedUserOpHashTxRet = await soulWallet.packUserOpHash(userOpTx, validAfter, validUntil);
-        if (!packedUserOpHashTxRet.succ) {
-            throw new Error(packedUserOpHashTxRet.errors);
+        if (packedUserOpHashTxRet.isErr()) {
+            throw new Error(packedUserOpHashTxRet.ERR);
         }
-        const packedUserOpHashTx = packedUserOpHashTxRet.result!;
+        const packedUserOpHashTx = packedUserOpHashTxRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signatureTx = PersonalSign.signMessage(packedUserOpHashTx.packedUserOpHash, signer.privateKey);
         const packedSignatureTx = await soulWallet.packUserOpSignature(signatureTx, packedUserOpHashTx.validationData);
@@ -176,27 +176,27 @@ export class Deploy {
         // send userOp
 
         const retErr3 = await soulWallet.sendUserOperation(userOpTx);
-        if (!retErr3.succ) {
-            throw new Error(retErr3.errors!.toString());
+        if (retErr3.isErr()) {
+            throw new Error(retErr3.OK.toString());
         }
         const balance_beforeTx = await jsonProvider.getBalance(contractAddr);
         console.log(`balance before: ${ethers.formatEther(balance_beforeTx)} ETH`);
         // wait for tx to be mined
         const bundler = new Bundler(this.bundler);
         const userOpHashTxRet = await soulWallet.userOpHash(userOpTx);
-        if (!userOpHashTxRet.succ) {
-            throw new Error(userOpHashTxRet.errors);
+        if (userOpHashTxRet.isErr()) {
+            throw new Error(userOpHashTxRet.ERR);
         }
         while (true) {
-            const receipt = await bundler.eth_getUserOperationReceipt(userOpHashTxRet.result!);
-            if (!receipt.succ) {
-                throw new Error(receipt.errors);
+            const receipt = await bundler.eth_getUserOperationReceipt(userOpHashTxRet.OK);
+            if (receipt.isErr()) {
+                throw new Error(receipt.ERR);
             }
-            if (receipt.result! === null) {
+            if (receipt.OK === null) {
                 console.log('waiting for tx to be mined');
                 await new Promise((resolve) => setTimeout(resolve, 1000));
             } else {
-                if (receipt.result!.success === false) {
+                if (receipt.OK.success === false) {
                     throw new Error('tx failed');
                 }
                 break;

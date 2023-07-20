@@ -3,7 +3,7 @@ import { UserOperation } from "./interface/ISoulWallet.js";
 import { deepHexlify } from "@account-abstraction/utils";
 import { IBundler, UserOpDetail, UserOpGas, UserOpReceipt } from "./interface/IBundler.js";
 import { UserOpErrorCodes, UserOpErrors } from "./interface/IUserOpErrors.js";
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 
 export class Bundler implements IBundler {
     private bundler: ethers.JsonRpcProvider;
@@ -16,7 +16,7 @@ export class Bundler implements IBundler {
         }
     }
 
-    async eth_sendUserOperation(entryPoint: string, userOp: UserOperation): Promise<ResultWithErrors<string, UserOpErrors>> {
+    async eth_sendUserOperation(entryPoint: string, userOp: UserOperation): Promise<Result<string, UserOpErrors>> {
         try {
             const userOpHash = await this.bundler.send(
                 'eth_sendUserOperation',
@@ -25,18 +25,18 @@ export class Bundler implements IBundler {
                     entryPoint
                 ]
             );
-            return new ResultWithErrors(true, userOpHash);
+            return new Ok(userOpHash);
         } catch (error: any) {
             if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                return new ResultWithErrors<string, UserOpErrors>(false, undefined, new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined));
+                return new Err(new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined));
             } else {
                 //return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
-                return new ResultWithErrors<string, UserOpErrors>(false, undefined, new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
+                return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
             }
         }
     }
 
-    async eth_estimateUserOperationGas(entryPoint: string, userOp: UserOperation): Promise<ResultWithErrors<UserOpGas, UserOpErrors>> {
+    async eth_estimateUserOperationGas(entryPoint: string, userOp: UserOperation): Promise<Result<UserOpGas, UserOpErrors>> {
         try {
             const userOpGas = await this.bundler.send(
                 'eth_estimateUserOperationGas',
@@ -46,22 +46,22 @@ export class Bundler implements IBundler {
                 ]
             ) as UserOpGas;
             if (!userOpGas) {
-                return new ResultWithErrors<UserOpGas, UserOpErrors>(false, undefined, new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
+                return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
             } else {
-                return new ResultWithErrors<UserOpGas, UserOpErrors>(true, userOpGas);
+                return new Ok(userOpGas);
             }
 
         } catch (error: any) {
             if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                return new ResultWithErrors<UserOpGas, UserOpErrors>(false, undefined, new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined));
+                return new Err(new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined));
             } else {
                 //return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
-                return new ResultWithErrors<UserOpGas, UserOpErrors>(false, undefined, new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
+                return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
             }
         }
     }
 
-    async eth_getUserOperationByHash(userOpHash: string): Promise<ResultWithErrors<null | UserOpDetail, string>> {
+    async eth_getUserOperationByHash(userOpHash: string): Promise<Result<null | UserOpDetail, string>> {
         try {
             const ret = await this.bundler.send(
                 'eth_estimateUserOperationGas',
@@ -69,18 +69,18 @@ export class Bundler implements IBundler {
                     userOpHash
                 ]
             );
-            return new ResultWithErrors<null | UserOpDetail, string>(true, ret);
+            return new Ok(ret);
         } catch (error: any) {
             if (typeof error === 'object' && typeof error.message === 'string') {
-                return new ResultWithErrors<null | UserOpDetail, string>(false, undefined, error.message);
+                return new Err(error.message);
             } else {
                 console.error(error);
-                return new ResultWithErrors<null | UserOpDetail, string>(false, undefined, 'unknown error');
+                return new Err('unknown error');
             }
         }
     }
 
-    async eth_getUserOperationReceipt(userOpHash: string): Promise<ResultWithErrors<null | UserOpReceipt, string>> {
+    async eth_getUserOperationReceipt(userOpHash: string): Promise<Result<null | UserOpReceipt, string>> {
         try {
             const ret = await this.bundler.send(
                 'eth_getUserOperationReceipt',
@@ -88,49 +88,49 @@ export class Bundler implements IBundler {
                     userOpHash
                 ]
             );
-            return new ResultWithErrors<null | UserOpReceipt, string>(true, ret);
+            return new Ok(ret);
         } catch (error: any) {
             if (typeof error === 'object' && typeof error.message === 'string') {
-                return new ResultWithErrors<null | UserOpReceipt, string>(false, undefined, error.message);
+                return new Err(error.message);
             } else {
                 console.error(error);
-                return new ResultWithErrors<null | UserOpReceipt, string>(false, undefined, 'unknown error');
+                return new Err('unknown error');
             }
         }
     }
 
-    async eth_supportedEntryPoints(): Promise<ResultWithErrors<string[], string>> {
+    async eth_supportedEntryPoints(): Promise<Result<string[], string>> {
         try {
             const ret = await this.bundler.send(
                 'eth_supportedEntryPoints',
                 []
             );
             if (Array.isArray(ret)) {
-                return new ResultWithErrors<string[], string>(true, ret);
+                return new Ok(ret);
             } else {
-                return new ResultWithErrors<string[], string>(false, undefined, 'unknown error');
+                return new Err('unknown error');
             }
 
         } catch (error: any) {
             if (typeof error === 'object' && typeof error.message === 'string') {
-                return new ResultWithErrors<string[], string>(false, undefined, error.message);
+                return new Err(error.message);
             } else {
                 console.error(error);
-                return new ResultWithErrors<string[], string>(false, undefined, 'unknown error');
+                return new Err('unknown error');
             }
         }
     }
 
-    async eth_chainId(): Promise<ResultWithErrors<number, string>> {
+    async eth_chainId(): Promise<Result<number, string>> {
         try {
             const chain = await this.bundler.send('eth_chainId', []);
-            return new ResultWithErrors<number, string>(true, parseInt(chain));
+            return new Ok(parseInt(chain));
         } catch (error: any) {
             if (typeof error === 'object' && typeof error.message === 'string') {
-                return new ResultWithErrors<number, string>(false, undefined, error.message);
+                return new Err(error.message);
             } else {
                 console.error(error);
-                return new ResultWithErrors<number, string>(false, undefined, 'unknown error');
+                return new Err('unknown error');
             }
         }
     }

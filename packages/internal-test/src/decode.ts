@@ -63,10 +63,10 @@ export class Decode {
         }
 
         const ret = await Decoder.decode(1, '0x1', '0x2', callData);
-        if (!ret.succ) {
-            throw new Error(ret.errors);
+        if (ret.isErr()) {
+            throw new Error(ret.ERR);
         }
-        if (ret.result!.length !== 2) {
+        if (ret.OK.length !== 2) {
             throw new Error('result length error');
         }
 

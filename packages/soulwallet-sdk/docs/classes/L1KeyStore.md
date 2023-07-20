@@ -53,7 +53,7 @@ IL1KeyStore.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:24](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L24)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:24](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L24)
 
 ## Properties
 
@@ -63,7 +63,7 @@ IL1KeyStore.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:15](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L15)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:15](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L15)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:13](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L13)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L13)
 
 ___
 
@@ -83,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:14](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L14)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L14)
 
 ___
 
@@ -93,13 +93,13 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:11](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L11)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:11](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L11)
 
 ## Methods
 
 ### getKey
 
-▸ **getKey**(`slot`): `Promise`<[`ResultWithErrors`](ResultWithErrors.md)<`string`, `any`\>\>
+▸ **getKey**(`slot`): `Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
 
 #### Parameters
 
@@ -109,7 +109,7 @@ ___
 
 #### Returns
 
-`Promise`<[`ResultWithErrors`](ResultWithErrors.md)<`string`, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
 
 #### Overrides
 
@@ -117,7 +117,7 @@ IL1KeyStore.getKey
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:126](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L126)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:126](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L126)
 
 ___
 
@@ -147,7 +147,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:90](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L90)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:90](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L90)
 
 ___
 
@@ -169,13 +169,13 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:58](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L58)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:58](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L58)
 
 ___
 
 ### guardianSafePeriodGuard
 
-▸ `Static` `Private` **guardianSafePeriodGuard**(`guardianSafePeriod`): [`ResultWithErrors`](ResultWithErrors.md)<``true``, `string`\>
+▸ `Static` `Private` **guardianSafePeriodGuard**(`guardianSafePeriod`): [`Result`](../modules.md#result)<``true``, `string`\>
 
 #### Parameters
 
@@ -185,8 +185,8 @@ ___
 
 #### Returns
 
-[`ResultWithErrors`](ResultWithErrors.md)<``true``, `string`\>
+[`Result`](../modules.md#result)<``true``, `string`\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:47](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/L1KeyStore.ts#L47)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:47](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/L1KeyStore.ts#L47)

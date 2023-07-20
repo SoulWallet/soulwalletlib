@@ -24,7 +24,7 @@
 
 ### decode
 
-▸ `Static` **decode**(`chainId`, `from`, `to`, `calldata`): `Promise`<[`ResultWithErrors`](ResultWithErrors.md)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `string`\>\>
+▸ `Static` **decode**(`chainId`, `from`, `to`, `calldata`): `Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `string`\>\>
 
 @Doc: Why use: async?
        May be use some online services in the future, 
@@ -41,17 +41,17 @@
 
 #### Returns
 
-`Promise`<[`ResultWithErrors`](ResultWithErrors.md)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `string`\>\>
 
 #### Defined in
 
-soulwallet-decoder/src/decoder.ts:17
+[soulwallet-decoder/src/decoder.ts:17](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/decoder.ts#L17)
 
 ___
 
 ### decodeFunctionParams
 
-▸ `Static` `Private` **decodeFunctionParams**(`calldata`): `Promise`<[`ResultWithErrors`](ResultWithErrors.md)<[`Method`](../interfaces/Method.md), `string`\>\>
+▸ `Static` `Private` **decodeFunctionParams**(`calldata`): `Promise`<[`Result`](../modules.md#result)<[`Method`](../interfaces/Method.md), `string`\>\>
 
 #### Parameters
 
@@ -61,17 +61,17 @@ ___
 
 #### Returns
 
-`Promise`<[`ResultWithErrors`](ResultWithErrors.md)<[`Method`](../interfaces/Method.md), `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<[`Method`](../interfaces/Method.md), `string`\>\>
 
 #### Defined in
 
-soulwallet-decoder/src/decoder.ts:79
+[soulwallet-decoder/src/decoder.ts:79](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/decoder.ts#L79)
 
 ___
 
 ### decodeItem
 
-▸ `Static` `Private` **decodeItem**(`from`, `to`, `value`, `calldata`, `chainId`): `Promise`<[`ResultWithErrors`](ResultWithErrors.md)<[`DecodeResult`](../interfaces/DecodeResult.md), `string`\>\>
+▸ `Static` `Private` **decodeItem**(`from`, `to`, `value`, `calldata`, `chainId`): `Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md), `string`\>\>
 
 #### Parameters
 
@@ -85,8 +85,8 @@ ___
 
 #### Returns
 
-`Promise`<[`ResultWithErrors`](ResultWithErrors.md)<[`DecodeResult`](../interfaces/DecodeResult.md), `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md), `string`\>\>
 
 #### Defined in
 
-soulwallet-decoder/src/decoder.ts:111
+[soulwallet-decoder/src/decoder.ts:111](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/decoder.ts#L111)

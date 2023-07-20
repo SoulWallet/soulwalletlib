@@ -3,7 +3,7 @@ import { TypeGuard } from "./tools/typeGuard.js";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 
 
 export class L1KeyStore extends IL1KeyStore {
@@ -25,14 +25,14 @@ export class L1KeyStore extends IL1KeyStore {
         super();
 
         const ret = TypeGuard.onlyAddress(_L1KeyStoreContractAddress);
-        if (!ret.succ) {
-            throw new Error(ret.errors);
+        if (ret.isErr()) {
+            throw new Error(ret.ERR);
         }
 
         if (typeof _L1Provider === 'string') {
             const ret = TypeGuard.httpOrHttps(_L1Provider);
-            if (!ret.succ) {
-                throw new Error(ret.errors);
+            if (ret.isErr()) {
+                throw new Error(ret.ERR);
             }
             this.L1Provider = new ethers.JsonRpcProvider(_L1Provider);
         } else {
@@ -44,29 +44,29 @@ export class L1KeyStore extends IL1KeyStore {
         this.L1KeyStoreContract = new ethers.Contract(this.L1KeyStoreContractAddress, ABI_KeyStore, this.L1Provider);
     }
 
-    private static guardianSafePeriodGuard(guardianSafePeriod: number): ResultWithErrors<true, string> {
+    private static guardianSafePeriodGuard(guardianSafePeriod: number): Result<true, string> {
         if (guardianSafePeriod < (this.days * 2)) {
-            return new ResultWithErrors<true, string>(false, undefined, "initialGuardianSafePeriod is too small");
+            return new Err("initialGuardianSafePeriod is too small");
         }
         if (guardianSafePeriod > (this.days * 30)) {
-            return new ResultWithErrors<true, string>(false, undefined, "initialGuardianSafePeriod is too large");
+            return new Err("initialGuardianSafePeriod is too large");
         }
-        return new ResultWithErrors<true, string>(true, true);
+        return new Ok(true);
     }
 
 
     static getSlot(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
         let ret = TypeGuard.onlyAddress(initialKey);
-        if (!ret.succ) {
-            throw new Error(ret.errors);
+        if (ret.isErr()) {
+            throw new Error(ret.ERR);
         }
         ret = TypeGuard.onlyBytes32(initialGuardianHash);
-        if (!ret.succ) {
-            throw new Error(ret.errors);
+        if (ret.isErr()) {
+            throw new Error(ret.ERR);
         }
         ret = this.guardianSafePeriodGuard(initialGuardianSafePeriod);
-        if (!ret.succ) {
-            throw new Error(ret.errors);
+        if (ret.isErr()) {
+            throw new Error(ret.ERR);
         }
 
         // bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod
@@ -98,8 +98,8 @@ export class L1KeyStore extends IL1KeyStore {
         guardians.sort((a, b) => {
             {
                 const ret = TypeGuard.onlyAddress(a);
-                if (!ret.succ) {
-                    throw new Error(ret.errors);
+                if (ret.isErr()) {
+                    throw new Error(ret.ERR);
                 }
             }
 
@@ -114,8 +114,8 @@ export class L1KeyStore extends IL1KeyStore {
             }
         });
         let ret = TypeGuard.onlyBytes32(salt);
-        if (!ret.succ) {
-            throw new Error(ret.errors);
+        if (ret.isErr()) {
+            throw new Error(ret.ERR);
         }
 
         const abiEncoded = new ethers.AbiCoder().encode(["address[]", "uint256", "uint256"], [guardians, threshold, salt]);
@@ -123,18 +123,18 @@ export class L1KeyStore extends IL1KeyStore {
         return keccak256;
     }
 
-    async getKey(slot: string): Promise<ResultWithErrors<string, any>> {
+    async getKey(slot: string): Promise<Result<string, any>> {
         const ret = TypeGuard.onlyBytes32(slot);
-        if (!ret.succ) {
-            return new ResultWithErrors<string, any>(false, undefined, ret.errors);
+        if (ret.isErr()) {
+            return new Err(ret.ERR);
         }
         try {
             // function getKey(bytes32 slot) external view returns (bytes32 key);
             const data = await this.L1KeyStoreContract.getKey(slot);
             // bytes32 to address
-            return new ResultWithErrors(true, ethers.getAddress('0x' + data.slice(26)));
+            return new Ok(ethers.getAddress('0x' + data.slice(26)));
         } catch (error) {
-            return new ResultWithErrors<string, any>(false, undefined, error);
+            return new Err(error);
         }
     }
 

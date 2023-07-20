@@ -1,24 +1,13 @@
-[@soulwallet/decoder](README.md) / Modules
+[@soulwallet/result](README.md) / Modules
 
-# @soulwallet/decoder
+# @soulwallet/result
 
 ## Table of contents
 
-### Enumerations
-
-- [AddressType](enums/AddressType.md)
-
 ### Classes
 
-- [Decoder](classes/Decoder.md)
 - [Err](classes/Err.md)
 - [Ok](classes/Ok.md)
-
-### Interfaces
-
-- [DecodeResult](interfaces/DecodeResult.md)
-- [Method](interfaces/Method.md)
-- [TokenInfo](interfaces/TokenInfo.md)
 
 ### Type Aliases
 
@@ -41,4 +30,4 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-soulwallet-result/lib/Result.d.ts:4
+Result.ts:4

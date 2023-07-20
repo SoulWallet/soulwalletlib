@@ -40,7 +40,7 @@ UserOpDetail
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:31](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/IBundler.ts#L31)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:31](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L31)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:30](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/IBundler.ts#L30)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:30](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L30)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:29](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/IBundler.ts#L29)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:29](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L29)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:32](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/IBundler.ts#L32)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:32](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L32)
 
 ___
 

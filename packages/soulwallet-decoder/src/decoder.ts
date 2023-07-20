@@ -2,7 +2,7 @@ import soulWalletBytes4 from './soulwalletBytes4.js';
 import hotBytes4 from './hotBytes4.js';
 import { TokenInfo, getAsset } from "@soulwallet/assets";
 import { ABI_SoulWallet } from "@soulwallet/abi";
-import { ResultWithErrors } from 'internal-interface';
+import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 import { DecodeResult, Method } from './interface/decodeData.js';
 import { ethers } from 'ethers';
 import { Bytes4 } from './interface/bytes4.js';
@@ -14,12 +14,12 @@ export class Decoder {
      *        May be use some online services in the future, 
      *        use the async keyword ensures that the interface signature will not need to change in the future.
      */
-    public static async decode(chainId: number, from: string, to: string, calldata: string): Promise<ResultWithErrors<DecodeResult[], string>> {
+    public static async decode(chainId: number, from: string, to: string, calldata: string): Promise<Result<DecodeResult[], string>> {
         calldata = calldata.toLowerCase();
 
         const ret: DecodeResult[] = [];
         if (calldata.length < 10) {
-            return new ResultWithErrors<DecodeResult[], string>(true, ret);
+            return new Ok(ret);
         }
 
         // get 4bytes from calldata
@@ -67,16 +67,16 @@ export class Decoder {
             const data = _data[i];
 
             const decodeResult = await this.decodeItem(from, to, value, data, chainId);
-            if (!decodeResult.succ) {
-                return new ResultWithErrors<DecodeResult[], string>(false, undefined, decodeResult.errors);
+            if (decodeResult.isErr()) {
+                return new Err(decodeResult.ERR);
             }
-            ret.push(decodeResult.result!);
+            ret.push(decodeResult.OK);
         }
 
-        return new ResultWithErrors<DecodeResult[], string>(true, ret);
+        return new Ok(ret);
     }
 
-    private static async decodeFunctionParams(calldata: string): Promise<ResultWithErrors<Method, string>> {
+    private static async decodeFunctionParams(calldata: string): Promise<Result<Method, string>> {
         if (calldata.length >= 10) {
             const bytes4 = calldata.substring(0, 10);
             let fun: Bytes4 | undefined = undefined;
@@ -100,15 +100,15 @@ export class Decoder {
                         text: fun.text,
                         params: decodedData
                     }
-                    return new ResultWithErrors<Method, string>(true, method);
+                    return new Ok(method);
                 }
             }
         }
-        return new ResultWithErrors<Method, string>(false, undefined, 'decodeFunctionParams error');
+        return new Err('decodeFunctionParams error');
     }
 
 
-    private static async decodeItem(from: string, to: string, value: bigint, calldata: string, chainId: number): Promise<ResultWithErrors<DecodeResult, string>> {
+    private static async decodeItem(from: string, to: string, value: bigint, calldata: string, chainId: number): Promise<Result<DecodeResult, string>> {
         const decodeResult: DecodeResult = {
             from: from,
             fromInfo: undefined,
@@ -119,23 +119,21 @@ export class Decoder {
         };
 
         const fromInfoRet = await getAsset(chainId, from);
-        if (fromInfoRet.succ) {
-            decodeResult.fromInfo = fromInfoRet.result!;
+        if (fromInfoRet.isOk()) {
+            decodeResult.fromInfo = fromInfoRet.OK;
         }
-        decodeResult.fromInfo = fromInfoRet.result!;
 
         const toInfoRet = await getAsset(chainId, to);
-        if (toInfoRet.succ) {
-            decodeResult.toInfo = toInfoRet.result!;
+        if (toInfoRet.isOk()) {
+            decodeResult.toInfo = toInfoRet.OK;
         }
-        decodeResult.toInfo = toInfoRet.result!;
 
         const params = await this.decodeFunctionParams(calldata);
-        if (params.succ) {
-            decodeResult.method = params.result!;
+        if (params.isOk()) {
+            decodeResult.method = params.OK;
         }
 
-        return new ResultWithErrors<DecodeResult, string>(true, decodeResult);
+        return new Ok(decodeResult);
     }
 
 

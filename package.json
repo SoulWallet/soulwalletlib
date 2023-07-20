@@ -21,7 +21,8 @@
     "reBuild": "npm run clean && npm run build  ",
     "geth": "docker-compose -f ./eth-node/docker-compose.yaml up --force-recreate -V",
     "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
-    "bundler": "cd bundler/ && yarn run bundler"
+    "bundler": "cd bundler/ && yarn run bundler",
+    "publish": "pnpm -r publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",

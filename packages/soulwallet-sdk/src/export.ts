@@ -3,7 +3,7 @@ import { L1KeyStore } from "./L1KeyStore.js";
 import { Transaction, UserOperation } from "./interface/ISoulWallet.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { UserOpReceipt, UserOpDetail, UserOpGas } from "./interface/IBundler.js";
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 import { Bundler } from "./bundler.js";
 
 export {
@@ -12,7 +12,7 @@ export {
     UserOpErrors,
     UserOpErrorCodes,
     L1KeyStore,
-    ResultWithErrors,
+    Ok, Err, Result,
     UserOpReceipt,
     UserOpDetail,
     UserOpGas,

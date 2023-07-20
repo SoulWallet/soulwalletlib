@@ -2,7 +2,7 @@ import { UserOperationStruct } from "@account-abstraction/contracts";
 import { NotPromise } from '@account-abstraction/utils'
 export type UserOperation = NotPromise<UserOperationStruct>;
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../../soulwallet-result/lib/main.js';
 
 export interface Transaction {
     to: string;
@@ -20,7 +20,7 @@ export abstract class ISoulWallet {
      * @return {*}  {Promise<string>}
      * @memberof ISoulWallet
      */
-    abstract entryPoint(): Promise<ResultWithErrors<string, any>>;
+    abstract entryPoint(): Promise<Result<string, any>>;
 
     /**
      *
@@ -38,7 +38,7 @@ export abstract class ISoulWallet {
         initialKey: string,
         initialGuardianHash: string,
         initialGuardianSafePeriod?: number
-    ): Promise<ResultWithErrors<string, any>>;
+    ): Promise<Result<string, any>>;
 
 
     /**
@@ -59,7 +59,7 @@ export abstract class ISoulWallet {
         initialGuardianHash: string,
         callData?: string,
         initialGuardianSafePeriod?: number
-    ): Promise<ResultWithErrors<UserOperation, any>>;
+    ): Promise<Result<UserOperation, any>>;
 
     /**
      *
@@ -69,7 +69,7 @@ export abstract class ISoulWallet {
      * @return {*}  {string}
      * @memberof ISoulWallet
      */
-    abstract userOpHash(userOp: UserOperation): Promise<ResultWithErrors<string, any>>;
+    abstract userOpHash(userOp: UserOperation): Promise<Result<string, any>>;
 
     /**
      *
@@ -85,7 +85,7 @@ export abstract class ISoulWallet {
      * @memberof ISoulWallet
      */
     abstract packUserOpHash(userOp: UserOperation, validAfter?: number, validUntil?: number): Promise<
-        ResultWithErrors<{
+        Result<{
             packedUserOpHash: string,
             validationData: string
         }, any>
@@ -111,7 +111,7 @@ export abstract class ISoulWallet {
      * @return {*}  {(Promise<UserOpErrors | undefined>)}
      * @memberof ISoulWallet
      */
-    abstract estimateUserOperationGas(userOp: UserOperation): Promise<ResultWithErrors<true, UserOpErrors>>;
+    abstract estimateUserOperationGas(userOp: UserOperation): Promise<Result<true, UserOpErrors>>;
 
     /**
      *
@@ -121,7 +121,7 @@ export abstract class ISoulWallet {
      * @return {*}  {(Promise<UserOpErrors | undefined>)}
      * @memberof ISoulWallet
      */
-    abstract sendUserOperation(userOp: UserOperation): Promise<ResultWithErrors<true, UserOpErrors>>;
+    abstract sendUserOperation(userOp: UserOperation): Promise<Result<true, UserOpErrors>>;
 
 
     /**
@@ -136,7 +136,7 @@ export abstract class ISoulWallet {
      *     }>} hex string, unit: wei
      * @memberof ISoulWallet
      */
-    abstract preFund(userOp: UserOperation): Promise<ResultWithErrors<{
+    abstract preFund(userOp: UserOperation): Promise<Result<{
         deposit: string,
         prefund: string,
         missfund: string
@@ -151,10 +151,10 @@ export abstract class ISoulWallet {
      * @param {string} from
      * @param {Transaction[]} txs
      * @param {string} [nonceKey]
-     * @return {*}  {Promise<ResultWithErrors<UserOperation, any>>}
+     * @return {*}  {Promise<Result<UserOperation, any>>}
      * @memberof ISoulWallet
      */
-    abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<ResultWithErrors<UserOperation, any>>;
+    abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, any>>;
 
 
     /**
@@ -163,10 +163,10 @@ export abstract class ISoulWallet {
      * @abstract
      * @param {string} walletAddr
      * @param {string} [key] default: "0x0"
-     * @return {*}  {Promise<ResultWithErrors<string, any>>}
+     * @return {*}  {Promise<Result<string, any>>}
      * @memberof ISoulWallet
      */
-    abstract getNonce(walletAddr: string, key?: string): Promise<ResultWithErrors<string, any>>;
+    abstract getNonce(walletAddr: string, key?: string): Promise<Result<string, any>>;
 
 }
 

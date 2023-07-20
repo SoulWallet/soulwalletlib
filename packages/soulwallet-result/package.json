@@ -1,16 +1,16 @@
 {
-  "name": "internal-interface",
+  "name": "@soulwallet/result",
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": "Jayden <z.cejay@gmail.com>",
   "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
   "license": "ISC",
-  "type": "module",
   "main": "lib/main.js",
   "types": "lib/main.d.ts",
-  "private": true,
+  "type": "module",
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "test": "__tests__"
   },
   "files": [
     "lib"
@@ -23,7 +23,11 @@
     "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
   },
   "scripts": {
-    "tsc": "tsc"
+    "typedoc": "typedoc",
+    "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
+    "tsc": "tsc",
+    "javascript-obfuscator": "javascript-obfuscator",
+    "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
   },
   "bugs": {
     "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"

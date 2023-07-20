@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { UserOperation } from "./ISoulWallet.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../../soulwallet-result/lib/main.js';
 
 
 /**
@@ -83,10 +83,10 @@ export abstract class IBundler {
      * @abstract 
      * @param {string} entryPoint
      * @param {UserOperation} userOp
-     * @return {*}  {Promise<ResultWithErrors<string, UserOpErrors>>}
+     * @return {*}  {Promise<Result<string, UserOpErrors>>}
      * @memberof IBundler
      */
-    abstract eth_sendUserOperation(entryPoint: string, userOp: UserOperation): Promise<ResultWithErrors<string, UserOpErrors>>;
+    abstract eth_sendUserOperation(entryPoint: string, userOp: UserOperation): Promise<Result<string, UserOpErrors>>;
 
     /**
      *
@@ -94,46 +94,46 @@ export abstract class IBundler {
      * @abstract 
      * @param {string} entryPoint
      * @param {UserOperation} userOp
-     * @return {*}  {Promise<ResultWithErrors<UserOpGas, UserOpErrors>>}
+     * @return {*}  {Promise<Result<UserOpGas, UserOpErrors>>}
      * @memberof IBundler
      */
-    abstract eth_estimateUserOperationGas(entryPoint: string, userOp: UserOperation): Promise<ResultWithErrors<UserOpGas, UserOpErrors>>;
+    abstract eth_estimateUserOperationGas(entryPoint: string, userOp: UserOperation): Promise<Result<UserOpGas, UserOpErrors>>;
 
     /**
      *
      *
      * @abstract 
      * @param {string} userOpHash
-     * @return {*}  {(Promise<ResultWithErrors<null | UserOpDetail, string>>)}
+     * @return {*}  {(Promise<Result<null | UserOpDetail, string>>)}
      * @memberof IBundler
      */
-    abstract eth_getUserOperationByHash(userOpHash: string): Promise<ResultWithErrors<null | UserOpDetail, string>>;
+    abstract eth_getUserOperationByHash(userOpHash: string): Promise<Result<null | UserOpDetail, string>>;
 
     /**
      *
      *
      * @abstract 
      * @param {string} userOpHash
-     * @return {*}  {(Promise<ResultWithErrors<null | UserOpReceipt, string>>)}
+     * @return {*}  {(Promise<Result<null | UserOpReceipt, string>>)}
      * @memberof IBundler
      */
-    abstract eth_getUserOperationReceipt(userOpHash: string): Promise<ResultWithErrors<null | UserOpReceipt, string>>;
+    abstract eth_getUserOperationReceipt(userOpHash: string): Promise<Result<null | UserOpReceipt, string>>;
 
     /**
      *
      *
      * @abstract 
-     * @return {*}  {Promise<ResultWithErrors<string[], string>>}
+     * @return {*}  {Promise<Result<string[], string>>}
      * @memberof IBundler
      */
-    abstract eth_supportedEntryPoints(): Promise<ResultWithErrors<string[], string>>;
+    abstract eth_supportedEntryPoints(): Promise<Result<string[], string>>;
 
     /**
      *
      *
      * @abstract 
-     * @return {*}  {Promise<ResultWithErrors<number, string>>}
+     * @return {*}  {Promise<Result<number, string>>}
      * @memberof IBundler
      */
-    abstract eth_chainId(): Promise<ResultWithErrors<number, string>>;
+    abstract eth_chainId(): Promise<Result<number, string>>;
 }

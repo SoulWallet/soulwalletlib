@@ -22,7 +22,7 @@
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:13
+[soulwallet-assets/src/interface/tokenInfo.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L13)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:11
+[soulwallet-assets/src/interface/tokenInfo.ts:11](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L11)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:16
+[soulwallet-assets/src/interface/tokenInfo.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L16)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:17
+[soulwallet-assets/src/interface/tokenInfo.ts:17](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L17)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:14
+[soulwallet-assets/src/interface/tokenInfo.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L14)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:15
+[soulwallet-assets/src/interface/tokenInfo.ts:15](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L15)
 
 ___
 
@@ -82,4 +82,4 @@ ___
 
 #### Defined in
 
-soulwallet-assets/src/interface/tokenInfo.ts:12
+[soulwallet-assets/src/interface/tokenInfo.ts:12](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L12)
