@@ -6,11 +6,18 @@ export enum AddressType {
     Erc1155 = 4,
 }
 
+export interface MinTokenInfo {
+    t: AddressType;
+    n: string;
+    s: string;
+    d: number;
+    l?: string;
+}
 
 export interface TokenInfo {
     chainId: number;
-    type: AddressType;
     address: string;
+    type: AddressType;
     name: string;
     symbol: string;
     decimals: number;
