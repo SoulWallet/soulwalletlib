@@ -26,11 +26,15 @@ export class Bundler implements IBundler {
                 ]
             );
             return new Ok(userOpHash);
-        } catch (error: any) {
-            if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                return new Err(new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                const subError = (<any>error).error;
+                if (typeof subError === 'object' && typeof subError.code === 'number' && typeof subError.message === 'string') {
+                    return new Err(new UserOpErrors(subError.code, subError.message, typeof subError.data === 'object' ? subError.data : undefined));
+                } else {
+                    return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, error.message));
+                }
             } else {
-                //return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
                 return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
             }
         }
@@ -51,17 +55,21 @@ export class Bundler implements IBundler {
                 return new Ok(userOpGas);
             }
 
-        } catch (error: any) {
-            if (typeof error.error === 'object' && typeof error.error.code === 'number' && typeof error.error.message === 'string') {
-                return new Err(new UserOpErrors(error.error.code, error.error.message, typeof error.error.data === 'object' ? error.error.data : undefined));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                const subError = (<any>error).error;
+                if (typeof subError === 'object' && typeof subError.code === 'number' && typeof subError.message === 'string') {
+                    return new Err(new UserOpErrors(subError.code, subError.message, typeof subError.data === 'object' ? subError.data : undefined));
+                } else {
+                    return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, error.message));
+                }
             } else {
-                //return new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error');
                 return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
             }
         }
     }
 
-    async eth_getUserOperationByHash(userOpHash: string): Promise<Result<null | UserOpDetail, string>> {
+    async eth_getUserOperationByHash(userOpHash: string): Promise<Result<null | UserOpDetail, Error>> {
         try {
             const ret = await this.bundler.send(
                 'eth_estimateUserOperationGas',
@@ -70,17 +78,19 @@ export class Bundler implements IBundler {
                 ]
             );
             return new Ok(ret);
-        } catch (error: any) {
-            if (typeof error === 'object' && typeof error.message === 'string') {
-                return new Err(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
             } else {
                 console.error(error);
-                return new Err('unknown error');
+                return new Err(
+                    new Error('unknown error')
+                );
             }
         }
     }
 
-    async eth_getUserOperationReceipt(userOpHash: string): Promise<Result<null | UserOpReceipt, string>> {
+    async eth_getUserOperationReceipt(userOpHash: string): Promise<Result<null | UserOpReceipt, Error>> {
         try {
             const ret = await this.bundler.send(
                 'eth_getUserOperationReceipt',
@@ -89,17 +99,19 @@ export class Bundler implements IBundler {
                 ]
             );
             return new Ok(ret);
-        } catch (error: any) {
-            if (typeof error === 'object' && typeof error.message === 'string') {
-                return new Err(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
             } else {
                 console.error(error);
-                return new Err('unknown error');
+                return new Err(
+                    new Error('unknown error')
+                );
             }
         }
     }
 
-    async eth_supportedEntryPoints(): Promise<Result<string[], string>> {
+    async eth_supportedEntryPoints(): Promise<Result<string[], Error>> {
         try {
             const ret = await this.bundler.send(
                 'eth_supportedEntryPoints',
@@ -108,29 +120,35 @@ export class Bundler implements IBundler {
             if (Array.isArray(ret)) {
                 return new Ok(ret);
             } else {
-                return new Err('unknown error');
+                return new Err(
+                    new Error('unknown error')
+                );
             }
 
-        } catch (error: any) {
-            if (typeof error === 'object' && typeof error.message === 'string') {
-                return new Err(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
             } else {
                 console.error(error);
-                return new Err('unknown error');
+                return new Err(
+                    new Error('unknown error')
+                );
             }
         }
     }
 
-    async eth_chainId(): Promise<Result<number, string>> {
+    async eth_chainId(): Promise<Result<number, Error>> {
         try {
             const chain = await this.bundler.send('eth_chainId', []);
             return new Ok(parseInt(chain));
-        } catch (error: any) {
-            if (typeof error === 'object' && typeof error.message === 'string') {
-                return new Err(error.message);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
             } else {
                 console.error(error);
-                return new Err('unknown error');
+                return new Err(
+                    new Error('unknown error')
+                );
             }
         }
     }

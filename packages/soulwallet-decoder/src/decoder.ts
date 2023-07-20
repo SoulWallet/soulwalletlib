@@ -14,7 +14,7 @@ export class Decoder {
      *        May be use some online services in the future, 
      *        use the async keyword ensures that the interface signature will not need to change in the future.
      */
-    public static async decode(chainId: number, from: string, to: string, calldata: string): Promise<Result<DecodeResult[], string>> {
+    public static async decode(chainId: number, from: string, to: string, calldata: string): Promise<Result<DecodeResult[], Error>> {
         calldata = calldata.toLowerCase();
 
         const ret: DecodeResult[] = [];
@@ -68,7 +68,9 @@ export class Decoder {
 
             const decodeResult = await this.decodeItem(from, to, value, data, chainId);
             if (decodeResult.isErr()) {
-                return new Err(decodeResult.ERR);
+                return new Err(
+                    new Error('decode error')
+                );
             }
             ret.push(decodeResult.OK);
         }
@@ -76,7 +78,7 @@ export class Decoder {
         return new Ok(ret);
     }
 
-    private static async decodeFunctionParams(calldata: string): Promise<Result<Method, string>> {
+    private static async decodeFunctionParams(calldata: string): Promise<Result<Method, Error>> {
         if (calldata.length >= 10) {
             const bytes4 = calldata.substring(0, 10);
             let fun: Bytes4 | undefined = undefined;
@@ -104,11 +106,13 @@ export class Decoder {
                 }
             }
         }
-        return new Err('decodeFunctionParams error');
+        return new Err(
+            new Error('decodeFunctionParams error')
+        );
     }
 
 
-    private static async decodeItem(from: string, to: string, value: bigint, calldata: string, chainId: number): Promise<Result<DecodeResult, string>> {
+    private static async decodeItem(from: string, to: string, value: bigint, calldata: string, chainId: number): Promise<Result<DecodeResult, Error>> {
         const decodeResult: DecodeResult = {
             from: from,
             fromInfo: undefined,

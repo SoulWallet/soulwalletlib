@@ -107,7 +107,7 @@ export abstract class IBundler {
      * @return {*}  {(Promise<Result<null | UserOpDetail, string>>)}
      * @memberof IBundler
      */
-    abstract eth_getUserOperationByHash(userOpHash: string): Promise<Result<null | UserOpDetail, string>>;
+    abstract eth_getUserOperationByHash(userOpHash: string): Promise<Result<null | UserOpDetail, Error>>;
 
     /**
      *
@@ -117,7 +117,7 @@ export abstract class IBundler {
      * @return {*}  {(Promise<Result<null | UserOpReceipt, string>>)}
      * @memberof IBundler
      */
-    abstract eth_getUserOperationReceipt(userOpHash: string): Promise<Result<null | UserOpReceipt, string>>;
+    abstract eth_getUserOperationReceipt(userOpHash: string): Promise<Result<null | UserOpReceipt, Error>>;
 
     /**
      *
@@ -126,7 +126,7 @@ export abstract class IBundler {
      * @return {*}  {Promise<Result<string[], string>>}
      * @memberof IBundler
      */
-    abstract eth_supportedEntryPoints(): Promise<Result<string[], string>>;
+    abstract eth_supportedEntryPoints(): Promise<Result<string[], Error>>;
 
     /**
      *
@@ -135,5 +135,5 @@ export abstract class IBundler {
      * @return {*}  {Promise<Result<number, string>>}
      * @memberof IBundler
      */
-    abstract eth_chainId(): Promise<Result<number, string>>;
+    abstract eth_chainId(): Promise<Result<number, Error>>;
 }

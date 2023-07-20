@@ -3,7 +3,7 @@ import tokenList from './tokens.js';
 import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 import { UriCompression } from './uriCompression.js';
 
-async function getAsset(chainId: number, address: string): Promise<Result<TokenInfo, string>> {
+async function getAsset(chainId: number, address: string): Promise<Result<TokenInfo, Error>> {
     const key = address.toLowerCase() + '|' + chainId;
     const token = tokenList.get(key);
     if (token) {
@@ -18,7 +18,9 @@ async function getAsset(chainId: number, address: string): Promise<Result<TokenI
                 logoURI: UriCompression.decompressUri(token.l)
             });
     }
-    return new Err('Token not found');
+    return new Err(
+        new Error('token not found')
+    );
 }
 
 export {

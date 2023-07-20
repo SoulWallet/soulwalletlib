@@ -62,7 +62,7 @@ export class StorageCache {
             if (s) {
                 try {
                     v = JSON.parse(s) as CachedData;
-                } catch (error) {
+                } catch (error: unknown) {
                     console.error(error);
                 }
             }
