@@ -21,7 +21,7 @@
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:12
+[soulwallet-decoder/src/interface/decodeData.ts:12](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L12)
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:13
+[soulwallet-decoder/src/interface/decodeData.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L13)
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:17
+[soulwallet-decoder/src/interface/decodeData.ts:17](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L17)
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:14
+[soulwallet-decoder/src/interface/decodeData.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L14)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:15
+[soulwallet-decoder/src/interface/decodeData.ts:15](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L15)
 
 ___
 
@@ -71,4 +71,4 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:16
+[soulwallet-decoder/src/interface/decodeData.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L16)

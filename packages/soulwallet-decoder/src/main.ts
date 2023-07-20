@@ -1,7 +1,7 @@
 import { TokenInfo, AddressType } from '@soulwallet/assets';
 import { Decoder } from './decoder.js';
 import { DecodeResult, Method } from './interface/decodeData.js';
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 
 export {
     Decoder,
@@ -9,5 +9,5 @@ export {
     AddressType,
     DecodeResult,
     Method,
-    ResultWithErrors
+    Ok, Err, Result
 }

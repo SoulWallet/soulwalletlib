@@ -19,7 +19,7 @@
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:5
+[soulwallet-decoder/src/interface/decodeData.ts:5](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L5)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:6
+[soulwallet-decoder/src/interface/decodeData.ts:6](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L6)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:8
+[soulwallet-decoder/src/interface/decodeData.ts:8](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L8)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-soulwallet-decoder/src/interface/decodeData.ts:7
+[soulwallet-decoder/src/interface/decodeData.ts:7](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L7)

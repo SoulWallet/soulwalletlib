@@ -7,8 +7,9 @@
 ### Classes
 
 - [Bundler](classes/Bundler.md)
+- [Err](classes/Err.md)
 - [L1KeyStore](classes/L1KeyStore.md)
-- [ResultWithErrors](classes/ResultWithErrors.md)
+- [Ok](classes/Ok.md)
 - [SoulWallet](classes/SoulWallet.md)
 - [UserOpErrorCodes](classes/UserOpErrorCodes.md)
 - [UserOpErrors](classes/UserOpErrors.md)
@@ -22,9 +23,29 @@
 
 ### Type Aliases
 
+- [Result](modules.md#result)
 - [UserOperation](modules.md#useroperation)
 
 ## Type Aliases
+
+### Result
+
+Ƭ **Result**<`T`, `E`\>: [`Ok`](classes/Ok.md)<`T`, `E`\> \| [`Err`](classes/Err.md)<`T`, `E`\>
+
+Defines a Result type, which can be either Ok or Err.
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+| `E` |
+
+#### Defined in
+
+packages/soulwallet-result/lib/Result.d.ts:4
+
+___
 
 ### UserOperation
 
@@ -32,4 +53,4 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:3](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L3)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:3](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L3)

@@ -1,4 +1,4 @@
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../../soulwallet-result/lib/main.js';
 
 /**
  * @interface IL1KeyStore
@@ -14,9 +14,9 @@ export abstract class IL1KeyStore {
      *
      * @abstract
      * @param {string} slot 
-     * @return {*}  {Promise<ResultWithErrors<string, any>>} if return 0 address ,it means the slot is not set
+     * @return {*}  {Promise<Result<string, any>>} if return 0 address ,it means the slot is not set
      * @memberof IL1KeyStore
      */
-    abstract getKey(slot: string): Promise<ResultWithErrors<string, any>>;
+    abstract getKey(slot: string): Promise<Result<string, any>>;
 
 }

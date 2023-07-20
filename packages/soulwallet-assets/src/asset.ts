@@ -1,14 +1,14 @@
 import { TokenInfo } from './interface/tokenInfo.js';
 import tokenList from './tokens.js';
-import { ResultWithErrors } from "internal-interface";
+import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 
-async function getAsset(chainId: number, address: string): Promise<ResultWithErrors<TokenInfo, string>> {
+async function getAsset(chainId: number, address: string): Promise<Result<TokenInfo, string>> {
     const key = address.toLowerCase() + '|' + chainId;
     const token = tokenList.get(key);
     if (token) {
-        return new ResultWithErrors<TokenInfo, string>(true, token);
+        return new Ok(token);
     }
-    return new ResultWithErrors<TokenInfo, string>(false, undefined, 'Token not found');
+    return new Err('Token not found');
 }
 
 export {

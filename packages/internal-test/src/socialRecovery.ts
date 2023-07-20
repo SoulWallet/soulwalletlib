@@ -32,10 +32,10 @@ export class SocialRecovery {
         const initialGuardianHash = L1KeyStore.calcGuardianHash(guardianAddresses, threshold);
         const slot = L1KeyStore.getSlot(initialKey.address, initialGuardianHash);
         const keyRet = await _L1KeyStore.getKey(slot);
-        if (!keyRet.succ) {
-            throw new Error(keyRet.errors);
+        if (keyRet.isErr()) {
+            throw new Error(keyRet.ERR);
         }
-        const key = keyRet.result!;
+        const key = keyRet.OK;
         if (key != ethers.ZeroAddress) {
             throw new Error('slot is already set');
         }

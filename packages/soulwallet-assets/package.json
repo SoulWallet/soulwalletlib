@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/assets",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
@@ -34,7 +34,7 @@
         "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
     },
     "dependencies": { 
-        "internal-interface": "workspace:*"
+        "@soulwallet/result": "workspace:*"
     },
     "devDependencies": {
         "@types/node": "^20.3.1"

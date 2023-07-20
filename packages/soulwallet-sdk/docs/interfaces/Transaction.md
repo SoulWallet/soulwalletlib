@@ -19,7 +19,7 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:10](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L10)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:10](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L10)
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:11](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L11)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:11](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L11)
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:8](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L8)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:8](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L8)
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:9](https://github.com/jayden-sudo/soulwalletlib/blob/9df1426/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L9)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:9](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L9)

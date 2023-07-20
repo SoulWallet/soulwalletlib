@@ -22,9 +22,6 @@ importers:
       typedoc-plugin-missing-exports: 2.0.0_typedoc@0.24.8
       typescript: 5.1.6
 
-  packages/internal-interface:
-    specifiers: {}
-
   packages/internal-test:
     specifiers:
       '@account-abstraction/contracts': ^0.6
@@ -66,10 +63,10 @@ importers:
 
   packages/soulwallet-assets:
     specifiers:
+      '@soulwallet/result': workspace:*
       '@types/node': ^20.3.1
-      internal-interface: workspace:*
     dependencies:
-      internal-interface: link:../internal-interface
+      '@soulwallet/result': link:../soulwallet-result
     devDependencies:
       '@types/node': 20.4.2
 
@@ -77,20 +74,23 @@ importers:
     specifiers:
       '@soulwallet/abi': workspace:*
       '@soulwallet/assets': workspace:*
+      '@soulwallet/result': workspace:*
       '@types/node': ^20.3.1
       '@types/shelljs': ^0.8.12
       ethers: ^6.6.4
-      internal-interface: workspace:*
       shelljs: ^0.8.5
     dependencies:
       '@soulwallet/abi': link:../soulwallet-abi
       '@soulwallet/assets': link:../soulwallet-assets
+      '@soulwallet/result': link:../soulwallet-result
       ethers: 6.6.4
-      internal-interface: link:../internal-interface
     devDependencies:
       '@types/node': 20.4.2
       '@types/shelljs': 0.8.12
       shelljs: 0.8.5
+
+  packages/soulwallet-result:
+    specifiers: {}
 
   packages/soulwallet-sdk:
     specifiers:
@@ -98,19 +98,19 @@ importers:
       '@account-abstraction/sdk': ^0.6
       '@account-abstraction/utils': ^0.6.0
       '@soulwallet/abi': workspace:*
+      '@soulwallet/result': workspace:*
       '@soulwallet/sdk': workspace:*
       '@types/shelljs': ^0.8.12
       ethers: ^6.6.4
-      internal-interface: workspace:*
       shelljs: ^0.8.5
     dependencies:
       '@account-abstraction/contracts': 0.6.0
       '@account-abstraction/sdk': 0.6.0
       '@account-abstraction/utils': 0.6.0
       '@soulwallet/abi': link:../soulwallet-abi
+      '@soulwallet/result': link:../soulwallet-result
       '@soulwallet/sdk': 'link:'
       ethers: 6.6.4
-      internal-interface: link:../internal-interface
     devDependencies:
       '@types/shelljs': 0.8.12
       shelljs: 0.8.5
