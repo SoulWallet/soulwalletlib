@@ -33,7 +33,7 @@ export class SocialRecovery {
         const slot = L1KeyStore.getSlot(initialKey.address, initialGuardianHash);
         const keyRet = await _L1KeyStore.getKey(slot);
         if (keyRet.isErr()) {
-            throw new Error(keyRet.ERR);
+            throw new Error(keyRet.ERR.message);
         }
         const key = keyRet.OK;
         if (key != ethers.ZeroAddress) {

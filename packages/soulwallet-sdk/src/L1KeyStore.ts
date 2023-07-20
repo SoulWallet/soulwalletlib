@@ -123,18 +123,26 @@ export class L1KeyStore extends IL1KeyStore {
         return keccak256;
     }
 
-    async getKey(slot: string): Promise<Result<string, any>> {
+    async getKey(slot: string): Promise<Result<string, Error>> {
         const ret = TypeGuard.onlyBytes32(slot);
         if (ret.isErr()) {
-            return new Err(ret.ERR);
+            return new Err(
+                new Error(ret.ERR)
+            );
         }
         try {
             // function getKey(bytes32 slot) external view returns (bytes32 key);
             const data = await this.L1KeyStoreContract.getKey(slot);
             // bytes32 to address
             return new Ok(ethers.getAddress('0x' + data.slice(26)));
-        } catch (error) {
-            return new Err(error);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error('unknown error')
+                );
+            }
         }
     }
 

@@ -62,7 +62,7 @@ export class SoulWallet extends ISoulWallet {
     }
 
 
-    async getOnChainConfig(): Promise<Result<onChainConfig, string>> {
+    async getOnChainConfig(): Promise<Result<onChainConfig, Error>> {
         const key = `onChainConfig_${this.soulWalletFactoryAddress}`;
         // read from cache
         let _onChainConfig = StorageCache.getInstance().get<onChainConfig | undefined>(key, undefined);
@@ -78,24 +78,34 @@ export class SoulWallet extends ISoulWallet {
             const _chainId: number = Number(_chainIdBigint);
             if (Number.isSafeInteger(_chainId)) {
                 if (_chainId === 0) {
-                    return new Err("Invalid chainId");
+                    return new Err(
+                        new Error("Invalid chainId")
+                    );
                 }
             } else {
-                return new Err("chainId is not a safe integer");
+                return new Err(
+                    new Error("chainId is not a safe integer")
+                );
             }
 
             const _bundlerChainIdBigint = (await this.bundler.getNetwork()).chainId;
             const _bundlerChainId: number = Number(_bundlerChainIdBigint);
             if (Number.isSafeInteger(_bundlerChainId)) {
                 if (_bundlerChainId === 0) {
-                    return new Err("Invalid chainId");
+                    return new Err(
+                        new Error("Invalid bundler chainId")
+                    );
                 }
             } else {
-                return new Err("chainId is not a safe integer");
+                return new Err(
+                    new Error("bundler chainId is not a safe integer")
+                );
             }
 
             if (_chainId !== _bundlerChainId) {
-                return new Err("chainId mismatch");
+                return new Err(
+                    new Error("chainId !== bundler chainId")
+                );
             }
 
             _onChainConfig.chainId = _chainId;
@@ -108,11 +118,12 @@ export class SoulWallet extends ISoulWallet {
             // check bundler RPC
             const ret = await this.Bundler.eth_supportedEntryPoints();
             if (ret.isErr()) {
-                return new Err("Bundler RPC error");
+                return new Err(ret.ERR);
             }
             if (ret.OK.join().toLowerCase().indexOf(entryPoint.toLowerCase()) === -1) {
-                return new Err(`Bundler network doesn't support entryPoint ${entryPoint}`);
-
+                return new Err(
+                    new Error(`Bundler network doesn't support entryPoint ${entryPoint}`)
+                );
             }
         }
         return new Ok(_onChainConfig);
@@ -120,7 +131,7 @@ export class SoulWallet extends ISoulWallet {
 
     private _entryPointContract: ethers.Contract | undefined;
 
-    private async getEntryPointContract(): Promise<Result<ethers.Contract, string>> {
+    private async getEntryPointContract(): Promise<Result<ethers.Contract, Error>> {
         if (this._entryPointContract === undefined) {
             const _onChainConfig = await this.getOnChainConfig();
             if (_onChainConfig.isErr()) {
@@ -131,7 +142,7 @@ export class SoulWallet extends ISoulWallet {
         return new Ok(this._entryPointContract);
     }
 
-    async entryPoint(): Promise<Result<string, any>> {
+    async entryPoint(): Promise<Result<string, Error>> {
         const _onChainConfig = await this.getOnChainConfig();
         if (_onChainConfig.isErr()) {
             return new Err(_onChainConfig.ERR);
@@ -139,7 +150,7 @@ export class SoulWallet extends ISoulWallet {
         return new Ok(_onChainConfig.OK.entryPoint);
     }
 
-    async initializeData(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod): Promise<Result<string, any>> {
+    async initializeData(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod): Promise<Result<string, Error>> {
         /* 
             function initialize(
                 address anOwner,
@@ -183,7 +194,7 @@ export class SoulWallet extends ISoulWallet {
         initialKey: string,
         initialGuardianHash: string,
         initialGuardianSafePeriod?: number
-    ): Promise<Result<string, any>> {
+    ): Promise<Result<string, Error>> {
         const _initializeDataRet = await this.initializeData(initialKey, initialGuardianHash, initialGuardianSafePeriod);
         if (_initializeDataRet.isErr()) {
             return new Err(_initializeDataRet.ERR);
@@ -204,7 +215,7 @@ export class SoulWallet extends ISoulWallet {
             deposit: string,
             prefund: string,
             missfund: string
-        }, any>> {
+        }, Error>> {
         /*
         function _getRequiredPrefund(MemoryUserOp memory mUserOp) internal pure returns (uint256 requiredPrefund) {
         unchecked {
@@ -259,10 +270,15 @@ export class SoulWallet extends ISoulWallet {
                 missfund: '0x' + _missfund.toString(16)
             };
             return new Ok(data);
-        } catch (error) {
-            return new Err(error);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error("unknown error")
+                );
+            }
         }
-
     }
 
     async createUnsignedDeployWalletUserOp(
@@ -271,10 +287,12 @@ export class SoulWallet extends ISoulWallet {
         initialGuardianHash: string,
         callData: string = "0x",
         initialGuardianSafePeriod?: number
-    ): Promise<Result<UserOperation, any>> {
+    ): Promise<Result<UserOperation, Error>> {
         const ret = TypeGuard.onlyBytes(callData);
         if (ret.isErr()) {
-            return new Err(ret.ERR);
+            return new Err(
+                new Error(ret.ERR)
+            );
         }
         const _initializeData = await this.initializeData(initialKey, initialGuardianHash, initialGuardianSafePeriod);
         if (_initializeData.isErr()) {
@@ -325,7 +343,7 @@ export class SoulWallet extends ISoulWallet {
         return new Ok(_userOperation);
     }
 
-    async userOpHash(userOp: UserOperation): Promise<Result<string, any>> {
+    async userOpHash(userOp: UserOperation): Promise<Result<string, Error>> {
         const _onChainConfig = await this.getOnChainConfig();
         if (_onChainConfig.isErr()) {
             return new Err(_onChainConfig.ERR);
@@ -338,7 +356,7 @@ export class SoulWallet extends ISoulWallet {
         Result<{
             packedUserOpHash: string,
             validationData: string
-        }, any>> {
+        }, Error>> {
         const userOPHashRet = await this.userOpHash(userOp);
         if (userOPHashRet.isErr()) {
             return new Err(userOPHashRet.ERR);
@@ -371,7 +389,7 @@ export class SoulWallet extends ISoulWallet {
         const semiValidSignature = userOp.signature === "0x";
         const _onChainConfig = await this.getOnChainConfig();
         if (_onChainConfig.isErr()) {
-            return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, _onChainConfig.ERR));
+            return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, _onChainConfig.ERR.message));
         }
         try {
             if (semiValidSignature) {
@@ -415,7 +433,7 @@ export class SoulWallet extends ISoulWallet {
     async sendUserOperation(userOp: UserOperation): Promise<Result<true, UserOpErrors>> {
         const _onChainConfig = await this.getOnChainConfig();
         if (_onChainConfig.isErr()) {
-            return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, _onChainConfig.ERR));
+            return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, _onChainConfig.ERR.message));
         }
         const sendUserOpRet = await this.Bundler.eth_sendUserOperation(_onChainConfig.OK.entryPoint, userOp);
         if (sendUserOpRet.isErr()) {
@@ -423,7 +441,9 @@ export class SoulWallet extends ISoulWallet {
         }
         const userOPHashLocal = await this.userOpHash(userOp);
         if (userOPHashLocal.isErr()) {
-            return new Err(userOPHashLocal.ERR);
+            return new Err(
+                new UserOpErrors(UserOpErrorCodes.UnknownError, userOPHashLocal.ERR.message)
+            );
         }
         if (sendUserOpRet.OK.toLowerCase() !== userOPHashLocal.OK.toLowerCase()) {
             throw new Error("userOpHash !== userOPHashLocal");
@@ -432,12 +452,14 @@ export class SoulWallet extends ISoulWallet {
 
     }
 
-    async getNonce(walletAddr: string, key?: string): Promise<Result<string, any>> {
+    async getNonce(walletAddr: string, key?: string): Promise<Result<string, Error>> {
         let _key = "0x0";
         if (key !== undefined) {
             const ret = TypeGuard.maxToUint192(key);
             if (ret.isErr()) {
-                return new Err(ret.ERR);
+                return new Err(
+                    new Error(ret.ERR)
+                );
             }
             _key = '0x' + ret.OK.toString(16);
         }
@@ -448,12 +470,18 @@ export class SoulWallet extends ISoulWallet {
         try {
             const _nonce: bigint = await _entrypointRet.OK.getFunction("getNonce").staticCall(walletAddr, _key);
             return new Ok(`0x${_nonce.toString(16)}`);
-        } catch (error) {
-            return new Err(error);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error("unknown error")
+                );
+            }
         }
     }
 
-    private async walletDeployed(walletAddress: string): Promise<Result<boolean, string>> {
+    private async walletDeployed(walletAddress: string): Promise<Result<boolean, Error>> {
         const _onChainConfig = await this.getOnChainConfig();
         if (_onChainConfig.isErr()) {
             return new Err(_onChainConfig.ERR);
@@ -470,24 +498,34 @@ export class SoulWallet extends ISoulWallet {
                 StorageCache.getInstance().set(key, true);
             }
             return new Ok(deployed);
-        } catch (e: any) {
-            return new Err(e.toString());
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error("unknown error")
+                );
+            }
         }
     }
 
-    async fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, any>> {
+    async fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, Error>> {
         if (txs.length === 0) {
-            return new Err("txs.length === 0");
+            return new Err(
+                new Error("txs.length === 0")
+            );
         }
         if (TypeGuard.onlyAddress(from).isErr()) {
-            return new Err(`invalid from: ${from}`);
+            return new Err(
+                new Error(`invalid from: ${from}`)
+            );
         }
         const _walletDeployed = await this.walletDeployed(from);
         if (_walletDeployed.isErr()) {
             return new Err(_walletDeployed.ERR);
         }
         if (_walletDeployed.isErr()) {
-            return new Err(`wallet not deployed: ${from}`);
+            new Error(`walletDeployed error: ${_walletDeployed.ERR.message}`);
         }
 
         let callGasLimit: bigint = BigInt(0);
@@ -524,7 +562,7 @@ export class SoulWallet extends ISoulWallet {
             let hasValue = false;
             for (let i = 0; i < txs.length; i++) {
                 const _to = txs[i].to;
-                if (TypeGuard.onlyAddress(_to).isErr()) return new Err(`invalid to: ${to}`);
+                if (TypeGuard.onlyAddress(_to).isErr()) return new Err(new Error(`invalid to: ${to}`));
                 to.push(_to);
 
                 const _valueTmp = txs[i].value;
@@ -534,7 +572,7 @@ export class SoulWallet extends ISoulWallet {
 
                 const _dataTmp = txs[i].data;
                 const _data = _dataTmp === undefined ? '0x' : _dataTmp;
-                if (TypeGuard.onlyBytes(_data).isErr()) return new Err(`invalid data: ${_data}`);
+                if (TypeGuard.onlyBytes(_data).isErr()) return new Err(new Error(`invalid data: ${_data}`));
                 data.push(_data);
             }
 

@@ -14,9 +14,9 @@ export abstract class IL1KeyStore {
      *
      * @abstract
      * @param {string} slot 
-     * @return {*}  {Promise<Result<string, any>>} if return 0 address ,it means the slot is not set
+     * @return {*}  {Promise<Result<string, string>>} if return 0 address ,it means the slot is not set
      * @memberof IL1KeyStore
      */
-    abstract getKey(slot: string): Promise<Result<string, any>>;
+    abstract getKey(slot: string): Promise<Result<string, Error>>;
 
 }
