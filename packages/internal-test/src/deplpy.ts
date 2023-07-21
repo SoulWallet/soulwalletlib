@@ -86,8 +86,11 @@ export class Deploy {
         const packedUserOpHash = packedUserOpHashRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signature = PersonalSign.signMessage(packedUserOpHash.packedUserOpHash, signer.privateKey);
-        const packedSignature = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
-        userOp.signature = packedSignature;
+        const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
+        if (packedSignatureRet.isErr()) {
+            throw new Error(packedSignatureRet.ERR.message);
+        }
+        userOp.signature = packedSignatureRet.OK;
 
 
 
@@ -169,8 +172,11 @@ export class Deploy {
         const packedUserOpHashTx = packedUserOpHashTxRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signatureTx = PersonalSign.signMessage(packedUserOpHashTx.packedUserOpHash, signer.privateKey);
-        const packedSignatureTx = await soulWallet.packUserOpSignature(signatureTx, packedUserOpHashTx.validationData);
-        userOpTx.signature = packedSignatureTx;
+        const packedSignatureTxRet = await soulWallet.packUserOpSignature(signatureTx, packedUserOpHashTx.validationData);
+        if (packedSignatureTxRet.isErr()) {
+            throw new Error(packedSignatureTxRet.ERR.message);
+        }
+        userOpTx.signature = packedSignatureTxRet.OK;
 
 
         // send userOp
