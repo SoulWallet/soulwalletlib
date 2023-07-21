@@ -45,7 +45,7 @@ UserOpReceipt
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:61](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L61)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:61](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L61)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:62](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L62)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:62](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L62)
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:57](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L57)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:57](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L57)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L65)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L65)
 
 ___
 
@@ -159,7 +159,7 @@ UserOperation.nonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:59](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L59)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:59](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L59)
 
 ___
 
@@ -169,7 +169,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:60](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L60)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:60](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L60)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:64](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L64)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:64](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L64)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:66](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L66)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:66](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L66)
 
 ___
 
@@ -231,7 +231,7 @@ UserOperation.sender
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:58](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L58)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:58](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L58)
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:63](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L63)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:63](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L63)
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:56](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IBundler.ts#L56)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:56](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L56)
 
 ___
 

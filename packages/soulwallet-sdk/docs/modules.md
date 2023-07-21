@@ -53,4 +53,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:3](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L3)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:3](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L3)

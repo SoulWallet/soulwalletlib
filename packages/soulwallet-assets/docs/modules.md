@@ -48,7 +48,9 @@ soulwallet-result/lib/Result.d.ts:4
 
 ### getAsset
 
-▸ **getAsset**(`chainId`, `address`): `Promise`<[`Result`](modules.md#result)<[`TokenInfo`](interfaces/TokenInfo.md), `string`\>\>
+▸ **getAsset**(`chainId`, `address`): `Promise`<[`Result`](modules.md#result)<[`TokenInfo`](interfaces/TokenInfo.md), `Error`\>\>
+
+Get the token information from the token list.
 
 #### Parameters
 
@@ -59,8 +61,10 @@ soulwallet-result/lib/Result.d.ts:4
 
 #### Returns
 
-`Promise`<[`Result`](modules.md#result)<[`TokenInfo`](interfaces/TokenInfo.md), `string`\>\>
+`Promise`<[`Result`](modules.md#result)<[`TokenInfo`](interfaces/TokenInfo.md), `Error`\>\>
+
+{Promise<Result<TokenInfo, Error>>}
 
 #### Defined in
 
-[soulwallet-assets/src/asset.ts:5](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/asset.ts#L5)
+[soulwallet-assets/src/asset.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/asset.ts#L14)

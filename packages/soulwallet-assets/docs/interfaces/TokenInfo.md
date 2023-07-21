@@ -2,6 +2,12 @@
 
 # Interface: TokenInfo
 
+TokenInfo is the interface for the token information.
+
+**`Export`**
+
+TokenInfo
+
 ## Table of contents
 
 ### Properties
@@ -20,9 +26,15 @@
 
 • **address**: `string`
 
+The address of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L13)
+[soulwallet-assets/src/interface/tokenInfo.ts:38](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L38)
 
 ___
 
@@ -30,9 +42,15 @@ ___
 
 • **chainId**: `number`
 
+The chain id of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:11](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L11)
+[soulwallet-assets/src/interface/tokenInfo.ts:30](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L30)
 
 ___
 
@@ -40,9 +58,15 @@ ___
 
 • **decimals**: `number`
 
+The decimals of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L16)
+[soulwallet-assets/src/interface/tokenInfo.ts:70](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L70)
 
 ___
 
@@ -50,9 +74,15 @@ ___
 
 • `Optional` **logoURI**: `string`
 
+The logo URI of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:17](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L17)
+[soulwallet-assets/src/interface/tokenInfo.ts:78](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L78)
 
 ___
 
@@ -60,9 +90,15 @@ ___
 
 • **name**: `string`
 
+The name of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L14)
+[soulwallet-assets/src/interface/tokenInfo.ts:54](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L54)
 
 ___
 
@@ -70,9 +106,15 @@ ___
 
 • **symbol**: `string`
 
+The symbol of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:15](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L15)
+[soulwallet-assets/src/interface/tokenInfo.ts:62](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L62)
 
 ___
 
@@ -80,6 +122,12 @@ ___
 
 • **type**: [`AddressType`](../enums/AddressType.md)
 
+The type of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:12](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L12)
+[soulwallet-assets/src/interface/tokenInfo.ts:46](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L46)

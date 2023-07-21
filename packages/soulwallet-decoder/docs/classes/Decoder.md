@@ -2,6 +2,10 @@
 
 # Class: Decoder
 
+Decode the transaction data (userOp.calldata).
+
+**`Export`**
+
 ## Table of contents
 
 ### Constructors
@@ -24,11 +28,16 @@
 
 ### decode
 
-▸ `Static` **decode**(`chainId`, `from`, `to`, `calldata`): `Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `string`\>\>
+▸ `Static` **decode**(`chainId`, `from`, `to`, `calldata`): `Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `Error`\>\>
 
-@Doc: Why use: async?
-       May be use some online services in the future, 
-       use the async keyword ensures that the interface signature will not need to change in the future.
+Decode the transaction data (userOp.calldata).
+@description: Why use async: May be use some online services in the future, use the async keyword ensures that the interface signature will not need to change in the future.
+
+**`Static`**
+
+**`Memberof`**
+
+Decoder
 
 #### Parameters
 
@@ -41,17 +50,19 @@
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md)[], `Error`\>\>
+
+{Promise<Result<DecodeResult[], Error>>}
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:17](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/decoder.ts#L17)
+[soulwallet-decoder/src/decoder.ts:30](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/decoder.ts#L30)
 
 ___
 
 ### decodeFunctionParams
 
-▸ `Static` `Private` **decodeFunctionParams**(`calldata`): `Promise`<[`Result`](../modules.md#result)<[`Method`](../interfaces/Method.md), `string`\>\>
+▸ `Static` `Private` **decodeFunctionParams**(`calldata`): `Promise`<[`Result`](../modules.md#result)<[`Method`](../interfaces/Method.md), `Error`\>\>
 
 #### Parameters
 
@@ -61,17 +72,17 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<[`Method`](../interfaces/Method.md), `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<[`Method`](../interfaces/Method.md), `Error`\>\>
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:79](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/decoder.ts#L79)
+[soulwallet-decoder/src/decoder.ts:94](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/decoder.ts#L94)
 
 ___
 
 ### decodeItem
 
-▸ `Static` `Private` **decodeItem**(`from`, `to`, `value`, `calldata`, `chainId`): `Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md), `string`\>\>
+▸ `Static` `Private` **decodeItem**(`from`, `to`, `value`, `calldata`, `chainId`): `Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md), `Error`\>\>
 
 #### Parameters
 
@@ -85,8 +96,8 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md), `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<[`DecodeResult`](../interfaces/DecodeResult.md), `Error`\>\>
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:111](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/decoder.ts#L111)
+[soulwallet-decoder/src/decoder.ts:128](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/decoder.ts#L128)

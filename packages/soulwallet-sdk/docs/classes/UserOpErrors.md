@@ -2,6 +2,16 @@
 
 # Class: UserOpErrors
 
+UserOpErrors
+
+**`Export`**
+
+## Hierarchy
+
+- `Error`
+
+  ↳ **`UserOpErrors`**
+
 ## Table of contents
 
 ### Constructors
@@ -13,10 +23,15 @@
 - [code](UserOpErrors.md#code)
 - [data](UserOpErrors.md#data)
 - [message](UserOpErrors.md#message)
+- [name](UserOpErrors.md#name)
+- [stack](UserOpErrors.md#stack)
+- [prepareStackTrace](UserOpErrors.md#preparestacktrace)
+- [stackTraceLimit](UserOpErrors.md#stacktracelimit)
 
 ### Methods
 
 - [toString](UserOpErrors.md#tostring)
+- [captureStackTrace](UserOpErrors.md#capturestacktrace)
 
 ## Constructors
 
@@ -32,9 +47,13 @@
 | `message` | `string` |
 | `data?` | `any` |
 
+#### Overrides
+
+Error.constructor
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:6](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L6)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:25](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L25)
 
 ## Properties
 
@@ -42,9 +61,15 @@
 
 • **code**: `number`
 
+The error code, all error codes are defined in UserOpErrorCodes.
+
+**`Memberof`**
+
+UserOpErrors
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:2](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L2)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L16)
 
 ___
 
@@ -52,9 +77,15 @@ ___
 
 • **data**: `any`
 
+The error data, it is optional.
+
+**`Memberof`**
+
+UserOpErrors
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:4](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L4)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:24](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L24)
 
 ___
 
@@ -62,9 +93,90 @@ ___
 
 • **message**: `string`
 
+#### Inherited from
+
+Error.message
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:3](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L3)
+node_modules/.pnpm/typescript@5.1.6/node_modules/typescript/lib/lib.es5.d.ts:1068
+
+___
+
+### name
+
+• **name**: `string`
+
+#### Inherited from
+
+Error.name
+
+#### Defined in
+
+node_modules/.pnpm/typescript@5.1.6/node_modules/typescript/lib/lib.es5.d.ts:1067
+
+___
+
+### stack
+
+• `Optional` **stack**: `string`
+
+#### Inherited from
+
+Error.stack
+
+#### Defined in
+
+node_modules/.pnpm/typescript@5.1.6/node_modules/typescript/lib/lib.es5.d.ts:1069
+
+___
+
+### prepareStackTrace
+
+▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
+
+#### Type declaration
+
+▸ (`err`, `stackTraces`): `any`
+
+Optional override for formatting stack traces
+
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `err` | `Error` |
+| `stackTraces` | `CallSite`[] |
+
+##### Returns
+
+`any`
+
+#### Inherited from
+
+Error.prepareStackTrace
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:11
+
+___
+
+### stackTraceLimit
+
+▪ `Static` **stackTraceLimit**: `number`
+
+#### Inherited from
+
+Error.stackTraceLimit
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:13
 
 ## Methods
 
@@ -78,4 +190,31 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:12](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L12)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:31](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L31)
+
+___
+
+### captureStackTrace
+
+▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+
+Create .stack property on a target object
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `targetObject` | `object` |
+| `constructorOpt?` | `Function` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Error.captureStackTrace
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:4
