@@ -364,14 +364,24 @@ export class SoulWallet extends ISoulWallet {
         return new Ok(Signature.packUserOpHash(userOPHashRet.OK, validAfter, validUntil));
     }
 
-    private async guardHookList(walletAddress: string): Promise<string[]> {
-        const _soulWallet = new ethers.Contract(walletAddress, ABI_SoulWallet, this.provider);
-        // function listPlugin(uint8 hookType) external view returns (address[] memory plugins);
-        const _guardHookList = await _soulWallet.listPlugin(1 /* uint8 private constant _GUARD_HOOK = 1 << 0; */);
-        return _guardHookList;
+    private async guardHookList(walletAddress: string): Promise<Result<string[], Error>> {
+        try {
+            const _soulWallet = new ethers.Contract(walletAddress, ABI_SoulWallet, this.provider);
+            // function listPlugin(uint8 hookType) external view returns (address[] memory plugins);
+            const _guardHookList = await _soulWallet.listPlugin(1 /* uint8 private constant _GUARD_HOOK = 1 << 0; */);
+            return new Ok(_guardHookList);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error("unknown error")
+                );
+            }
+        }
     }
 
-    async packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<string> {
+    async packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>> {
         let hookInputData: HookInputData | undefined = undefined;
         if (guardHookInputData !== undefined) {
             const ret = TypeGuard.onlyAddress(guardHookInputData.sender);
@@ -379,13 +389,31 @@ export class SoulWallet extends ISoulWallet {
                 throw new Error(`invalid sender: ${guardHookInputData.sender}`);
             }
             hookInputData = new HookInputData();
-            hookInputData.guardHooks = await this.guardHookList(guardHookInputData.sender);
+            const guardHooksRet = await this.guardHookList(guardHookInputData.sender);
+            if (guardHooksRet.isErr()) {
+                return new Err(guardHooksRet.ERR);
+            }
+            hookInputData.guardHooks = guardHooksRet.OK;
             hookInputData.inputData = guardHookInputData.inputData;
         }
-        return Signature.packSignature(signature, validationData, hookInputData);
+        return new Ok(
+            Signature.packSignature(signature, validationData, hookInputData)
+        );
     }
 
-    async estimateUserOperationGas(userOp: UserOperation): Promise<Result<true, UserOpErrors>> {
+    async estimateUserOperationGas(userOp: UserOperation, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>> {
+        if (semiValidGuardHookInputData !== undefined) {
+            if (semiValidGuardHookInputData.sender.toLowerCase() !== userOp.sender.toLowerCase()) {
+                return new Err(
+                    new UserOpErrors(UserOpErrorCodes.UnknownError, `invalid sender: ${semiValidGuardHookInputData.sender}`)
+                );
+            }
+            if (userOp.initCode === "0x") {
+                return new Err(
+                    new UserOpErrors(UserOpErrorCodes.UnknownError, `cannot set semiValidGuardHookInputData when the contract wallet is not deployed`)
+                );
+            }
+        }
         const semiValidSignature = userOp.signature === "0x";
         const _onChainConfig = await this.getOnChainConfig();
         if (_onChainConfig.isErr()) {
@@ -393,14 +421,16 @@ export class SoulWallet extends ISoulWallet {
         }
         try {
             if (semiValidSignature) {
-                if (userOp.initCode !== "0x") {
-                    // deploy
-                    // no need guardHook input data 
-                    userOp.signature = Signature.semiValidSignature();
-                } else {
-                    // #TODO : if guardianHook input data is not empty
-                    userOp.signature = Signature.semiValidSignature();
+                // semiValidSignature
+                const signature = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+                const validationData = (BigInt(68719476735) << BigInt(160)) + (BigInt(1599999999) << BigInt(160 + 48));
+                const signatureRet = await this.packUserOpSignature(signature, `0x${validationData.toString(16)}`, semiValidGuardHookInputData);
+                if (signatureRet.isErr()) {
+                    return new Err(
+                        new UserOpErrors(UserOpErrorCodes.UnknownError, signatureRet.ERR.message)
+                    );
                 }
+                userOp.signature = signatureRet.OK;
             }
             const userOpGasRet = await this.Bundler.eth_estimateUserOperationGas(_onChainConfig.OK.entryPoint, userOp);
             if (userOpGasRet.isErr()) {

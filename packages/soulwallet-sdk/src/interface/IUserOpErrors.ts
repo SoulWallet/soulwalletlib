@@ -1,14 +1,12 @@
-export class UserOpErrors {
+export class UserOpErrors extends Error {
   code: number;
-  message: string;
   data: any | undefined;
-
   constructor(code: number, message: string, data?: any | undefined) {
+    super(message);
+    this.name = 'UserOpErrors';
     this.code = code;
-    this.message = message;
     this.data = data;
   }
-
   toString(): string {
     return `UserOpErrors: ${this.message} (${this.code})`;
   }

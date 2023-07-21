@@ -255,12 +255,4 @@ export class Signature {
 
     }
 
-
-    static semiValidSignature(): string {
-        const signType = "01";
-        const signature = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-        const validationData = (BigInt(68719476735) << BigInt(160)) + (BigInt(1599999999) << BigInt(160 + 48));
-        const validationDataHex = Hex.paddingZero(validationData, 32).slice(2);
-        return `0x${signType}${validationDataHex}${signature.substring(2)}`.toLowerCase();
-    }
 }

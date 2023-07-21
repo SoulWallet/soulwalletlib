@@ -101,17 +101,18 @@ export abstract class ISoulWallet {
      * @return {*}  {Promise<string>} packed signature
      * @memberof ISoulWallet
      */
-    abstract packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<string>;
+    abstract packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>>;
 
     /**
-     *
+     * Estimate the gas for userOp and fill it into the userOp.
      *
      * @abstract
      * @param {UserOperation} userOp
-     * @return {*}  {(Promise<UserOpErrors | undefined>)}
+     * @param {GuardHookInputData} [semiValidGuardHookInputData]
+     * @return {*}  {Promise<Result<true, UserOpErrors>>}
      * @memberof ISoulWallet
      */
-    abstract estimateUserOperationGas(userOp: UserOperation): Promise<Result<true, UserOpErrors>>;
+    abstract estimateUserOperationGas(userOp: UserOperation, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>>;
 
     /**
      *
