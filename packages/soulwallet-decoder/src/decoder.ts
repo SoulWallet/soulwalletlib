@@ -7,12 +7,25 @@ import { DecodeResult, Method } from './interface/decodeData.js';
 import { ethers } from 'ethers';
 import { Bytes4 } from './interface/bytes4.js';
 
+/**
+ * Decode the transaction data (userOp.calldata).
+ *
+ * @export
+ * @class Decoder
+ */
 export class Decoder {
 
     /**
-     * @Doc: Why use: async?
-     *        May be use some online services in the future, 
-     *        use the async keyword ensures that the interface signature will not need to change in the future.
+     * Decode the transaction data (userOp.calldata).
+     * @description: Why use async: May be use some online services in the future, use the async keyword ensures that the interface signature will not need to change in the future.
+     *
+     * @static
+     * @param {number} chainId
+     * @param {string} from
+     * @param {string} to
+     * @param {string} calldata
+     * @return {*}  {Promise<Result<DecodeResult[], Error>>}
+     * @memberof Decoder
      */
     public static async decode(chainId: number, from: string, to: string, calldata: string): Promise<Result<DecodeResult[], Error>> {
         calldata = calldata.toLowerCase();
