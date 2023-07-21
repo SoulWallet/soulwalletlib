@@ -2,6 +2,12 @@
 
 # Interface: TokenInfo
 
+TokenInfo is the interface for the token information.
+
+**`Export`**
+
+TokenInfo
+
 ## Table of contents
 
 ### Properties
@@ -20,9 +26,15 @@
 
 • **address**: `string`
 
+The address of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:11
+soulwallet-assets/lib/interface/tokenInfo.d.ts:35
 
 ___
 
@@ -30,9 +42,15 @@ ___
 
 • **chainId**: `number`
 
+The chain id of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:9
+soulwallet-assets/lib/interface/tokenInfo.d.ts:28
 
 ___
 
@@ -40,9 +58,15 @@ ___
 
 • **decimals**: `number`
 
+The decimals of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:14
+soulwallet-assets/lib/interface/tokenInfo.d.ts:63
 
 ___
 
@@ -50,9 +74,15 @@ ___
 
 • `Optional` **logoURI**: `string`
 
+The logo URI of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:15
+soulwallet-assets/lib/interface/tokenInfo.d.ts:70
 
 ___
 
@@ -60,9 +90,15 @@ ___
 
 • **name**: `string`
 
+The name of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:12
+soulwallet-assets/lib/interface/tokenInfo.d.ts:49
 
 ___
 
@@ -70,9 +106,15 @@ ___
 
 • **symbol**: `string`
 
+The symbol of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:13
+soulwallet-assets/lib/interface/tokenInfo.d.ts:56
 
 ___
 
@@ -80,6 +122,12 @@ ___
 
 • **type**: [`AddressType`](../enums/AddressType.md)
 
+The type of the token.
+
+**`Memberof`**
+
+TokenInfo
+
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:10
+soulwallet-assets/lib/interface/tokenInfo.d.ts:42

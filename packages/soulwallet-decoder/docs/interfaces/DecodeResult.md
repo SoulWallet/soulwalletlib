@@ -2,6 +2,12 @@
 
 # Interface: DecodeResult
 
+DecodeResult is the interface for the decode result.
+
+**`Export`**
+
+DecodeResult
+
 ## Table of contents
 
 ### Properties
@@ -19,9 +25,15 @@
 
 • **from**: `string`
 
+The from address.
+
+**`Memberof`**
+
+DecodeResult
+
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:12](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L12)
+[soulwallet-decoder/src/interface/decodeData.ts:57](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/interface/decodeData.ts#L57)
 
 ___
 
@@ -29,9 +41,15 @@ ___
 
 • `Optional` **fromInfo**: [`TokenInfo`](TokenInfo.md)
 
+The token information of the from address.
+
+**`Memberof`**
+
+DecodeResult
+
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:13](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L13)
+[soulwallet-decoder/src/interface/decodeData.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/interface/decodeData.ts#L65)
 
 ___
 
@@ -39,9 +57,15 @@ ___
 
 • `Optional` **method**: [`Method`](Method.md)
 
+The method.
+
+**`Memberof`**
+
+DecodeResult
+
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:17](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L17)
+[soulwallet-decoder/src/interface/decodeData.ts:97](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/interface/decodeData.ts#L97)
 
 ___
 
@@ -49,9 +73,15 @@ ___
 
 • **to**: `string`
 
+The to address.
+
+**`Memberof`**
+
+DecodeResult
+
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:14](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L14)
+[soulwallet-decoder/src/interface/decodeData.ts:73](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/interface/decodeData.ts#L73)
 
 ___
 
@@ -59,9 +89,15 @@ ___
 
 • `Optional` **toInfo**: [`TokenInfo`](TokenInfo.md)
 
+The token information of the to address.
+
+**`Memberof`**
+
+DecodeResult
+
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:15](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L15)
+[soulwallet-decoder/src/interface/decodeData.ts:81](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/interface/decodeData.ts#L81)
 
 ___
 
@@ -69,6 +105,12 @@ ___
 
 • **value**: `bigint`
 
+The eth value.
+
+**`Memberof`**
+
+DecodeResult
+
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-decoder/src/interface/decodeData.ts#L16)
+[soulwallet-decoder/src/interface/decodeData.ts:89](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-decoder/src/interface/decodeData.ts#L89)

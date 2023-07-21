@@ -20,7 +20,7 @@
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:6](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L6)
+[soulwallet-assets/src/interface/tokenInfo.ts:6](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L6)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:4](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L4)
+[soulwallet-assets/src/interface/tokenInfo.ts:4](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L4)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:5](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L5)
+[soulwallet-assets/src/interface/tokenInfo.ts:5](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L5)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:3](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L3)
+[soulwallet-assets/src/interface/tokenInfo.ts:3](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L3)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:2](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-assets/src/interface/tokenInfo.ts#L2)
+[soulwallet-assets/src/interface/tokenInfo.ts:2](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-assets/src/interface/tokenInfo.ts#L2)

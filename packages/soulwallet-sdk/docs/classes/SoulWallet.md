@@ -2,6 +2,10 @@
 
 # Class: SoulWallet
 
+main class of the SDK.
+
+**`Export`**
+
 ## Hierarchy
 
 - `ISoulWallet`
@@ -70,7 +74,7 @@ ISoulWallet.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L37)
+[packages/soulwallet-sdk/src/soulWallet.ts:44](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L44)
 
 ## Properties
 
@@ -80,7 +84,7 @@ ISoulWallet.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L34)
+[packages/soulwallet-sdk/src/soulWallet.ts:41](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L41)
 
 ___
 
@@ -90,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:121](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L121)
+[packages/soulwallet-sdk/src/soulWallet.ts:139](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L139)
 
 ___
 
@@ -100,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:26](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L26)
+[packages/soulwallet-sdk/src/soulWallet.ts:33](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L33)
 
 ___
 
@@ -110,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:22](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L22)
+[packages/soulwallet-sdk/src/soulWallet.ts:29](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L29)
 
 ___
 
@@ -120,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:28](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L28)
+[packages/soulwallet-sdk/src/soulWallet.ts:35](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L35)
 
 ___
 
@@ -130,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:23](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L23)
+[packages/soulwallet-sdk/src/soulWallet.ts:30](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L30)
 
 ___
 
@@ -140,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:29](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L29)
+[packages/soulwallet-sdk/src/soulWallet.ts:36](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L36)
 
 ___
 
@@ -150,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:32](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L32)
+[packages/soulwallet-sdk/src/soulWallet.ts:39](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L39)
 
 ___
 
@@ -160,7 +164,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:25](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L25)
+[packages/soulwallet-sdk/src/soulWallet.ts:32](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L32)
 
 ___
 
@@ -170,7 +174,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:30](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L30)
+[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L37)
 
 ___
 
@@ -180,13 +184,13 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:27](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L27)
+[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L34)
 
 ## Methods
 
 ### calcWalletAddress
 
-▸ **calcWalletAddress**(`index`, `initialKey`, `initialGuardianHash`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+▸ **calcWalletAddress**(`index`, `initialKey`, `initialGuardianHash`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -199,7 +203,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Overrides
 
@@ -207,13 +211,13 @@ ISoulWallet.calcWalletAddress
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:181](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L181)
+[packages/soulwallet-sdk/src/soulWallet.ts:199](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L199)
 
 ___
 
 ### createUnsignedDeployWalletUserOp
 
-▸ **createUnsignedDeployWalletUserOp**(`index`, `initialKey`, `initialGuardianHash`, `callData?`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `any`\>\>
+▸ **createUnsignedDeployWalletUserOp**(`index`, `initialKey`, `initialGuardianHash`, `callData?`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `Error`\>\>
 
 #### Parameters
 
@@ -227,7 +231,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `Error`\>\>
 
 #### Overrides
 
@@ -235,17 +239,17 @@ ISoulWallet.createUnsignedDeployWalletUserOp
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:268](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L268)
+[packages/soulwallet-sdk/src/soulWallet.ts:291](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L291)
 
 ___
 
 ### entryPoint
 
-▸ **entryPoint**(): `Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+▸ **entryPoint**(): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Overrides
 
@@ -253,19 +257,20 @@ ISoulWallet.entryPoint
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:134](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L134)
+[packages/soulwallet-sdk/src/soulWallet.ts:152](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L152)
 
 ___
 
 ### estimateUserOperationGas
 
-▸ **estimateUserOperationGas**(`userOp`): `Promise`<[`Result`](../modules.md#result)<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
+▸ **estimateUserOperationGas**(`userOp`, `semiValidGuardHookInputData?`): `Promise`<[`Result`](../modules.md#result)<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `userOp` | `NotPromise`<`UserOperationStruct`\> |
+| `semiValidGuardHookInputData?` | `GuardHookInputData` |
 
 #### Returns
 
@@ -277,13 +282,13 @@ ISoulWallet.estimateUserOperationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:370](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L370)
+[packages/soulwallet-sdk/src/soulWallet.ts:411](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L411)
 
 ___
 
 ### fromTransaction
 
-▸ **fromTransaction**(`maxFeePerGas`, `maxPriorityFeePerGas`, `from`, `txs`, `nonceKey?`): `Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `any`\>\>
+▸ **fromTransaction**(`maxFeePerGas`, `maxPriorityFeePerGas`, `from`, `txs`, `nonceKey?`): `Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `Error`\>\>
 
 #### Parameters
 
@@ -297,7 +302,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`NotPromise`<`UserOperationStruct`\>, `Error`\>\>
 
 #### Overrides
 
@@ -305,27 +310,27 @@ ISoulWallet.fromTransaction
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:478](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L478)
+[packages/soulwallet-sdk/src/soulWallet.ts:549](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L549)
 
 ___
 
 ### getEntryPointContract
 
-▸ `Private` **getEntryPointContract**(): `Promise`<[`Result`](../modules.md#result)<`Contract`, `string`\>\>
+▸ `Private` **getEntryPointContract**(): `Promise`<[`Result`](../modules.md#result)<`Contract`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`Contract`, `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<`Contract`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:123](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L123)
+[packages/soulwallet-sdk/src/soulWallet.ts:141](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L141)
 
 ___
 
 ### getNonce
 
-▸ **getNonce**(`walletAddr`, `key?`): `Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+▸ **getNonce**(`walletAddr`, `key?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -336,7 +341,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Overrides
 
@@ -344,27 +349,27 @@ ISoulWallet.getNonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:435](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L435)
+[packages/soulwallet-sdk/src/soulWallet.ts:492](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L492)
 
 ___
 
 ### getOnChainConfig
 
-▸ **getOnChainConfig**(): `Promise`<[`Result`](../modules.md#result)<`onChainConfig`, `string`\>\>
+▸ **getOnChainConfig**(): `Promise`<[`Result`](../modules.md#result)<`onChainConfig`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`onChainConfig`, `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<`onChainConfig`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L65)
+[packages/soulwallet-sdk/src/soulWallet.ts:72](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L72)
 
 ___
 
 ### guardHookList
 
-▸ `Private` **guardHookList**(`walletAddress`): `Promise`<`string`[]\>
+▸ `Private` **guardHookList**(`walletAddress`): `Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
 
 #### Parameters
 
@@ -374,17 +379,17 @@ ___
 
 #### Returns
 
-`Promise`<`string`[]\>
+`Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:349](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L349)
+[packages/soulwallet-sdk/src/soulWallet.ts:374](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L374)
 
 ___
 
 ### initializeData
 
-▸ **initializeData**(`initialKey`, `initialGuardianHash`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+▸ **initializeData**(`initialKey`, `initialGuardianHash`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -396,17 +401,17 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:142](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L142)
+[packages/soulwallet-sdk/src/soulWallet.ts:160](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L160)
 
 ___
 
 ### packUserOpHash
 
-▸ **packUserOpHash**(`userOp`, `validAfter?`, `validUntil?`): `Promise`<[`Result`](../modules.md#result)<{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `any`\>\>
+▸ **packUserOpHash**(`userOp`, `validAfter?`, `validUntil?`): `Promise`<[`Result`](../modules.md#result)<{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
 
 #### Parameters
 
@@ -418,7 +423,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
 
 #### Overrides
 
@@ -426,13 +431,13 @@ ISoulWallet.packUserOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:337](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L337)
+[packages/soulwallet-sdk/src/soulWallet.ts:362](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L362)
 
 ___
 
 ### packUserOpSignature
 
-▸ **packUserOpSignature**(`signature`, `validationData`, `guardHookInputData?`): `Promise`<`string`\>
+▸ **packUserOpSignature**(`signature`, `validationData`, `guardHookInputData?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -444,7 +449,7 @@ ___
 
 #### Returns
 
-`Promise`<`string`\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Overrides
 
@@ -452,13 +457,13 @@ ISoulWallet.packUserOpSignature
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:356](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L356)
+[packages/soulwallet-sdk/src/soulWallet.ts:391](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L391)
 
 ___
 
 ### preFund
 
-▸ **preFund**(`userOp`): `Promise`<[`Result`](../modules.md#result)<{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `any`\>\>
+▸ **preFund**(`userOp`): `Promise`<[`Result`](../modules.md#result)<{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `Error`\>\>
 
 #### Parameters
 
@@ -468,7 +473,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `Error`\>\>
 
 #### Overrides
 
@@ -476,7 +481,7 @@ ISoulWallet.preFund
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:202](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L202)
+[packages/soulwallet-sdk/src/soulWallet.ts:220](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L220)
 
 ___
 
@@ -500,13 +505,13 @@ ISoulWallet.sendUserOperation
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:415](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L415)
+[packages/soulwallet-sdk/src/soulWallet.ts:470](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L470)
 
 ___
 
 ### userOpHash
 
-▸ **userOpHash**(`userOp`): `Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+▸ **userOpHash**(`userOp`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -516,7 +521,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `any`\>\>
+`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
 
 #### Overrides
 
@@ -524,13 +529,13 @@ ISoulWallet.userOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:328](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L328)
+[packages/soulwallet-sdk/src/soulWallet.ts:353](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L353)
 
 ___
 
 ### walletDeployed
 
-▸ `Private` **walletDeployed**(`walletAddress`): `Promise`<[`Result`](../modules.md#result)<`boolean`, `string`\>\>
+▸ `Private` **walletDeployed**(`walletAddress`): `Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
 
 #### Parameters
 
@@ -540,8 +545,8 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`boolean`, `string`\>\>
+`Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:456](https://github.com/proofofsoulprotocol/soulwalletlib/blob/99dfd90/packages/soulwallet-sdk/src/soulWallet.ts#L456)
+[packages/soulwallet-sdk/src/soulWallet.ts:521](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/soulWallet.ts#L521)

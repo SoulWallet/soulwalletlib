@@ -30,4 +30,4 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-Result.ts:4
+[Result.ts:4](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-result/src/Result.ts#L4)
