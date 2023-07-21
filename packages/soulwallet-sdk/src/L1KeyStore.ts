@@ -5,7 +5,13 @@ import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
 
-
+/**
+ * L1KeyStore
+ *
+ * @export
+ * @class L1KeyStore
+ * @extends {IL1KeyStore}
+ */
 export class L1KeyStore extends IL1KeyStore {
 
     static readonly days = 86400;

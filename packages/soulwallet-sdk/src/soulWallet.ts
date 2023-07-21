@@ -18,6 +18,13 @@ export class onChainConfig {
 }
 
 
+/**
+ * main class of the SDK.
+ *
+ * @export
+ * @class SoulWallet
+ * @extends {ISoulWallet}
+ */
 export class SoulWallet extends ISoulWallet {
     readonly days = 86400;
     readonly defalutInitialGuardianSafePeriod = 2 * this.days;

@@ -1,5 +1,26 @@
+
+/**
+ * UserOpErrors
+ *
+ * @export
+ * @class UserOpErrors
+ * @extends {Error}
+ */
 export class UserOpErrors extends Error {
+  /**
+   * The error code, all error codes are defined in UserOpErrorCodes.
+   *
+   * @type {number}
+   * @memberof UserOpErrors
+   */
   code: number;
+
+  /**
+   * The error data, it is optional.
+   *
+   * @type {(any | undefined)}
+   * @memberof UserOpErrors
+   */
   data: any | undefined;
   constructor(code: number, message: string, data?: any | undefined) {
     super(message);
@@ -12,6 +33,12 @@ export class UserOpErrors extends Error {
   }
 }
 
+/**
+ * UserOpErrorCodes
+ * refer: https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace
+ * @export
+ * @class UserOpErrorCodes
+ */
 export class UserOpErrorCodes {
   static UnknownError = -1;
   static InvalidUserOp = -32602;
