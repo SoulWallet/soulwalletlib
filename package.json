@@ -18,8 +18,6 @@
     "generateBytes4": "pnpm -r run generateBytes4 --filter 'soulwallet-decoder'",
     "generateTokens": "pnpm -r run generateTokens --filter 'soulwallet-assets'",
     "clean": "lerna run clean && rm -rf ./packages/*/lib/*",
-    "reBuild": "npm run clean && npm run build  ",
-    "geth": "docker-compose -f ./eth-node/docker-compose.yaml up --force-recreate -V",
     "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
     "bundler": "cd bundler/ && yarn run bundler",
     "publish": "pnpm -r publish"
