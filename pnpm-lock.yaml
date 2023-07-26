@@ -89,6 +89,17 @@ importers:
       '@types/shelljs': 0.8.12
       shelljs: 0.8.5
 
+  packages/soulwallet-keystore:
+    specifiers:
+      '@soulwallet/result': workspace:*
+      '@types/node': ^20.3.1
+      ethers: ^6.6.4
+    dependencies:
+      '@soulwallet/result': link:../soulwallet-result
+      ethers: 6.6.4
+    devDependencies:
+      '@types/node': 20.4.2
+
   packages/soulwallet-result:
     specifiers: {}
 
@@ -99,7 +110,6 @@ importers:
       '@account-abstraction/utils': ^0.6.0
       '@soulwallet/abi': workspace:*
       '@soulwallet/result': workspace:*
-      '@soulwallet/sdk': workspace:*
       '@types/shelljs': ^0.8.12
       ethers: ^6.6.4
       shelljs: ^0.8.5
@@ -109,7 +119,6 @@ importers:
       '@account-abstraction/utils': 0.6.0
       '@soulwallet/abi': link:../soulwallet-abi
       '@soulwallet/result': link:../soulwallet-result
-      '@soulwallet/sdk': 'link:'
       ethers: 6.6.4
     devDependencies:
       '@types/shelljs': 0.8.12
