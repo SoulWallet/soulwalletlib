@@ -3,7 +3,7 @@ import { TypeGuard } from "./tools/typeGuard.js";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
-import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
+import { Ok, Err, Result } from '@soulwallet/result';
 
 /**
  * L1KeyStore

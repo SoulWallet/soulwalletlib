@@ -9,7 +9,7 @@ import { Hex } from "./tools/hex.js";
 import { GasOverhead } from "./tools/gasOverhead.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
-import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
+import { Ok, Err, Result } from '@soulwallet/result';
 
 export class onChainConfig {
     chainId: number = 0;

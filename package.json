@@ -18,8 +18,6 @@
     "generateBytes4": "pnpm -r run generateBytes4 --filter 'soulwallet-decoder'",
     "generateTokens": "pnpm -r run generateTokens --filter 'soulwallet-assets'",
     "clean": "lerna run clean && rm -rf ./packages/*/lib/*",
-    "reBuild": "npm run clean && npm run build  ",
-    "geth": "docker-compose -f ./eth-node/docker-compose.yaml up --force-recreate -V",
     "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
     "bundler": "cd bundler/ && yarn run bundler",
     "publish": "pnpm -r publish"
@@ -27,12 +25,12 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@types/node": "^20.4.2",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6",
     "javascript-obfuscator": "^4.0.2",
+    "ts-node": "^10.9.1",
     "typedoc": "^0.24.8",
     "typedoc-plugin-markdown": "^3.15.3",
-    "typedoc-plugin-missing-exports": "^2.0.0"
+    "typedoc-plugin-missing-exports": "^2.0.0",
+    "typescript": "^5.1.6"
   },
   "keywords": [],
   "author": "",
