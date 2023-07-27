@@ -4,15 +4,20 @@ import shell from 'shelljs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve, join } from 'path';
 import { ethers } from 'ethers';
-import { Deploy } from "./deplpy.js";
+import { Deploy } from "./deploy.js";
 import { SocialRecovery } from "./socialRecovery.js";
 import { Decode } from './decode.js';
+import { CryptoTest } from './crypto.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const __baseDir = resolve(__dirname, '..', '..', '..');
 
 async function main() {
+
+    await new CryptoTest().run();
+
+
     const soulwalletcontractDir = resolve(__baseDir, 'soul-wallet-contract');
     const bundlerDir = resolve(__baseDir, 'bundler');
     const RPC = 'http://127.0.0.1:8545';

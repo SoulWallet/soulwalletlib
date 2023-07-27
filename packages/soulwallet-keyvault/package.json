@@ -1,12 +1,16 @@
 {
-    "name": "@soulwallet/sdk",
-    "version": "0.0.6",
+    "name": "@soulwallet/keyvault",
+    "version": "0.0.1",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
     "license": "ISC",
-    "main": "lib/export.js",
-    "types": "lib/export.d.ts",
+    "main": "lib/main.js",
+    "browser": {
+        "./lib/storage.js": "./lib/storage-browser.js",
+        "./lib/crypto.js": "./lib/crypto-browser.js"
+    },
+    "types": "lib/main.d.ts",
     "type": "module",
     "directories": {
         "lib": "lib",
@@ -23,25 +27,20 @@
         "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
     },
     "scripts": {
-        "typedoc":"typedoc",
-        "docs":"npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/export.ts",
+        "typedoc": "typedoc",
+        "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
         "tsc": "tsc",
-        "javascript-obfuscator":"javascript-obfuscator",
+        "javascript-obfuscator": "javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
     },
     "bugs": {
         "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
     },
     "dependencies": {
-        "@account-abstraction/contracts": "^0.6",
-        "@account-abstraction/sdk": "^0.6",
-        "@account-abstraction/utils": "^0.6.0",
-        "@soulwallet/abi": "workspace:*",
         "@soulwallet/result": "workspace:*",
         "ethers": "^6.6.4"
     },
     "devDependencies": {
-        "@types/shelljs": "^0.8.12",
-        "shelljs": "^0.8.5"
+        "@types/node": "^20.3.1"
     }
 }

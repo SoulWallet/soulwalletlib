@@ -1,6 +1,6 @@
 import { TokenInfo } from './interface/tokenInfo.js';
 import tokenList from './tokens.js';
-import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
+import { Ok, Err, Result } from '@soulwallet/result';
 import { UriCompression } from './uriCompression.js';
 
 

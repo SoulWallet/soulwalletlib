@@ -3,7 +3,7 @@ import { UserOperation } from "./interface/ISoulWallet.js";
 import { deepHexlify } from "@account-abstraction/utils";
 import { IBundler, UserOpDetail, UserOpGas, UserOpReceipt } from "./interface/IBundler.js";
 import { UserOpErrorCodes, UserOpErrors } from "./interface/IUserOpErrors.js";
-import { Ok, Err, Result } from '../../soulwallet-result/lib/main.js';
+import { Ok, Err, Result } from '@soulwallet/result';
 
 export class Bundler implements IBundler {
     private bundler: ethers.JsonRpcProvider;

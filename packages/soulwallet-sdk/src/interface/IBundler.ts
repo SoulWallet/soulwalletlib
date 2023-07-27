@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { UserOperation } from "./ISoulWallet.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { Ok, Err, Result } from '../../../soulwallet-result/lib/main.js';
+import { Ok, Err, Result } from '@soulwallet/result';
 
 
 /**
