@@ -1,5 +1,9 @@
-import { KeyVault } from './KeyVault.js';
+import { KeyVault } from './keyVault.js';
+import { Ok, Err, Result } from '@soulwallet/result';
+import { Crypto } from './crypto.js';
 
 export {
-    KeyVault
+    KeyVault,
+    Ok, Err, Result,
+    Crypto
 }

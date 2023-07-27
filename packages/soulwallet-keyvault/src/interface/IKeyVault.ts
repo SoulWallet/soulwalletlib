@@ -7,7 +7,12 @@ export abstract class IKeyVault extends EventEmitter {
     // #region Vault initialization
     public abstract init(password: string): Promise<Result<void, Error>>;
     public abstract restore(exportData: string, password: string): Promise<Result<void, Error>>;
+    public abstract isInitialized(): Promise<Result<boolean, Error>>;
     // #endregion end Vault initialization
+
+    // #region Vault destruction
+    public abstract destroy(): Promise<Result<void, Error>>;
+    // #endregion end Vault destruction
 
     // #region lock/unlock
     public abstract unlock(password: string): Promise<Result<void, Error>>;

@@ -6,6 +6,10 @@
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
     "license": "ISC",
     "main": "lib/main.js",
+    "browser": {
+        "./lib/storage.js": "./lib/storage-browser.js",
+        "./lib/crypto.js": "./lib/crypto-browser.js"
+    },
     "types": "lib/main.d.ts",
     "type": "module",
     "directories": {
@@ -25,10 +29,9 @@
     "scripts": {
         "typedoc": "typedoc",
         "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
-        "tsc": "tsc;rm -rf lib/dev",
+        "tsc": "tsc",
         "javascript-obfuscator": "javascript-obfuscator",
-        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
-        "generateTokens": "ts-node src/dev/generateTokens.ts"
+        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
     },
     "bugs": {
         "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
