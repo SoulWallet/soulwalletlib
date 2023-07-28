@@ -4,10 +4,11 @@ import {
     randomBytes,
     createCipheriv,
     createDecipheriv,
-    scryptSync
+    scrypt
 } from 'node:crypto';
+import * as ethUtil from 'ethereumjs-util';
 
-export class Crypto {
+export class AES_256_GCM {
     private static readonly ALGORITHM = 'aes-256-gcm';
     private static readonly VERSION = '001';
     private static AUTH_TAG_BYTES = 8;
@@ -18,12 +19,12 @@ export class Crypto {
     }
 
 
-    public static async init(base64Key: string): Promise<Result<Crypto, Error>> {
-        const key = await Crypto.importKey(base64Key);
+    public static async init(base64Key: string): Promise<Result<AES_256_GCM, Error>> {
+        const key = await AES_256_GCM.importKey(base64Key);
         if (key.isErr()) {
             return new Err(key.ERR);
         }
-        return new Ok(new Crypto(key.OK));
+        return new Ok(new AES_256_GCM(key.OK));
     }
 
     public destroy() {
@@ -60,12 +61,12 @@ export class Crypto {
         //const key = scryptSync(password, 'salt', 32);
         try {
             const iv = randomBytes(16);
-            const cipher = createCipheriv(Crypto.ALGORITHM, keyBuffer, iv, {
-                authTagLength: Crypto.AUTH_TAG_BYTES
+            const cipher = createCipheriv(AES_256_GCM.ALGORITHM, keyBuffer, iv, {
+                authTagLength: AES_256_GCM.AUTH_TAG_BYTES
             });
             const encryptedText = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
             const authTag = cipher.getAuthTag();
-            const versonBuffer = Buffer.from(Crypto.VERSION);
+            const versonBuffer = Buffer.from(AES_256_GCM.VERSION);
             return new Ok(Buffer.concat([versonBuffer, iv, encryptedText, authTag]).toString('base64'));
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -84,10 +85,10 @@ export class Crypto {
                 return new Err(new Error('unknow versoin'));
             }
             const iv = data.subarray(3, 19);
-            const encryptedText = data.subarray(19, data.length - Crypto.AUTH_TAG_BYTES);
-            const authTag = data.subarray(data.length - Crypto.AUTH_TAG_BYTES);
-            const decipher = createDecipheriv(Crypto.ALGORITHM, keyBuffer, iv, {
-                authTagLength: Crypto.AUTH_TAG_BYTES
+            const encryptedText = data.subarray(19, data.length - AES_256_GCM.AUTH_TAG_BYTES);
+            const authTag = data.subarray(data.length - AES_256_GCM.AUTH_TAG_BYTES);
+            const decipher = createDecipheriv(AES_256_GCM.ALGORITHM, keyBuffer, iv, {
+                authTagLength: AES_256_GCM.AUTH_TAG_BYTES
             });
             decipher.setAuthTag(authTag);
             const decryptedText = Buffer.concat([decipher.update(encryptedText), decipher.final()]);
@@ -100,5 +101,9 @@ export class Crypto {
             }
         }
     }
+}
+
+export class ECDSA {
+
 }
 

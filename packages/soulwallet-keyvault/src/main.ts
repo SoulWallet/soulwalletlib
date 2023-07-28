@@ -1,9 +1,9 @@
-import { KeyVault } from './keyVault.js';
+import { Vault } from './vault.js';
 import { Ok, Err, Result } from '@soulwallet/result';
-import { Crypto } from './crypto.js';
+import { AES_256_GCM, ECDSA } from './crypto.js';
 
 export {
-    KeyVault,
+    Vault,
     Ok, Err, Result,
-    Crypto
+    AES_256_GCM, ECDSA
 }

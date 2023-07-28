@@ -1,16 +1,18 @@
 import { Result, Ok, Err } from '@soulwallet/result';
 
-export class Crypto {
-    /* 
-    
-       Using the Web Crypto API in the browser environment is not just because of its high performance,
-       but more importantly, it provides memory-invisible key storage: CryptoKey
-    
-    */
+
+/* 
+
+   Using the Web Crypto API in the browser environment is not just because of its high performance,
+   but more importantly, it provides memory-invisible key storage: CryptoKey
+
+*/
+
+export class AES_256_GCM {
     private static VERSION = '001';
     private static AUTH_TAG_BYTES = 8;
-    private static AUTH_TAG_BITS = 8 * Crypto.AUTH_TAG_BYTES;
-    private static ALGORITHM = { name: 'AES-GCM', length: 256, tagLength: Crypto.AUTH_TAG_BITS };
+    private static AUTH_TAG_BITS = 8 * AES_256_GCM.AUTH_TAG_BYTES;
+    private static ALGORITHM = { name: 'AES-GCM', length: 256, tagLength: AES_256_GCM.AUTH_TAG_BITS };
 
     private _cryptoKey: CryptoKey | undefined;
     constructor(cryptoKey: CryptoKey) {
@@ -18,12 +20,12 @@ export class Crypto {
     }
 
 
-    public static async init(base64Key: string): Promise<Result<Crypto, Error>> {
-        const key = await Crypto.importKey(base64Key);
+    public static async init(base64Key: string): Promise<Result<AES_256_GCM, Error>> {
+        const key = await AES_256_GCM.importKey(base64Key);
         if (key.isErr()) {
             return new Err(key.ERR);
         }
-        return new Ok(new Crypto(key.OK));
+        return new Ok(new AES_256_GCM(key.OK));
     }
 
     public destroy() {
@@ -126,18 +128,18 @@ export class Crypto {
             const encoded = new TextEncoder().encode(text);
             const encryptedText = await window.crypto.subtle.encrypt(
                 {
-                    ...Crypto.ALGORITHM,
+                    ...AES_256_GCM.ALGORITHM,
                     iv: iv
                 },
                 keyBuffer,
                 encoded
             );
-            const versonBuffer = new TextEncoder().encode(Crypto.VERSION);
+            const versonBuffer = new TextEncoder().encode(AES_256_GCM.VERSION);
             const combinedBuffer = new Uint8Array(3 /*versonBuffer.length*/ + 16 /*iv.length*/ + encryptedText.byteLength);
             combinedBuffer.set(versonBuffer, 0);
             combinedBuffer.set(iv, 3);
             combinedBuffer.set(new Uint8Array(encryptedText), 3 /*versonBuffer.length*/ + 16 /*iv.length*/);
-            const encryptedTextWithIvAndTag = await Crypto.uint8ArrayToBase64(combinedBuffer);
+            const encryptedTextWithIvAndTag = await AES_256_GCM.uint8ArrayToBase64(combinedBuffer);
             return encryptedTextWithIvAndTag;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -150,7 +152,7 @@ export class Crypto {
 
     private async _decrypt(keyBuffer: CryptoKey, encryptedTextWithIvAndTag: string): Promise<Result<string, Error>> {
         try {
-            const u8Arrary = await Crypto.base64ToUint8Array(encryptedTextWithIvAndTag);
+            const u8Arrary = await AES_256_GCM.base64ToUint8Array(encryptedTextWithIvAndTag);
             if (u8Arrary.isErr()) {
                 return new Err(u8Arrary.ERR);
             }
@@ -163,7 +165,7 @@ export class Crypto {
             const encryptedText = data.subarray(19);
             const decrypted = await window.crypto.subtle.decrypt(
                 {
-                    ...Crypto.ALGORITHM,
+                    ...AES_256_GCM.ALGORITHM,
                     iv: iv
                 },
                 keyBuffer,
@@ -179,4 +181,9 @@ export class Crypto {
             }
         }
     }
+}
+
+
+export class ECDSA {
+
 }
