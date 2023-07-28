@@ -128,9 +128,9 @@ importers:
       '@soulwallet/result':
         specifier: workspace:*
         version: link:../soulwallet-result
-      ethers:
-        specifier: ^6.6.4
-        version: 6.6.4
+      ethereumjs-util:
+        specifier: ^7.1.5
+        version: 7.1.5
     devDependencies:
       '@types/node':
         specifier: ^20.3.1
