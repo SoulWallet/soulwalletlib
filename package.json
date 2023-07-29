@@ -1,7 +1,7 @@
 {
   "name": "@soulwallet/soulwallet",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "typedoc": "typedoc",
     "docs": "pnpm -r run docs",
@@ -9,8 +9,8 @@
     "javascript-obfuscator": "javascript-obfuscator",
     "ts-node": "ts-node",
     "preinstall": "npx only-allow pnpm",
-    "build": "pnpm -r run tsc",
-    "rebuild": "rm -rf ./packages/*/lib;pnpm -r run tsc",
+    "build": "pnpm -r run build",
+    "rebuild": "rm -rf ./packages/*/lib.*;pnpm run build",
     "release": "pnpm -r run release",
     "preTest": "cd soul-wallet-contract/ && chmod +x .env && npm install && npm run build && cd ../bundler/ && yarn && yarn preprocess",
     "test": "pnpm -r run test --filter 'test'",

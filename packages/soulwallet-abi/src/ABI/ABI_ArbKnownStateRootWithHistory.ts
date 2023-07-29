@@ -28,7 +28,32 @@ export default [
                 "type": "bytes32"
             }
         ],
-        "name": "L1BLockSyncd",
+        "name": "L1BlockSyncd",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "stateRoot",
+                "type": "bytes32"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "blockNumber",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "user",
+                "type": "address"
+            }
+        ],
+        "name": "NewStateRoot",
         "type": "event"
     },
     {

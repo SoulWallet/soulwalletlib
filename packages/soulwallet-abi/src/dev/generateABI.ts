@@ -1,9 +1,8 @@
-import { resolve } from 'path';
-import fs from 'fs';
+import { resolve } from 'node:path';
+import fs from 'node:fs';
 import shell from 'shelljs';
 
-
-
+ 
 // chech if solc is installed
 if (!shell.which('solc')) {
     shell.echo('this script requires solc');
