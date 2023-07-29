@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/keyvault",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
@@ -15,11 +15,12 @@
     },
     "type": "module",
     "directories": {
-        "lib": "lib",
+        "lib": "lib.commonjs",
         "test": "__tests__"
     },
     "files": [
-        "lib"
+        "lib.commonjs",
+        "lib.esm"
     ],
     "publishConfig": {
         "access": "public"

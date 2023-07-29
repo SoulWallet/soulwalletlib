@@ -1,6 +1,6 @@
 {
   "name": "@soulwallet/abi",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "> TODO: description",
   "author": "Jayden <z.cejay@gmail.com>",
   "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
@@ -9,10 +9,12 @@
   "main": "./lib.commonjs/main.js",
   "module": "./lib.esm/main.js",
   "directories": {
-    "lib": "lib.commonjs"
+    "lib": "lib.commonjs",
+    "test": "__tests__"
   },
   "files": [
-    "lib.commonjs"
+    "lib.commonjs",
+    "lib.esm"
   ],
   "publishConfig": {
     "access": "public"

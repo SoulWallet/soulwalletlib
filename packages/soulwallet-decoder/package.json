@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/decoder",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
@@ -10,11 +10,12 @@
     "module": "./lib.esm/main.js",
     "types": "./lib.esm/main.d.ts",
     "directories": {
-        "lib": "lib",
+        "lib": "lib.commonjs",
         "test": "__tests__"
     },
     "files": [
-        "lib"
+        "lib.commonjs",
+        "lib.esm"
     ],
     "publishConfig": {
         "access": "public"
