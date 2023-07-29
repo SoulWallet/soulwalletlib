@@ -1,5 +1,68 @@
 import { Ok, Err, Result } from '@soulwallet/result';
 
+export interface KeyStoreInfo {
+    /**
+     * The address of the signer
+     *
+     * @type {string}
+     * @memberof KeyStoreInfo
+     */
+    key: string;
+    /**
+     * The nonce of the slot
+     *
+     * @type {number}
+     * @memberof KeyStoreInfo
+     */
+    nonce: number;
+    /**
+     * The hash of the 'raw guardian' of the slot
+     *
+     * @type {string}
+     * @memberof KeyStoreInfo
+     */
+    guardianHash: string;
+    /**
+     * The hash of the 'raw pending guardian' of the slot
+     *
+     * @type {string}
+     * @memberof KeyStoreInfo
+     */
+    pendingGuardianHash: string;
+
+    /**
+     * unix timestamp (second) of when the `pendingGuardianHash` is activated
+     *
+     * @type {number}
+     * @memberof KeyStoreInfo
+     */
+    guardianActivateAt: number;
+
+    /**
+     * The safe period of the slot
+     *
+     * @type {number}
+     * @memberof KeyStoreInfo
+     */
+    guardianSafePeriod: number;
+
+    /**
+     * new guardian safe period
+     *
+     * @type {number}
+     * @memberof KeyStoreInfo
+     */
+    pendingGuardianSafePeriod: number;
+
+    /**
+     * unix timestamp (second) of when the `pendingGuardianSafePeriod` is activated
+     *
+     * @type {number}
+     * @memberof KeyStoreInfo
+     */
+    guardianSafePeriodActivateAt: number;
+}
+
 /**
  * @interface IL1KeyStore
  * IL1KeyStore is a globally unique contract where each user determines their unique slot using the three fields: 
@@ -18,5 +81,15 @@ export abstract class IL1KeyStore {
      * @memberof IL1KeyStore
      */
     abstract getKey(slot: string): Promise<Result<string, Error>>;
+
+    /**
+     * get all slot info
+     *
+     * @abstract
+     * @param {string} slot
+     * @return {*}  {(Promise<Result<KeyStoreInfo, Error>>)}
+     * @memberof IL1KeyStore
+     */
+    abstract getKeyStoreInfo(slot: string): Promise<Result<KeyStoreInfo, Error>>;
 
 }

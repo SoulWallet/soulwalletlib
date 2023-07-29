@@ -1,13 +1,14 @@
 {
     "name": "@soulwallet/sdk",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
     "license": "ISC",
-    "main": "lib/export.js",
-    "types": "lib/export.d.ts",
     "type": "module",
+    "main": "./lib.commonjs/main.js",
+    "module": "./lib.esm/main.js",
+    "types": "./lib.esm/main.d.ts",
     "directories": {
         "lib": "lib",
         "test": "__tests__"
@@ -23,10 +24,11 @@
         "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
     },
     "scripts": {
-        "typedoc":"typedoc",
-        "docs":"npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/export.ts",
+        "typedoc": "typedoc",
+        "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/export.ts",
         "tsc": "tsc",
-        "javascript-obfuscator":"javascript-obfuscator",
+        "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.commonjs.json",
+        "javascript-obfuscator": "javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
     },
     "bugs": {
@@ -43,5 +45,11 @@
     "devDependencies": {
         "@types/shelljs": "^0.8.12",
         "shelljs": "^0.8.5"
+    },
+    "exports": {
+        ".": {
+            "import": "./lib.esm/main.js",
+            "default": "./lib.commonjs/main.js"
+        }
     }
 }

@@ -31,6 +31,26 @@ export class SocialRecovery {
         }
         const initialGuardianHash = L1KeyStore.calcGuardianHash(guardianAddresses, threshold);
         const slot = L1KeyStore.getSlot(initialKey.address, initialGuardianHash);
+
+        {
+            const _key = await _L1KeyStore.getKey(slot);
+            if (_key.isErr()) {
+                throw new Error(_key.ERR.message);
+            }
+            if (_key.OK != ethers.ZeroAddress) {
+                throw new Error('slot is already set');
+            }
+
+            const _slotInfo = await _L1KeyStore.getKeyStoreInfo(slot);
+            if (_slotInfo.isErr()) {
+                throw new Error(_slotInfo.ERR.message);
+            }
+            if (_slotInfo.OK.key != ethers.ZeroAddress) {
+                throw new Error('slot is already set');
+            }
+        }
+
+
         const keyRet = await _L1KeyStore.getKey(slot);
         if (keyRet.isErr()) {
             throw new Error(keyRet.ERR.message);

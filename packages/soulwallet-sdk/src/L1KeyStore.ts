@@ -1,9 +1,10 @@
-import { IL1KeyStore } from "./interface/IL1KeyStore.js";
+import { IL1KeyStore, KeyStoreInfo } from "./interface/IL1KeyStore.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '@soulwallet/result';
+import { Convert } from './tools/convert.js';
 
 /**
  * L1KeyStore
@@ -141,6 +142,57 @@ export class L1KeyStore extends IL1KeyStore {
             const data = await this.L1KeyStoreContract.getKey(slot);
             // bytes32 to address
             return new Ok(ethers.getAddress('0x' + data.slice(26)));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error('unknown error')
+                );
+            }
+        }
+    }
+
+    /**
+     * get slot info
+     *
+     * @param {string} slot
+     * @return {*}  {(Promise<Result<KeyStoreInfo, Error>>)} 
+     * @memberof L1KeyStore
+     */
+    async getKeyStoreInfo(slot: string): Promise<Result<KeyStoreInfo, Error>> {
+        const ret = TypeGuard.onlyBytes32(slot);
+        if (ret.isErr()) {
+            return new Err(
+                new Error(ret.ERR)
+            );
+        }
+        try {
+            // function getKeyStoreInfo(bytes32 slot) external pure override returns (keyStoreInfo memory _keyStoreInfo)
+            const data = await this.L1KeyStoreContract.getKeyStoreInfo(slot);
+            /*
+                data[0]     bytes32 key; 
+                data[1]     uint256 nonce; 
+                data[2]     bytes32 guardianHash; 
+                data[3]     bytes32 pendingGuardianHash; 
+                data[4]     uint64 guardianActivateAt; 
+                data[5]     uint64 guardianSafePeriod; 
+                data[6]     uint64 pendingGuardianSafePeriod; 
+                data[7]     uint64 guardianSafePeriodActivateAt;
+            */
+            // bytes32 to address
+            const key = ethers.getAddress('0x' + data[0].slice(26));
+            const _keyStoreInfo: KeyStoreInfo = {
+                key: key,
+                nonce: Convert.bigIntToNumber(data[1]),
+                guardianHash: data[2],
+                pendingGuardianHash: data[3],
+                guardianActivateAt: Convert.bigIntToNumber(data[4]),
+                guardianSafePeriod: Convert.bigIntToNumber(data[5]),
+                pendingGuardianSafePeriod: Convert.bigIntToNumber(data[6]),
+                guardianSafePeriodActivateAt: Convert.bigIntToNumber(data[7])
+            }
+            return new Ok(_keyStoreInfo);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 return new Err(error);

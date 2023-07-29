@@ -1,16 +1,18 @@
 {
     "name": "@soulwallet/keyvault",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
     "license": "ISC",
-    "main": "lib/main.js",
+    "private": true,
+    "main": "./lib.commonjs/main.js",
+    "module": "./lib.esm/main.js",
+    "types": "./lib.esm/main.d.ts",
     "browser": {
         "./lib/storage.js": "./lib/storage-browser.js",
         "./lib/crypto.js": "./lib/crypto-browser.js"
     },
-    "types": "lib/main.d.ts",
     "type": "module",
     "directories": {
         "lib": "lib",
@@ -30,6 +32,7 @@
         "typedoc": "typedoc",
         "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
         "tsc": "tsc",
+        "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.commonjs.json",
         "javascript-obfuscator": "javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
     },
@@ -42,5 +45,11 @@
     },
     "devDependencies": {
         "@types/node": "^20.3.1"
+    },
+    "exports": {
+        ".": {
+            "import": "./lib.esm/main.js",
+            "default": "./lib.commonjs/main.js"
+        }
     }
 }

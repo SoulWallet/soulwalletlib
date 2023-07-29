@@ -1,18 +1,18 @@
 {
   "name": "@soulwallet/abi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "> TODO: description",
   "author": "Jayden <z.cejay@gmail.com>",
   "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
   "license": "ISC",
-  "main": "lib/main.js",
-  "types": "lib/main.d.ts",
   "type": "module",
+  "main": "./lib.commonjs/main.js",
+  "module": "./lib.esm/main.js",
   "directories": {
-    "lib": "lib"
+    "lib": "lib.commonjs"
   },
   "files": [
-    "lib"
+    "lib.commonjs"
   ],
   "publishConfig": {
     "access": "public"
@@ -22,12 +22,13 @@
     "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
   },
   "scripts": {
-    "typedoc":"typedoc",
-    "docs":"npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
-    "tsc": "tsc;rm -rf lib/dev",
-    "javascript-obfuscator":"javascript-obfuscator",
+    "typedoc": "typedoc",
+    "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
+    "tsc": "tsc",
+    "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.commonjs.json",
+    "javascript-obfuscator": "javascript-obfuscator",
     "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
-    "generateABI": "ts-node src/dev/generateABI.ts"
+    "generateABI": "ts-node --project ./tsconfig.dev.json ./src/dev/generateABI.ts"
   },
   "bugs": {
     "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
@@ -36,5 +37,11 @@
     "@types/node": "^20.3.1",
     "@types/shelljs": "^0.8.12",
     "shelljs": "^0.8.5"
+  },
+  "exports": {
+    ".": {
+      "import": "./lib.esm/main.js",
+      "default": "./lib.commonjs/main.js"
+    }
   }
 }
