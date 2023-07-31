@@ -1,4 +1,5 @@
 import { Result, Ok, Err } from '@soulwallet/result';
+import { scrypt } from 'scrypt-js';
 
 
 /* 
@@ -63,7 +64,7 @@ export class AES_256_GCM {
 
     }
 
-    private static uint8ArrayToBase64(bytes: Uint8Array): Result<string, Error> {
+    static uint8ArrayToBase64(bytes: Uint8Array): Result<string, Error> {
         try {
             let binary = '';
             const len = bytes.byteLength;
@@ -80,7 +81,7 @@ export class AES_256_GCM {
         }
     }
 
-    private static base64ToUint8Array(base64: string): Result<Uint8Array, Error> {
+    static base64ToUint8Array(base64: string): Result<Uint8Array, Error> {
         try {
             const binary = window.atob(base64);
             const len = binary.length;
@@ -187,3 +188,30 @@ export class AES_256_GCM {
 export class ECDSA {
 
 }
+
+
+export class Scrtpt {
+    public static async deriveKey(password: string): Promise<Result<string, Error>> {
+        const salt = 'salt';
+        const keylen = 32;
+        const N = Math.pow(2, 13);
+        const r = 8;
+        const p = 1;
+        try {
+            const key: Uint8Array = await scrypt(new TextEncoder().encode(password), new TextEncoder().encode(salt), N, r, p, keylen);
+            const _keyBase64 = await AES_256_GCM.uint8ArrayToBase64(key);
+            if (_keyBase64.isErr()) {
+                return new Err(_keyBase64.ERR);
+            }
+            const keyBase64 = _keyBase64.OK;
+            return new Ok(keyBase64);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(new Error('unknown error'));
+            }
+        }
+    }
+}
+

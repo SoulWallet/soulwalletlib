@@ -7,3 +7,5 @@ export {
     Ok, Err, Result,
     AES_256_GCM, ECDSA
 }
+
+export * from './vault.js';

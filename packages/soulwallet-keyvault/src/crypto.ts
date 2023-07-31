@@ -104,6 +104,31 @@ export class AES_256_GCM {
 }
 
 export class ECDSA {
+    // public static async sign(): Promise<Result<string, Error>> {
 
+    // }
+}
+
+export class Scrtpt {
+    public static async deriveKey(password: string): Promise<Result<string, Error>> {
+        return new Promise((resolve, reject) => {
+            const salt = 'salt';
+            const keylen = 32;
+            const N = Math.pow(2, 13);
+            const r = 8;
+            const p = 1;
+            scrypt(Buffer.from(password, 'utf8'), Buffer.from(salt, 'utf8'), keylen, { N, r, p }, (error, derivedKey) => {
+                if (error) {
+                    if (error instanceof Error) {
+                        resolve(new Err(error));
+                    } else {
+                        resolve(new Err(new Error('unknown error')));
+                    }
+                } else {
+                    resolve(new Ok(derivedKey.toString('base64')));
+                }
+            });
+        });
+    }
 }
 

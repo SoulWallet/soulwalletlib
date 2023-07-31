@@ -5,3 +5,5 @@ export {
     Err,
     Result
 }
+
+export * from './Result.js';

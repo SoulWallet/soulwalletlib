@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-      "module": "es2020",
+      "module": "commonjs",
       "declaration": true,        
       "declarationMap": false,      
       "emitDeclarationOnly": false,       
