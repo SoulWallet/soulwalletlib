@@ -1,8 +1,8 @@
 {
-  "extends": "../../tsconfig.commonjs.json",
+  "extends": "../../tsconfig.cjs.json",
   "compilerOptions": {
     "module": "commonjs",
-    "outDir": "lib.commonjs"
+    "outDir": "lib.cjs"
   },
   "include": ["src/**/*"]
 }

@@ -42,8 +42,8 @@ export class SoulWallet extends ISoulWallet {
 
 
     constructor(
-        _provider: string,
-        _bundler: string,
+        _provider: string | ethers.JsonRpcProvider,
+        _bundler: string | ethers.JsonRpcProvider,
         _soulWalletFactoryAddress: string,
         _defalutCallbackHandlerAddress: string,
         _keyStoreModuleAddress: string,
@@ -51,15 +51,23 @@ export class SoulWallet extends ISoulWallet {
 
     ) {
         super();
-        if (TypeGuard.httpOrHttps(_provider).isErr()) throw new Error("invalid provider");
-        if (TypeGuard.httpOrHttps(_bundler).isErr()) throw new Error("invalid bundler");
+        if (typeof _provider === 'string') {
+            if (TypeGuard.httpOrHttps(_provider).isErr()) throw new Error("invalid provider");
+            this.provider = new ethers.JsonRpcProvider(_provider);
+        } else {
+            this.provider = _provider;
+        }
+        if (typeof _bundler === 'string') {
+            if (TypeGuard.httpOrHttps(_bundler).isErr()) throw new Error("invalid bundler");
+            this.bundler = new ethers.JsonRpcProvider(_bundler);
+        } else {
+            this.bundler = _bundler;
+        }
         if (TypeGuard.onlyAddress(_soulWalletFactoryAddress).isErr()) throw new Error("invalid soulWalletFactoryAddress");
         if (TypeGuard.onlyAddress(_defalutCallbackHandlerAddress).isErr()) throw new Error("invalid defalutCallbackHandlerAddress");
         if (TypeGuard.onlyAddress(_keyStoreModuleAddress).isErr()) throw new Error("invalid keyStoreModuleAddress");
         if (TypeGuard.onlyAddress(_securityControlModuleAddress).isErr()) throw new Error("invalid securityControlModuleAddress");
 
-        this.provider = new ethers.JsonRpcProvider(_provider);
-        this.bundler = new ethers.JsonRpcProvider(_bundler);
         this.soulWalletFactoryAddress = _soulWalletFactoryAddress;
         this.defalutCallbackHandlerAddress = _defalutCallbackHandlerAddress;
         this.keyStoreModuleAddress = _keyStoreModuleAddress;

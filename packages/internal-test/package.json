@@ -5,8 +5,8 @@
   "author": "Jayden <z.cejay@gmail.com>",
   "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
   "license": "ISC",
-  "type": "module",
   "private": true,
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
@@ -21,7 +21,7 @@
     "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
   },
   "scripts": {
-    "test": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts"
+    "test": "ts-node ./src/main.ts"
   },
   "bugs": {
     "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"

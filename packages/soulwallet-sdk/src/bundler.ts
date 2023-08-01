@@ -8,7 +8,7 @@ import { Ok, Err, Result } from '@soulwallet/result';
 export class Bundler implements IBundler {
     private bundler: ethers.JsonRpcProvider;
 
-    constructor(bundler: ethers.JsonRpcProvider | string) {
+    constructor(bundler: string | ethers.JsonRpcProvider) {
         if (typeof bundler === 'string') {
             this.bundler = new ethers.JsonRpcProvider(bundler);
         } else {

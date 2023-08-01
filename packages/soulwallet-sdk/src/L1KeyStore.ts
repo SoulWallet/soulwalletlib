@@ -204,4 +204,63 @@ export class L1KeyStore extends IL1KeyStore {
         }
     }
 
+
+    /**
+     * calc sig hash
+     *
+     * @static
+     * @param {string} L1KeyStoreContractAddress L1KeyStore contract address
+     * @param {string} slot bytes32 slot
+     * @param {number} nonce uint256 nonce
+     * @param {string} data bytes32 data ( padded to bytes32 owner address | guardian Hash )
+     * @return {*}  {string}
+     * @memberof L1KeyStore
+     */
+    static getSigHash(L1KeyStoreContractAddress: string, slot: string, nonce: number, data: string): string {
+        TypeGuard.onlyBytes32(slot);
+        TypeGuard.onlyBytes32(data);
+        const abiEncoded = new ethers.AbiCoder().encode(
+            ["address", "bytes32", "uint256", "bytes32"],
+            [L1KeyStoreContractAddress, slot, nonce, data]);
+        const keccak256 = ethers.keccak256(abiEncoded);
+        return keccak256;
+    }
+
+    /**
+     * get sign hash of the setKey
+     *
+     * @param {string} slot bytes32 slot
+     * @param {string} addressKey address of the new key
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof L1KeyStore
+     */
+    async getSetKeySigHash(slot: string, addressKey: string): Promise<Result<string, Error>> {
+        TypeGuard.onlyAddress(addressKey);
+        const bytes32Key = Hex.paddingZero(addressKey, 32);
+        const ret = await this.getKeyStoreInfo(slot);
+        if (ret.isErr()) {
+            return new Err(ret.ERR);
+        }
+        const nonce = ret.OK.nonce;
+        return new Ok(L1KeyStore.getSigHash(this.L1KeyStoreContractAddress, slot, nonce, bytes32Key));
+    }
+
+    /**
+     * get sign hash of the setGuardian
+     *
+     * @param {string} slot bytes32 slot
+     * @param {string} guardianHash bytes32 guardianHash
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof L1KeyStore
+     */
+    async getSetGuardianSigHash(slot: string, guardianHash: string): Promise<Result<string, Error>> {
+        TypeGuard.onlyBytes32(guardianHash);
+        const ret = await this.getKeyStoreInfo(slot);
+        if (ret.isErr()) {
+            return new Err(ret.ERR);
+        }
+        const nonce = ret.OK.nonce;
+        return new Ok(L1KeyStore.getSigHash(this.L1KeyStoreContractAddress, slot, nonce, guardianHash));
+    }
+
 }
