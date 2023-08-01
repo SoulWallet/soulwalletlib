@@ -8,6 +8,7 @@ import { Deploy } from "./deploy.js";
 import { SocialRecovery } from "./socialRecovery.js";
 import { Decode } from './decode.js';
 import { CryptoTest } from './crypto.js';
+import { L1KeyStoreTest } from './L1KeyStore.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -187,6 +188,9 @@ async function main() {
     }
     {
         //run testcase
+
+
+        await new L1KeyStoreTest(RPC, contractInstance['KeyStore']).run();
 
         await new Decode().run();
 
