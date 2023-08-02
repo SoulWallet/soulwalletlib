@@ -51,6 +51,15 @@ export class L1KeyStore extends IL1KeyStore {
         this.L1KeyStoreContract = new ethers.Contract(this.L1KeyStoreContractAddress, ABI_KeyStore, this.L1Provider);
     }
 
+    static bytes32ToAddress(bytes32: string): string {
+        TypeGuard.onlyBytes32(bytes32);
+        return ethers.getAddress('0x' + bytes32.slice(26));
+    }
+    static addressToBytes32(address: string): string {
+        TypeGuard.onlyAddress(address);
+        return Hex.paddingZero(address, 32);
+    }
+
     private static guardianSafePeriodGuard(guardianSafePeriod: number): Result<true, string> {
         if (guardianSafePeriod < (this.days * 2)) {
             return new Err("initialGuardianSafePeriod is too small");
@@ -61,9 +70,18 @@ export class L1KeyStore extends IL1KeyStore {
         return new Ok(true);
     }
 
-
+    /**
+     * calculate the slot
+     *
+     * @static
+     * @param {string} initialKey bytes32
+     * @param {string} initialGuardianHash bytes32
+     * @param {number} [initialGuardianSafePeriod=2 * this.days]
+     * @return {*}  {string} bytes32
+     * @memberof L1KeyStore
+     */
     static getSlot(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
-        let ret = TypeGuard.onlyAddress(initialKey);
+        let ret = TypeGuard.onlyBytes32(initialKey);
         if (ret.isErr()) {
             throw new Error(ret.ERR);
         }
@@ -78,8 +96,7 @@ export class L1KeyStore extends IL1KeyStore {
 
         // bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod
         // keccak256(abi.encode(initialKey, initialGuardianHash, guardianSafePeriod));  
-        const _initialKey = Hex.paddingZero(initialKey, 32)
-        const abiEncoded = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKey, initialGuardianHash, initialGuardianSafePeriod]);
+        const abiEncoded = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [initialKey, initialGuardianHash, initialGuardianSafePeriod]);
         const keccak256 = ethers.keccak256(abiEncoded);
         return keccak256;
     }
@@ -99,8 +116,6 @@ export class L1KeyStore extends IL1KeyStore {
         (address[] memory guardians, uint256 threshold, uint256 salt) =
             abi.decode(rawGuardian, (address[], uint256, uint256));
         */
-
-
 
         guardians.sort((a, b) => {
             {
@@ -130,6 +145,13 @@ export class L1KeyStore extends IL1KeyStore {
         return keccak256;
     }
 
+    /**
+     * get the key stored in the slot
+     *
+     * @param {string} slot bytes32
+     * @return {*}  {Promise<Result<string, Error>>} bytes32 key 
+     * @memberof L1KeyStore
+     */
     async getKey(slot: string): Promise<Result<string, Error>> {
         const ret = TypeGuard.onlyBytes32(slot);
         if (ret.isErr()) {
@@ -140,8 +162,7 @@ export class L1KeyStore extends IL1KeyStore {
         try {
             // function getKey(bytes32 slot) external view returns (bytes32 key);
             const data = await this.L1KeyStoreContract.getKey(slot);
-            // bytes32 to address
-            return new Ok(ethers.getAddress('0x' + data.slice(26)));
+            return new Ok(data);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 return new Err(error);
@@ -156,7 +177,7 @@ export class L1KeyStore extends IL1KeyStore {
     /**
      * get slot info
      *
-     * @param {string} slot
+     * @param {string} slot bytes32
      * @return {*}  {(Promise<Result<KeyStoreInfo, Error>>)} 
      * @memberof L1KeyStore
      */
@@ -180,10 +201,8 @@ export class L1KeyStore extends IL1KeyStore {
                 data[6]     uint64 pendingGuardianSafePeriod; 
                 data[7]     uint64 guardianSafePeriodActivateAt;
             */
-            // bytes32 to address
-            const key = ethers.getAddress('0x' + data[0].slice(26));
             const _keyStoreInfo: KeyStoreInfo = {
-                key: key,
+                key: data[0],
                 nonce: Convert.bigIntToNumber(data[1]),
                 guardianHash: data[2],
                 pendingGuardianHash: data[3],
@@ -230,13 +249,12 @@ export class L1KeyStore extends IL1KeyStore {
      * get sign hash of the setKey
      *
      * @param {string} slot bytes32 slot
-     * @param {string} addressKey address of the new key
+     * @param {string} bytes32Key the new key
      * @return {*}  {Promise<Result<string, Error>>}
      * @memberof L1KeyStore
      */
-    async getSetKeySigHash(slot: string, addressKey: string): Promise<Result<string, Error>> {
-        TypeGuard.onlyAddress(addressKey);
-        const bytes32Key = Hex.paddingZero(addressKey, 32);
+    async getSetKeySigHash(slot: string, bytes32Key: string): Promise<Result<string, Error>> {
+        TypeGuard.onlyBytes32(bytes32Key);
         const ret = await this.getKeyStoreInfo(slot);
         if (ret.isErr()) {
             return new Err(ret.ERR);

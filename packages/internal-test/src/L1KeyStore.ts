@@ -32,7 +32,7 @@ export class L1KeyStoreTest {
         const _L1KeyStore = new L1KeyStore(this.rpc, this.keyStoreAddress);
         {
             const _slot = '0xc83ce2ae5f0849408e8430aab8302ba83b8993ccec901ca1a9f5136a3892afbc';
-            const _newKey = '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4';
+            const _newKey = L1KeyStore.addressToBytes32('0x5B38Da6a701c568545dCfcB03FcB875f56beddC4');
             const _value = await _L1KeyStore.getSetKeySigHash(_slot, _newKey);
             if (_value.isErr()) {
                 throw new Error(`Expected Ok but got Err: ${_value.ERR.message}`);
