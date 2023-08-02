@@ -1,8 +1,8 @@
 import { Result, Ok, Err } from '@soulwallet/result';
-import { IKeyVault } from './interface/IKeyVault.js';
+import { IVault } from './interface/IVault.js';
 import { Storage } from './storage.js';
 
-export class Vault extends IKeyVault {
+export class Vault extends IVault {
 
     private _storage: Storage;
     private _password: string | undefined = undefined;

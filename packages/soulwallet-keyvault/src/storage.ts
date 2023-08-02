@@ -1,9 +1,9 @@
 import { Result, Ok, Err } from '@soulwallet/result';
 import { KeyNotFound, IStorage, Serializable, StorageLocation } from './interface/IStorage.js';
-import { homedir } from 'node:os';
-import { join } from 'node:path';
-import { existsSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
-import { createHash } from 'node:crypto';
+import { homedir } from 'os';
+import { join } from 'path';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'fs';
+import { createHash } from 'crypto';
 
 
 export class Storage extends IStorage {

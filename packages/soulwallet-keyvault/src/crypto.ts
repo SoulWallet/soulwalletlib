@@ -1,12 +1,13 @@
 import { Result, Ok, Err } from '@soulwallet/result';
-import { Buffer } from 'node:buffer';
+import { Buffer } from 'buffer';
 import {
     randomBytes,
     createCipheriv,
     createDecipheriv,
-    scrypt
-} from 'node:crypto';
+    scrypt as _scrypt,
+} from 'crypto';
 import * as ethUtil from 'ethereumjs-util';
+import scryptConfig from './config/scryptConfig.js'
 
 export class AES_256_GCM {
     private static readonly ALGORITHM = 'aes-256-gcm';
@@ -18,6 +19,9 @@ export class AES_256_GCM {
         this._keyBuffer = keyBuffer;
     }
 
+    public destroy() {
+        this._keyBuffer.fill(0);
+    }
 
     public static async init(base64Key: string): Promise<Result<AES_256_GCM, Error>> {
         const key = await AES_256_GCM.importKey(base64Key);
@@ -25,10 +29,6 @@ export class AES_256_GCM {
             return new Err(key.ERR);
         }
         return new Ok(new AES_256_GCM(key.OK));
-    }
-
-    public destroy() {
-        this._keyBuffer.fill(0);
     }
 
     public static async generateAndExportKey(): Promise<string> {
@@ -104,20 +104,50 @@ export class AES_256_GCM {
 }
 
 export class ECDSA {
-    // public static async sign(): Promise<Result<string, Error>> {
+    private _privateKey: Buffer;
+    address: string;
+    constructor(privateKey: string) {
+        this._privateKey = ethUtil.toBuffer(privateKey);
+        this.address = ethUtil.toChecksumAddress(ethUtil.Address.fromPrivateKey(this._privateKey).toString());
+    }
 
-    // }
+    async sign(message: string): Promise<string> {
+        const messageHash = ethUtil.keccak256(Buffer.from(message));
+        const signature = ethUtil.ecsign(messageHash, this._privateKey);
+        return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
+    }
+
+    async personalSign(message: string): Promise<string> {
+        const messageHash = ethUtil.hashPersonalMessage(Buffer.from(message));
+        const signature = ethUtil.ecsign(messageHash, this._privateKey);
+        return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
+    }
+
+    async verify(message: string, signature: string): Promise<boolean> {
+        const messageHash = ethUtil.keccak256(Buffer.from(message));
+        const sig = ethUtil.fromRpcSig(signature);
+        const publicKey = ethUtil.ecrecover(messageHash, sig.v, sig.r, sig.s);
+        const sender = ethUtil.pubToAddress(publicKey);
+        const address = ethUtil.toChecksumAddress(ethUtil.bufferToHex(sender));
+        return address === this.address;
+    }
 }
 
-export class Scrtpt {
-    public static async deriveKey(password: string): Promise<Result<string, Error>> {
+
+/**
+ * Anti-Brute-Force Algorithm
+ *
+ * @export
+ * @class ABFA
+ */
+export class ABFA {
+    static scrypt(password: string, salt: string = scryptConfig.salt): Promise<Result<string, Error>> {
         return new Promise((resolve, reject) => {
-            const salt = 'salt';
-            const keylen = 32;
-            const N = Math.pow(2, 13);
-            const r = 8;
-            const p = 1;
-            scrypt(Buffer.from(password, 'utf8'), Buffer.from(salt, 'utf8'), keylen, { N, r, p }, (error, derivedKey) => {
+            const keylen = scryptConfig.keylen;
+            const N = scryptConfig.N;
+            const r = scryptConfig.r;
+            const p = scryptConfig.p;
+            _scrypt(Buffer.from(password, 'utf8'), Buffer.from(salt, 'utf8'), keylen, { N, r, p }, (error, derivedKey) => {
                 if (error) {
                     if (error instanceof Error) {
                         resolve(new Err(error));
@@ -129,6 +159,22 @@ export class Scrtpt {
                 }
             });
         });
+    }
+
+    static async argon2id(password: string, salt: string): Promise<string> {
+        // const _salt = Buffer.from(salt, 'utf8');
+        // const hash = await _argon2.hash(password, {
+        //     raw: false,
+        //     salt: _salt,
+        //     hashLength: 32,
+        //     timeCost: 3,
+        //     memoryCost: 4096,
+        //     parallelism: 1,
+        //     type: 2/*argon2id*/,
+        //     version: 19
+        // });
+        // return hash;
+        throw new Error('not implemented');
     }
 }
 

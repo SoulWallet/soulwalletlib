@@ -1,8 +1,8 @@
 import { Ok, Err, Result } from '@soulwallet/result';
-import { EventEmitter } from 'node:events';
+// import { EventEmitter } from 'events';
 
 
-export abstract class IKeyVault extends EventEmitter {
+export abstract class IVault /*extends EventEmitter*/ {
 
     // #region Vault initialization
     public abstract init(password: string): Promise<Result<void, Error>>;

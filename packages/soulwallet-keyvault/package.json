@@ -10,8 +10,8 @@
     "module": "./lib.esm/main.js",
     "types": "./lib.esm/main.d.ts",
     "browser": {
-        "./lib/storage.js": "./lib/storage-browser.js",
-        "./lib/crypto.js": "./lib/crypto-browser.js"
+        "./lib.esm/storage.js": "./lib.esm/storage-browser.js",
+        "./lib.esm/crypto.js": "./lib.esm/crypto-browser.js"
     },
     "directories": {
         "lib": "lib.cjs",

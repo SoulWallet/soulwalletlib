@@ -1,5 +1,7 @@
 import { Result, Ok, Err } from '@soulwallet/result';
-import { scrypt } from 'scrypt-js';
+import { scrypt as _scrypt } from 'scrypt-js';
+import scryptConfig from './config/scryptConfig.js'
+import * as ethUtil from 'ethereumjs-util';
 
 
 /* 
@@ -20,6 +22,9 @@ export class AES_256_GCM {
         this._cryptoKey = cryptoKey;
     }
 
+    public destroy() {
+        this._cryptoKey = undefined;
+    }
 
     public static async init(base64Key: string): Promise<Result<AES_256_GCM, Error>> {
         const key = await AES_256_GCM.importKey(base64Key);
@@ -27,10 +32,6 @@ export class AES_256_GCM {
             return new Err(key.ERR);
         }
         return new Ok(new AES_256_GCM(key.OK));
-    }
-
-    public destroy() {
-        this._cryptoKey = undefined;
     }
 
     public static async generateAndExportKey(): Promise<string> {
@@ -189,16 +190,21 @@ export class ECDSA {
 
 }
 
+/**
+ * Anti-Brute-Force Algorithm
+ *
+ * @export
+ * @class ABFA
+ */
+export class ABFA {
 
-export class Scrtpt {
-    public static async deriveKey(password: string): Promise<Result<string, Error>> {
-        const salt = 'salt';
-        const keylen = 32;
-        const N = Math.pow(2, 13);
-        const r = 8;
-        const p = 1;
+    static async scrypt(password: string, salt: string = scryptConfig.salt): Promise<Result<string, Error>> {
+        const keylen = scryptConfig.keylen;
+        const N = scryptConfig.N;
+        const r = scryptConfig.r;
+        const p = scryptConfig.p;
         try {
-            const key: Uint8Array = await scrypt(new TextEncoder().encode(password), new TextEncoder().encode(salt), N, r, p, keylen);
+            const key: Uint8Array = await _scrypt(new TextEncoder().encode(password), new TextEncoder().encode(salt), N, r, p, keylen);
             const _keyBase64 = await AES_256_GCM.uint8ArrayToBase64(key);
             if (_keyBase64.isErr()) {
                 return new Err(_keyBase64.ERR);
@@ -212,6 +218,10 @@ export class Scrtpt {
                 return new Err(new Error('unknown error'));
             }
         }
+    }
+
+    static async argon2id(password: string, salt: string): Promise<string> {
+        throw new Error('not implemented');
     }
 }
 
