@@ -34,7 +34,7 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:35
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:35
 
 ___
 
@@ -50,7 +50,7 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:28
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:28
 
 ___
 
@@ -66,7 +66,7 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:63
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:63
 
 ___
 
@@ -82,7 +82,7 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:70
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:70
 
 ___
 
@@ -98,7 +98,7 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:49
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:49
 
 ___
 
@@ -114,7 +114,7 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:56
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:56
 
 ___
 
@@ -130,4 +130,4 @@ TokenInfo
 
 #### Defined in
 
-soulwallet-assets/lib/interface/tokenInfo.d.ts:42
+soulwallet-assets/lib.cjs/interface/tokenInfo.d.ts:42

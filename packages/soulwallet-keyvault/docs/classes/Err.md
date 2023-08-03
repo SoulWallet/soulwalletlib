@@ -1,4 +1,4 @@
-[@soulwallet/decoder](../README.md) / [Modules](../modules.md) / Err
+[@soulwallet/keyvault](../README.md) / [Modules](../modules.md) / Err
 
 # Class: Err<T, E\>
 

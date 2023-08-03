@@ -131,30 +131,6 @@ export class Storage implements IStorage {
         }
     }
 
-
-    public async destroy(): Promise<Result<void, Error>> {
-        try {
-            if (this._chromeExtension) {
-                await this.chromeStorageSet(this._dataStorageKey, '[]');
-                await this.chromeStorageSet(this._signerStorageKey, '[]');
-            } else {
-                window.localStorage.setItem(this._dataStorageKey, '[]');
-                window.localStorage.setItem(this._signerStorageKey, '[]');
-            }
-            return new Ok(void (0));
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                return new Err(error);
-            } else {
-                return new Err(new Error('unknown error'));
-            }
-        }
-    }
-
-
-
-
-
     private async _save(location: StorageLocation, data: Map<string, string>): Promise<Result<void, Error>> {
         try {
             let _data = JSON.stringify(Array.from(data));
@@ -271,6 +247,25 @@ export class Storage implements IStorage {
                 }
             });
         });
+    }
+
+    public async selfDestruct(): Promise<Result<void, Error>> {
+        try {
+            if (this._chromeExtension) {
+                await this.chromeStorageSet(this._dataStorageKey, '[]');
+                await this.chromeStorageSet(this._signerStorageKey, '[]');
+            } else {
+                window.localStorage.setItem(this._dataStorageKey, '[]');
+                window.localStorage.setItem(this._signerStorageKey, '[]');
+            }
+            return new Ok(void (0));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(new Error('unknown error'));
+            }
+        }
     }
 
 }

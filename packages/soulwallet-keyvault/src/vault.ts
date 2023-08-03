@@ -3,7 +3,7 @@ import { IVault } from './interface/IVault.js';
 import { Storage } from './storage.js';
 import { StorageLocation } from './interface/IStorage.js';
 import { AES_256_GCM, ECDSA, ABFA, Utils } from './crypto.js';
-import * as ethUtil from 'ethereumjs-util';
+import { ethers } from 'ethers';
 import mitt, { Emitter, EventHandlerMap } from 'mitt'
 
 export interface SignData {
@@ -14,7 +14,7 @@ export interface SignData {
 
 export type VaultEvents = {
     Initialized: void,
-    Destroy: void,
+    ReInitialized: void,
     Locked: void,
     Unlocked: void,
     AccountAdded: string,
@@ -23,6 +23,13 @@ export type VaultEvents = {
     PersonalSign: SignData,
 };
 
+/**
+ * Vault
+ *
+ * @export
+ * @class Vault
+ * @implements {IVault}
+ */
 export class Vault implements IVault {
 
     private _storage: Storage;
@@ -84,12 +91,27 @@ export class Vault implements IVault {
 
     private static _hash(data: string): string {
         const _salt = '@key-hash-salt'
-        const buff = ethUtil.keccakFromString(_salt + data);
-        return ethUtil.bufferToHex(buff);
+        return ethers.keccak256(ethers.toUtf8Bytes(_salt + data));
     }
 
-    public async init(password: string): Promise<Result<void, Error>> {
-        if (await this.isInitialized()) {
+    /**
+     * initialize vault
+     *
+     * @param {string} password
+     * @param {boolean} [enforce] if true, delete all data and re-initialize
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
+    public async init(password: string, enforce?: boolean): Promise<Result<void, Error>> {
+        if (enforce === true) {
+            // delete all data
+            await this.destroy();
+            const ret = await this._storage.selfDestruct();
+            if (ret.isErr()) {
+                return new Err(ret.ERR);
+            }
+        }
+        if (await this._isInitialized()) {
             return new Err(new Error('already initialized'));
         } else {
             const _key = await this._deriveKey(password);
@@ -106,12 +128,20 @@ export class Vault implements IVault {
             }
             this._AES_256_GCM = _aes.OK;
 
-            this.emit('Initialized', void (0));
+            this.emit(enforce === true ? 'ReInitialized' : 'Initialized', void (0));
 
             return new Ok(void (0));
         }
     }
 
+    /**
+     * not implemented
+     *
+     * @param {string} exportData
+     * @param {string} password
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
     public async restore(exportData: string, password: string): Promise<Result<void, Error>> {
         throw new Error('Method not implemented.');
     }
@@ -134,6 +164,12 @@ export class Vault implements IVault {
         return new Ok(void (0));
     }
 
+    /**
+     * check if vault is initialized
+     *
+     * @return {*}  {Promise<Result<boolean, Error>>}
+     * @memberof Vault
+     */
     public async isInitialized(): Promise<Result<boolean, Error>> {
         const ret = await this._loadDecryptKeyHash();
         if (ret.isErr()) {
@@ -142,7 +178,13 @@ export class Vault implements IVault {
         return new Ok(ret.OK !== '');
     }
 
-    public async destroy(): Promise<void> {
+    /**
+     * for security reason, allways call this method after use
+     *
+     * @return {*}  {Promise<void>}
+     * @memberof Vault
+     */
+    private async destroy(): Promise<void> {
         if (this._AES_256_GCM) {
             this._AES_256_GCM = undefined;
         }
@@ -154,14 +196,35 @@ export class Vault implements IVault {
             }
         }
         this._account.clear();
-
-        this.emit('Destroy', void (0));
     }
 
+    private async _isInitialized(): Promise<boolean> {
+        const ret = await this.isInitialized();
+        if (ret.isErr()) {
+            return false;
+        }
+        return ret.OK;
+    }
+
+    /**
+     * unlock keyVault
+     *
+     * @param {string} password
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
     public async unlock(password: string): Promise<Result<void, Error>> {
-        if (!await this.isInitialized()) {
+        if (!await this._isInitialized()) {
             return new Err(new Error('not initialized'));
         } else {
+            const ret = await this.isLocked();
+            if (ret.isErr()) {
+                return new Err(ret.ERR);
+            }
+            if (!ret.OK) {
+                return new Err(new Error('already unlocked'));
+            }
+
             const _key = await this._deriveKey(password);
             if (_key.isErr()) {
                 return new Err(_key.ERR);
@@ -182,18 +245,50 @@ export class Vault implements IVault {
         }
     }
 
+    /**
+     * lock keyVault
+     *
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
     public async lock(): Promise<Result<void, Error>> {
-        await this.destroy();
+        if (!await this._isInitialized()) {
+            return new Err(new Error('not initialized'));
+        } else {
+            const ret = await this.isLocked();
+            if (ret.isErr()) {
+                return new Err(ret.ERR);
+            }
+            if (ret.OK) {
+                return new Err(new Error('already locked'));
+            }
 
-        this.emit('Locked', void (0));
+            await this.destroy();
 
-        return new Ok(void (0));
+            this.emit('Locked', void (0));
+
+            return new Ok(void (0));
+        }
     }
 
+    /**
+     * check if vault is locked
+     *
+     * @return {*}  {Promise<Result<boolean, Error>>}
+     * @memberof Vault
+     */
     public async isLocked(): Promise<Result<boolean, Error>> {
         return new Ok(this._AES_256_GCM === undefined);
     }
 
+    /**
+     * not implemented
+     *
+     * @param {string} oldPassword
+     * @param {string} newPassword
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
     public async changePassword(oldPassword: string, newPassword: string): Promise<Result<void, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
@@ -201,6 +296,13 @@ export class Vault implements IVault {
         throw new Error('Method not implemented.');
     }
 
+    /**
+     * not implemented
+     *
+     * @param {string} password
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof Vault
+     */
     public async export(password: string): Promise<Result<string, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
@@ -218,11 +320,19 @@ export class Vault implements IVault {
     //     throw new Error('Method not implemented.');
     // }
 
+    /**
+     * import signer from privateKey
+     *
+     * @param {string} privateKey
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof Vault
+     */
     public async importSigner(privateKey: string): Promise<Result<string/* EOA address */, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
         }
-        const address = ethUtil.toChecksumAddress('0x' + ethUtil.publicToAddress(ethUtil.privateToPublic(ethUtil.toBuffer(privateKey))).toString('hex'));
+        const _signKey = new ethers.SigningKey(privateKey);
+        const address = ethers.getAddress(ethers.keccak256("0x" + _signKey.publicKey.substring(4)).substring(26));
         const _encryptRet = await this._AES_256_GCM!.encrypt(privateKey);
         if (_encryptRet.isErr()) {
             return new Err(_encryptRet.ERR);
@@ -237,43 +347,69 @@ export class Vault implements IVault {
         return new Ok(address);
     }
 
+    /**
+     * create a signer
+     *
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof Vault
+     */
     public async createSigner(): Promise<Result<string, Error>> {
         const privateKey = Utils.generatePrivateKey();
         return await this.importSigner(privateKey);
     }
 
+    /**
+     * delete a signer
+     *
+     * @param {string} address
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
     public async removeSigner(address: string): Promise<Result<void, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
         }
-        address = ethUtil.toChecksumAddress(address);
+        address = ethers.getAddress(address);
         if (this._account.has(address)) {
             const _ECDSA = this._account.get(address)!;
             _ECDSA.destroy();
             this._account.delete(address);
-
-            this.emit('AccountRemoved', address);
         }
+
+        const ret = await this._storage.remove(StorageLocation.Signer, address);
+        if (ret.isErr()) {
+            return new Err(ret.ERR);
+        }
+        this.emit('AccountRemoved', address);
 
         return new Ok(void (0));
     }
 
+    /**
+     * list all signers
+     *
+     * @return {*}  {Promise<Result<string[], Error>>}
+     * @memberof Vault
+     */
     public async listSigners(): Promise<Result<string[], Error>> {
-        if ((await this.isLocked()).OK) {
-            return new Err(new Error('locked'));
-        }
         const _storageRet = await this._storage.listKeys(StorageLocation.Signer);
         if (_storageRet.isErr()) {
             return new Err(_storageRet.ERR);
         }
-        return new Ok(_storageRet.OK);
+        const _addressList: string[] = [];
+        for (let i of _storageRet.OK) {
+            if (i.startsWith('0x') && ethers.isAddress(i)) {
+                _addressList.push(i);
+            }
+        }
+        return new Ok(_addressList);
     }
 
     private async _loadSigner(address: string): Promise<Result<ECDSA, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
         }
-        address = ethUtil.toChecksumAddress(address);
+        address = ethers.getAddress(address);
         if (!this._account.has(address)) {
             const ret = await this._storage.load<string>(StorageLocation.Signer, address, '');
             if (ret.isErr()) {
@@ -283,12 +419,24 @@ export class Vault implements IVault {
                 return new Err(new Error('unknown address'));
             }
             const _ECDSA = new ECDSA();
-            await _ECDSA.init(ret.OK);
+            const _decryptRet = await this._AES_256_GCM!.decrypt(ret.OK);
+            if (_decryptRet.isErr()) {
+                return new Err(_decryptRet.ERR);
+            }
+            await _ECDSA.init(_decryptRet.OK);
             this._account.set(address, _ECDSA);
         }
         return new Ok(this._account.get(address)!);
     }
 
+    /**
+     * sign a message (personalSign)
+     *
+     * @param {string} address
+     * @param {string} message
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof Vault
+     */
     public async personalSign(address: string, message: string): Promise<Result<string, Error>> {
         const _ECDSA = await this._loadSigner(address);
         if (_ECDSA.isErr()) {
@@ -305,6 +453,14 @@ export class Vault implements IVault {
         return new Ok(_sign);
     }
 
+    /**
+     * sign a message (rawSign)
+     *
+     * @param {string} address
+     * @param {string} message
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof Vault
+     */
     public async rawSign(address: string, message: string): Promise<Result<string, Error>> {
         const _ECDSA = await this._loadSigner(address);
         if (_ECDSA.isErr()) {

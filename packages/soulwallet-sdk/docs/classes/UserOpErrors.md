@@ -53,7 +53,7 @@ Error.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:25](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L25)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L25)
 
 ## Properties
 
@@ -69,7 +69,7 @@ UserOpErrors
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:16](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L16)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L16)
 
 ___
 
@@ -85,7 +85,7 @@ UserOpErrors
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:24](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L24)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:24](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L24)
 
 ___
 
@@ -190,7 +190,7 @@ node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:13
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:31](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L31)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L31)
 
 ___
 

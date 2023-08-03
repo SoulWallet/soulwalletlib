@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "> TODO: description",
   "author": "Jayden <z.cejay@gmail.com>",
-  "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
+  "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
   "license": "ISC",
   "private": true,
   "type": "module",
@@ -18,18 +18,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
+    "url": "git+https://github.com/SoulWallet/soulwalletlib.git"
   },
   "scripts": {
     "test": "ts-node ./src/main.ts"
   },
   "bugs": {
-    "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
+    "url": "https://github.com/SoulWallet/soulwalletlib/issues"
   },
   "dependencies": {
-    "@account-abstraction/contracts": "^0.6",
-    "@account-abstraction/sdk": "^0.6",
-    "@account-abstraction/utils": "^0.6.0",
     "@soulwallet/abi": "workspace:*",
     "@soulwallet/sdk": "workspace:*",
     "@soulwallet/decoder": "workspace:*",

@@ -1,7 +1,7 @@
 import { Result, Ok, Err } from '@soulwallet/result';
 import { scrypt as _scrypt } from 'scrypt-js';
 import scryptConfig from './config/scryptConfig.js'
-import * as ethUtil from 'ethereumjs-util';
+import { ethers } from 'ethers';
 
 
 /* 
@@ -67,11 +67,18 @@ export class AES_256_GCM {
     }
 
     private static async importKey(strKey: string): Promise<Result<CryptoKey, Error>> {
+        // base64 strKey to Uint8Array
+        const binaryKey = window.atob(strKey);
+        const keyBuffer = new ArrayBuffer(binaryKey.length);
+        const keyView = new Uint8Array(keyBuffer);
+        for (let i = 0; i < binaryKey.length; i++) {
+            keyView[i] = binaryKey.charCodeAt(i);
+        }
         try {
             const key = await window.crypto.subtle.importKey(
-                "jwk",
-                { "alg": "A256GCM", "ext": true, "k": strKey, "key_ops": ["encrypt", "decrypt"], "kty": "oct" },
-                { name: "AES-GCM", },
+                "raw",
+                keyBuffer,
+                { name: "AES-GCM" },
                 false/* highlight */,
                 ["encrypt", "decrypt"]
             );
@@ -83,6 +90,26 @@ export class AES_256_GCM {
                 return new Err(new Error('unknown error'));
             }
         }
+
+
+
+
+        // try {
+        //     const key = await window.crypto.subtle.importKey(
+        //         "jwk",
+        //         { "alg": "A256GCM", "ext": true, "k": strKey, "key_ops": ["encrypt", "decrypt"], "kty": "oct" },
+        //         { name: "AES-GCM" },
+        //         false/* highlight */,
+        //         ["encrypt", "decrypt"]
+        //     );
+        //     return new Ok(key);
+        // } catch (error: unknown) {
+        //     if (error instanceof Error) {
+        //         return new Err(error);
+        //     } else {
+        //         return new Err(new Error('unknown error'));
+        //     }
+        // }
 
     }
 
@@ -250,7 +277,7 @@ export class ECDSA {
         }
     }
 
-    private async _decryptPrivateKey(): Promise<Buffer> {
+    private async _decryptPrivateKey(): Promise<string> {
         if (this._encryptedPrivateKey === undefined || this._AES_256_GCM === undefined) {
             throw new Error('not init');
         }
@@ -258,27 +285,23 @@ export class ECDSA {
         if (ret.isErr()) {
             throw ret.ERR;
         }
-        return ethUtil.toBuffer(ret.OK);
+        return ret.OK;
     }
+
 
     async sign(message: string): Promise<string> {
         ECDSA.onlyBytes32(message);
-        const messageHex = ethUtil.toBuffer(message);
         let _privateKey = await this._decryptPrivateKey();
-        const _signature = ethUtil.ecsign(messageHex, _privateKey);
-        _privateKey.fill(0);
-        const signature = ethUtil.toRpcSig(_signature.v, _signature.r, _signature.s);
+        let _signKey = new ethers.SigningKey(_privateKey);
+        const signature = _signKey.sign(message).serialized;
         return signature;
     }
 
     async personalSign(message: string): Promise<string> {
         ECDSA.onlyBytes32(message);
-        const messageHex = ethUtil.toBuffer(message);
-        const messageHash = ethUtil.hashPersonalMessage(messageHex);
         let _privateKey = await this._decryptPrivateKey();
-        const _signature = ethUtil.ecsign(messageHash, _privateKey);
-        _privateKey.fill(0);
-        const signature = ethUtil.toRpcSig(_signature.v, _signature.r, _signature.s);
+        let _signKey = new ethers.SigningKey(_privateKey);
+        const signature = _signKey.sign(ethers.hashMessage(ethers.getBytes(message))).serialized;
         return signature;
     }
 }
@@ -327,7 +350,7 @@ export class Utils {
     static readonly HexCharacters: string = "0123456789abcdef";
     static generatePrivateKey(): string {
         cryptoAPIGuard();
-        
+
         const _bytes = new Uint8Array(32);
         window.crypto.getRandomValues(_bytes);
 

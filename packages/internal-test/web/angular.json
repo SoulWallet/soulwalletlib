@@ -35,12 +35,8 @@
               "src/theme/variables.scss",
               "src/global.scss"
             ],
-            "scripts": [],
-            "allowedCommonJsDependencies": [
-              "buffer",
-              "events",
-              "stream"
-            ]
+            "scripts": []
+           
           },
           "configurations": {
             "production": {

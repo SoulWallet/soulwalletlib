@@ -185,7 +185,7 @@ export class Storage implements IStorage {
     }
 
 
-    public async destroy(): Promise<Result<void, Error>> {
+    public async selfDestruct(): Promise<Result<void, Error>> {
         // delete storage files
         try {
             writeFileSync(this._signerStorageFile, '[]');

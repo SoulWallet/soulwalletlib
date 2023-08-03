@@ -10,6 +10,122 @@
       <ion-title size="large">keyvault</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-label>Label</ion-label>
-  <ion-button (click)="onClick()">Click</ion-button>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>isInitialized</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            {{isInitialized}}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>isLocked</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            {{isLocked}}
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-input label="password:" placeholder="Enter init password" [(ngModel)]="password"></ion-input>
+            <ion-button (click)="init(false)">init</ion-button>
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-input label="password:" placeholder="Enter init password" [(ngModel)]="password"></ion-input>
+            <ion-button (click)="init(true)">selfDestruct and Init</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-input label="password:" placeholder="Enter unlock password" [(ngModel)]="password"></ion-input>
+            <ion-button (click)="unlock()">unlock</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-button (click)="lock()">lock</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-input label="privateKey:" placeholder="Enter privateKey" [(ngModel)]="privateKey"></ion-input>
+            <ion-button (click)="importSigner()">import Signer</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-button (click)="createSigner()">create Signer</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-content>
+            <ion-input label="bytes32 messgae:" placeholder="Enter message" [(ngModel)]="message"></ion-input>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list [inset]="true">
+    <ion-list-header>
+      <ion-label>Signers</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let signer of Signers">
+      <ion-label>
+        {{signer}}
+        <ion-button (click)="removeSigner(signer)">delete</ion-button>
+        <ion-button (click)="sign(signer)">raw sign</ion-button>
+        <ion-button (click)="personalSign(signer)">personal Sign</ion-button>
+        <br />
+        <ion-textarea label="raw sign:" placeholder="{{getRawSign(signer)}}"></ion-textarea>
+        <ion-textarea label="personal sign:" placeholder="{{getPersonalSign(signer)}}"></ion-textarea>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <br />
+  <ion-label>event log:</ion-label>
+  <div style="size: 12px; color: darkslategray;" [innerHtml]="getEventLog()">
+  </div>
+
+
 </ion-content>

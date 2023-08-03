@@ -3,7 +3,7 @@
     "version": "0.0.12",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
-    "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
+    "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
     "license": "ISC",
     "main": "./lib.cjs/main.js",
     "module": "./lib.esm/main.js",
@@ -21,18 +21,18 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/proofofsoulprotocol/soulwalletlib.git"
+        "url": "git+https://github.com/SoulWallet/soulwalletlib.git"
     },
     "scripts": {
         "typedoc": "typedoc",
-        "docs": "npx typedoc --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/export.ts",
+        "docs": "npx typedoc --tsconfig ./tsconfig.esm.json --plugin typedoc-plugin-markdown typedoc-plugin-missing-exports src/main.ts",
         "tsc": "tsc",
         "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.cjs.json;ts-node ./create-package-json.ts",
         "javascript-obfuscator": "javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib"
     },
     "bugs": {
-        "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
+        "url": "https://github.com/SoulWallet/soulwalletlib/issues"
     },
     "dependencies": {
         "@soulwallet/abi": "workspace:*",
