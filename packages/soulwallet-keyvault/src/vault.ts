@@ -35,14 +35,7 @@ export class Vault implements IVault {
 
     private _EventEmitter: Emitter<VaultEvents>;
 
-    private static instance: Vault;
-    public static getInstance(): Vault {
-        if (!Vault.instance)
-            Vault.instance = new Vault();
-        return Vault.instance;
-    }
-
-    private constructor() {
+    public constructor() {
         this._storage = new Storage();
 
         if (typeof window !== 'undefined') {

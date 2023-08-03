@@ -1,4 +1,4 @@
-import { UserOperation } from "../interface/ISoulWallet.js";
+import { UserOperation } from "../interface/UserOperation.js";
 
 
 

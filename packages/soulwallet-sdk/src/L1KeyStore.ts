@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '@soulwallet/result';
-import { Convert } from './tools/convert.js';
+import { bigIntToNumber } from './tools/convert.js';
 
 /**
  * L1KeyStore
@@ -110,6 +110,10 @@ export class L1KeyStore implements IL1KeyStore {
      * @memberof IL1KeyStore
      */
     static calcGuardianHash(guardians: string[], threshold: number, salt: string = ethers.ZeroHash): string {
+        if (guardians.length === 0) {
+            return ethers.ZeroHash;
+        }
+        
         /* 
         (address[] memory guardians, uint256 threshold, uint256 salt) =
             abi.decode(rawGuardian, (address[], uint256, uint256));
@@ -201,13 +205,13 @@ export class L1KeyStore implements IL1KeyStore {
             */
             const _keyStoreInfo: KeyStoreInfo = {
                 key: data[0],
-                nonce: Convert.bigIntToNumber(data[1]),
+                nonce: bigIntToNumber(data[1]),
                 guardianHash: data[2],
                 pendingGuardianHash: data[3],
-                guardianActivateAt: Convert.bigIntToNumber(data[4]),
-                guardianSafePeriod: Convert.bigIntToNumber(data[5]),
-                pendingGuardianSafePeriod: Convert.bigIntToNumber(data[6]),
-                guardianSafePeriodActivateAt: Convert.bigIntToNumber(data[7])
+                guardianActivateAt: bigIntToNumber(data[4]),
+                guardianSafePeriod: bigIntToNumber(data[5]),
+                pendingGuardianSafePeriod: bigIntToNumber(data[6]),
+                guardianSafePeriodActivateAt: bigIntToNumber(data[7])
             }
             return new Ok(_keyStoreInfo);
         } catch (error: unknown) {

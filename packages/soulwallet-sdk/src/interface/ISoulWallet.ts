@@ -1,6 +1,4 @@
-import { UserOperationStruct } from "@account-abstraction/contracts";
-import { NotPromise } from '@account-abstraction/utils'
-export type UserOperation = NotPromise<UserOperationStruct>;
+import { UserOperation } from "./UserOperation.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 

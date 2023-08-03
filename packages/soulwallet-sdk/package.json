@@ -35,12 +35,9 @@
         "url": "https://github.com/proofofsoulprotocol/soulwalletlib/issues"
     },
     "dependencies": {
-        "@account-abstraction/contracts": "^0.6",
-        "@account-abstraction/sdk": "^0.6",
-        "@account-abstraction/utils": "^0.6.0",
         "@soulwallet/abi": "workspace:*",
         "@soulwallet/result": "workspace:*",
-        "ethers": "^6.6.4"
+        "ethers": "^6.7.0"
     },
     "devDependencies": {
         "@types/shelljs": "^0.8.12",

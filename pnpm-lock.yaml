@@ -78,8 +78,8 @@ importers:
         specifier: ^7.1.5
         version: 7.1.5
       ethers:
-        specifier: ^6.6.4
-        version: 6.6.4
+        specifier: ^6.7.0
+        version: 6.7.0
     devDependencies:
       '@types/node':
         specifier: ^20.3.1
@@ -125,8 +125,8 @@ importers:
         specifier: workspace:*
         version: link:../soulwallet-result
       ethers:
-        specifier: ^6.6.4
-        version: 6.6.4
+        specifier: ^6.7.0
+        version: 6.7.0
     devDependencies:
       '@types/node':
         specifier: ^20.3.1
@@ -161,15 +161,6 @@ importers:
 
   packages/soulwallet-sdk:
     dependencies:
-      '@account-abstraction/contracts':
-        specifier: ^0.6
-        version: 0.6.0
-      '@account-abstraction/sdk':
-        specifier: ^0.6
-        version: 0.6.0
-      '@account-abstraction/utils':
-        specifier: ^0.6.0
-        version: 0.6.0
       '@soulwallet/abi':
         specifier: workspace:*
         version: link:../soulwallet-abi
@@ -177,8 +168,8 @@ importers:
         specifier: workspace:*
         version: link:../soulwallet-result
       ethers:
-        specifier: ^6.6.4
-        version: 6.6.4
+        specifier: ^6.7.0
+        version: 6.7.0
     devDependencies:
       '@types/shelljs':
         specifier: ^0.8.12
@@ -3001,8 +2992,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /ethers@6.6.4:
-    resolution: {integrity: sha512-r3myN2hEnydmu23iiIj5kjWnCh5JNzlqrE/z+Kw5UqH173F+JOWzU6qkFB4HVC50epgxzKSL2Hq1oNXA877vwQ==}
+  /ethers@6.7.0:
+    resolution: {integrity: sha512-pxt5hK82RNwcTX2gOZP81t6qVPVspnkpeivwEgQuK9XUvbNtghBnT8GNIb/gPh+WnVSfi8cXC9XlfT8sqc6D6w==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@adraffy/ens-normalize': 1.9.2
