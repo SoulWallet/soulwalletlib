@@ -15,7 +15,6 @@ const __dirname = dirname(__filename);
 const __baseDir = resolve(__dirname, '..', '..', '..');
 
 async function main() {
-
     await new CryptoTest().run();
 
 

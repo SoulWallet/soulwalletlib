@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
-import { UserOperation } from "./interface/ISoulWallet.js";
-import { deepHexlify } from "@account-abstraction/utils";
+import { UserOperation } from "./interface/UserOperation.js";
 import { IBundler, UserOpDetail, UserOpGas, UserOpReceipt } from "./interface/IBundler.js";
 import { UserOpErrorCodes, UserOpErrors } from "./interface/IUserOpErrors.js";
 import { Ok, Err, Result } from '@soulwallet/result';
+import { userOperationToJSON } from './tools/convert.js';
 
 export class Bundler implements IBundler {
     private bundler: ethers.JsonRpcProvider;
@@ -21,7 +21,7 @@ export class Bundler implements IBundler {
             const userOpHash = await this.bundler.send(
                 'eth_sendUserOperation',
                 [
-                    deepHexlify(userOp),
+                    JSON.parse(userOperationToJSON(userOp)),
                     entryPoint
                 ]
             );
@@ -45,7 +45,7 @@ export class Bundler implements IBundler {
             const userOpGas = await this.bundler.send(
                 'eth_estimateUserOperationGas',
                 [
-                    deepHexlify(userOp),
+                    JSON.parse(userOperationToJSON(userOp)),
                     entryPoint
                 ]
             ) as UserOpGas;

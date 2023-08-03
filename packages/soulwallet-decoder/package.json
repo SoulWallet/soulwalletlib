@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/decoder",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "description": "> TODO: description",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/proofofsoulprotocol/soulwalletlib#readme",
@@ -39,11 +39,10 @@
         "@soulwallet/abi": "workspace:*",
         "@soulwallet/result": "workspace:*",
         "@soulwallet/assets": "workspace:*",
-        "ethers": "^6.6.4"
+        "ethers": "^6.7.0"
     },
     "devDependencies": {
         "@types/node": "^20.3.1",
-        "ethers": "^6.6.4",
         "@types/shelljs": "^0.8.12",
         "shelljs": "^0.8.5"
     },
