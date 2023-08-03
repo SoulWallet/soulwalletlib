@@ -19,6 +19,11 @@ export class AES_256_GCM {
         this._keyBuffer = keyBuffer;
     }
 
+    public static async randomAesVault(): Promise<AES_256_GCM> {
+        const key = randomBytes(32); // 256 bits
+        return new AES_256_GCM(key);
+    }
+
     public destroy() {
         this._keyBuffer.fill(0);
     }
@@ -66,7 +71,7 @@ export class AES_256_GCM {
             });
             const encryptedText = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
             const authTag = cipher.getAuthTag();
-            const versonBuffer = Buffer.from(AES_256_GCM.VERSION);
+            const versonBuffer = Utils.toBuffer(AES_256_GCM.VERSION);
             return new Ok(Buffer.concat([versonBuffer, iv, encryptedText, authTag]).toString('base64'));
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -104,32 +109,70 @@ export class AES_256_GCM {
 }
 
 export class ECDSA {
-    private _privateKey: Buffer;
-    address: string;
-    constructor(privateKey: string) {
-        this._privateKey = ethUtil.toBuffer(privateKey);
-        this.address = ethUtil.toChecksumAddress(ethUtil.Address.fromPrivateKey(this._privateKey).toString());
+    private _encryptedPrivateKey: string | undefined;
+    private _AES_256_GCM: AES_256_GCM | undefined;
+    constructor() { }
+
+    async init(privateKey: string) {
+        if (this._AES_256_GCM === undefined) {
+            this._AES_256_GCM = await AES_256_GCM.randomAesVault();
+            const ret = await this._AES_256_GCM.encrypt(privateKey);
+            if (ret.isErr()) {
+                throw ret.ERR;
+            }
+            this._encryptedPrivateKey = ret.OK;
+        } else {
+            throw new Error('already init');
+        }
+    }
+
+    public destroy() {
+        if (this._AES_256_GCM !== undefined) {
+            this._AES_256_GCM.destroy();
+            this._AES_256_GCM = undefined;
+        }
+        if (this._encryptedPrivateKey !== undefined) {
+            this._encryptedPrivateKey = undefined;
+        }
+    }
+
+    private static onlyBytes32(bytes32: string) {
+        const regex = /^0x[a-fA-F0-9]{64}$/;
+        if (!regex.test(bytes32)) {
+            return new Err('sign message must be bytes32');
+        }
+    }
+
+    private async _decryptPrivateKey(): Promise<Buffer> {
+        if (this._encryptedPrivateKey === undefined || this._AES_256_GCM === undefined) {
+            throw new Error('not init');
+        }
+        const ret = await this._AES_256_GCM.decrypt(this._encryptedPrivateKey);
+        if (ret.isErr()) {
+            throw ret.ERR;
+        }
+        return ethUtil.toBuffer(ret.OK);
     }
 
     async sign(message: string): Promise<string> {
-        const messageHash = ethUtil.keccak256(Buffer.from(message));
-        const signature = ethUtil.ecsign(messageHash, this._privateKey);
-        return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
+        ECDSA.onlyBytes32(message);
+        const messageHex = ethUtil.toBuffer(message);
+        let _privateKey = await this._decryptPrivateKey();
+        const _signature = ethUtil.ecsign(messageHex, _privateKey);
+        _privateKey.fill(0);
+        const signature = ethUtil.toRpcSig(_signature.v, _signature.r, _signature.s);
+        return signature;
     }
 
     async personalSign(message: string): Promise<string> {
-        const messageHash = ethUtil.hashPersonalMessage(Buffer.from(message));
-        const signature = ethUtil.ecsign(messageHash, this._privateKey);
-        return ethUtil.toRpcSig(signature.v, signature.r, signature.s);
-    }
-
-    async verify(message: string, signature: string): Promise<boolean> {
-        const messageHash = ethUtil.keccak256(Buffer.from(message));
-        const sig = ethUtil.fromRpcSig(signature);
-        const publicKey = ethUtil.ecrecover(messageHash, sig.v, sig.r, sig.s);
-        const sender = ethUtil.pubToAddress(publicKey);
-        const address = ethUtil.toChecksumAddress(ethUtil.bufferToHex(sender));
-        return address === this.address;
+        ECDSA.onlyBytes32(message);
+        const messageHex = ethUtil.toBuffer(message);
+        const messageHash = ethUtil.hashPersonalMessage(messageHex);
+        let _privateKey = await this._decryptPrivateKey();
+        const _signature = ethUtil.ecsign(messageHash, _privateKey);
+        _privateKey.fill(0);
+        const signature = ethUtil.toRpcSig(_signature.v, _signature.r, _signature.s);
+        return signature;
     }
 }
 
@@ -147,7 +190,7 @@ export class ABFA {
             const N = scryptConfig.N;
             const r = scryptConfig.r;
             const p = scryptConfig.p;
-            _scrypt(Buffer.from(password, 'utf8'), Buffer.from(salt, 'utf8'), keylen, { N, r, p }, (error, derivedKey) => {
+            _scrypt(Utils.toBuffer(password), Utils.toBuffer(salt), keylen, { N, r, p }, (error, derivedKey) => {
                 if (error) {
                     if (error instanceof Error) {
                         resolve(new Err(error));
@@ -178,3 +221,13 @@ export class ABFA {
     }
 }
 
+
+export class Utils {
+    static toBuffer(value: string): Buffer {
+        return Buffer.from(value, 'utf8');
+    }
+
+    static generatePrivateKey(): string {
+        return randomBytes(32).toString('hex');
+    }
+}

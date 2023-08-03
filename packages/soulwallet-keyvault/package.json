@@ -42,6 +42,7 @@
     "dependencies": {
         "@soulwallet/result": "workspace:*",
         "ethereumjs-util": "^7.1.5",
+        "mitt": "^3.0.1",
         "scrypt-js": "^3.0.1"
     },
     "devDependencies": {

@@ -11,11 +11,6 @@
     "test": "ng test",
     "lint": "ng lint"
   },
-  "browser":{
-    "path": false,
-    "fs": false,
-    "a": false
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.0.0",

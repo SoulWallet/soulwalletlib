@@ -23,9 +23,9 @@ export class onChainConfig {
  *
  * @export
  * @class SoulWallet
- * @extends {ISoulWallet}
+ * @implements {ISoulWallet}
  */
-export class SoulWallet extends ISoulWallet {
+export class SoulWallet implements ISoulWallet {
     readonly days = 86400;
     readonly defalutInitialGuardianSafePeriod = 2 * this.days;
 
@@ -50,7 +50,6 @@ export class SoulWallet extends ISoulWallet {
         _securityControlModuleAddress: string,
 
     ) {
-        super();
         if (typeof _provider === 'string') {
             if (TypeGuard.httpOrHttps(_provider).isErr()) throw new Error("invalid provider");
             this.provider = new ethers.JsonRpcProvider(_provider);
