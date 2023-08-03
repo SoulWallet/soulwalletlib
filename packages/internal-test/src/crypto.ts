@@ -25,33 +25,34 @@ export class CryptoTest {
             console.log(`Time to derive key: ${_timeAfter - _timeBefore}ms`);
             console.log(re.OK);
         }
+
         {
+            const privateKey = '0x4f7ef884a2fff8bcbfbe2377dd055e95acfae573a85d0217eb887b40c0ffa4d8';
+            const address = '0x3C4938668423E3BF1caAE4C04461A3B76a3706Df';
+            const message = '0x426d3189d9ed64fbfab235f05d9a0e102d575939a951a93ec8bbdeef05cd707b';
+            const _ECDSA = new ECDSA();
+            await _ECDSA.init(privateKey); 
             // personalSign
-
-            const wallet = ethers.Wallet.createRandom();
-            const message = 'hello world';
-            const signature = await wallet.signMessage(message);
-            const recoveredAddress = ethers.verifyMessage(message, signature);
-            if (recoveredAddress !== wallet.address) {
-                throw new Error('address mismatch');
+            {
+                const expectSignature = '0x4855eabbd24c5b982da5b62139658ac58578651bc218be5b387b2673699928bc5dc4c7a1f6f710e1ccd4e102b1c99bc4683cb9bff0fdeee9b02e42a4764134251c';
+                const _signature = await _ECDSA.personalSign(message);
+                if (_signature !== expectSignature) {
+                    throw new Error('signature mismatch');
+                }
             }
 
-            const _ECDSA = new ECDSA(wallet.privateKey);
-            const _signature = await _ECDSA.personalSign(message);
-            const _recoveredAddress = ethers.verifyMessage(message, _signature);
-            if (_recoveredAddress !== _ECDSA.address) {
-                throw new Error('address mismatch');
+            {
+                // raw sign
+                const expectSignature = '0xd07f389db784752d088f212f40e4a059cfa219ada6f86570e20024e1104621d44902ecea94a27e1cb7924b7a08e17773ae2f0f15cd503a81cd1fd3c26492249c1b';
+                const _signature = await _ECDSA.sign(message);
+                if (_signature !== expectSignature) {
+                    throw new Error('signature mismatch');
+                }
             }
 
         }
 
-        {
-            // raw Sign
-            const wallet = ethers.Wallet.createRandom();
-            const message = 'hello world';
-            const signature = await wallet.signMessage(message);
 
-        }
     }
 
 }

@@ -11,7 +11,7 @@ export abstract class IVault /*extends EventEmitter*/ {
     // #endregion end Vault initialization
 
     // #region Vault destruction
-    public abstract destroy(): Promise<Result<void, Error>>;
+    public abstract destroy(): Promise<void>;
     // #endregion end Vault destruction
 
     // #region lock/unlock
@@ -29,15 +29,16 @@ export abstract class IVault /*extends EventEmitter*/ {
     // #endregion end backup
 
     // #region private data store (if app need to store some data in vault)
-    public abstract getData<T>(key: string, defaultValue: T): Promise<Result<T, Error>>;
-    public abstract setData<T>(key: string, value: T): Promise<Result<void, Error>>;
-    public abstract removeData(key: string): Promise<Result<void, Error>>;
+    // public abstract getData<T>(key: string, defaultValue: T): Promise<Result<T, Error>>;
+    // public abstract setData<T>(key: string, value: T): Promise<Result<void, Error>>;
+    // public abstract removeData(key: string): Promise<Result<void, Error>>;
     // #endregion end private data store
 
     // #region signer management
-    public abstract createSigner(tag?: string): Promise<Result<string/* EOA address */, Error>>;
+    public abstract importSigner(privateKey: string): Promise<Result<string/* EOA address */, Error>>;
+    public abstract createSigner(): Promise<Result<string/* EOA address */, Error>>;
     public abstract removeSigner(address: string): Promise<Result<void, Error>>;
-    public abstract listSigners(tag?: string): Promise<Result<string[]/* EOA addresses */, Error>>;
+    public abstract listSigners(): Promise<Result<string[]/* EOA addresses */, Error>>;
     // #endregion end signer management
 
     // #region sign transaction

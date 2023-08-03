@@ -1,19 +1,16 @@
 import { Result, Ok, Err } from '@soulwallet/result';
-import { KeyNotFound, IStorage, Serializable, StorageLocation } from './interface/IStorage.js';
+import { IStorage, Serializable, StorageLocation } from './interface/IStorage.js';
 import { homedir } from 'os';
 import { join } from 'path';
-import { existsSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'fs';
-import { createHash } from 'crypto';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 
 
-export class Storage extends IStorage {
+export class Storage implements IStorage {
 
     private _signerStorageFile: string;
     private _dataStorageFile: string;
 
     constructor() {
-        super();
-
         if (typeof process !== 'undefined' && process.versions && process.versions.node) {
         } else {
             throw new Error("only available in NodeJS");
@@ -150,8 +147,23 @@ export class Storage extends IStorage {
     }
 
 
+    public async listKeys(location: StorageLocation): Promise<Result<string[], Error>> {
+        try {
+            let data = await this._read(location);
+            if (data.isErr()) {
+                return new Err(data.ERR);
+            }
+            return new Ok(Array.from(data.OK.keys()));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(new Error('unknown error'));
+            }
+        }
+    }
 
-    public async load<T extends Serializable>(location: StorageLocation, key: string): Promise<Result<T, Error>> {
+    public async load<T extends Serializable>(location: StorageLocation, key: string, defaultValue: T): Promise<Result<T, Error>> {
         try {
             let data = await this._read(location);
             if (data.isErr()) {
@@ -161,7 +173,7 @@ export class Storage extends IStorage {
                 const re = JSON.parse(data.OK.get(key) as string) as T;
                 return new Ok(re);
             } else {
-                return new Err(new KeyNotFound(`key ${key} not found`));
+                return new Ok(defaultValue);
             }
         } catch (error: unknown) {
             if (error instanceof Error) {

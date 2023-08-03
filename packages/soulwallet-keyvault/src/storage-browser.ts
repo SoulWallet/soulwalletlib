@@ -1,22 +1,16 @@
 import { Result, Ok, Err } from '@soulwallet/result';
-import { KeyNotFound, IStorage, Serializable, StorageLocation } from './interface/IStorage.js';
+import { IStorage, Serializable, StorageLocation } from './interface/IStorage.js';
 
-export class Storage extends IStorage {
+export class Storage implements IStorage {
 
     private _chromeExtension = false;
     private _signerStorageKey: string = "@soulwallet/keyvault:signer";
     private _dataStorageKey: string = "@soulwallet/keyvault:data";
 
     constructor() {
-        super();
-
-        if (typeof window !== 'undefined' && window.crypto) {
+        if (typeof window !== 'undefined') {
             if (typeof window.localStorage === 'undefined') {
                 throw new Error('localStorage is not available');
-            }
-            // Web Crypto API
-            if (typeof window.crypto.subtle === 'undefined') {
-                throw new Error('Web Crypto API is not available');
             }
             // extension environment
             const _window = window as any;
@@ -100,8 +94,23 @@ export class Storage extends IStorage {
         }
     }
 
+    public async listKeys(location: StorageLocation): Promise<Result<string[], Error>> {
+        try {
+            let data = await this._read(location);
+            if (data.isErr()) {
+                return new Err(data.ERR);
+            }
+            return new Ok(Array.from(data.OK.keys()));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(new Error('unknown error'));
+            }
+        }
+    }
 
-    public async load<T extends Serializable>(location: StorageLocation, key: string): Promise<Result<T, Error>> {
+    public async load<T extends Serializable>(location: StorageLocation, key: string, defaultValue: T): Promise<Result<T, Error>> {
         try {
             let data = await this._read(location);
             if (data.isErr()) {
@@ -111,7 +120,7 @@ export class Storage extends IStorage {
                 const re = JSON.parse(data.OK.get(key) as string) as T;
                 return new Ok(re);
             } else {
-                return new Err(new KeyNotFound(`key ${key} not found`));
+                return new Ok(defaultValue);
             }
         } catch (error: unknown) {
             if (error instanceof Error) {
