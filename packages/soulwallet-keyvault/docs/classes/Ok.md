@@ -1,8 +1,8 @@
-[@soulwallet/decoder](../README.md) / [Modules](../modules.md) / Err
+[@soulwallet/keyvault](../README.md) / [Modules](../modules.md) / Ok
 
-# Class: Err<T, E\>
+# Class: Ok<T, E\>
 
-Defines an Err class, representing a failed operation result.
+Defines an Ok class, representing a successful operation result.
 
 **`Export`**
 
@@ -17,33 +17,33 @@ Defines an Err class, representing a failed operation result.
 
 ### Constructors
 
-- [constructor](Err.md#constructor)
+- [constructor](Ok.md#constructor)
 
 ### Properties
 
-- [\_error](Err.md#_error)
+- [\_value](Ok.md#_value)
 
 ### Accessors
 
-- [ERR](Err.md#err)
-- [OK](Err.md#ok)
+- [ERR](Ok.md#err)
+- [OK](Ok.md#ok)
 
 ### Methods
 
-- [isErr](Err.md#iserr)
-- [isOk](Err.md#isok)
+- [isErr](Ok.md#iserr)
+- [isOk](Ok.md#isok)
 
 ## Constructors
 
 ### constructor
 
-• **new Err**<`T`, `E`\>(`error`)
+• **new Ok**<`T`, `E`\>(`value`)
 
-Creates an instance of Err.
+Creates an instance of Ok.
 
 **`Memberof`**
 
-Err
+Ok
 
 #### Type parameters
 
@@ -56,21 +56,21 @@ Err
 
 | Name | Type |
 | :------ | :------ |
-| `error` | `E` |
+| `value` | `T` |
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:67
+soulwallet-result/lib.cjs/Result.d.ts:20
 
 ## Properties
 
-### \_error
+### \_value
 
-• `Private` `Readonly` **\_error**: `any`
+• `Private` `Readonly` **\_value**: `any`
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:61
+soulwallet-result/lib.cjs/Result.d.ts:14
 
 ## Accessors
 
@@ -82,7 +82,7 @@ Gets the error.
 
 **`Memberof`**
 
-Err
+Ok
 
 #### Returns
 
@@ -90,7 +90,7 @@ Err
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:83
+soulwallet-result/lib.cjs/Result.d.ts:36
 
 ___
 
@@ -102,7 +102,7 @@ Gets the successful result value.
 
 **`Memberof`**
 
-Err
+Ok
 
 #### Returns
 
@@ -110,7 +110,7 @@ Err
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:75
+soulwallet-result/lib.cjs/Result.d.ts:28
 
 ## Methods
 
@@ -120,7 +120,7 @@ soulwallet-result/lib.cjs/Result.d.ts:75
 
 **`Memberof`**
 
-Err
+Ok
 
 #### Returns
 
@@ -130,7 +130,7 @@ Err
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:97
+soulwallet-result/lib.cjs/Result.d.ts:50
 
 ___
 
@@ -140,7 +140,7 @@ ___
 
 **`Memberof`**
 
-Err
+Ok
 
 #### Returns
 
@@ -150,4 +150,4 @@ Err
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:90
+soulwallet-result/lib.cjs/Result.d.ts:43

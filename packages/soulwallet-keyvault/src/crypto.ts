@@ -6,7 +6,7 @@ import {
     createDecipheriv,
     scrypt as _scrypt,
 } from 'crypto';
-import * as ethUtil from 'ethereumjs-util';
+import { ethers } from 'ethers';
 import scryptConfig from './config/scryptConfig.js'
 
 export class AES_256_GCM {
@@ -143,7 +143,7 @@ export class ECDSA {
         }
     }
 
-    private async _decryptPrivateKey(): Promise<Buffer> {
+    private async _decryptPrivateKey(): Promise<string> {
         if (this._encryptedPrivateKey === undefined || this._AES_256_GCM === undefined) {
             throw new Error('not init');
         }
@@ -151,27 +151,22 @@ export class ECDSA {
         if (ret.isErr()) {
             throw ret.ERR;
         }
-        return ethUtil.toBuffer(ret.OK);
+        return  ret.OK;
     }
 
     async sign(message: string): Promise<string> {
         ECDSA.onlyBytes32(message);
-        const messageHex = ethUtil.toBuffer(message);
         let _privateKey = await this._decryptPrivateKey();
-        const _signature = ethUtil.ecsign(messageHex, _privateKey);
-        _privateKey.fill(0);
-        const signature = ethUtil.toRpcSig(_signature.v, _signature.r, _signature.s);
+        let _signKey = new ethers.SigningKey(_privateKey);
+        const signature = _signKey.sign(message).serialized;
         return signature;
     }
 
     async personalSign(message: string): Promise<string> {
         ECDSA.onlyBytes32(message);
-        const messageHex = ethUtil.toBuffer(message);
-        const messageHash = ethUtil.hashPersonalMessage(messageHex);
         let _privateKey = await this._decryptPrivateKey();
-        const _signature = ethUtil.ecsign(messageHash, _privateKey);
-        _privateKey.fill(0);
-        const signature = ethUtil.toRpcSig(_signature.v, _signature.r, _signature.s);
+        let _signKey = new ethers.SigningKey(_privateKey);
+        const signature = _signKey.sign(ethers.hashMessage(ethers.getBytes(message))).serialized;
         return signature;
     }
 }

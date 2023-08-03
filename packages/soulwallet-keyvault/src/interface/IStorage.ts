@@ -22,5 +22,5 @@ export abstract class IStorage {
     public abstract load<T extends Serializable>(location: StorageLocation, key: string, defaultValue: T): Promise<Result<T, Error>>;
     public abstract listKeys(location: StorageLocation): Promise<Result<string[], Error>>;
     public abstract remove(location: StorageLocation, key: string): Promise<Result<void, Error>>;
-    public abstract destroy(): Promise<Result<void, Error>>;
+    public abstract selfDestruct(): Promise<Result<void, Error>>;
 }

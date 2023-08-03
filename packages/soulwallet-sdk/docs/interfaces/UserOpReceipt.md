@@ -45,7 +45,7 @@ UserOpReceipt
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:61](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L61)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:61](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L61)
 
 ___
 
@@ -55,13 +55,13 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:62](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L62)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:62](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L62)
 
 ___
 
 ### callData
 
-• **callData**: `BytesLike`
+• **callData**: `string`
 
 #### Inherited from
 
@@ -69,7 +69,7 @@ UserOperation.callData
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:9
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L10)
 
 ___
 
@@ -83,7 +83,7 @@ UserOperation.callGasLimit
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:10
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L11)
 
 ___
 
@@ -93,13 +93,13 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:57](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L57)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:57](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L57)
 
 ___
 
 ### initCode
 
-• **initCode**: `BytesLike`
+• **initCode**: `string`
 
 #### Inherited from
 
@@ -107,7 +107,7 @@ UserOperation.initCode
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:8
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L9)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:65](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L65)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:65](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L65)
 
 ___
 
@@ -131,7 +131,7 @@ UserOperation.maxFeePerGas
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:13
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L14)
 
 ___
 
@@ -145,7 +145,7 @@ UserOperation.maxPriorityFeePerGas
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:14
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L15)
 
 ___
 
@@ -159,7 +159,7 @@ UserOperation.nonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:59](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L59)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:59](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L59)
 
 ___
 
@@ -169,13 +169,13 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:60](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L60)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:60](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L60)
 
 ___
 
 ### paymasterAndData
 
-• **paymasterAndData**: `BytesLike`
+• **paymasterAndData**: `string`
 
 #### Inherited from
 
@@ -183,7 +183,7 @@ UserOperation.paymasterAndData
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:15
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L16)
 
 ___
 
@@ -197,7 +197,7 @@ UserOperation.preVerificationGas
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:12
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:13](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L13)
 
 ___
 
@@ -207,7 +207,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:64](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L64)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:64](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L64)
 
 ___
 
@@ -217,7 +217,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:66](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L66)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:66](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L66)
 
 ___
 
@@ -231,13 +231,13 @@ UserOperation.sender
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:58](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L58)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:58](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L58)
 
 ___
 
 ### signature
 
-• **signature**: `BytesLike`
+• **signature**: `string`
 
 #### Inherited from
 
@@ -245,7 +245,7 @@ UserOperation.signature
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:16
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L17)
 
 ___
 
@@ -255,7 +255,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:63](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L63)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:63](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L63)
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:56](https://github.com/proofofsoulprotocol/soulwalletlib/blob/f66010c/packages/soulwallet-sdk/src/interface/IBundler.ts#L56)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:56](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/IBundler.ts#L56)
 
 ___
 
@@ -279,4 +279,4 @@ UserOperation.verificationGasLimit
 
 #### Defined in
 
-node_modules/.pnpm/@account-abstraction+contracts@0.6.0/node_modules/@account-abstraction/contracts/dist/types/EntryPoint.d.ts:11
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:12](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L12)

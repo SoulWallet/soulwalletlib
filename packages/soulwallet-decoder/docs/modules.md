@@ -41,4 +41,4 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-soulwallet-result/lib/Result.d.ts:4
+soulwallet-result/lib.cjs/Result.d.ts:4

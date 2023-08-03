@@ -60,7 +60,7 @@ Ok
 
 #### Defined in
 
-packages/soulwallet-result/lib/Result.d.ts:20
+packages/soulwallet-result/lib.cjs/Result.d.ts:20
 
 ## Properties
 
@@ -70,7 +70,7 @@ packages/soulwallet-result/lib/Result.d.ts:20
 
 #### Defined in
 
-packages/soulwallet-result/lib/Result.d.ts:14
+packages/soulwallet-result/lib.cjs/Result.d.ts:14
 
 ## Accessors
 
@@ -90,7 +90,7 @@ Ok
 
 #### Defined in
 
-packages/soulwallet-result/lib/Result.d.ts:36
+packages/soulwallet-result/lib.cjs/Result.d.ts:36
 
 ___
 
@@ -110,7 +110,7 @@ Ok
 
 #### Defined in
 
-packages/soulwallet-result/lib/Result.d.ts:28
+packages/soulwallet-result/lib.cjs/Result.d.ts:28
 
 ## Methods
 
@@ -130,7 +130,7 @@ Ok
 
 #### Defined in
 
-packages/soulwallet-result/lib/Result.d.ts:50
+packages/soulwallet-result/lib.cjs/Result.d.ts:50
 
 ___
 
@@ -150,4 +150,4 @@ Ok
 
 #### Defined in
 
-packages/soulwallet-result/lib/Result.d.ts:43
+packages/soulwallet-result/lib.cjs/Result.d.ts:43
