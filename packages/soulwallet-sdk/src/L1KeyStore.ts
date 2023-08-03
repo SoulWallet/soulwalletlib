@@ -11,9 +11,9 @@ import { Convert } from './tools/convert.js';
  *
  * @export
  * @class L1KeyStore
- * @extends {IL1KeyStore}
+ * @implements {IL1KeyStore}
  */
-export class L1KeyStore extends IL1KeyStore {
+export class L1KeyStore implements IL1KeyStore {
 
     static readonly days = 86400;
 
@@ -29,8 +29,6 @@ export class L1KeyStore extends IL1KeyStore {
      * @memberof IL1KeyStore
      */
     constructor(_L1Provider: string | ethers.JsonRpcProvider, _L1KeyStoreContractAddress: string) {
-        super();
-
         const ret = TypeGuard.onlyAddress(_L1KeyStoreContractAddress);
         if (ret.isErr()) {
             throw new Error(ret.ERR);
