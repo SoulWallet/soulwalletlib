@@ -81,7 +81,7 @@ export class Vault implements IVault {
     }
 
     private async _deriveKey(password: string): Promise<Result<string, Error>> {
-        const _key = await ABFA.scrypt(password);
+        const _key = await ABFA.scrypt(password.slice()/* make a copy */);
         if (_key.isErr()) {
             return new Err(_key.ERR);
         }

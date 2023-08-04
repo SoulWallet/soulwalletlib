@@ -151,22 +151,28 @@ export class ECDSA {
         if (ret.isErr()) {
             throw ret.ERR;
         }
-        return  ret.OK;
+        return ret.OK;
     }
 
     async sign(message: string): Promise<string> {
         ECDSA.onlyBytes32(message);
         let _privateKey = await this._decryptPrivateKey();
-        let _signKey = new ethers.SigningKey(_privateKey);
-        const signature = _signKey.sign(message).serialized;
+        let _signKey: ethers.SigningKey | undefined = new ethers.SigningKey(_privateKey);
+        _privateKey = '';
+        // In ethers.js, the `message` has already been copied, so we don't need to worry about issues caused by data modification
+        const signature = _signKey!.sign(message).serialized;
+        _signKey = undefined;
         return signature;
     }
 
     async personalSign(message: string): Promise<string> {
         ECDSA.onlyBytes32(message);
         let _privateKey = await this._decryptPrivateKey();
-        let _signKey = new ethers.SigningKey(_privateKey);
-        const signature = _signKey.sign(ethers.hashMessage(ethers.getBytes(message))).serialized;
+        let _signKey: ethers.SigningKey | undefined = new ethers.SigningKey(_privateKey);
+        _privateKey = '';
+        // In ethers.js, the `message` has already been copied, so we don't need to worry about issues caused by data modification
+        const signature = _signKey!.sign(ethers.hashMessage(ethers.getBytes(message))).serialized;
+        _signKey = undefined;
         return signature;
     }
 }
