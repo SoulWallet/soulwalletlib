@@ -13,6 +13,7 @@
 - [SoulWallet](classes/SoulWallet.md)
 - [UserOpErrorCodes](classes/UserOpErrorCodes.md)
 - [UserOpErrors](classes/UserOpErrors.md)
+- [UserOpUtils](classes/UserOpUtils.md)
 
 ### Interfaces
 
@@ -26,11 +27,6 @@
 
 - [Result](modules.md#result)
 - [UserOperation](modules.md#useroperation)
-
-### Functions
-
-- [userOperationFromJSON](modules.md#useroperationfromjson)
-- [userOperationToJSON](modules.md#useroperationtojson)
 
 ## Type Aliases
 
@@ -75,44 +71,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)
-
-## Functions
-
-### userOperationFromJSON
-
-▸ **userOperationFromJSON**(`json`): [`UserOperation`](modules.md#useroperation)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `json` | `string` |
-
-#### Returns
-
-[`UserOperation`](modules.md#useroperation)
-
-#### Defined in
-
-[packages/soulwallet-sdk/src/tools/convert.ts:42](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/tools/convert.ts#L42)
-
-___
-
-### userOperationToJSON
-
-▸ **userOperationToJSON**(`userOp`): `string`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `userOp` | [`UserOperation`](modules.md#useroperation) |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[packages/soulwallet-sdk/src/tools/convert.ts:26](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-sdk/src/tools/convert.ts#L26)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)
