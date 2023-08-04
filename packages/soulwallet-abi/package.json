@@ -2,7 +2,7 @@
   "name": "@soulwallet/abi",
   "version": "0.0.6",
   "description": "soulwallet-contract ABI",
-  "author": "Jayden <z.cejay@gmail.com>",
+  "author": "Jayden@SoulWallet",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
   "license": "ISC",
   "main": "./lib.cjs/main.js",

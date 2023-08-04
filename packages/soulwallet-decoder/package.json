@@ -2,7 +2,7 @@
     "name": "@soulwallet/decoder",
     "version": "0.0.11",
     "description": "A lib for decode calldata",
-    "author": "Jayden <z.cejay@gmail.com>",
+    "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
     "license": "ISC",
     "main": "./lib.cjs/main.js",
