@@ -1,7 +1,7 @@
 {
     "name": "@soulwallet/assets",
-    "version": "0.0.9",
-    "description": "> TODO: description",
+    "version": "0.0.10",
+    "description": "A database of token",
     "author": "Jayden <z.cejay@gmail.com>",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
     "license": "ISC",
