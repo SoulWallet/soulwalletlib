@@ -59,4 +59,4 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L15)
+[soulwallet-keyvault/src/vault.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L15)

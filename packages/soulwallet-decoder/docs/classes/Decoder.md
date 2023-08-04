@@ -56,7 +56,7 @@ Decoder
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:29](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-decoder/src/decoder.ts#L29)
+[soulwallet-decoder/src/decoder.ts:29](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/decoder.ts#L29)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:93](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-decoder/src/decoder.ts#L93)
+[soulwallet-decoder/src/decoder.ts:93](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/decoder.ts#L93)
 
 ___
 
@@ -100,4 +100,4 @@ ___
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:127](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-decoder/src/decoder.ts#L127)
+[soulwallet-decoder/src/decoder.ts:127](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/decoder.ts#L127)

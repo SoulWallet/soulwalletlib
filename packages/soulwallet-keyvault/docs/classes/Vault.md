@@ -62,7 +62,7 @@ Vault
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L45)
+[soulwallet-keyvault/src/vault.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L45)
 
 ## Properties
 
@@ -72,7 +72,7 @@ Vault
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L36)
+[soulwallet-keyvault/src/vault.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L36)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L41)
+[soulwallet-keyvault/src/vault.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L41)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L43)
+[soulwallet-keyvault/src/vault.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L43)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L37)
+[soulwallet-keyvault/src/vault.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L37)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L39)
+[soulwallet-keyvault/src/vault.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L39)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:35](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L35)
+[soulwallet-keyvault/src/vault.ts:35](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L35)
 
 ## Methods
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:83](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L83)
+[soulwallet-keyvault/src/vault.ts:83](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L83)
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:201](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L201)
+[soulwallet-keyvault/src/vault.ts:201](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L201)
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:149](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L149)
+[soulwallet-keyvault/src/vault.ts:149](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L149)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:408](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L408)
+[soulwallet-keyvault/src/vault.ts:408](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L408)
 
 ___
 
@@ -210,7 +210,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:159](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L159)
+[soulwallet-keyvault/src/vault.ts:159](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L159)
 
 ___
 
@@ -243,7 +243,7 @@ IVault.changePassword
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:292](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L292)
+[soulwallet-keyvault/src/vault.ts:292](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L292)
 
 ___
 
@@ -269,7 +269,7 @@ IVault.createSigner
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:356](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L356)
+[soulwallet-keyvault/src/vault.ts:356](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L356)
 
 ___
 
@@ -291,7 +291,7 @@ Vault
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:187](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L187)
+[soulwallet-keyvault/src/vault.ts:187](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L187)
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:76](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L76)
+[soulwallet-keyvault/src/vault.ts:76](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L76)
 
 ___
 
@@ -350,7 +350,7 @@ IVault.export
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:306](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L306)
+[soulwallet-keyvault/src/vault.ts:306](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L306)
 
 ___
 
@@ -382,7 +382,7 @@ IVault.importSigner
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:330](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L330)
+[soulwallet-keyvault/src/vault.ts:330](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L330)
 
 ___
 
@@ -415,7 +415,7 @@ IVault.init
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:105](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L105)
+[soulwallet-keyvault/src/vault.ts:105](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L105)
 
 ___
 
@@ -441,7 +441,7 @@ IVault.isInitialized
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:173](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L173)
+[soulwallet-keyvault/src/vault.ts:173](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L173)
 
 ___
 
@@ -467,7 +467,7 @@ IVault.isLocked
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:280](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L280)
+[soulwallet-keyvault/src/vault.ts:280](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L280)
 
 ___
 
@@ -493,7 +493,7 @@ IVault.listSigners
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:394](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L394)
+[soulwallet-keyvault/src/vault.ts:394](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L394)
 
 ___
 
@@ -519,7 +519,7 @@ IVault.lock
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:254](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L254)
+[soulwallet-keyvault/src/vault.ts:254](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L254)
 
 ___
 
@@ -546,7 +546,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:68](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L68)
+[soulwallet-keyvault/src/vault.ts:68](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L68)
 
 ___
 
@@ -573,7 +573,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:60](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L60)
+[soulwallet-keyvault/src/vault.ts:60](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L60)
 
 ___
 
@@ -606,7 +606,7 @@ IVault.personalSign
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:440](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L440)
+[soulwallet-keyvault/src/vault.ts:440](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L440)
 
 ___
 
@@ -639,7 +639,7 @@ IVault.rawSign
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:464](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L464)
+[soulwallet-keyvault/src/vault.ts:464](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L464)
 
 ___
 
@@ -671,7 +671,7 @@ IVault.removeSigner
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:368](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L368)
+[soulwallet-keyvault/src/vault.ts:368](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L368)
 
 ___
 
@@ -704,7 +704,7 @@ IVault.restore
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:145](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L145)
+[soulwallet-keyvault/src/vault.ts:145](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L145)
 
 ___
 
@@ -736,7 +736,7 @@ IVault.unlock
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:216](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L216)
+[soulwallet-keyvault/src/vault.ts:216](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L216)
 
 ___
 
@@ -756,4 +756,4 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:92](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-keyvault/src/vault.ts#L92)
+[soulwallet-keyvault/src/vault.ts:92](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L92)

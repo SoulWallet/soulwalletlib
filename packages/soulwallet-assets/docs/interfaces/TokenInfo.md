@@ -34,7 +34,7 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L38)
+[soulwallet-assets/src/interface/tokenInfo.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L38)
 
 ___
 
@@ -50,7 +50,7 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:30](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L30)
+[soulwallet-assets/src/interface/tokenInfo.ts:30](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L30)
 
 ___
 
@@ -66,7 +66,7 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:70](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L70)
+[soulwallet-assets/src/interface/tokenInfo.ts:70](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L70)
 
 ___
 
@@ -82,7 +82,7 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:78](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L78)
+[soulwallet-assets/src/interface/tokenInfo.ts:78](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L78)
 
 ___
 
@@ -98,7 +98,7 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L54)
+[soulwallet-assets/src/interface/tokenInfo.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L54)
 
 ___
 
@@ -114,7 +114,7 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:62](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L62)
+[soulwallet-assets/src/interface/tokenInfo.ts:62](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L62)
 
 ___
 
@@ -130,4 +130,4 @@ TokenInfo
 
 #### Defined in
 
-[soulwallet-assets/src/interface/tokenInfo.ts:46](https://github.com/SoulWallet/soulwalletlib/blob/1189b3a/packages/soulwallet-assets/src/interface/tokenInfo.ts#L46)
+[soulwallet-assets/src/interface/tokenInfo.ts:46](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-assets/src/interface/tokenInfo.ts#L46)
