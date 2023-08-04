@@ -1,7 +1,7 @@
 {
   "name": "@soulwallet/abi",
-  "version": "0.0.5",
-  "description": "> TODO: description",
+  "version": "0.0.6",
+  "description": "soulwallet-contract ABI",
   "author": "Jayden <z.cejay@gmail.com>",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
   "license": "ISC",
@@ -41,9 +41,9 @@
     "shelljs": "^0.8.5"
   },
   "exports": {
-      ".": {
-          "import": "./lib.esm/main.js",
-          "require": "./lib.cjs/main.js"
-      }
+    ".": {
+      "import": "./lib.esm/main.js",
+      "require": "./lib.cjs/main.js"
+    }
   }
 }
