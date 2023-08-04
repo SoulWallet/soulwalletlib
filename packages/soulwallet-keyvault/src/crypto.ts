@@ -229,6 +229,6 @@ export class Utils {
     }
 
     static generatePrivateKey(): string {
-        return randomBytes(32).toString('hex');
+        return '0x' + randomBytes(32).toString('hex');
     }
 }

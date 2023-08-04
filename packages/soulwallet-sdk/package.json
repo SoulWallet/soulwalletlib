@@ -2,7 +2,7 @@
     "name": "@soulwallet/sdk",
     "version": "0.0.14",
     "description": "SoulWalletSDK = {  Basic Functions,  Bundler, KeyStore,  SignatureTools }",
-    "author": "Jayden <z.cejay@gmail.com>",
+    "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
     "license": "ISC",
     "main": "./lib.cjs/main.js",

@@ -2,7 +2,7 @@
   "name": "@soulwallet/result",
   "version": "0.0.6",
   "description": "A lib designed based on the philosophy of 'Errors are values'",
-  "author": "Jayden <z.cejay@gmail.com>",
+  "author": "Jayden@SoulWallet",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
   "license": "ISC",
   "main": "./lib.cjs/main.js",

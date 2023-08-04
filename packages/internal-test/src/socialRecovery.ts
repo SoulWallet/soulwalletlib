@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import { PersonalSign } from "./personalSign.js";
 import { L1KeyStore, SoulWallet } from "@soulwallet/sdk";
 
 export class SocialRecovery {

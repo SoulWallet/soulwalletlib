@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import { PersonalSign } from "./personalSign.js";
 import { SoulWallet, Transaction, Bundler, UserOpUtils, UserOperation } from "@soulwallet/sdk";
+import { Vault } from '@soulwallet/keyvault';
 
 import { ABI_EntryPoint } from "@soulwallet/abi";
 
@@ -13,6 +13,8 @@ export class Deploy {
     readonly keyStoreModuleAddress: string;
     readonly securityControlModuleAddress: string;
     readonly defaultWallet: ethers.Wallet;
+
+    private keyVault: Vault;
 
     constructor(
         _provider: string,
@@ -29,20 +31,32 @@ export class Deploy {
         this.keyStoreModuleAddress = _keyStoreModuleAddress;
         this.securityControlModuleAddress = _securityControlModuleAddress;
         this.defaultWallet = _defaultWallet;
+
+        this.keyVault = new Vault();
     }
 
 
 
 
     async run(): Promise<void> {
+        const password = '123456';
+        let enforce = false;
+        if ((await this.keyVault.isInitialized()).OK) {
+            enforce = true;
+        }
+        await this.keyVault.init(password, enforce);
+        if ((await this.keyVault.isLocked()).OK) {
+            await this.keyVault.unlock(password);
+        }
+        // create new signer
+        debugger;
+        const signer = (await this.keyVault.createSigner()).OK;
 
         const soulWallet = new SoulWallet(this.provider, this.bundler, this.soulWalletFactoryAddress, this.defalutCallbackHandlerAddress, this.keyStoreModuleAddress, this.securityControlModuleAddress);
-        // new wallet
-        const signer = ethers.Wallet.createRandom();
 
         const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
             0,
-            signer.address,
+            signer,
             ethers.ZeroHash
         );
         if (userOpRet.isErr()) {
@@ -87,7 +101,7 @@ export class Deploy {
         }
         const packedUserOpHash = packedUserOpHashRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
-        const signature = PersonalSign.signMessage(packedUserOpHash.packedUserOpHash, signer.privateKey);
+        const signature = (await this.keyVault.personalSign(signer, packedUserOpHash.packedUserOpHash)).OK;
         const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
         if (packedSignatureRet.isErr()) {
             throw new Error(packedSignatureRet.ERR.message);
@@ -173,7 +187,7 @@ export class Deploy {
         }
         const packedUserOpHashTx = packedUserOpHashTxRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
-        const signatureTx = PersonalSign.signMessage(packedUserOpHashTx.packedUserOpHash, signer.privateKey);
+        const signatureTx = (await this.keyVault.personalSign(signer, packedUserOpHashTx.packedUserOpHash)).OK;
         const packedSignatureTxRet = await soulWallet.packUserOpSignature(signatureTx, packedUserOpHashTx.validationData);
         if (packedSignatureTxRet.isErr()) {
             throw new Error(packedSignatureTxRet.ERR.message);

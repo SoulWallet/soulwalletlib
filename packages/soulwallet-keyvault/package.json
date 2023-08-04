@@ -1,8 +1,8 @@
 {
     "name": "@soulwallet/keyvault",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "A lightweight private key management library",
-    "author": "Jayden <z.cejay@gmail.com>",
+    "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
     "license": "ISC",
     "main": "./lib.cjs/main.js",
