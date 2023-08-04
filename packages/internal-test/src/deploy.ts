@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { PersonalSign } from "./personalSign.js";
-import { SoulWallet, Transaction, Bundler } from "@soulwallet/sdk";
+import { SoulWallet, Transaction, Bundler, UserOpUtils, UserOperation } from "@soulwallet/sdk";
+
 import { ABI_EntryPoint } from "@soulwallet/abi";
 
 export class Deploy {
@@ -34,6 +35,7 @@ export class Deploy {
 
 
     async run(): Promise<void> {
+
         const soulWallet = new SoulWallet(this.provider, this.bundler, this.soulWalletFactoryAddress, this.defalutCallbackHandlerAddress, this.keyStoreModuleAddress, this.securityControlModuleAddress);
         // new wallet
         const signer = ethers.Wallet.createRandom();
