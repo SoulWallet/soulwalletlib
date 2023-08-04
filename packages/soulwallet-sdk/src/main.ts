@@ -7,12 +7,12 @@ import { UserOpReceipt, UserOpDetail, UserOpGas } from "./interface/IBundler.js"
 import { Ok, Err, Result } from '@soulwallet/result';
 import { Bundler } from "./bundler.js";
 import { KeyStoreInfo } from "./interface/IL1KeyStore.js";
-import { userOperationFromJSON, userOperationToJSON } from "./tools/convert.js";
+import { UserOpUtils } from "./userOpUtils.js";
 
 export {
-    UserOperation,
-    userOperationFromJSON, userOperationToJSON,
     SoulWallet,
+    UserOperation,
+    UserOpUtils,
     UserOpErrors,
     UserOpErrorCodes,
     L1KeyStore,
