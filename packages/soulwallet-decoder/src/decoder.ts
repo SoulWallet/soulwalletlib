@@ -6,13 +6,17 @@ import { DecodeResult, Method } from './interface/decodeData.js';
 import { ethers } from 'ethers';
 import { Bytes4 } from './interface/bytes4.js';
 
+export interface IUserOperation {
+    sender: string;
+    callData: string;
+};
+
 /**
  * Decode the transaction data (userOp.calldata).
  *
- * @export
  * @class Decoder
  */
-export class Decoder {
+class Decoder {
 
     /**
      * Decode the transaction data (userOp.calldata).
@@ -36,6 +40,7 @@ export class Decoder {
 
         // get 4bytes from calldata
         const bytes4 = calldata.substring(0, 10);
+        let _from = from;
         let _to: string[] = [];
         let _value: bigint[] = [];
         let _data: string[] = [];
@@ -44,7 +49,7 @@ export class Decoder {
             const fun = soulWalletBytes4.get('0x18dfb3c7')!;
             const iface = new ethers.Interface(['function ' + fun.text]);
             const decodedData = iface.decodeFunctionData(fun.text.substring(0, fun.text.indexOf('(')), calldata);
-
+            _from = to;
             _to = decodedData[0];
             _data = decodedData[1];
         } else if (bytes4 === '0x47e1da2a') {
@@ -52,7 +57,7 @@ export class Decoder {
             const fun = soulWalletBytes4.get('0x47e1da2a')!;
             const iface = new ethers.Interface(['function ' + fun.text]);
             const decodedData = iface.decodeFunctionData(fun.text.substring(0, fun.text.indexOf('(')), calldata);
-
+            _from = to;
             _to = decodedData[0];
             _value = decodedData[1];
             _data = decodedData[2];
@@ -61,7 +66,7 @@ export class Decoder {
             const fun = soulWalletBytes4.get('0xb61d27f6')!;
             const iface = new ethers.Interface(['function ' + fun.text]);
             const decodedData = iface.decodeFunctionData(fun.text.substring(0, fun.text.indexOf('(')), calldata);
-
+            _from = to;
             _to = [decodedData[0]];
             _value = [decodedData[1]];
             _data = [decodedData[2]];
@@ -71,14 +76,12 @@ export class Decoder {
         }
 
         for (let i = 0; i < _to.length; i++) {
-            const to = _to[i];
             let value = BigInt(0);
             if (_value.length > 0) {
                 value = _value[i];
             }
-            const data = _data[i];
 
-            const decodeResult = await this.decodeItem(from, to, value, data, chainId);
+            const decodeResult = await this.decodeItem(_from, _to[i], value, _data[i], chainId);
             if (decodeResult.isErr()) {
                 return new Err(
                     new Error('decode error')
@@ -153,6 +156,19 @@ export class Decoder {
     }
 
 
+}
 
-
+/**
+    * Decode the transaction data (userOp.calldata, interaction from soulwallet contract only).
+    *
+    * @static
+    * @param {number} chainId
+    * @param {string} entrypoint contract address
+    * @param {IUserOperation} userOperation struct
+    * @return {*}  {Promise<Result<DecodeResult[], Error>>}
+    * @memberof Decoder
+    */
+export async function DecodeUserOp(chainId: number, entrypoint: string, userOperations: IUserOperation): Promise<Result<DecodeResult[], Error>> {
+    const { sender, callData } = userOperations;
+    return await Decoder.decode(chainId, entrypoint, sender, callData);
 }

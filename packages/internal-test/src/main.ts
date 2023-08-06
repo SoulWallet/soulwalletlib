@@ -17,6 +17,7 @@ const __baseDir = resolve(__dirname, '..', '..', '..');
 async function main() {
     await new CryptoTest().run();
 
+    await new Decode().run();
 
     const soulwalletcontractDir = resolve(__baseDir, 'soul-wallet-contract');
     const bundlerDir = resolve(__baseDir, 'bundler');
@@ -190,9 +191,6 @@ async function main() {
 
 
         await new L1KeyStoreTest(RPC, contractInstance['KeyStore']).run();
-
-        await new Decode().run();
-
 
         await new SocialRecovery(
             RPC,

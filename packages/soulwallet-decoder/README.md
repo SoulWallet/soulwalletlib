@@ -5,7 +5,7 @@
 </h1>
 
 <p align="center">
-A lib for decode calldata. If it contains known token information, it will also output the token details.
+A lib for decode userOp.calldata. If it contains known token information, it will also output the token details.
 </p>
 
 <p align="center">
