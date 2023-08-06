@@ -58,7 +58,7 @@ A lightweight private key management library
 
 ## @soulwallet/decoder
 
-A lib for decode calldata
+A lib for decode userOp.calldata
 <p align="left">
 <a href="./packages/soulwallet-decoder/README.md">
 <b>Readme</b>

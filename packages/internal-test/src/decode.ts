@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { ABI_EntryPoint, ABI_SoulWallet } from "@soulwallet/abi";
-import { Decoder } from "@soulwallet/decoder";
+import { DecodeUserOp } from "@soulwallet/decoder";
 
 export class Decode {
     constructor() { }
@@ -62,14 +62,25 @@ export class Decode {
             callData = abi.encodeFunctionData("execute", [to[0], value[0], data[0]]);
         }
 
-        const ret = await Decoder.decode(1, '0x1', '0x2', callData);
+        const userOp = {
+            sender: '0xa',
+            callData: callData
+        }
+        const chainId = 1;
+        const entryPoint = '0xb';
+
+        const ret = await DecodeUserOp(chainId, entryPoint, userOp);
         if (ret.isErr()) {
             throw new Error(
                 ret.ERR.message
             );
         }
-        if (ret.OK.length !== 2) {
+        const result = ret.OK;
+        if (result.length !== 2) {
             throw new Error('result length error');
+        }
+        if (result[0].from !== userOp.sender || result[1].from !== userOp.sender) {
+            throw new Error('result[0].from error');
         }
 
     }
