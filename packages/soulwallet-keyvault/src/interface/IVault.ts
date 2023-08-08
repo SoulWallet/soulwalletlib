@@ -1,4 +1,5 @@
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Result } from '@soulwallet/result';
+import { ethers } from 'ethers';
 // import { EventEmitter } from 'events';
 
 
@@ -40,6 +41,7 @@ export abstract class IVault /*extends EventEmitter*/ {
     // #region sign transaction
     public abstract personalSign(address: string, message: string): Promise<Result<string, Error>>;
     public abstract rawSign(address: string, message: string): Promise<Result<string, Error>>;
+    public abstract typedDataSign(address: string, domain: ethers.TypedDataDomain, types: Record<string, Array<ethers.TypedDataField>>, value: Record<string, any>, provider?: string | ethers.JsonRpcProvider): Promise<Result<string, Error>>;
     // #endregion end sign transaction
 
 }
