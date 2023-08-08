@@ -100,20 +100,19 @@ export class L1KeyStore implements IL1KeyStore {
     }
 
     /**
+     * pack guardian info into bytes
      *
-     *
-     * @abstract
      * @param {string[]} guardians EOA/Smart contract address array (auto sort)
      * @param {number} threshold
      * @param {string} salt hex string (bytes32),default is 0
      * @return {*}  {string} keccak256 hash of the guardian set
      * @memberof IL1KeyStore
      */
-    static calcGuardianHash(guardians: string[], threshold: number, salt: string = ethers.ZeroHash): string {
+    static getGuardianBytes(guardians: string[], threshold: number, salt: string = ethers.ZeroHash): string {
         if (guardians.length === 0) {
-            return ethers.ZeroHash;
+            return '0x';
         }
-        
+
         /* 
         (address[] memory guardians, uint256 threshold, uint256 salt) =
             abi.decode(rawGuardian, (address[], uint256, uint256));
@@ -143,6 +142,25 @@ export class L1KeyStore implements IL1KeyStore {
         }
 
         const abiEncoded = new ethers.AbiCoder().encode(["address[]", "uint256", "uint256"], [guardians, threshold, salt]);
+        return abiEncoded;
+    }
+
+    /**
+     * calculate the guardian hash
+     *
+     * @abstract
+     * @param {string[]} guardians EOA/Smart contract address array (auto sort)
+     * @param {number} threshold
+     * @param {string} salt hex string (bytes32),default is 0
+     * @return {*}  {string} keccak256 hash of the guardian set
+     * @memberof IL1KeyStore
+     */
+    static calcGuardianHash(guardians: string[], threshold: number, salt: string = ethers.ZeroHash): string {
+        if (guardians.length === 0) {
+            return ethers.ZeroHash;
+        }
+
+        const abiEncoded = L1KeyStore.getGuardianBytes(guardians, threshold, salt);
         const keccak256 = ethers.keccak256(abiEncoded);
         return keccak256;
     }
