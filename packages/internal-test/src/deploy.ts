@@ -49,7 +49,6 @@ export class Deploy {
             await this.keyVault.unlock(password);
         }
         // create new signer
-        debugger;
         const signer = (await this.keyVault.createSigner()).OK;
 
         const soulWallet = new SoulWallet(this.provider, this.bundler, this.soulWalletFactoryAddress, this.defalutCallbackHandlerAddress, this.keyStoreModuleAddress, this.securityControlModuleAddress);

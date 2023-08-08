@@ -22,6 +22,37 @@ export default [
                 "type": "address"
             },
             {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "_initialKey",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "initialGuardianHash",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint64",
+                "name": "guardianSafePeriod",
+                "type": "uint64"
+            }
+        ],
+        "name": "KeyStoreInited",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_wallet",
+                "type": "address"
+            },
+            {
                 "indexed": true,
                 "internalType": "address",
                 "name": "_newOwners",

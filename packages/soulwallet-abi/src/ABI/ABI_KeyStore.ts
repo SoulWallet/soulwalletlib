@@ -3,6 +3,11 @@
 export default [
     {
         "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "inputs": [],
         "name": "GUARDIAN_SIGNATURE_INVALID",
         "type": "error"
     },

@@ -21,6 +21,7 @@ export type VaultEvents = {
     AccountRemoved: string,
     Sign: SignData,
     PersonalSign: SignData,
+    TypedDataSign: SignData,
 };
 
 /**
@@ -453,6 +454,15 @@ export class Vault implements IVault {
         return new Ok(_sign);
     }
 
+    private async _rawSign(address: string, message: string): Promise<Result<string, Error>> {
+        const _ECDSA = await this._loadSigner(address);
+        if (_ECDSA.isErr()) {
+            return new Err(_ECDSA.ERR);
+        }
+        const _sign = await _ECDSA.OK.sign(message);
+        return new Ok(_sign);
+    }
+
     /**
      * sign a message (rawSign)
      *
@@ -462,19 +472,68 @@ export class Vault implements IVault {
      * @memberof Vault
      */
     public async rawSign(address: string, message: string): Promise<Result<string, Error>> {
-        const _ECDSA = await this._loadSigner(address);
-        if (_ECDSA.isErr()) {
-            return new Err(_ECDSA.ERR);
+        const ret = await this._rawSign(address, message);
+        if (ret.isOk()) {
+            this.emit('Sign', {
+                address: address,
+                message: message,
+                signature: ret.OK
+            });
         }
-        const _sign = await _ECDSA.OK.sign(message);
+        return ret;
+    }
 
-        this.emit('Sign', {
-            address: address,
-            message: message,
-            signature: _sign
+    /**
+     * sign typedData message (EIP712)
+     *
+     * @param {string} address
+     * @param {ethers.TypedDataDomain} domain
+     * @param {Record<string, Array<ethers.TypedDataField>>} types
+     * @param {Record<string, any>} value
+     * @param {(string | ethers.JsonRpcProvider)} [provider]
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof Vault
+     */
+    public async typedDataSign(address: string, domain: ethers.TypedDataDomain, types: Record<string, Array<ethers.TypedDataField>>, value: Record<string, any>, provider?: string | ethers.JsonRpcProvider): Promise<Result<string, Error>> {
+        // refer: ethers.js
+
+        let _provider: ethers.JsonRpcProvider | null = null;
+        if (provider) {
+            if (typeof provider === 'string') {
+                _provider = new ethers.JsonRpcProvider(provider);
+            } else {
+                _provider = provider;
+            }
+        }
+
+        // Populate any ENS names
+        const populated = await ethers.TypedDataEncoder.resolveNames(domain, types, value, async (name: string) => {
+            // @TODO: this should use resolveName; addresses don't
+            //        need a provider
+
+            ethers.assert(_provider != null, "cannot resolve ENS names without a provider", "UNSUPPORTED_OPERATION", {
+                operation: "resolveName",
+                info: { name }
+            });
+
+            const address = await _provider!.resolveName(name);
+            ethers.assert(address != null, "unconfigured ENS name", "UNCONFIGURED_NAME", {
+                value: name
+            });
+
+            return address;
         });
 
-        return new Ok(_sign);
+        const message = ethers.TypedDataEncoder.hash(populated.domain, types, populated.value);
+        const ret = await this._rawSign(address, message);
+        if (ret.isOk()) {
+            this.emit('TypedDataSign', {
+                address: address,
+                message: message,
+                signature: ret.OK
+            });
+        }
+        return ret;
     }
 
 }

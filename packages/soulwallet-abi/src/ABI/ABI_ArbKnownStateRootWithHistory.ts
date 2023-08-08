@@ -7,6 +7,11 @@ export default [
                 "internalType": "address",
                 "name": "_l1Target",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
             }
         ],
         "stateMutability": "nonpayable",
@@ -165,6 +170,41 @@ export default [
                 "internalType": "address",
                 "name": "",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "lastestStateRootInfo",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "bytes32",
+                        "name": "storageRootHash",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "blockHash",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "blockNumber",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "blockTimestamp",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct BlockInfo",
+                "name": "info",
+                "type": "tuple"
             }
         ],
         "stateMutability": "view",
