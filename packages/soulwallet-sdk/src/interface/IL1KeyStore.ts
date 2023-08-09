@@ -1,5 +1,31 @@
 import { Ok, Err, Result } from '@soulwallet/result';
 
+export interface GuardianSignature {
+    /**
+     * 0:EIP-1271 signature, 1:approved onchain before, 2:EOA signature, 3:No signature provided
+     *
+     * @type {number}
+     * @memberof GuardianSignature
+     */
+    signatureType: 0 | 1 | 2 | 3;
+
+    /**
+     * Guardian address
+     *
+     * @type {string}
+     * @memberof GuardianSignature
+     */
+    address: string;
+
+    /**
+     * Signature
+     *
+     * @type {string}
+     * @memberof GuardianSignature
+     */
+    signature?: string;
+}
+
 export interface KeyStoreInfo {
     /**
      * The address of the signer
