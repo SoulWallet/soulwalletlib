@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
-import { L1KeyStore } from "@soulwallet/sdk";
+import { GuardianSignature, L1KeyStore } from "@soulwallet/sdk";
+import { ABI_KeyStore } from "@soulwallet/abi";
 
 export class L1KeyStoreTest {
     readonly rpc: string;
@@ -44,6 +45,131 @@ export class L1KeyStoreTest {
             const _value = await _L1KeyStore.getSetGuardianSigHash(_slot, _newGuardianHash);
             if (_value.isErr()) {
                 throw new Error(`Expected Ok but got Err: ${_value.ERR.message}`);
+            }
+        }
+
+        {
+            // social recovery test
+            const guardianCount = 15;
+            const threshold = 8;
+
+            const guardians: string[] = [];
+            const guardiansAccount: ethers.HDNodeWallet[] = [];
+            for (let index = 0; index < guardianCount; index++) {
+                const account = ethers.Wallet.createRandom();
+                guardians.push(account.address);
+                guardiansAccount.push(account);
+            }
+            const initialKey: string = '0x0000000000000000000000000000000000000000000000000000000000000001';
+            const initialGuardianHash: string = L1KeyStore.calcGuardianHash(guardians, threshold);
+            const slot = L1KeyStore.getSlot(initialKey, initialGuardianHash);
+
+            /* 
+            function setKey(
+                bytes32 initialKey,
+                bytes32 initialGuardianHash,
+                uint64 initialGuardianSafePeriod,
+                bytes32 newKey,
+                bytes calldata rawGuardian,
+                bytes calldata guardianSignature
+            ) external;
+            */
+            const provider = new ethers.JsonRpcProvider(this.rpc);
+            const keyStoreContract = new ethers.Contract(this.keyStoreAddress, ABI_KeyStore, provider);
+            const chainId = (await provider.getNetwork()).chainId.toString();
+
+            const keyInfo = await _L1KeyStore.getKeyStoreInfo(slot);
+
+            const domain = {
+                name: "KeyStore",
+                version: "1",
+                chainId: chainId,
+                verifyingContract: this.keyStoreAddress,
+            };
+            // SocialRecovery(bytes32 keyStoreSlot,uint256 nonce,bytes32 newSigner) 
+            const types = {
+                SocialRecovery: [
+                    { name: "keyStoreSlot", type: "bytes32" },
+                    { name: "nonce", type: "uint256" },
+                    { name: "newSigner", type: "bytes32" },
+                ],
+            };
+            const message = {
+                keyStoreSlot: slot,
+                nonce: keyInfo.OK.nonce.toString(),
+                newSigner: "0x000000000000000000000000f8e81D47203A594245E36C48e151709F0C19fBe8",
+            };
+
+
+
+            const days = 86400;
+
+
+            const guardianSignature: GuardianSignature[] = [];
+            for (let index = 0; index < guardianCount; index++) {
+                const _guardianAddress = guardians[index];
+                guardianSignature.push({
+                    // 0:EIP-1271 signature, 1:approved onchain before, 2:EOA signature, 3:No signature provided
+                    signatureType: 3,
+                    address: _guardianAddress
+                });
+            }
+            for (let index = 0; index < threshold; index++) {
+                guardianSignature[index].signatureType = 2;
+                guardianSignature[index].signature = await guardiansAccount[index].signTypedData(domain, types, message);
+            }
+            {
+                const typedMessage = ethers.TypedDataEncoder.hash(domain, types, message);
+                console.log(`typedMessage: ${typedMessage}`);
+            }
+
+            const packedGuardianSignature = L1KeyStore.packGuardianSignature(guardianSignature);
+
+            /* 
+
+             function setKey(
+                bytes32 initialKey,
+                bytes32 initialGuardianHash,
+                uint64 initialGuardianSafePeriod,
+                bytes32 newKey,
+                bytes calldata rawGuardian,
+                bytes calldata guardianSignature
+            )
+            OR
+            function setKey(bytes32 slot, bytes32 newKey, bytes calldata rawGuardian, bytes calldata guardianSignature)
+            */
+
+            const signer = await provider.getSigner();
+
+            if (keyInfo.OK.key === ethers.ZeroHash) {
+                const tx = await signer.sendTransaction({
+                    to: this.keyStoreAddress,
+                    data: keyStoreContract.interface.encodeFunctionData("setKey(bytes32,bytes32,uint64,bytes32,bytes,bytes)", [
+                        initialKey,
+                        initialGuardianHash,
+                        days * 2,
+                        message.newSigner,
+                        L1KeyStore.getGuardianBytes(guardians, threshold),
+                        packedGuardianSignature
+                    ])
+                });
+                console.log(`tx: ${tx.hash}`);
+            } else {
+                const tx = await signer.sendTransaction({
+                    to: this.keyStoreAddress,
+                    data: keyStoreContract.interface.encodeFunctionData("setKey(bytes32,bytes32,bytes,bytes)", [
+                        slot,
+                        message.newSigner,
+                        L1KeyStore.getGuardianBytes(guardians, threshold),
+                        packedGuardianSignature
+                    ])
+                });
+                console.log(`tx: ${tx.hash}`);
+            }
+
+            const keyInfo_new = await _L1KeyStore.getKeyStoreInfo(slot);
+            if (keyInfo_new.OK.key.toLowerCase() !== message.newSigner.toLowerCase()) {
+                throw new Error(`Expected ${message.newSigner} but got ${keyInfo_new.OK.key}`);
             }
         }
 

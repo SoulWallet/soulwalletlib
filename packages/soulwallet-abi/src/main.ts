@@ -10,7 +10,9 @@ import ABI_Upgrade from "./ABI/ABI_Upgrade.js";
 import ABI_TrustedModuleManager from "./ABI/ABI_TrustedModuleManager.js";
 import ABI_TrustedPluginManager from "./ABI/ABI_TrustedPluginManager.js";
 import ABI_OpKnownStateRootWithHistory from "./ABI/ABI_OpKnownStateRootWithHistory.js";
+import ABI_KnownStateRootWithHistoryBase from "./ABI/ABI_KnownStateRootWithHistoryBase.js";
 import ABI_ArbKnownStateRootWithHistory from "./ABI/ABI_ArbKnownStateRootWithHistory.js";
+import ABI_L1BlockInfoPassing from "./ABI/ABI_L1BlockInfoPassing.js";
 import ABI_KeyStoreModule from "./ABI/ABI_KeyStoreModule.js";
 import ABI_KeystoreProof from "./ABI/ABI_KeystoreProof.js";
 import ABI_ERC20Paymaster from "./ABI/ABI_ERC20Paymaster.js";
@@ -31,7 +33,9 @@ export {
     ABI_TrustedModuleManager,
     ABI_TrustedPluginManager,
     ABI_OpKnownStateRootWithHistory,
+    ABI_KnownStateRootWithHistoryBase,
     ABI_ArbKnownStateRootWithHistory,
+    ABI_L1BlockInfoPassing,
     ABI_KeyStoreModule,
     ABI_KeystoreProof,
     ABI_ERC20Paymaster,

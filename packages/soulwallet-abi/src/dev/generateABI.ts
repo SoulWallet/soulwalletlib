@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import fs from 'node:fs';
 import shell from 'shelljs';
 
- 
+
 // chech if solc is installed
 if (!shell.which('solc')) {
     shell.echo('this script requires solc');
@@ -24,11 +24,14 @@ const abiSource = [
     ["contracts/trustedContractManager/trustedModuleManager/TrustedModuleManager.sol", "TrustedModuleManager"],
     ["contracts/trustedContractManager/trustedPluginManager/TrustedPluginManager.sol", "TrustedPluginManager"],
     ["contracts/modules/keystore/OptimismKeyStoreProofModule/OpKnownStateRootWithHistory.sol", "OpKnownStateRootWithHistory"],
+    ["contracts/modules/keystore/KnownStateRootWithHistoryBase.sol", "KnownStateRootWithHistoryBase"],
     ["contracts/modules/keystore/ArbitrumKeyStoreModule/ArbKnownStateRootWithHistory.sol", "ArbKnownStateRootWithHistory"],
+    ["contracts/modules/keystore/ArbitrumKeyStoreModule/L1BlockInfoPassing.sol", "L1BlockInfoPassing"],
     ["contracts/modules/keystore/KeyStoreModule.sol", "KeyStoreModule"],
     ["contracts/modules/keystore/KeystoreProof.sol", "KeystoreProof"],
     ["contracts/paymaster/ERC20Paymaster.sol", "ERC20Paymaster"],
     ["contracts/miscellaneous/ReceivePayment.sol", "ReceivePayment"]
+
 ];
 
 // delete old abi

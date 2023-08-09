@@ -1,4 +1,4 @@
-import { IL1KeyStore, KeyStoreInfo } from "./interface/IL1KeyStore.js";
+import { GuardianSignature, IL1KeyStore, KeyStoreInfo } from "./interface/IL1KeyStore.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
@@ -117,7 +117,8 @@ export class L1KeyStore implements IL1KeyStore {
         (address[] memory guardians, uint256 threshold, uint256 salt) =
             abi.decode(rawGuardian, (address[], uint256, uint256));
         */
-
+        // deep copy guardians,to avoid sort the original array
+        guardians = [...guardians];
         guardians.sort((a, b) => {
             {
                 const ret = TypeGuard.onlyAddress(a);
@@ -129,7 +130,7 @@ export class L1KeyStore implements IL1KeyStore {
             const aBig = BigInt(a);
             const bBig = BigInt(b);
             if (aBig === bBig) {
-                throw new Error(`guardian address is same: ${a}`);
+                throw new Error(`guardian address is duplicated: ${a}`);
             } else if (aBig < bBig) {
                 return -1;
             } else {
@@ -163,6 +164,126 @@ export class L1KeyStore implements IL1KeyStore {
         const abiEncoded = L1KeyStore.getGuardianBytes(guardians, threshold, salt);
         const keccak256 = ethers.keccak256(abiEncoded);
         return keccak256;
+    }
+
+    /**
+     * pack guardian signatures into `guardianSignature` bytes
+     *
+     * @static
+     * @param {GuardianSignature[]} guardianSignature
+     * @return {*}  {string}
+     * @memberof L1KeyStore
+     */
+    static packGuardianSignature(guardianSignature: GuardianSignature[]): string {
+        // deep copy guardianSignature,to avoid sort the original array
+        guardianSignature = [...guardianSignature];
+        guardianSignature.sort((a, b) => {
+            const aBig = BigInt(a.address);
+            const bBig = BigInt(b.address);
+            if (aBig === bBig) {
+                throw new Error(`guardian address is duplicated: ${a}`);
+            } else if (aBig < bBig) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+        const signs: string[] = [];
+
+        let skipTimes = 0;
+
+        for (let index = 0; index < guardianSignature.length; index++) {
+            /*  
+           one signature structure:
+            ┌──────────┬──────────────┬──────────┬────────────────┐
+            │          │              │          │                │
+            │    v     │       s      │   r      │  dynamic data  │
+            │  bytes1  │bytes4|bytes32│  bytes32 │     dynamic    │
+            │  (must)  │  (optional)  │(optional)│   (optional)   │
+            └──────────┴──────────────┴──────────┴────────────────┘ 
+            */
+            let oneSign = '';
+            const guardianSign = guardianSignature[index];
+            if (guardianSign.signatureType === 3) {
+                //3:No signature provided
+                skipTimes++;
+            } else {
+                if (skipTimes > 0) {
+                    /* 
+                        v = 2
+                            skip
+                            s: bytes4 skip times
+                            r: no set
+                    */
+                    oneSign = '02';
+                    oneSign += Hex.paddingZero(skipTimes - 1, 4).slice(2);
+                    signs.push(oneSign);
+                    skipTimes = 0;
+                }
+                let signature = guardianSign.signature || '';
+                if (signature.startsWith('0x')) {
+                    signature = signature.slice(2);
+                }
+                if (signature.length % 2 !== 0) {
+                    throw new Error('signature invalid');
+                }
+                let signatureLen = signature.length / 2;
+                switch (guardianSign.signatureType) {
+                    case 0://0:EIP-1271 signature
+                        /*
+                            v = 0
+                                EIP-1271 signature
+                                s: bytes4 Length of signature data 
+                                r: no set
+                                dynamic data: signature data
+                         */
+                        oneSign = '00';
+                        oneSign += Hex.paddingZero(signatureLen, 4).slice(2);
+                        oneSign += signature;
+                        break;
+                    case 1://1:approved onchain before
+                        /* 
+                           v = 1
+                               approved hash
+                               r: no set
+                               s: no set
+                        */
+                        oneSign = '01';
+                        break;
+                    case 2://2:EOA signature
+                        /* 
+                            v > 2
+                                EOA signature
+                        */
+                        // r, s, v => v, s, r
+                        const r = signature.slice(0, 64);
+                        const s = signature.slice(64, 128);
+                        const v = signature.slice(128, 130);
+                        oneSign = v + s + r;
+                        break;
+                    default:
+                        throw new Error('Unkown signatureType');
+                }
+                signs.push(oneSign);
+            }
+
+        }
+
+        if (skipTimes > 0) {
+            /* 
+                v = 2
+                    skip
+                    s: bytes4 skip times
+                    r: no set
+            */
+            let oneSign = '02';
+            oneSign += Hex.paddingZero(skipTimes - 1, 4).slice(2);
+            signs.push(oneSign);
+            skipTimes = 0;
+        }
+
+
+        return '0x' + signs.join('');
     }
 
     /**
