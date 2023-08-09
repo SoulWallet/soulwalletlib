@@ -27,7 +27,8 @@ const abiSource = [
     ["contracts/modules/keystore/ArbitrumKeyStoreModule/ArbKnownStateRootWithHistory.sol", "ArbKnownStateRootWithHistory"],
     ["contracts/modules/keystore/KeyStoreModule.sol", "KeyStoreModule"],
     ["contracts/modules/keystore/KeystoreProof.sol", "KeystoreProof"],
-    ["contracts/paymaster/ERC20Paymaster.sol", "ERC20Paymaster"]
+    ["contracts/paymaster/ERC20Paymaster.sol", "ERC20Paymaster"],
+    ["contracts/miscellaneous/ReceivePayment.sol", "ReceivePayment"]
 ];
 
 // delete old abi
