@@ -30,4 +30,4 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-[Result.ts:4](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-result/src/Result.ts#L4)
+[Result.ts:4](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L4)

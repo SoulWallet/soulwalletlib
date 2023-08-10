@@ -31,7 +31,7 @@ Method
 
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/interface/decodeData.ts#L17)
+[soulwallet-decoder/src/interface/decodeData.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-decoder/src/interface/decodeData.ts#L17)
 
 ___
 
@@ -47,7 +47,7 @@ Method
 
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/interface/decodeData.ts#L25)
+[soulwallet-decoder/src/interface/decodeData.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-decoder/src/interface/decodeData.ts#L25)
 
 ___
 
@@ -63,7 +63,7 @@ Method
 
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/interface/decodeData.ts#L41)
+[soulwallet-decoder/src/interface/decodeData.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-decoder/src/interface/decodeData.ts#L41)
 
 ___
 
@@ -79,4 +79,4 @@ Method
 
 #### Defined in
 
-[soulwallet-decoder/src/interface/decodeData.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-decoder/src/interface/decodeData.ts#L33)
+[soulwallet-decoder/src/interface/decodeData.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-decoder/src/interface/decodeData.ts#L33)
