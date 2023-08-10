@@ -1,5 +1,5 @@
-import { ethers } from "ethers";
-import { GuardianSignature, L1KeyStore } from "@soulwallet/sdk";
+import { TypedDataDomain, TypedDataField, ethers } from "ethers";
+import { GuardianSignature, KeyStoreTypedDataType, L1KeyStore } from "@soulwallet/sdk";
 import { ABI_KeyStore } from "@soulwallet/abi";
 
 export class L1KeyStoreTest {
@@ -76,29 +76,20 @@ export class L1KeyStoreTest {
             */
             const provider = new ethers.JsonRpcProvider(this.rpc);
             const keyStoreContract = new ethers.Contract(this.keyStoreAddress, ABI_KeyStore, provider);
-            const chainId = (await provider.getNetwork()).chainId.toString();
-
+            const newSigner = "0x000000000000000000000000f8e81D47203A594245E36C48e151709F0C19fBe8";
             const keyInfo = await _L1KeyStore.getKeyStoreInfo(slot);
 
-            const domain = {
-                name: "KeyStore",
-                version: "1",
-                chainId: chainId,
-                verifyingContract: this.keyStoreAddress,
-            };
-            // SocialRecovery(bytes32 keyStoreSlot,uint256 nonce,bytes32 newSigner) 
-            const types = {
-                SocialRecovery: [
-                    { name: "keyStoreSlot", type: "bytes32" },
-                    { name: "nonce", type: "uint256" },
-                    { name: "newSigner", type: "bytes32" },
-                ],
-            };
-            const message = {
-                keyStoreSlot: slot,
-                nonce: keyInfo.OK.nonce.toString(),
-                newSigner: "0x000000000000000000000000f8e81D47203A594245E36C48e151709F0C19fBe8",
-            };
+            const ret = await _L1KeyStore.getTypedData(KeyStoreTypedDataType.TYPE_HASH_SOCIAL_RECOVERY,
+                slot,
+                newSigner
+            );
+            if (ret.isErr()) {
+                throw new Error(`Expected Ok but got Err: ${ret.ERR.message}`);
+            }
+            let domain: TypedDataDomain = ret.OK.domain;
+            let types: Record<string, Array<TypedDataField>> = ret.OK.types;
+            let message: Record<string, any> = ret.OK.value;
+
 
 
 
@@ -120,7 +111,9 @@ export class L1KeyStoreTest {
             }
             {
                 const typedMessage = ethers.TypedDataEncoder.hash(domain, types, message);
-                console.log(`typedMessage: ${typedMessage}`);
+                if (typedMessage !== ret.OK.typedMessage) {
+                    throw new Error(`Expected ${ret.OK.typedMessage} but got ${typedMessage}`);
+                }
             }
 
             const packedGuardianSignature = L1KeyStore.packGuardianSignature(guardianSignature);
