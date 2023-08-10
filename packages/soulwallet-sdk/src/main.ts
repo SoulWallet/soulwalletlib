@@ -6,7 +6,7 @@ import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { UserOpReceipt, UserOpDetail, UserOpGas } from "./interface/IBundler.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { Bundler } from "./bundler.js";
-import { KeyStoreInfo, GuardianSignature } from "./interface/IL1KeyStore.js";
+import { KeyStoreInfo, GuardianSignature, KeyStoreTypedDataType } from "./interface/IL1KeyStore.js";
 import { UserOpUtils } from "./userOpUtils.js";
 
 export {
@@ -23,5 +23,6 @@ export {
     Bundler,
     Transaction,
     KeyStoreInfo,
-    GuardianSignature
+    GuardianSignature,
+    KeyStoreTypedDataType
 }

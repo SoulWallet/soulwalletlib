@@ -1,4 +1,5 @@
 import { Ok, Err, Result } from '@soulwallet/result';
+import { TypedDataDomain, TypedDataField } from 'ethers';
 
 export interface GuardianSignature {
     /**
@@ -24,6 +25,33 @@ export interface GuardianSignature {
      * @memberof GuardianSignature
      */
     signature?: string;
+}
+
+export enum KeyStoreTypedDataType {
+    /**
+     * keccak256("SetKey(bytes32 keyStoreSlot,uint256 nonce,bytes32 newSigner)");
+     */
+    TYPE_HASH_SET_KEY = 'TYPE_HASH_SET_KEY',
+    /**
+     * keccak256("SetGuardian(bytes32 keyStoreSlot,uint256 nonce,bytes32 newGuardianHash)");
+     */
+    TYPE_HASH_SET_GUARDIAN = 'TYPE_HASH_SET_GUARDIAN',
+    /**
+     * keccak256("SetGuardianSafePeriod(bytes32 keyStoreSlot,uint256 nonce,uint64 newGuardianSafePeriod)");
+     */
+    TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD = 'TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD',
+    /**
+     * keccak256("CancelSetGuardian(bytes32 keyStoreSlot,uint256 nonce)");
+     */
+    TYPE_HASH_CANCEL_SET_GUARDIAN = 'TYPE_HASH_CANCEL_SET_GUARDIAN',
+    /**
+     * keccak256("CancelSetGuardianSafePeriod(bytes32 keyStoreSlot,uint256 nonce)");
+     */
+    TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD = 'TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD',
+    /**
+     * keccak256("SocialRecovery(bytes32 keyStoreSlot,uint256 nonce,bytes32 newSigner)");
+     */
+    TYPE_HASH_SOCIAL_RECOVERY = 'TYPE_HASH_SOCIAL_RECOVERY'
 }
 
 export interface KeyStoreInfo {
@@ -117,5 +145,45 @@ export abstract class IL1KeyStore {
      * @memberof IL1KeyStore
      */
     abstract getKeyStoreInfo(slot: string): Promise<Result<KeyStoreInfo, Error>>;
+
+    /**
+     * Get EIP-712 typed data for a specific slot
+     *
+     * @abstract
+     * @param {KeyStoreTypedDataType} type Interact Type
+     * @param {string} slot slot
+     * @param {(string)} [data] Interact Arg (Hex string): 
+     * 
+     * TYPE_HASH_SET_KEY: "newSigner":"bytes32". 
+     * 
+     * TYPE_HASH_SET_GUARDIAN: "newGuardianHash":"bytes32". 
+     * 
+     * TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD: "newGuardianSafePeriod":"uint64". 
+     * 
+     * TYPE_HASH_CANCEL_SET_GUARDIAN: no need. 
+     * 
+     * TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD: no need. 
+     * 
+     * TYPE_HASH_SOCIAL_RECOVERY: "newSigner":"bytes32".
+     * 
+     * 
+     * @return {*}  {Promise<Result<{
+     *         domain: TypedDataDomain,
+     *         types: Record<string, Array<TypedDataField>>,
+     *         value: Record<string, any>,
+     *         typedMessage: string
+     *     }, Error>>}
+     * @memberof IL1KeyStore
+     */
+    abstract getTypedData(
+        type: KeyStoreTypedDataType,
+        slot: string,
+        data?: string
+    ): Promise<Result<{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        value: Record<string, any>,
+        typedMessage: string
+    }, Error>>;
 
 }

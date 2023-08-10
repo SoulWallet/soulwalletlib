@@ -1,6 +1,6 @@
-import { GuardianSignature, IL1KeyStore, KeyStoreInfo } from "./interface/IL1KeyStore.js";
+import { GuardianSignature, IL1KeyStore, KeyStoreInfo, KeyStoreTypedDataType } from "./interface/IL1KeyStore.js";
 import { TypeGuard } from "./tools/typeGuard.js";
-import { ethers } from "ethers";
+import { TypedDataDomain, TypedDataField, ethers } from "ethers";
 import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '@soulwallet/result';
@@ -420,6 +420,245 @@ export class L1KeyStore implements IL1KeyStore {
         }
         const nonce = ret.OK.nonce;
         return new Ok(L1KeyStore.getSigHash(this.L1KeyStoreContractAddress, slot, nonce, guardianHash));
+    }
+
+    /**
+     * Get EIP-712 typed data for a specific slot
+     *
+     * @static
+     * @param {KeyStoreTypedDataType} type Interact Type
+     * @param {number} chainId chainId
+     * @param {string} keyStoreContract keyStoreContract address
+     * @param {string} slot bytes32 slot
+     * @param {number} nonce uint256 nonce
+     * @param {(string)} [data] Interact Arg (Hex string): 
+     * 
+     * TYPE_HASH_SET_KEY: "newSigner":"bytes32". 
+     * 
+     * TYPE_HASH_SET_GUARDIAN: "newGuardianHash":"bytes32". 
+     * 
+     * TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD: "newGuardianSafePeriod":"uint64". 
+     * 
+     * TYPE_HASH_CANCEL_SET_GUARDIAN: no need. 
+     * 
+     * TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD: no need. 
+     * 
+     * TYPE_HASH_SOCIAL_RECOVERY: "newSigner":"bytes32".
+     * 
+     * 
+     * @return {*}  {{
+     *         domain: TypedDataDomain,
+     *         types: Record<string, Array<TypedDataField>>,
+     *         value: Record<string, any>,
+     *         typedMessage: string
+     *     }}
+     * @memberof L1KeyStore
+     */
+    static getTypedData(type: KeyStoreTypedDataType, chainId: number, keyStoreContract: string, slot: string, nonce: number, data?: string): {
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        value: Record<string, any>,
+        typedMessage: string
+    } {
+        if (TypeGuard.onlyBytes32(slot).isErr()) throw new Error('slot must be bytes32');
+        const domain: TypedDataDomain = {
+            name: "KeyStore",
+            version: "1",
+            chainId: chainId.toString(),
+            verifyingContract: ethers.getAddress(keyStoreContract)
+        };
+        let types: Record<string, Array<TypedDataField>>;
+        let value: Record<string, any>;
+        switch (type) {
+            case KeyStoreTypedDataType.TYPE_HASH_SET_KEY:
+                // keccak256("SetKey(bytes32 keyStoreSlot,uint256 nonce,bytes32 newSigner)");
+                types = {
+                    SetKey: [
+                        { name: "keyStoreSlot", type: "bytes32" },
+                        { name: "nonce", type: "uint256" },
+                        { name: "newSigner", type: "bytes32" }
+                    ]
+                };
+                if (TypeGuard.onlyBytes32(data!).isErr()) throw new Error('data must be bytes32');
+                value = {
+                    keyStoreSlot: slot,
+                    nonce: nonce,
+                    newSigner: data!
+                };
+                break;
+            case KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN:
+                // keccak256("SetGuardian(bytes32 keyStoreSlot,uint256 nonce,bytes32 newGuardianHash)");
+                types = {
+                    SetGuardian: [
+                        { name: "keyStoreSlot", type: "bytes32" },
+                        { name: "nonce", type: "uint256" },
+                        { name: "newGuardianHash", type: "bytes32" }
+                    ]
+                };
+                if (TypeGuard.onlyBytes32(data!).isErr()) throw new Error('data must be bytes32');
+                value = {
+                    keyStoreSlot: slot,
+                    nonce: nonce,
+                    newGuardianHash: data!
+                };
+                break;
+            case KeyStoreTypedDataType.TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD:
+                // keccak256("SetGuardianSafePeriod(bytes32 keyStoreSlot,uint256 nonce,uint64 newGuardianSafePeriod)");
+                types = {
+                    SetGuardianSafePeriod: [
+                        { name: "keyStoreSlot", type: "bytes32" },
+                        { name: "nonce", type: "uint256" },
+                        { name: "newGuardianSafePeriod", type: "uint64" }
+                    ]
+                };
+                const ret = TypeGuard.maxToUint64(data!);
+                if (ret.isErr()) {
+                    throw new Error('data must be uint64');
+                }
+                value = {
+                    keyStoreSlot: slot,
+                    nonce: nonce,
+                    newGuardianSafePeriod: ret.OK
+                };
+                break;
+            case KeyStoreTypedDataType.TYPE_HASH_CANCEL_SET_GUARDIAN:
+                // keccak256("CancelSetGuardian(bytes32 keyStoreSlot,uint256 nonce)");
+                types = {
+                    CancelSetGuardian: [
+                        { name: "keyStoreSlot", type: "bytes32" },
+                        { name: "nonce", type: "uint256" }
+                    ]
+                };
+                if (typeof data !== undefined) {
+                    throw new Error('data must be undefined');
+                }
+                value = {
+                    keyStoreSlot: slot,
+                    nonce: nonce
+                };
+                break;
+            case KeyStoreTypedDataType.TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD:
+                // keccak256("CancelSetGuardianSafePeriod(bytes32 keyStoreSlot,uint256 nonce)");
+                types = {
+                    CancelSetGuardianSafePeriod: [
+                        { name: "keyStoreSlot", type: "bytes32" },
+                        { name: "nonce", type: "uint256" }
+                    ]
+                };
+                if (typeof data !== undefined) {
+                    throw new Error('data must be undefined');
+                }
+                value = {
+                    keyStoreSlot: slot,
+                    nonce: nonce
+                };
+                break;
+            case KeyStoreTypedDataType.TYPE_HASH_SOCIAL_RECOVERY:
+                // keccak256("SocialRecovery(bytes32 keyStoreSlot,uint256 nonce,bytes32 newSigner)");
+                types = {
+                    SocialRecovery: [
+                        { name: "keyStoreSlot", type: "bytes32" },
+                        { name: "nonce", type: "uint256" },
+                        { name: "newSigner", type: "bytes32" },
+                    ]
+                };
+                if (TypeGuard.onlyBytes32(data!).isErr()) throw new Error('data must be bytes32');
+                value = {
+                    keyStoreSlot: slot,
+                    nonce: nonce,
+                    newSigner: data!
+                };
+                break;
+            default:
+                throw new Error('unknown type');
+        }
+
+        const typedMessage = ethers.TypedDataEncoder.hash(domain, types, value);
+
+        return {
+            domain,
+            types,
+            value,
+            typedMessage
+        };
+    }
+
+
+    /**
+     * Get EIP-712 typed data for a specific slot
+     *
+     * @abstract
+     * @param {KeyStoreTypedDataType} type Interact Type
+     * @param {string} slot slot
+     * @param {(string)} [data] Interact Arg (Hex string): 
+     * 
+     * TYPE_HASH_SET_KEY: "newSigner":"bytes32". 
+     * 
+     * TYPE_HASH_SET_GUARDIAN: "newGuardianHash":"bytes32". 
+     * 
+     * TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD: "newGuardianSafePeriod":"uint64". 
+     * 
+     * TYPE_HASH_CANCEL_SET_GUARDIAN: no need. 
+     * 
+     * TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD: no need. 
+     * 
+     * TYPE_HASH_SOCIAL_RECOVERY: "newSigner":"bytes32".
+     * 
+     * 
+     * @return {*}  {Promise<Result<{
+     *         domain: TypedDataDomain,
+     *         types: Record<string, Array<TypedDataField>>,
+     *         value: Record<string, any>,
+     *         typedMessage: string
+     *     }, Error>>}
+     * @memberof IL1KeyStore
+     */
+    async getTypedData(
+        type: KeyStoreTypedDataType,
+        slot: string,
+        data?: string
+    ): Promise<Result<{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        value: Record<string, any>,
+        typedMessage: string
+    }, Error>> {
+        let chainId = 0;
+        try {
+            chainId = bigIntToNumber(((await this.L1Provider.getNetwork()).chainId));
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error('unknown error')
+                );
+            }
+        }
+        const slotInfo = await this.getKeyStoreInfo(slot);
+        if (slotInfo.isErr()) {
+            return new Err(slotInfo.ERR);
+        }
+
+        try {
+            const ret = L1KeyStore.getTypedData(
+                type,
+                chainId,
+                this.L1KeyStoreContractAddress,
+                slot,
+                slotInfo.OK.nonce,
+                data
+            );
+            return new Ok(ret);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                return new Err(error);
+            } else {
+                return new Err(
+                    new Error('unknown error')
+                );
+            }
+        }
     }
 
 }
