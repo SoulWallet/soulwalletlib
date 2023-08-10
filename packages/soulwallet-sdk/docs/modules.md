@@ -4,6 +4,10 @@
 
 ## Table of contents
 
+### Enumerations
+
+- [KeyStoreTypedDataType](enums/KeyStoreTypedDataType.md)
+
 ### Classes
 
 - [Bundler](classes/Bundler.md)
@@ -17,6 +21,7 @@
 
 ### Interfaces
 
+- [GuardianSignature](interfaces/GuardianSignature.md)
 - [KeyStoreInfo](interfaces/KeyStoreInfo.md)
 - [Transaction](interfaces/Transaction.md)
 - [UserOpDetail](interfaces/UserOpDetail.md)
@@ -71,4 +76,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)

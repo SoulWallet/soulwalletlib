@@ -31,12 +31,16 @@ L1KeyStore
 - [getKeyStoreInfo](L1KeyStore.md#getkeystoreinfo)
 - [getSetGuardianSigHash](L1KeyStore.md#getsetguardiansighash)
 - [getSetKeySigHash](L1KeyStore.md#getsetkeysighash)
+- [getTypedData](L1KeyStore.md#gettypeddata)
 - [addressToBytes32](L1KeyStore.md#addresstobytes32)
 - [bytes32ToAddress](L1KeyStore.md#bytes32toaddress)
 - [calcGuardianHash](L1KeyStore.md#calcguardianhash)
+- [getGuardianBytes](L1KeyStore.md#getguardianbytes)
 - [getSigHash](L1KeyStore.md#getsighash)
 - [getSlot](L1KeyStore.md#getslot)
+- [getTypedData](L1KeyStore.md#gettypeddata-1)
 - [guardianSafePeriodGuard](L1KeyStore.md#guardiansafeperiodguard)
+- [packGuardianSignature](L1KeyStore.md#packguardiansignature)
 
 ## Constructors
 
@@ -59,7 +63,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L31)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L31)
 
 ## Properties
 
@@ -69,7 +73,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L22)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L22)
 
 ___
 
@@ -79,7 +83,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:20](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L20)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:20](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L20)
 
 ___
 
@@ -89,7 +93,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L21)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L21)
 
 ___
 
@@ -99,7 +103,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:18](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L18)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:18](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L18)
 
 ## Methods
 
@@ -131,7 +135,7 @@ IL1KeyStore.getKey
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:157](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L157)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:296](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L296)
 
 ___
 
@@ -163,7 +167,7 @@ IL1KeyStore.getKeyStoreInfo
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:186](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L186)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:325](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L325)
 
 ___
 
@@ -192,7 +196,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:276](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L276)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:415](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L415)
 
 ___
 
@@ -221,7 +225,48 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:258](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L258)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:397](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L397)
+
+___
+
+### getTypedData
+
+▸ **getTypedData**(`type`, `slot`, `data?`): `Promise`<[`Result`](../modules.md#result)<{ `domain`: `TypedDataDomain` ; `typedMessage`: `string` ; `types`: `Record`<`string`, `TypedDataField`[]\> ; `value`: `Record`<`string`, `any`\>  }, `Error`\>\>
+
+Get EIP-712 typed data for a specific slot
+
+**`Abstract`**
+
+**`Memberof`**
+
+IL1KeyStore
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `type` | [`KeyStoreTypedDataType`](../enums/KeyStoreTypedDataType.md) | Interact Type |
+| `slot` | `string` | slot |
+| `data?` | `string` | Interact Arg (Hex string): TYPE_HASH_SET_KEY: "newSigner":"bytes32". TYPE_HASH_SET_GUARDIAN: "newGuardianHash":"bytes32". TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD: "newGuardianSafePeriod":"uint64". TYPE_HASH_CANCEL_SET_GUARDIAN: no need. TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD: no need. TYPE_HASH_SOCIAL_RECOVERY: "newSigner":"bytes32". |
+
+#### Returns
+
+`Promise`<[`Result`](../modules.md#result)<{ `domain`: `TypedDataDomain` ; `typedMessage`: `string` ; `types`: `Record`<`string`, `TypedDataField`[]\> ; `value`: `Record`<`string`, `any`\>  }, `Error`\>\>
+
+{Promise<Result<{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        value: Record<string, any>,
+        typedMessage: string
+    }, Error>>}
+
+#### Implementation of
+
+IL1KeyStore.getTypedData
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/L1KeyStore.ts:616](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L616)
 
 ___
 
@@ -241,7 +286,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:56](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L56)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:56](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L56)
 
 ___
 
@@ -261,13 +306,15 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:52](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L52)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:52](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L52)
 
 ___
 
 ### calcGuardianHash
 
 ▸ `Static` **calcGuardianHash**(`guardians`, `threshold`, `salt?`): `string`
+
+calculate the guardian hash
 
 **`Abstract`**
 
@@ -291,7 +338,37 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:112](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L112)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:159](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L159)
+
+___
+
+### getGuardianBytes
+
+▸ `Static` **getGuardianBytes**(`guardians`, `threshold`, `salt?`): `string`
+
+pack guardian info into bytes
+
+**`Memberof`**
+
+IL1KeyStore
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `guardians` | `string`[] | `undefined` | EOA/Smart contract address array (auto sort) |
+| `threshold` | `number` | `undefined` |  |
+| `salt` | `string` | `ethers.ZeroHash` | hex string (bytes32),default is 0 |
+
+#### Returns
+
+`string`
+
+{string} keccak256 hash of the guardian set
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/L1KeyStore.ts:111](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L111)
 
 ___
 
@@ -324,7 +401,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L240)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:379](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L379)
 
 ___
 
@@ -356,7 +433,54 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:81](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L81)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:81](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L81)
+
+___
+
+### getTypedData
+
+▸ `Static` **getTypedData**(`type`, `chainId`, `keyStoreContract`, `slot`, `nonce`, `data?`): `Object`
+
+Get EIP-712 typed data for a specific slot
+
+**`Static`**
+
+**`Memberof`**
+
+L1KeyStore
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `type` | [`KeyStoreTypedDataType`](../enums/KeyStoreTypedDataType.md) | Interact Type |
+| `chainId` | `number` | chainId |
+| `keyStoreContract` | `string` | keyStoreContract address |
+| `slot` | `string` | bytes32 slot |
+| `nonce` | `number` | uint256 nonce |
+| `data?` | `string` | Interact Arg (Hex string): TYPE_HASH_SET_KEY: "newSigner":"bytes32". TYPE_HASH_SET_GUARDIAN: "newGuardianHash":"bytes32". TYPE_HASH_SET_GUARDIAN_SAFE_PERIOD: "newGuardianSafePeriod":"uint64". TYPE_HASH_CANCEL_SET_GUARDIAN: no need. TYPE_HASH_CANCEL_SET_GUARDIAN_SAFE_PERIOD: no need. TYPE_HASH_SOCIAL_RECOVERY: "newSigner":"bytes32". |
+
+#### Returns
+
+`Object`
+
+{{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        value: Record<string, any>,
+        typedMessage: string
+    }}
+
+| Name | Type |
+| :------ | :------ |
+| `domain` | `TypedDataDomain` |
+| `typedMessage` | `string` |
+| `types` | `Record`<`string`, `TypedDataField`[]\> |
+| `value` | `Record`<`string`, `any`\> |
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/L1KeyStore.ts:457](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L457)
 
 ___
 
@@ -376,4 +500,34 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:61](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-sdk/src/L1KeyStore.ts#L61)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:61](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L61)
+
+___
+
+### packGuardianSignature
+
+▸ `Static` **packGuardianSignature**(`guardianSignature`): `string`
+
+pack guardian signatures into `guardianSignature` bytes
+
+**`Static`**
+
+**`Memberof`**
+
+L1KeyStore
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `guardianSignature` | [`GuardianSignature`](../interfaces/GuardianSignature.md)[] |
+
+#### Returns
+
+`string`
+
+{string}
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/L1KeyStore.ts:177](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/L1KeyStore.ts#L177)

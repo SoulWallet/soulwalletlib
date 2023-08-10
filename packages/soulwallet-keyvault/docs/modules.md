@@ -55,8 +55,9 @@ ___
 | `PersonalSign` | [`SignData`](interfaces/SignData.md) |
 | `ReInitialized` | `void` |
 | `Sign` | [`SignData`](interfaces/SignData.md) |
+| `TypedDataSign` | [`SignData`](interfaces/SignData.md) |
 | `Unlocked` | `void` |
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/38adfd4/packages/soulwallet-keyvault/src/vault.ts#L15)
+[soulwallet-keyvault/src/vault.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L15)
