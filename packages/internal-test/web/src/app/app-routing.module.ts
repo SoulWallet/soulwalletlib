@@ -19,6 +19,10 @@ const routes: Routes = [
     path: 'keyvault',
     loadChildren: () => import('./keyvault/keyvault.module').then( m => m.KeyvaultPageModule)
   },
+  {
+    path: 'scrypt-benchmark',
+    loadChildren: () => import('./scrypt-benchmark/scrypt-benchmark.module').then( m => m.ScryptBenchmarkPageModule)
+  },
 ];
 
 @NgModule({

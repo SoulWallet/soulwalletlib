@@ -185,12 +185,9 @@ export class ECDSA {
  * @class ABFA
  */
 export class ABFA {
-    static scrypt(password: string, salt: string = scryptConfig.salt): Promise<Result<string, Error>> {
+    static scrypt(password: string, salt: string = scryptConfig.salt, N = scryptConfig.N, r = scryptConfig.r, p = scryptConfig.p): Promise<Result<string, Error>> {
         return new Promise((resolve, reject) => {
             const keylen = scryptConfig.keylen;
-            const N = scryptConfig.N;
-            const r = scryptConfig.r;
-            const p = scryptConfig.p;
             _scrypt(Utils.toBuffer(password), Utils.toBuffer(salt), keylen, { N, r, p }, (error, derivedKey) => {
                 if (error) {
                     if (error instanceof Error) {
