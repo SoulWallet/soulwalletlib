@@ -41,6 +41,8 @@ export class SoulWallet implements ISoulWallet {
 
     readonly Bundler: Bundler;
 
+    private _onChainConfig: onChainConfig | undefined = undefined;
+
 
     constructor(
         _provider: string | ethers.JsonRpcProvider,
@@ -78,19 +80,13 @@ export class SoulWallet implements ISoulWallet {
 
 
     async getOnChainConfig(): Promise<Result<onChainConfig, Error>> {
-        const key = `onChainConfig_${this.soulWalletFactoryAddress}`;
-        // read from cache
-        let _onChainConfig = StorageCache.getInstance().get<onChainConfig | undefined>(key, undefined);
-        if (!_onChainConfig) {
-            const _soulWalletFactory = new ethers.Contract(this.soulWalletFactoryAddress, ABI_SoulWalletFactory, this.provider);
-            const soulWalletLogic: string = await _soulWalletFactory.getFunction("walletImpl").staticCall();
-            const _soulWallet = new ethers.Contract(soulWalletLogic, ABI_SoulWallet, this.provider);
-            const entryPoint: string = await _soulWallet.getFunction("entryPoint").staticCall();
-
-            _onChainConfig = new onChainConfig();
-
+        if (this._onChainConfig) {
+            return new Ok(this._onChainConfig);
+        }
+        let _chainId: number = 0;
+        {
             const _chainIdBigint = (await this.provider.getNetwork()).chainId;
-            const _chainId: number = Number(_chainIdBigint);
+            _chainId = Number(_chainIdBigint);
             if (Number.isSafeInteger(_chainId)) {
                 if (_chainId === 0) {
                     return new Err(
@@ -102,6 +98,18 @@ export class SoulWallet implements ISoulWallet {
                     new Error("chainId is not a safe integer")
                 );
             }
+        }
+
+        const key = `onChainConfig_${this.soulWalletFactoryAddress}_${_chainId}`;
+        // read from cache
+        let _onChainConfig = StorageCache.getInstance().get<onChainConfig | undefined>(key, undefined);
+        if (!_onChainConfig) {
+            const _soulWalletFactory = new ethers.Contract(this.soulWalletFactoryAddress, ABI_SoulWalletFactory, this.provider);
+            const soulWalletLogic: string = await _soulWalletFactory.getFunction("walletImpl").staticCall();
+            const _soulWallet = new ethers.Contract(soulWalletLogic, ABI_SoulWallet, this.provider);
+            const entryPoint: string = await _soulWallet.getFunction("entryPoint").staticCall();
+
+            _onChainConfig = new onChainConfig();
 
             const _bundlerChainIdBigint = (await this.bundler.getNetwork()).chainId;
             const _bundlerChainId: number = Number(_bundlerChainIdBigint);
@@ -141,6 +149,7 @@ export class SoulWallet implements ISoulWallet {
                 );
             }
         }
+        this._onChainConfig = _onChainConfig;
         return new Ok(_onChainConfig);
     }
 
