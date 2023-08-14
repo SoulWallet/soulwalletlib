@@ -320,11 +320,8 @@ export class ECDSA {
  */
 export class ABFA {
 
-    static async scrypt(password: string, salt: string = scryptConfig.salt): Promise<Result<string, Error>> {
+    static async scrypt(password: string, salt: string = scryptConfig.salt, N = scryptConfig.N, r = scryptConfig.r, p = scryptConfig.p): Promise<Result<string, Error>> {
         const keylen = scryptConfig.keylen;
-        const N = scryptConfig.N;
-        const r = scryptConfig.r;
-        const p = scryptConfig.p;
         try {
             const key: Uint8Array = await _scrypt(Utils.toBuffer(password), Utils.toBuffer(salt), N, r, p, keylen);
             const _keyBase64 = await AES_256_GCM.uint8ArrayToBase64(key);
