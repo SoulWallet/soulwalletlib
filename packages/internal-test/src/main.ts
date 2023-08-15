@@ -9,6 +9,7 @@ import { SocialRecovery } from "./socialRecovery.js";
 import { Decode } from './decode.js';
 import { CryptoTest } from './crypto.js';
 import { L1KeyStoreTest } from './L1KeyStore.js';
+import { GasApproach } from './gasApproach.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -198,15 +199,26 @@ async function main() {
         ).run();
 
 
+        // await new GasApproach(
+        //     RPC,
+        //     BUNDLER,
+        //     contractInstance['SoulwalletFactory'],
+        //     contractInstance['DefaultCallbackHandler'],
+        //     contractInstance['KeyStoreModuleProxy'],
+        //     contractInstance['SecurityControlModule'],
+        //     defaultWallet
+        // ).run();
+
         await new Deploy(
             RPC,
             BUNDLER,
             contractInstance['SoulwalletFactory'],
             contractInstance['DefaultCallbackHandler'],
-            contractInstance['KeyStoreModule'],
+            contractInstance['KeyStoreModuleProxy'],
             contractInstance['SecurityControlModule'],
             defaultWallet
         ).run();
+
 
 
     }
