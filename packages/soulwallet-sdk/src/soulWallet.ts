@@ -632,7 +632,7 @@ export class SoulWallet implements ISoulWallet {
 
             if (txs.length > 1) {
                 if (hasValue) {
-                    callData = abi.encodeFunctionData("executeBatchexecuteBatch(address[],uint256[],bytes[])", [to, value, data]);
+                    callData = abi.encodeFunctionData("executeBatch(address[],uint256[],bytes[])", [to, value, data]);
                 } else {
                     callData = abi.encodeFunctionData("executeBatch(address[],bytes[])", [to, data]);
                 }

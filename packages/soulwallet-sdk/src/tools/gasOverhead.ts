@@ -11,20 +11,23 @@ export class GasOverhead {
      * @memberof GasOverhead
      */
     public static calcGasOverhead(userOp: UserOperation) {
-        // #TODO need optimize
 
-        // preVerificationGas over head
+        // preVerificationGas overhead
         {
-            userOp.preVerificationGas = '0x' + (BigInt(userOp.preVerificationGas) + BigInt(10000)).toString(16);
+            // preVerificationGas overhead 1024 = 64bytes more ( 1024/16 = 64 )
+            userOp.preVerificationGas = '0x' + (BigInt(userOp.preVerificationGas) + BigInt(1024)).toString(16);
         }
 
-        // verificationGasLimit over head
+        // verificationGasLimit overhead
         {
-            if (userOp.paymasterAndData == '0x') {
-                userOp.verificationGasLimit = '0x' + (BigInt(userOp.verificationGasLimit) + BigInt(100000)).toString(16);
-            } else {
-                userOp.verificationGasLimit = '0x' + (BigInt(userOp.verificationGasLimit) + BigInt(150000)).toString(16);
+            let verificationGasLimitOverHead = 21000n;
+            if (userOp.initCode !== '0x') {
+                verificationGasLimitOverHead += 13000n;
             }
+            if (userOp.paymasterAndData !== '0x') {
+                verificationGasLimitOverHead += 30000n;
+            }
+            userOp.verificationGasLimit = '0x' + (BigInt(userOp.verificationGasLimit) + verificationGasLimitOverHead).toString(16);
         }
     }
 }
