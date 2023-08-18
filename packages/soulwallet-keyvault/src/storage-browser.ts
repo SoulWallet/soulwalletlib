@@ -13,10 +13,11 @@ export class Storage implements IStorage {
                 throw new Error('localStorage is not available');
             }
             // extension environment
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const _window = window as any;
-            if (typeof _window.chrome !== 'undefined' && _window.chrome.runtime && _window.chrome.runtime.id) {
+            if (typeof _window.chrome !== 'undefined' && _window.chrome.runtime !== undefined && _window.chrome.runtime.id !== undefined) {
                 // check if chrome.storage.local is available
-                if (typeof _window.chrome.storage !== 'undefined' && _window.chrome.storage.local) {
+                if (typeof _window.chrome.storage !== 'undefined' && _window.chrome.storage.local !== undefined && _window.chrome.storage.local.set !== undefined && _window.chrome.storage.local.get !== undefined) {
                     this._chromeExtension = true;
                 }
             }
@@ -53,12 +54,12 @@ export class Storage implements IStorage {
 
     public async save<T extends Serializable>(location: StorageLocation, key: string, value: T): Promise<Result<void, Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
             data.OK.set(key, JSON.stringify(value));
-            let re = await this._save(location, data.OK);
+            const re = await this._save(location, data.OK);
             if (re.isErr()) {
                 return new Err(re.ERR);
             }
@@ -75,12 +76,12 @@ export class Storage implements IStorage {
 
     public async remove(location: StorageLocation, key: string): Promise<Result<void, Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
             data.OK.delete(key);
-            let re = await this._save(location, data.OK);
+            const re = await this._save(location, data.OK);
             if (re.isErr()) {
                 return new Err(re.ERR);
             }
@@ -96,7 +97,7 @@ export class Storage implements IStorage {
 
     public async listKeys(location: StorageLocation): Promise<Result<string[], Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
@@ -112,7 +113,7 @@ export class Storage implements IStorage {
 
     public async load<T extends Serializable>(location: StorageLocation, key: string, defaultValue: T): Promise<Result<T, Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
@@ -133,7 +134,7 @@ export class Storage implements IStorage {
 
     private async _save(location: StorageLocation, data: Map<string, string>): Promise<Result<void, Error>> {
         try {
-            let _data = JSON.stringify(Array.from(data));
+            const _data = JSON.stringify(Array.from(data));
             const re = this.paddingTo1MB(_data);
             if (re.isErr()) {
                 return new Err(re.ERR);
@@ -219,11 +220,12 @@ export class Storage implements IStorage {
     }
 
     private chromeStorageSet(key: string, value: string): Promise<Result<void, Error>> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const _window = window as any;
         const storage = _window.chrome.storage.local;
-        return new Promise((resolve, _) => {
+        return new Promise((resolve) => {
             storage.set({ key: value }, () => {
-                if (_window.chrome.runtime.lastError) {
+                if (_window.chrome.runtime.lastError !== undefined) {
                     resolve(new Err(new Error(_window.chrome.runtime.lastError.message)));
                 } else {
                     resolve(new Ok(void (0)));
@@ -232,11 +234,13 @@ export class Storage implements IStorage {
         });
     }
     private chromeStorageGet(key: string): Promise<Result<string, Error>> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const _window = window as any;
         const storage = _window.chrome.storage.local;
-        return new Promise((resolve, _) => {
+        return new Promise((resolve) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             storage.get([key], (result: any) => {
-                if (_window.chrome.runtime.lastError) {
+                if (_window.chrome.runtime.lastError !== undefined) {
                     resolve(new Err(new Error(_window.chrome.runtime.lastError.message)));
                 } else {
                     if (typeof result.key === 'undefined') {

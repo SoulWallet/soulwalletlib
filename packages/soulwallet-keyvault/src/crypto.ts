@@ -185,8 +185,8 @@ export class ECDSA {
  */
 export class ABFA {
     static scrypt(password: string, salt: string = scryptConfig.salt, N = scryptConfig.N, r = scryptConfig.r, p = scryptConfig.p): Promise<Result<string, Error>> {
-        return new Promise((resolve, reject) => {
-            let passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
+        return new Promise((resolve) => {
+            const passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
             password = '';// clear password
             const keylen = scryptConfig.keylen;
             _scrypt(passwordBuffer, Utils.toBuffer(salt), keylen, { N, r, p }, (error, derivedKey) => {
@@ -206,6 +206,7 @@ export class ABFA {
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static async argon2id(password: string, salt: string): Promise<string> {
         // const _salt = Buffer.from(salt, 'utf8');
         // const hash = await _argon2.hash(password, {

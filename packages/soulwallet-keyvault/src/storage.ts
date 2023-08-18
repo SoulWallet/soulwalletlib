@@ -11,8 +11,7 @@ export class Storage implements IStorage {
     private _dataStorageFile: string;
 
     constructor() {
-        if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-        } else {
+        if (typeof process === 'undefined' || process.versions === undefined || process.versions.node === undefined) {
             throw new Error("only available in NodeJS");
         }
 
@@ -79,7 +78,7 @@ export class Storage implements IStorage {
 
     private async _save(location: StorageLocation, data: Map<string, string>): Promise<Result<void, Error>> {
         try {
-            let _data = JSON.stringify(Array.from(data));
+            const _data = JSON.stringify(Array.from(data));
             const re = this.paddingTo1MB(_data);
             if (re.isErr()) {
                 return new Err(re.ERR);
@@ -105,12 +104,12 @@ export class Storage implements IStorage {
 
     public async save<T extends Serializable>(location: StorageLocation, key: string, value: T): Promise<Result<void, Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
             data.OK.set(key, JSON.stringify(value));
-            let re = await this._save(location, data.OK);
+            const re = await this._save(location, data.OK);
             if (re.isErr()) {
                 return new Err(re.ERR);
             }
@@ -127,12 +126,12 @@ export class Storage implements IStorage {
 
     public async remove(location: StorageLocation, key: string): Promise<Result<void, Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
             data.OK.delete(key);
-            let re = await this._save(location, data.OK);
+            const re = await this._save(location, data.OK);
             if (re.isErr()) {
                 return new Err(re.ERR);
             }
@@ -149,7 +148,7 @@ export class Storage implements IStorage {
 
     public async listKeys(location: StorageLocation): Promise<Result<string[], Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }
@@ -165,7 +164,7 @@ export class Storage implements IStorage {
 
     public async load<T extends Serializable>(location: StorageLocation, key: string, defaultValue: T): Promise<Result<T, Error>> {
         try {
-            let data = await this._read(location);
+            const data = await this._read(location);
             if (data.isErr()) {
                 return new Err(data.ERR);
             }

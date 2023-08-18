@@ -137,7 +137,7 @@ export class L1KeyStore implements IL1KeyStore {
                 return 1;
             }
         });
-        let ret = TypeGuard.onlyBytes32(salt);
+        const ret = TypeGuard.onlyBytes32(salt);
         if (ret.isErr()) {
             throw new Error(ret.ERR);
         }
@@ -220,14 +220,14 @@ export class L1KeyStore implements IL1KeyStore {
                     signs.push(oneSign);
                     skipTimes = 0;
                 }
-                let signature = guardianSign.signature || '';
+                let signature = guardianSign.signature ?? "";
                 if (signature.startsWith('0x')) {
                     signature = signature.slice(2);
                 }
                 if (signature.length % 2 !== 0) {
                     throw new Error('signature invalid');
                 }
-                let signatureLen = signature.length / 2;
+                const signatureLen = signature.length / 2;
                 switch (guardianSign.signatureType) {
                     case 0://0:EIP-1271 signature
                         /*
@@ -256,13 +256,12 @@ export class L1KeyStore implements IL1KeyStore {
                                 EOA signature
                         */
                         // r, s, v => v, s, r
-                        const r = signature.slice(0, 64);
-                        const s = signature.slice(64, 128);
-                        const v = signature.slice(128, 130);
+                        // eslint-disable-next-line no-case-declarations
+                        const r = signature.slice(0, 64); const s = signature.slice(64, 128); const v = signature.slice(128, 130);
                         oneSign = v + s + r;
                         break;
                     default:
-                        throw new Error('Unkown signatureType');
+                        throw new Error('unknown signatureType');
                 }
                 signs.push(oneSign);
             }
@@ -457,6 +456,7 @@ export class L1KeyStore implements IL1KeyStore {
     static getTypedData(type: KeyStoreTypedDataType, chainId: number, keyStoreContract: string, slot: string, nonce: number, data?: string): {
         domain: TypedDataDomain,
         types: Record<string, Array<TypedDataField>>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: Record<string, any>,
         typedMessage: string
     } {
@@ -468,6 +468,7 @@ export class L1KeyStore implements IL1KeyStore {
             verifyingContract: ethers.getAddress(keyStoreContract)
         };
         let types: Record<string, Array<TypedDataField>>;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let value: Record<string, any>;
         switch (type) {
             case KeyStoreTypedDataType.TYPE_HASH_SET_KEY:
@@ -511,6 +512,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newGuardianSafePeriod", type: "uint64" }
                     ]
                 };
+                // eslint-disable-next-line no-case-declarations
                 const ret = TypeGuard.maxToUint64(data!);
                 if (ret.isErr()) {
                     throw new Error('data must be uint64');
@@ -529,7 +531,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "nonce", type: "uint256" }
                     ]
                 };
-                if (typeof data !== undefined) {
+                if (typeof data !== 'undefined') {
                     throw new Error('data must be undefined');
                 }
                 value = {
@@ -545,7 +547,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "nonce", type: "uint256" }
                     ]
                 };
-                if (typeof data !== undefined) {
+                if (typeof data !== 'undefined') {
                     throw new Error('data must be undefined');
                 }
                 value = {
@@ -620,6 +622,7 @@ export class L1KeyStore implements IL1KeyStore {
     ): Promise<Result<{
         domain: TypedDataDomain,
         types: Record<string, Array<TypedDataField>>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: Record<string, any>,
         typedMessage: string
     }, Error>> {

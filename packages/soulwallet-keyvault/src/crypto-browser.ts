@@ -60,7 +60,7 @@ export class AES_256_GCM {
             { name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]
         );
         const jwk = await window.crypto.subtle.exportKey("jwk", key);
-        if (!jwk.k) {
+        if (jwk.k === undefined || jwk.k === '') {
             throw new Error('can not generate AES256GCM key');
         }
         return jwk.k;
@@ -324,7 +324,7 @@ export class ABFA {
         /* 
          * Note: in scrypt-js: password = (password.length <= 64) ? password : SHA256(password);
          */
-        let passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
+        const passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
         password = '';// clear password
         const keylen = scryptConfig.keylen;
         try {
@@ -345,11 +345,10 @@ export class ABFA {
             } else {
                 return new Err(new Error('unknown error'));
             }
-        } finally {
-
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static async argon2id(password: string, salt: string): Promise<string> {
         throw new Error('not implemented');
     }

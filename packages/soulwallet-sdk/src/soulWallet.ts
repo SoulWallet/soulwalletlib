@@ -610,9 +610,9 @@ export class SoulWallet implements ISoulWallet {
             */
             const abi = new ethers.Interface(ABI_SoulWallet);
 
-            let to: string[] = [];
-            let value: string[] = [];
-            let data: string[] = [];
+            const to: string[] = [];
+            const value: string[] = [];
+            const data: string[] = [];
             let hasValue = false;
             for (let i = 0; i < txs.length; i++) {
                 const _to = txs[i].to;

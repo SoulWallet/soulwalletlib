@@ -1,6 +1,6 @@
 {
   "name": "@soulwallet/result",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A lib designed based on the philosophy of 'Errors are values'",
   "author": "Jayden@SoulWallet",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -29,7 +29,6 @@
     "tsc": "tsc",
     "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.cjs.json;ts-node ./create-package-json.ts",
     "javascript-obfuscator": "javascript-obfuscator",
-    "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
     "test":"jest"
   },
   "bugs": {

@@ -13,7 +13,7 @@ function _BigNumberishToHexString(value: BigNumberish): string {
 }
 
 function _HexstringToBytes(value: string): string {
-    if (!value) {
+    if (value.length === 0) {
         return '0x';
     }
     if (value.startsWith('0x')) {

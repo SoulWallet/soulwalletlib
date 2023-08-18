@@ -1,4 +1,4 @@
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Result } from '@soulwallet/result';
 
 
 export interface Serializable {

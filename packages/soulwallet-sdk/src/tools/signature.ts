@@ -153,7 +153,7 @@ export class Signature {
                     if (TypeGuard.onlyAddress(guardianHookPluginAddress).isErr()) throw new Error('invalid guardHookInputData');
                     guardHooks.push(guardianHookPluginAddress);
                 }
-                for (let key in guardHookInputData.inputData) {
+                for (const key in guardHookInputData.inputData) {
                     const guardianHookPluginAddress: string = key.toLocaleLowerCase();
                     if (TypeGuard.onlyAddress(guardianHookPluginAddress).isErr()) throw new Error('invalid guardHookInputData');
                     if (!guardHooks.includes(key)) {

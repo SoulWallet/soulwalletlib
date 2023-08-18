@@ -1,7 +1,7 @@
 {
   "name": "@soulwallet/soulwallet",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.1.0",
   "scripts": {
     "typedoc": "typedoc",
     "docs": "pnpm -r run docs",
@@ -11,7 +11,6 @@
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm -r run build",
     "rebuild": "rm -rf ./packages/*/lib.*;pnpm run build",
-    "release": "pnpm -r run release",
     "preTest": "cd soul-wallet-contract/ && chmod +x .env && npm install && npm run build && cd ../bundler/ && yarn && yarn preprocess",
     "internalTest": "pnpm -r run internalTest --filter 'internal-test'",
     "test": "pnpm -r run test",
@@ -21,7 +20,9 @@
     "clean": "lerna run clean && rm -rf ./packages/*/lib/*",
     "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
     "bundler": "cd bundler/ && yarn run bundler",
-    "publish": "pnpm -r publish"
+    "changeset": "changeset",
+    "lint": "eslint . --ext .ts",
+    "release": "pnpm run lint && pnpm run rebuild && pnpm run test && changeset publish"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.9",
@@ -33,6 +34,9 @@
     "@jest/globals": "^29.6.2",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
     "javascript-obfuscator": "^4.0.2",
     "jest": "^29.6.2",
     "jest-config": "^29.6.2",

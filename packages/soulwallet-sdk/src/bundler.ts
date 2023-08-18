@@ -28,6 +28,7 @@ export class Bundler implements IBundler {
             return new Ok(userOpHash);
         } catch (error: unknown) {
             if (error instanceof Error) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const subError = (<any>error).error;
                 if (typeof subError === 'object' && typeof subError.code === 'number' && typeof subError.message === 'string') {
                     return new Err(new UserOpErrors(subError.code, subError.message, typeof subError.data === 'object' ? subError.data : undefined));
@@ -49,7 +50,7 @@ export class Bundler implements IBundler {
                     entryPoint
                 ]
             ) as UserOpGas;
-            if (!userOpGas) {
+            if (userOpGas === null) {
                 return new Err(new UserOpErrors(UserOpErrorCodes.UnknownError, 'unknown error'));
             } else {
                 return new Ok(userOpGas);
@@ -57,6 +58,7 @@ export class Bundler implements IBundler {
 
         } catch (error: unknown) {
             if (error instanceof Error) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const subError = (<any>error).error;
                 if (typeof subError === 'object' && typeof subError.code === 'number' && typeof subError.message === 'string') {
                     return new Err(new UserOpErrors(subError.code, subError.message, typeof subError.data === 'object' ? subError.data : undefined));

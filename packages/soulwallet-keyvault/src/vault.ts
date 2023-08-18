@@ -4,7 +4,7 @@ import { Storage } from './storage.js';
 import { StorageLocation } from './interface/IStorage.js';
 import { AES_256_GCM, ECDSA, ABFA, Utils } from './crypto.js';
 import { ethers } from 'ethers';
-import mitt, { Emitter, EventHandlerMap } from 'mitt'
+import mitt, { Emitter } from 'mitt'
 
 /**
  * Vault
@@ -43,7 +43,7 @@ export class Vault implements IVault {
         this._EventEmitter = mitt<VaultEvents>();
     }
 
-    public on<Key extends keyof VaultEvents>(eventName: Key, handler: (arg: VaultEvents[Key]) => any) {
+    public on<Key extends keyof VaultEvents>(eventName: Key, handler: (arg: VaultEvents[Key]) => unknown) {
         try {
             this._EventEmitter.on(eventName, handler);
         } catch (error: unknown) {
@@ -51,7 +51,7 @@ export class Vault implements IVault {
         }
     }
 
-    public off<Key extends keyof VaultEvents>(eventName: Key, handler?: (arg: VaultEvents[Key]) => any) {
+    public off<Key extends keyof VaultEvents>(eventName: Key, handler?: (arg: VaultEvents[Key]) => unknown) {
         try {
             this._EventEmitter.off(eventName, handler);
         } catch (error: unknown) {
@@ -156,6 +156,7 @@ export class Vault implements IVault {
      * @return {*}  {Promise<Result<void, Error>>}
      * @memberof Vault
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async restore(exportData: string, password: string): Promise<Result<void, Error>> {
         throw new Error('Method not implemented.');
     }
@@ -205,7 +206,7 @@ export class Vault implements IVault {
         if (this._AES_256_GCM) {
             this._AES_256_GCM = undefined;
         }
-        for (let i of this._account.values()) {
+        for (const i of this._account.values()) {
             try {
                 i.destroy();
             } catch (error) {
@@ -307,6 +308,7 @@ export class Vault implements IVault {
      * @return {*}  {Promise<Result<void, Error>>}
      * @memberof Vault
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async changePassword(oldPassword: string, newPassword: string): Promise<Result<void, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
@@ -321,6 +323,7 @@ export class Vault implements IVault {
      * @return {*}  {Promise<Result<string, Error>>}
      * @memberof Vault
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async export(password: string): Promise<Result<string, Error>> {
         if ((await this.isLocked()).OK) {
             return new Err(new Error('locked'));
@@ -415,7 +418,7 @@ export class Vault implements IVault {
             return new Err(_storageRet.ERR);
         }
         const _addressList: string[] = [];
-        for (let i of _storageRet.OK) {
+        for (const i of _storageRet.OK) {
             if (i.startsWith('0x') && ethers.isAddress(i)) {
                 _addressList.push(i);
             }
@@ -512,11 +515,12 @@ export class Vault implements IVault {
      * @return {*}  {Promise<Result<string, Error>>}
      * @memberof Vault
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public async typedDataSign(address: string, domain: ethers.TypedDataDomain, types: Record<string, Array<ethers.TypedDataField>>, value: Record<string, any>, provider?: string | ethers.JsonRpcProvider): Promise<Result<string, Error>> {
         // refer: ethers.js
 
         let _provider: ethers.JsonRpcProvider | null = null;
-        if (provider) {
+        if (provider !== undefined) {
             if (typeof provider === 'string') {
                 _provider = new ethers.JsonRpcProvider(provider);
             } else {
