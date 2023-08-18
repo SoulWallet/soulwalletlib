@@ -115,7 +115,7 @@ export class Signature {
     */
 
     static onlyEOASignature(signature: string): void {
-        if (TypeGuard.onlyBytes(signature).isErr()) throw new Error('invalid EOA signature');
+        if (TypeGuard.onlyBytes(signature).isErr() === true) throw new Error('invalid EOA signature');
         if (signature.length !== 132) {
             throw new Error('invalid EOA signature');
         }
@@ -150,17 +150,17 @@ export class Signature {
             {
                 for (let i = 0; i < guardHookInputData.guardHooks.length; i++) {
                     const guardianHookPluginAddress: string = guardHookInputData.guardHooks[i].toLocaleLowerCase()
-                    if (TypeGuard.onlyAddress(guardianHookPluginAddress).isErr()) throw new Error('invalid guardHookInputData');
+                    if (TypeGuard.onlyAddress(guardianHookPluginAddress).isErr() === true) throw new Error('invalid guardHookInputData');
                     guardHooks.push(guardianHookPluginAddress);
                 }
                 for (const key in guardHookInputData.inputData) {
                     const guardianHookPluginAddress: string = key.toLocaleLowerCase();
-                    if (TypeGuard.onlyAddress(guardianHookPluginAddress).isErr()) throw new Error('invalid guardHookInputData');
+                    if (TypeGuard.onlyAddress(guardianHookPluginAddress).isErr() === true) throw new Error('invalid guardHookInputData');
                     if (!guardHooks.includes(key)) {
                         throw new Error('invalid guardHookInputData');
                     }
                     const inputDataValue = guardHookInputData.inputData[key].toLocaleLowerCase();
-                    if (TypeGuard.onlyBytes(inputDataValue).isErr()) throw new Error('invalid guardHookInputData');
+                    if (TypeGuard.onlyBytes(inputDataValue).isErr() === true) throw new Error('invalid guardHookInputData');
                     inputData[key] = inputDataValue;
                 }
             }
@@ -206,7 +206,7 @@ export class Signature {
         packedUserOpHash: string,
         validationData: string
     } {
-        if (TypeGuard.onlyBytes32(userOpHash).isErr()) throw new Error('invalid userOpHash');
+        if (TypeGuard.onlyBytes32(userOpHash).isErr() === true) throw new Error('invalid userOpHash');
 
         if (validAfter !== undefined && validUntil !== undefined) {
             if (validAfter >= validUntil) {

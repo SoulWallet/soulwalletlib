@@ -22,7 +22,7 @@ describe('Assets', () => {
         // chainId: 1
         {
             const ret = await getAsset(1, '0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48');
-            expect(ret.isOk()).toBeTruthy();
+            expect(ret.isOk() === true).toBeTruthy();
             const tokenInfo = ret.OK;
             expect(tokenInfo.decimals).toBe(6);
             expect(tokenInfo.symbol).toBe('USDC');
@@ -32,7 +32,7 @@ describe('Assets', () => {
         // chainId: 10
         {
             const ret = await getAsset(10, '0x7f5c764cbc14f9669b88837ca1490cca17c31607');
-            expect(ret.isOk()).toBeTruthy();
+            expect(ret.isOk() === true).toBeTruthy();
             const tokenInfo = ret.OK;
             expect(tokenInfo.decimals).toBe(6);
             expect(tokenInfo.symbol).toBe('USDC');
@@ -42,7 +42,7 @@ describe('Assets', () => {
         // chainId: 137
         {
             const ret = await getAsset(137, '0x2791bca1f2de4661ed88a30c99a7a9449aa84174');
-            expect(ret.isOk()).toBeTruthy();
+            expect(ret.isOk() === true).toBeTruthy();
             const tokenInfo = ret.OK;
             expect(tokenInfo.decimals).toBe(6);
             expect(tokenInfo.symbol).toBe('USDC');
@@ -52,7 +52,7 @@ describe('Assets', () => {
         // chainId: 42161
         {
             const ret = await getAsset(42161, '0xaf88d065e77c8cc2239327c5edb3a432268e5831');
-            expect(ret.isOk()).toBeTruthy();
+            expect(ret.isOk() === true).toBeTruthy();
             const tokenInfo = ret.OK;
             expect(tokenInfo.decimals).toBe(6);
             expect(tokenInfo.symbol).toBe('USDC');

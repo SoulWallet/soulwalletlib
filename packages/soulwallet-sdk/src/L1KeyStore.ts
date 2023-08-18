@@ -30,13 +30,13 @@ export class L1KeyStore implements IL1KeyStore {
      */
     constructor(_L1Provider: string | ethers.JsonRpcProvider, _L1KeyStoreContractAddress: string) {
         const ret = TypeGuard.onlyAddress(_L1KeyStoreContractAddress);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw new Error(ret.ERR);
         }
 
         if (typeof _L1Provider === 'string') {
             const ret = TypeGuard.httpOrHttps(_L1Provider);
-            if (ret.isErr()) {
+            if (ret.isErr() === true) {
                 throw new Error(ret.ERR);
             }
             this.L1Provider = new ethers.JsonRpcProvider(_L1Provider);
@@ -80,15 +80,15 @@ export class L1KeyStore implements IL1KeyStore {
      */
     static getSlot(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
         let ret = TypeGuard.onlyBytes32(initialKey);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw new Error(ret.ERR);
         }
         ret = TypeGuard.onlyBytes32(initialGuardianHash);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw new Error(ret.ERR);
         }
         ret = this.guardianSafePeriodGuard(initialGuardianSafePeriod);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw new Error(ret.ERR);
         }
 
@@ -122,7 +122,7 @@ export class L1KeyStore implements IL1KeyStore {
         guardians.sort((a, b) => {
             {
                 const ret = TypeGuard.onlyAddress(a);
-                if (ret.isErr()) {
+                if (ret.isErr() === true) {
                     throw new Error(ret.ERR);
                 }
             }
@@ -138,7 +138,7 @@ export class L1KeyStore implements IL1KeyStore {
             }
         });
         const ret = TypeGuard.onlyBytes32(salt);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw new Error(ret.ERR);
         }
 
@@ -294,7 +294,7 @@ export class L1KeyStore implements IL1KeyStore {
      */
     async getKey(slot: string): Promise<Result<string, Error>> {
         const ret = TypeGuard.onlyBytes32(slot);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             return new Err(
                 new Error(ret.ERR)
             );
@@ -323,7 +323,7 @@ export class L1KeyStore implements IL1KeyStore {
      */
     async getKeyStoreInfo(slot: string): Promise<Result<KeyStoreInfo, Error>> {
         const ret = TypeGuard.onlyBytes32(slot);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             return new Err(
                 new Error(ret.ERR)
             );
@@ -396,7 +396,7 @@ export class L1KeyStore implements IL1KeyStore {
     async getSetKeySigHash(slot: string, bytes32Key: string): Promise<Result<string, Error>> {
         TypeGuard.onlyBytes32(bytes32Key);
         const ret = await this.getKeyStoreInfo(slot);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             return new Err(ret.ERR);
         }
         const nonce = ret.OK.nonce;
@@ -414,7 +414,7 @@ export class L1KeyStore implements IL1KeyStore {
     async getSetGuardianSigHash(slot: string, guardianHash: string): Promise<Result<string, Error>> {
         TypeGuard.onlyBytes32(guardianHash);
         const ret = await this.getKeyStoreInfo(slot);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             return new Err(ret.ERR);
         }
         const nonce = ret.OK.nonce;
@@ -460,7 +460,7 @@ export class L1KeyStore implements IL1KeyStore {
         value: Record<string, any>,
         typedMessage: string
     } {
-        if (TypeGuard.onlyBytes32(slot).isErr()) throw new Error('slot must be bytes32');
+        if (TypeGuard.onlyBytes32(slot).isErr() === true) throw new Error('slot must be bytes32');
         const domain: TypedDataDomain = {
             name: "KeyStore",
             version: "1",
@@ -480,7 +480,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newSigner", type: "bytes32" }
                     ]
                 };
-                if (TypeGuard.onlyBytes32(data!).isErr()) throw new Error('data must be bytes32');
+                if (TypeGuard.onlyBytes32(data!).isErr() === true) throw new Error('data must be bytes32');
                 value = {
                     keyStoreSlot: slot,
                     nonce: nonce,
@@ -496,7 +496,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newGuardianHash", type: "bytes32" }
                     ]
                 };
-                if (TypeGuard.onlyBytes32(data!).isErr()) throw new Error('data must be bytes32');
+                if (TypeGuard.onlyBytes32(data!).isErr() === true) throw new Error('data must be bytes32');
                 value = {
                     keyStoreSlot: slot,
                     nonce: nonce,
@@ -514,7 +514,7 @@ export class L1KeyStore implements IL1KeyStore {
                 };
                 // eslint-disable-next-line no-case-declarations
                 const ret = TypeGuard.maxToUint64(data!);
-                if (ret.isErr()) {
+                if (ret.isErr() === true) {
                     throw new Error('data must be uint64');
                 }
                 value = {
@@ -564,7 +564,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newSigner", type: "bytes32" },
                     ]
                 };
-                if (TypeGuard.onlyBytes32(data!).isErr()) throw new Error('data must be bytes32');
+                if (TypeGuard.onlyBytes32(data!).isErr() === true) throw new Error('data must be bytes32');
                 value = {
                     keyStoreSlot: slot,
                     nonce: nonce,
@@ -639,7 +639,7 @@ export class L1KeyStore implements IL1KeyStore {
             }
         }
         const slotInfo = await this.getKeyStoreInfo(slot);
-        if (slotInfo.isErr()) {
+        if (slotInfo.isErr() === true) {
             return new Err(slotInfo.ERR);
         }
 

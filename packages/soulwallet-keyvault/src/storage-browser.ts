@@ -55,12 +55,12 @@ export class Storage implements IStorage {
     public async save<T extends Serializable>(location: StorageLocation, key: string, value: T): Promise<Result<void, Error>> {
         try {
             const data = await this._read(location);
-            if (data.isErr()) {
+            if (data.isErr() === true) {
                 return new Err(data.ERR);
             }
             data.OK.set(key, JSON.stringify(value));
             const re = await this._save(location, data.OK);
-            if (re.isErr()) {
+            if (re.isErr() === true) {
                 return new Err(re.ERR);
             }
             return new Ok(void (0));
@@ -77,12 +77,12 @@ export class Storage implements IStorage {
     public async remove(location: StorageLocation, key: string): Promise<Result<void, Error>> {
         try {
             const data = await this._read(location);
-            if (data.isErr()) {
+            if (data.isErr() === true) {
                 return new Err(data.ERR);
             }
             data.OK.delete(key);
             const re = await this._save(location, data.OK);
-            if (re.isErr()) {
+            if (re.isErr() === true) {
                 return new Err(re.ERR);
             }
             return new Ok(void (0));
@@ -98,7 +98,7 @@ export class Storage implements IStorage {
     public async listKeys(location: StorageLocation): Promise<Result<string[], Error>> {
         try {
             const data = await this._read(location);
-            if (data.isErr()) {
+            if (data.isErr() === true) {
                 return new Err(data.ERR);
             }
             return new Ok(Array.from(data.OK.keys()));
@@ -114,7 +114,7 @@ export class Storage implements IStorage {
     public async load<T extends Serializable>(location: StorageLocation, key: string, defaultValue: T): Promise<Result<T, Error>> {
         try {
             const data = await this._read(location);
-            if (data.isErr()) {
+            if (data.isErr() === true) {
                 return new Err(data.ERR);
             }
             if (data.OK.has(key)) {
@@ -136,7 +136,7 @@ export class Storage implements IStorage {
         try {
             const _data = JSON.stringify(Array.from(data));
             const re = this.paddingTo1MB(_data);
-            if (re.isErr()) {
+            if (re.isErr() === true) {
                 return new Err(re.ERR);
             }
             let key = '';
@@ -178,7 +178,7 @@ export class Storage implements IStorage {
             } else {
                 re = await this.localStorageGet(key);
             }
-            if (re.isErr()) {
+            if (re.isErr() === true) {
                 return new Err(re.ERR);
             }
             return new Ok(new Map(JSON.parse(re.OK)));

@@ -82,7 +82,7 @@ class Decoder {
             }
 
             const decodeResult = await this.decodeItem(_from, _to[i], value, _data[i], chainId);
-            if (decodeResult.isErr()) {
+            if (decodeResult.isErr() === true) {
                 return new Err(
                     new Error('decode error')
                 );
@@ -142,17 +142,17 @@ class Decoder {
         };
 
         const fromInfoRet = await getAsset(chainId, from);
-        if (fromInfoRet.isOk()) {
+        if (fromInfoRet.isOk() === true) {
             decodeResult.fromInfo = fromInfoRet.OK;
         }
 
         const toInfoRet = await getAsset(chainId, to);
-        if (toInfoRet.isOk()) {
+        if (toInfoRet.isOk() === true) {
             decodeResult.toInfo = toInfoRet.OK;
         }
 
         const params = await this.decodeFunctionParams(calldata);
-        if (params.isOk()) {
+        if (params.isOk() === true) {
             decodeResult.method = params.OK;
         }
 

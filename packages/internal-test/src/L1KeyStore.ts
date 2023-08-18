@@ -35,7 +35,7 @@ export class L1KeyStoreTest {
             const _slot = '0xc83ce2ae5f0849408e8430aab8302ba83b8993ccec901ca1a9f5136a3892afbc';
             const _newKey = L1KeyStore.addressToBytes32('0x5B38Da6a701c568545dCfcB03FcB875f56beddC4');
             const _value = await _L1KeyStore.getSetKeySigHash(_slot, _newKey);
-            if (_value.isErr()) {
+            if (_value.isErr() === true) {
                 throw new Error(`Expected Ok but got Err: ${_value.ERR.message}`);
             }
         }
@@ -43,7 +43,7 @@ export class L1KeyStoreTest {
             const _slot = '0xc83ce2ae5f0849408e8430aab8302ba83b8993ccec901ca1a9f5136a3892afbc';
             const _newGuardianHash = '0xf4bc49ca280d06067cb80250fb6d68e297fbf1bcabe8c633d2e27070278e9e75';
             const _value = await _L1KeyStore.getSetGuardianSigHash(_slot, _newGuardianHash);
-            if (_value.isErr()) {
+            if (_value.isErr() === true) {
                 throw new Error(`Expected Ok but got Err: ${_value.ERR.message}`);
             }
         }
@@ -83,7 +83,7 @@ export class L1KeyStoreTest {
                 slot,
                 newSigner
             );
-            if (ret.isErr()) {
+            if (ret.isErr() === true) {
                 throw new Error(`Expected Ok but got Err: ${ret.ERR.message}`);
             }
             let domain: TypedDataDomain = ret.OK.domain;
