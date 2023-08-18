@@ -168,7 +168,7 @@ export class Storage implements IStorage {
             if (data.isErr() === true) {
                 return new Err(data.ERR);
             }
-            if (data.OK.has(key)) {
+            if (data.OK.has(key) === true) {
                 const re = JSON.parse(data.OK.get(key) as string) as T;
                 return new Ok(re);
             } else {

@@ -239,7 +239,7 @@ export class Vault implements IVault {
             if (ret.isErr() === true) {
                 return new Err(ret.ERR);
             }
-            if (!ret.OK) {
+            if (ret.OK === false) {
                 return new Err(new Error('already unlocked'));
             }
 
@@ -277,7 +277,7 @@ export class Vault implements IVault {
             if (ret.isErr() === true) {
                 return new Err(ret.ERR);
             }
-            if (ret.OK) {
+            if (ret.OK === true) {
                 return new Err(new Error('already locked'));
             }
 
@@ -310,7 +310,7 @@ export class Vault implements IVault {
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async changePassword(oldPassword: string, newPassword: string): Promise<Result<void, Error>> {
-        if ((await this.isLocked()).OK) {
+        if ((await this.isLocked()).OK === true) {
             return new Err(new Error('locked'));
         }
         throw new Error('Method not implemented.');
@@ -325,7 +325,7 @@ export class Vault implements IVault {
      */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public async export(password: string): Promise<Result<string, Error>> {
-        if ((await this.isLocked()).OK) {
+        if ((await this.isLocked()).OK === true) {
             return new Err(new Error('locked'));
         }
         throw new Error('Method not implemented.');
@@ -349,7 +349,7 @@ export class Vault implements IVault {
      * @memberof Vault
      */
     public async importSigner(privateKey: string): Promise<Result<string/* EOA address */, Error>> {
-        if ((await this.isLocked()).OK) {
+        if ((await this.isLocked()).OK === true) {
             return new Err(new Error('locked'));
         }
         const _signKey = new ethers.SigningKey(privateKey);
@@ -387,7 +387,7 @@ export class Vault implements IVault {
      * @memberof Vault
      */
     public async removeSigner(address: string): Promise<Result<void, Error>> {
-        if ((await this.isLocked()).OK) {
+        if ((await this.isLocked()).OK === true) {
             return new Err(new Error('locked'));
         }
         address = ethers.getAddress(address);
@@ -419,7 +419,7 @@ export class Vault implements IVault {
         }
         const _addressList: string[] = [];
         for (const i of _storageRet.OK) {
-            if (i.startsWith('0x') && ethers.isAddress(i)) {
+            if (i.startsWith('0x') === true && ethers.isAddress(i) === true) {
                 _addressList.push(i);
             }
         }
@@ -428,7 +428,7 @@ export class Vault implements IVault {
     }
 
     private async _loadSigner(address: string): Promise<Result<ECDSA, Error>> {
-        if ((await this.isLocked()).OK) {
+        if ((await this.isLocked()).OK === true) {
             return new Err(new Error('locked'));
         }
         address = ethers.getAddress(address);
