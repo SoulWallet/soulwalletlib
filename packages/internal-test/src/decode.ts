@@ -70,7 +70,7 @@ export class Decode {
         const entryPoint = '0xb';
 
         const ret = await DecodeUserOp(chainId, entryPoint, userOp);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw new Error(
                 ret.ERR.message
             );

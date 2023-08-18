@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/decoder",
-    "version": "0.0.13",
+    "version": "0.1.0",
     "description": "A lib for decode userOp.calldata",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -29,7 +29,6 @@
         "tsc": "tsc",
         "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.cjs.json;ts-node ./create-package-json.ts",
         "javascript-obfuscator": "javascript-obfuscator",
-        "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
         "generateBytes4": "ts-node --project ./tsconfig.dev.json ./src/dev/generateBytes4.ts",
         "test":"jest"
     },

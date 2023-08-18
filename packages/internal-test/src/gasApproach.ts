@@ -66,7 +66,7 @@ export class GasApproach {
                 signer,
                 initialGuardianHash
             );
-            if (userOpRet.isErr()) {
+            if (userOpRet.isErr() === true) {
                 throw new Error(userOpRet.ERR.message);
             }
             const userOp = userOpRet.OK;
@@ -78,7 +78,7 @@ export class GasApproach {
             const contractAddr = userOp.sender;
 
             const retErr1 = await soulWallet.estimateUserOperationGas(userOp);
-            if (retErr1.isErr()) {
+            if (retErr1.isErr() === true) {
                 throw new Error(retErr1.ERR.toString());
             }
             userOp.verificationGasLimit = BigInt(userOp.verificationGasLimit) + BigInt(33000);
@@ -86,7 +86,7 @@ export class GasApproach {
             // send eth to contractAddr , from this.defaultWallet
             {
                 const preFundRet = await soulWallet.preFund(userOp);
-                if (preFundRet.isErr()) {
+                if (preFundRet.isErr() === true) {
                     throw new Error(preFundRet.ERR.message);
                 }
                 const preFund = preFundRet.OK;
@@ -100,20 +100,20 @@ export class GasApproach {
             const validAfter: number = Math.floor(Date.now() / 1000);
             const validUntil = validAfter + 3600;
             const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
-            if (packedUserOpHashRet.isErr()) {
+            if (packedUserOpHashRet.isErr() === true) {
                 throw new Error(packedUserOpHashRet.ERR.message);
             }
             const packedUserOpHash = packedUserOpHashRet.OK;
             // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
             const signature = (await this.keyVault.personalSign(signer, packedUserOpHash.packedUserOpHash)).OK;
             const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
-            if (packedSignatureRet.isErr()) {
+            if (packedSignatureRet.isErr() === true) {
                 throw new Error(packedSignatureRet.ERR.message);
             }
             userOp.signature = packedSignatureRet.OK;
 
             const retErr2 = await soulWallet.sendUserOperation(userOp);
-            if (retErr2.isErr()) {
+            if (retErr2.isErr() === true) {
                 throw new Error(retErr2.ERR.toString());
             }
 
@@ -145,24 +145,24 @@ export class GasApproach {
             )).OK;
 
             const retErr3 = await soulWallet.estimateUserOperationGas(userOpTx);
-            if (retErr3.isErr()) {
+            if (retErr3.isErr() === true) {
                 throw new Error(retErr3.ERR.toString());
             }
             userOpTx.verificationGasLimit = BigInt(userOpTx.verificationGasLimit) + BigInt(verificationGasLimitOverHead);
             const packedUserOpHashRet2 = await soulWallet.packUserOpHash(userOpTx, validAfter, validUntil);
-            if (packedUserOpHashRet2.isErr()) {
+            if (packedUserOpHashRet2.isErr() === true) {
                 throw new Error(packedUserOpHashRet2.ERR.message);
             }
             const packedUserOpHash2 = packedUserOpHashRet2.OK;
             const signature2 = (await this.keyVault.personalSign(signer, packedUserOpHash2.packedUserOpHash)).OK;
             const packedSignatureRet2 = await soulWallet.packUserOpSignature(signature2, packedUserOpHash2.validationData);
-            if (packedSignatureRet2.isErr()) {
+            if (packedSignatureRet2.isErr() === true) {
                 throw new Error(packedSignatureRet2.ERR.message);
             }
             userOpTx.signature = packedSignatureRet2.OK;
 
             const retErr4 = await soulWallet.sendUserOperation(userOpTx);
-            if (retErr4.isErr()) {
+            if (retErr4.isErr() === true) {
                 throw new Error(retErr4.ERR.toString());
             }
             // wait for tx to be mined

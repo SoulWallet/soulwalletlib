@@ -89,7 +89,7 @@ export class KeyvaultPage implements OnInit {
   async init(enforce: boolean) {
 
     const re = await this.vault.init(this.password, enforce);
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     }
 
@@ -98,7 +98,7 @@ export class KeyvaultPage implements OnInit {
 
   async unlock() {
     const re = await this.vault.unlock(this.password);
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     }
     await this.reload();
@@ -106,7 +106,7 @@ export class KeyvaultPage implements OnInit {
 
   async lock() {
     const re = await this.vault.lock();
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     }
     await this.reload();
@@ -114,7 +114,7 @@ export class KeyvaultPage implements OnInit {
 
   async importSigner() {
     const re = await this.vault.importSigner(this.privateKey);
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     } else {
       alert('address:' + re.OK);
@@ -124,7 +124,7 @@ export class KeyvaultPage implements OnInit {
 
   async createSigner() {
     const re = await this.vault.createSigner();
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     } else {
       alert('address:' + re.OK);
@@ -134,7 +134,7 @@ export class KeyvaultPage implements OnInit {
 
   async removeSigner(signer: string) {
     const re = await this.vault.removeSigner(signer);
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     }
     await this.reload();
@@ -142,7 +142,7 @@ export class KeyvaultPage implements OnInit {
 
   async sign(signer: string) {
     const re = await this.vault.rawSign(signer, this.message);
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     } else {
       this.signData.set(signer + 'raw', re.OK);
@@ -162,7 +162,7 @@ export class KeyvaultPage implements OnInit {
 
   async personalSign(signer: string) {
     const re = await this.vault.personalSign(signer, this.message);
-    if (re.isErr()) {
+    if (re.isErr() === true) {
       alert(re.ERR.message);
     } else {
       this.signData.set(signer + 'personal', re.OK);

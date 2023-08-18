@@ -49,7 +49,7 @@ export class AES_256_GCM {
 
     public static async init(base64Key: string): Promise<Result<AES_256_GCM, Error>> {
         const key = await AES_256_GCM.importKey(base64Key);
-        if (key.isErr()) {
+        if (key.isErr() === true) {
             return new Err(key.ERR);
         }
         return new Ok(new AES_256_GCM(key.OK));
@@ -60,7 +60,7 @@ export class AES_256_GCM {
             { name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]
         );
         const jwk = await window.crypto.subtle.exportKey("jwk", key);
-        if (!jwk.k) {
+        if (jwk.k === undefined || jwk.k === '') {
             throw new Error('can not generate AES256GCM key');
         }
         return jwk.k;
@@ -203,7 +203,7 @@ export class AES_256_GCM {
     private async _decrypt(keyBuffer: CryptoKey, encryptedTextWithIvAndTag: string): Promise<Result<string, Error>> {
         try {
             const u8Arrary = await AES_256_GCM.base64ToUint8Array(encryptedTextWithIvAndTag);
-            if (u8Arrary.isErr()) {
+            if (u8Arrary.isErr() === true) {
                 return new Err(u8Arrary.ERR);
             }
             const data = u8Arrary.OK;
@@ -251,7 +251,7 @@ export class ECDSA {
         if (this._AES_256_GCM === undefined) {
             this._AES_256_GCM = await AES_256_GCM.randomAesVault();
             const ret = await this._AES_256_GCM.encrypt(privateKey);
-            if (ret.isErr()) {
+            if (ret.isErr() === true) {
                 throw ret.ERR;
             }
             this._encryptedPrivateKey = ret.OK;
@@ -282,7 +282,7 @@ export class ECDSA {
             throw new Error('not init');
         }
         const ret = await this._AES_256_GCM.decrypt(this._encryptedPrivateKey);
-        if (ret.isErr()) {
+        if (ret.isErr() === true) {
             throw ret.ERR;
         }
         return ret.OK;
@@ -324,7 +324,7 @@ export class ABFA {
         /* 
          * Note: in scrypt-js: password = (password.length <= 64) ? password : SHA256(password);
          */
-        let passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
+        const passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
         password = '';// clear password
         const keylen = scryptConfig.keylen;
         try {
@@ -334,7 +334,7 @@ export class ABFA {
                 passwordBuffer[i] = 0;
             }
             const _keyBase64 = await AES_256_GCM.uint8ArrayToBase64(key);
-            if (_keyBase64.isErr()) {
+            if (_keyBase64.isErr() === true) {
                 return new Err(_keyBase64.ERR);
             }
             const keyBase64 = _keyBase64.OK;
@@ -345,11 +345,10 @@ export class ABFA {
             } else {
                 return new Err(new Error('unknown error'));
             }
-        } finally {
-
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static async argon2id(password: string, salt: string): Promise<string> {
         throw new Error('not implemented');
     }

@@ -75,7 +75,7 @@ describe('Decoder', () => {
         const entryPoint = '0xb';
 
         const ret = await DecodeUserOp(chainId, entryPoint, userOp);
-        expect(ret.isOk()).toBeTruthy();
+        expect(ret.isOk() === true).toBeTruthy();
         const result = ret.OK;
         expect(result.length).toBe(2);
         expect(result[0].from).toBe(userOp.sender);

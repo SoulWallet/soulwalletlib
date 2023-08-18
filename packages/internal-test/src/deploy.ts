@@ -58,7 +58,7 @@ export class Deploy {
             signer,
             ethers.ZeroHash
         );
-        if (userOpRet.isErr()) {
+        if (userOpRet.isErr() === true) {
             throw new Error(userOpRet.ERR.message);
         }
 
@@ -74,14 +74,14 @@ export class Deploy {
         const contractAddr = userOp.sender;
 
         const retErr1 = await soulWallet.estimateUserOperationGas(userOp);
-        if (retErr1.isErr()) {
+        if (retErr1.isErr() === true) {
             throw new Error(retErr1.ERR.toString());
         }
 
         // send eth to contractAddr , from this.defaultWallet
         {
             const preFundRet = await soulWallet.preFund(userOp);
-            if (preFundRet.isErr()) {
+            if (preFundRet.isErr() === true) {
                 throw new Error(preFundRet.ERR.message);
             }
             const preFund = preFundRet.OK;
@@ -95,14 +95,14 @@ export class Deploy {
         const validAfter: number = Math.floor(Date.now() / 1000);
         const validUntil = validAfter + 3600;
         const packedUserOpHashRet = await soulWallet.packUserOpHash(userOp, validAfter, validUntil);
-        if (packedUserOpHashRet.isErr()) {
+        if (packedUserOpHashRet.isErr() === true) {
             throw new Error(packedUserOpHashRet.ERR.message);
         }
         const packedUserOpHash = packedUserOpHashRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signature = (await this.keyVault.personalSign(signer, packedUserOpHash.packedUserOpHash)).OK;
         const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
-        if (packedSignatureRet.isErr()) {
+        if (packedSignatureRet.isErr() === true) {
             throw new Error(packedSignatureRet.ERR.message);
         }
         userOp.signature = packedSignatureRet.OK;
@@ -114,7 +114,7 @@ export class Deploy {
         console.log(`balance before: ${ethers.formatEther(balance_before)} ETH`);
 
         const retErr2 = await soulWallet.sendUserOperation(userOp);
-        if (retErr2.isErr()) {
+        if (retErr2.isErr() === true) {
             throw new Error(retErr2.ERR.toString());
         }
 
@@ -143,7 +143,7 @@ export class Deploy {
         const newAccount = ethers.Wallet.createRandom();
         const callData = abi_entryPoint.encodeFunctionData("depositTo", [newAccount.address]);
         const entryPointAddrRet = await soulWallet.entryPoint();
-        if (entryPointAddrRet.isErr()) {
+        if (entryPointAddrRet.isErr() === true) {
             throw new Error(entryPointAddrRet.ERR.message);
         }
 
@@ -167,28 +167,28 @@ export class Deploy {
             contractAddr,
             [tx]
         );
-        if (userOpTxRet.isErr()) {
+        if (userOpTxRet.isErr() === true) {
             throw new Error(userOpTxRet.ERR.message);
         }
         const userOpTx = userOpTxRet.OK;
 
         const estimateRet = await soulWallet.estimateUserOperationGas(userOpTx);
 
-        if (estimateRet.isErr()) {
+        if (estimateRet.isErr() === true) {
             console.table(estimateRet.ERR);
             throw new Error('estimate gas failed');
         }
 
         // sign
         const packedUserOpHashTxRet = await soulWallet.packUserOpHash(userOpTx, validAfter, validUntil);
-        if (packedUserOpHashTxRet.isErr()) {
+        if (packedUserOpHashTxRet.isErr() === true) {
             throw new Error(packedUserOpHashTxRet.ERR.message);
         }
         const packedUserOpHashTx = packedUserOpHashTxRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signatureTx = (await this.keyVault.personalSign(signer, packedUserOpHashTx.packedUserOpHash)).OK;
         const packedSignatureTxRet = await soulWallet.packUserOpSignature(signatureTx, packedUserOpHashTx.validationData);
-        if (packedSignatureTxRet.isErr()) {
+        if (packedSignatureTxRet.isErr() === true) {
             throw new Error(packedSignatureTxRet.ERR.message);
         }
         userOpTx.signature = packedSignatureTxRet.OK;
@@ -197,7 +197,7 @@ export class Deploy {
         // send userOp
 
         const retErr3 = await soulWallet.sendUserOperation(userOpTx);
-        if (retErr3.isErr()) {
+        if (retErr3.isErr() === true) {
             throw new Error(retErr3.OK.toString());
         }
         const balance_beforeTx = await jsonProvider.getBalance(contractAddr);
@@ -205,12 +205,12 @@ export class Deploy {
         // wait for tx to be mined
         const bundler = new Bundler(this.bundler);
         const userOpHashTxRet = await soulWallet.userOpHash(userOpTx);
-        if (userOpHashTxRet.isErr()) {
+        if (userOpHashTxRet.isErr() === true) {
             throw new Error(userOpHashTxRet.ERR.message);
         }
         while (true) {
             const receipt = await bundler.eth_getUserOperationReceipt(userOpHashTxRet.OK);
-            if (receipt.isErr()) {
+            if (receipt.isErr() === true) {
                 throw new Error(receipt.ERR.message);
             }
             if (receipt.OK === null) {

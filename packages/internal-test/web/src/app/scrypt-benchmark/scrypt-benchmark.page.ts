@@ -39,7 +39,7 @@ export class ScryptBenchmarkPage implements OnInit {
     const ts = new Date().getTime();
     for (let index = 0; index < times; index++) {
       const ret = await ABFA.scrypt("password", "salt", Math.pow(2, N));
-      if (ret.isErr()) {
+      if (ret.isErr() === true) {
         throw ret.ERR;
       }
     }

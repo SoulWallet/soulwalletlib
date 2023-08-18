@@ -1,6 +1,6 @@
 import { UserOperation } from "./UserOperation.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Result } from '@soulwallet/result';
 
 /**
  * Transaction is the interface for the transaction.
