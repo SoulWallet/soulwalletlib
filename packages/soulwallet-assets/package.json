@@ -30,7 +30,8 @@
         "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.cjs.json;ts-node ./create-package-json.ts",
         "javascript-obfuscator": "javascript-obfuscator",
         "release": "tsc && javascript-obfuscator --config ../../obfuscator.json ./lib --output ./lib",
-        "generateTokens": "ts-node --project ./tsconfig.dev.json ./src/dev/generateTokens.ts"
+        "generateTokens": "ts-node --project ./tsconfig.dev.json ./src/dev/generateTokens.ts",
+        "test":"jest"
     },
     "bugs": {
         "url": "https://github.com/SoulWallet/soulwalletlib/issues"

@@ -21,7 +21,7 @@
     "url": "git+https://github.com/SoulWallet/soulwalletlib.git"
   },
   "scripts": {
-    "test": "ts-node ./src/main.ts"
+    "internalTest": "ts-node ./src/main.ts"
   },
   "bugs": {
     "url": "https://github.com/SoulWallet/soulwalletlib/issues"

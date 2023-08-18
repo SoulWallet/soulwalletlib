@@ -20,12 +20,12 @@ export class GasOverhead {
 
         // verificationGasLimit overhead
         {
-            let verificationGasLimitOverHead = 21000n;
+            let verificationGasLimitOverHead = BigInt(21000);
             if (userOp.initCode !== '0x') {
-                verificationGasLimitOverHead += 13000n;
+                verificationGasLimitOverHead += BigInt(13000);
             }
             if (userOp.paymasterAndData !== '0x') {
-                verificationGasLimitOverHead += 30000n;
+                verificationGasLimitOverHead += BigInt(30000);
             }
             userOp.verificationGasLimit = '0x' + (BigInt(userOp.verificationGasLimit) + verificationGasLimitOverHead).toString(16);
         }
