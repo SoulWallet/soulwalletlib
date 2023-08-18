@@ -63,7 +63,6 @@ export class AES_256_GCM {
     }
 
     private async _encrypt(keyBuffer: Buffer, text: string): Promise<Result<string, Error>> {
-        //const key = scryptSync(password, 'salt', 32);
         try {
             const iv = randomBytes(16);
             const cipher = createCipheriv(AES_256_GCM.ALGORITHM, keyBuffer, iv, {
@@ -187,8 +186,10 @@ export class ECDSA {
 export class ABFA {
     static scrypt(password: string, salt: string = scryptConfig.salt, N = scryptConfig.N, r = scryptConfig.r, p = scryptConfig.p): Promise<Result<string, Error>> {
         return new Promise((resolve, reject) => {
+            let passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
+            password = '';// clear password
             const keylen = scryptConfig.keylen;
-            _scrypt(Utils.toBuffer(password), Utils.toBuffer(salt), keylen, { N, r, p }, (error, derivedKey) => {
+            _scrypt(passwordBuffer, Utils.toBuffer(salt), keylen, { N, r, p }, (error, derivedKey) => {
                 if (error) {
                     if (error instanceof Error) {
                         resolve(new Err(error));
@@ -196,7 +197,10 @@ export class ABFA {
                         resolve(new Err(new Error('unknown error')));
                     }
                 } else {
-                    resolve(new Ok(derivedKey.toString('base64')));
+                    const key = derivedKey.toString('base64').slice()/* make a copy */;
+                    // clear derivedKey
+                    derivedKey.fill(0);
+                    resolve(new Ok(key));
                 }
             });
         });

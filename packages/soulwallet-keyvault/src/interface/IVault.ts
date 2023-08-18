@@ -1,7 +1,24 @@
 import { Result } from '@soulwallet/result';
 import { ethers } from 'ethers';
-// import { EventEmitter } from 'events';
 
+export interface SignData {
+    address: string;
+    message: string;
+    signature: string;
+}
+
+export type VaultEvents = {
+    Initialized: void,
+    ReInitialized: void,
+    Locked: void,
+    Unlocked: void,
+    AccountAdded: string,
+    AccountRemoved: string,
+    Sign: SignData,
+    PersonalSign: SignData,
+    TypedDataSign: SignData,
+    Ping: void;
+};
 
 export abstract class IVault /*extends EventEmitter*/ {
 
