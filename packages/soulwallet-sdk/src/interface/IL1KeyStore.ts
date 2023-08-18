@@ -1,4 +1,4 @@
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Result } from '@soulwallet/result';
 import { TypedDataDomain, TypedDataField } from 'ethers';
 
 export interface GuardianSignature {
@@ -182,6 +182,7 @@ export abstract class IL1KeyStore {
     ): Promise<Result<{
         domain: TypedDataDomain,
         types: Record<string, Array<TypedDataField>>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         value: Record<string, any>,
         typedMessage: string
     }, Error>>;

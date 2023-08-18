@@ -9,7 +9,7 @@ import { Bytes4 } from './interface/bytes4.js';
 export interface IUserOperation {
     sender: string;
     callData: string;
-};
+}
 
 /**
  * Decode the transaction data (userOp.calldata).
@@ -82,7 +82,7 @@ class Decoder {
             }
 
             const decodeResult = await this.decodeItem(_from, _to[i], value, _data[i], chainId);
-            if (decodeResult.isErr()) {
+            if (decodeResult.isErr() === true) {
                 return new Err(
                     new Error('decode error')
                 );
@@ -109,8 +109,8 @@ class Decoder {
             if (fun) {
                 const iface = new ethers.Interface(['function ' + fun.text]);
                 const name = fun.text.substring(0, fun.text.indexOf('('));
-                const decodedData = iface.decodeFunctionData(name, calldata);
-                if (decodedData) {
+                try {
+                    const decodedData = iface.decodeFunctionData(name, calldata);
                     const method: Method = {
                         bytes4: bytes4,
                         name: name,
@@ -118,6 +118,10 @@ class Decoder {
                         params: decodedData
                     }
                     return new Ok(method);
+                } catch (error: unknown) {
+                    return new Err(
+                        new Error('decodeFunctionParams error')
+                    );
                 }
             }
         }
@@ -138,17 +142,17 @@ class Decoder {
         };
 
         const fromInfoRet = await getAsset(chainId, from);
-        if (fromInfoRet.isOk()) {
+        if (fromInfoRet.isOk() === true) {
             decodeResult.fromInfo = fromInfoRet.OK;
         }
 
         const toInfoRet = await getAsset(chainId, to);
-        if (toInfoRet.isOk()) {
+        if (toInfoRet.isOk() === true) {
             decodeResult.toInfo = toInfoRet.OK;
         }
 
         const params = await this.decodeFunctionParams(calldata);
-        if (params.isOk()) {
+        if (params.isOk() === true) {
             decodeResult.method = params.OK;
         }
 

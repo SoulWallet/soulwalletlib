@@ -21,8 +21,10 @@ export class UserOpErrors extends Error {
    * @type {(any | undefined)}
    * @memberof UserOpErrors
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any | undefined;
-  constructor(code: number, message: string, data?: any | undefined) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  constructor(code: number, message: string, data?: any) {
     super(message);
     this.name = 'UserOpErrors';
     this.code = code;

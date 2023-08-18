@@ -222,6 +222,7 @@ async function main() {
 
 
     }
+    console.log('test done');
     {
 
         // kill bundler (process named start with `npm run bundler`)

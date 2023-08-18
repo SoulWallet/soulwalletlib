@@ -1,18 +1,20 @@
 class CachedData {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public value: any;
     public expire: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(value: any, expire: number) {
         this.value = value;
         this.expire = expire;
     }
 }
 export class StorageCache {
-    private static instance: StorageCache;
+    private static instance?: StorageCache = undefined;
 
     public static getInstance(): StorageCache {
         if (!StorageCache.instance)
             StorageCache.instance = new StorageCache();
-        return StorageCache.instance;
+        return StorageCache.instance!;
     }
 
     private storage: Record<string, CachedData> = {};
@@ -59,7 +61,7 @@ export class StorageCache {
         let v: CachedData | undefined = undefined;
         if (this.useLocalStorage) {
             const s = window.localStorage.getItem(k);
-            if (s) {
+            if (s != null) {
                 try {
                     v = JSON.parse(s) as CachedData;
                 } catch (error: unknown) {

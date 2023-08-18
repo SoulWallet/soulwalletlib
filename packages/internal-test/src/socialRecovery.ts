@@ -33,7 +33,7 @@ export class SocialRecovery {
 
         {
             const _key = await _L1KeyStore.getKey(slot);
-            if (_key.isErr()) {
+            if (_key.isErr() === true) {
                 throw new Error(_key.ERR.message);
             }
             if (_key.OK != L1KeyStore.addressToBytes32(ethers.ZeroAddress)) {
@@ -41,7 +41,7 @@ export class SocialRecovery {
             }
 
             const _slotInfo = await _L1KeyStore.getKeyStoreInfo(slot);
-            if (_slotInfo.isErr()) {
+            if (_slotInfo.isErr() === true) {
                 throw new Error(_slotInfo.ERR.message);
             }
             if (_slotInfo.OK.key != L1KeyStore.addressToBytes32(ethers.ZeroAddress)) {
@@ -51,7 +51,7 @@ export class SocialRecovery {
 
 
         const keyRet = await _L1KeyStore.getKey(slot);
-        if (keyRet.isErr()) {
+        if (keyRet.isErr() === true) {
             throw new Error(keyRet.ERR.message);
         }
         const key = keyRet.OK;
