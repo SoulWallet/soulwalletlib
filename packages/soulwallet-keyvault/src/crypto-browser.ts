@@ -321,9 +321,18 @@ export class ECDSA {
 export class ABFA {
 
     static async scrypt(password: string, salt: string = scryptConfig.salt, N = scryptConfig.N, r = scryptConfig.r, p = scryptConfig.p): Promise<Result<string, Error>> {
+        /* 
+         * Note: in scrypt-js: password = (password.length <= 64) ? password : SHA256(password);
+         */
+        let passwordBuffer = Utils.toBuffer(password.slice()/* make a copy */);
+        password = '';// clear password
         const keylen = scryptConfig.keylen;
         try {
-            const key: Uint8Array = await _scrypt(Utils.toBuffer(password), Utils.toBuffer(salt), N, r, p, keylen);
+            const key: Uint8Array = await _scrypt(passwordBuffer, Utils.toBuffer(salt), N, r, p, keylen);
+            // clear passwordBuffer
+            for (let i = 0; i < passwordBuffer.length; i++) {
+                passwordBuffer[i] = 0;
+            }
             const _keyBase64 = await AES_256_GCM.uint8ArrayToBase64(key);
             if (_keyBase64.isErr()) {
                 return new Err(_keyBase64.ERR);
@@ -336,6 +345,8 @@ export class ABFA {
             } else {
                 return new Err(new Error('unknown error'));
             }
+        } finally {
+
         }
     }
 

@@ -135,13 +135,13 @@ importers:
         specifier: workspace:*
         version: link:../soulwallet-result
       ethers:
-        specifier: ^6.7.0
+        specifier: 6.7.0
         version: 6.7.0
       mitt:
-        specifier: ^3.0.1
+        specifier: 3.0.1
         version: 3.0.1
       scrypt-js:
-        specifier: ^3.0.1
+        specifier: 3.0.1
         version: 3.0.1
     devDependencies:
       '@types/node':

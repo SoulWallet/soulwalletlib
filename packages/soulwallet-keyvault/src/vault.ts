@@ -1,28 +1,10 @@
 import { Result, Ok, Err } from '@soulwallet/result';
-import { IVault } from './interface/IVault.js';
+import { IVault, VaultEvents } from './interface/IVault.js';
 import { Storage } from './storage.js';
 import { StorageLocation } from './interface/IStorage.js';
 import { AES_256_GCM, ECDSA, ABFA, Utils } from './crypto.js';
 import { ethers } from 'ethers';
 import mitt, { Emitter, EventHandlerMap } from 'mitt'
-
-export interface SignData {
-    address: string;
-    message: string;
-    signature: string;
-}
-
-export type VaultEvents = {
-    Initialized: void,
-    ReInitialized: void,
-    Locked: void,
-    Unlocked: void,
-    AccountAdded: string,
-    AccountRemoved: string,
-    Sign: SignData,
-    PersonalSign: SignData,
-    TypedDataSign: SignData,
-};
 
 /**
  * Vault
@@ -42,6 +24,9 @@ export class Vault implements IVault {
     private readonly _DECRYPT_KEY_HASH = '@DECRYPT_KEY_HASH';
 
     private _EventEmitter: Emitter<VaultEvents>;
+
+    private _timeout: NodeJS.Timeout | undefined;
+    private readonly _timeoutDuration = 1000 * 60 * 60; // 60 minutes
 
     public constructor() {
         this._storage = new Storage();
@@ -75,14 +60,40 @@ export class Vault implements IVault {
     }
 
     private emit<Key extends keyof VaultEvents>(eventName: Key, payload: VaultEvents[Key]) {
+        try {
+            if (eventName == 'Locked') {
+                this._clearTimeout();
+            } else {
+                this._touchTimeout();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
         this._EventEmitter.emit(
             eventName,
             payload
         );
     }
 
+    private _touchTimeout() {
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+        }
+        this._timeout = setTimeout(() => {
+            this.lock().catch();
+        }, this._timeoutDuration);
+    }
+
+    private _clearTimeout() {
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+            this._timeout = undefined;
+        }
+    }
+
     private async _deriveKey(password: string): Promise<Result<string, Error>> {
-        const _key = await ABFA.scrypt(password.slice()/* make a copy */);
+        const _key = await ABFA.scrypt(password);
         if (_key.isErr()) {
             return new Err(_key.ERR);
         }
@@ -131,6 +142,8 @@ export class Vault implements IVault {
 
             this.emit(enforce === true ? 'ReInitialized' : 'Initialized', void (0));
 
+            this.emit('Unlocked', void (0));
+
             return new Ok(void (0));
         }
     }
@@ -176,6 +189,9 @@ export class Vault implements IVault {
         if (ret.isErr()) {
             return new Err(ret.ERR);
         }
+
+        this.emit('Ping', void (0));
+
         return new Ok(ret.OK !== '');
     }
 
@@ -279,6 +295,7 @@ export class Vault implements IVault {
      * @memberof Vault
      */
     public async isLocked(): Promise<Result<boolean, Error>> {
+        this.emit('Ping', void (0));
         return new Ok(this._AES_256_GCM === undefined);
     }
 
@@ -403,6 +420,7 @@ export class Vault implements IVault {
                 _addressList.push(i);
             }
         }
+        this.emit('Ping', void (0));
         return new Ok(_addressList);
     }
 
