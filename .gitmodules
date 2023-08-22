@@ -2,3 +2,7 @@
 	path = bundler
 	url = https://github.com/jayden-sudo/bundler
 
+[submodule "soul-wallet-contract"]
+	path = soul-wallet-contract
+	url = https://github.com/SoulWallet/soul-wallet-contract.git
+	branch = develop
