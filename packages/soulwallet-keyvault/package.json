@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/keyvault",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A lightweight private key management library",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -33,7 +33,7 @@
         "tsc": "tsc",
         "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.cjs.json;ts-node ./create-package-json.ts",
         "javascript-obfuscator": "javascript-obfuscator",
-        "test":"jest"
+        "test": "jest"
     },
     "bugs": {
         "url": "https://github.com/SoulWallet/soulwalletlib/issues"

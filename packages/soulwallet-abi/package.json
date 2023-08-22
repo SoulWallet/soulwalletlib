@@ -1,6 +1,6 @@
 {
   "name": "@soulwallet/abi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "soulwallet-contract ABI",
   "author": "Jayden@SoulWallet",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -30,7 +30,7 @@
     "build": "tsc --project ./tsconfig.esm.json;tsc --project ./tsconfig.cjs.json;ts-node ./create-package-json.ts",
     "javascript-obfuscator": "javascript-obfuscator",
     "generateABI": "ts-node --project ./tsconfig.dev.json ./src/dev/generateABI.ts",
-    "test":"jest"
+    "test": "jest"
   },
   "bugs": {
     "url": "https://github.com/SoulWallet/soulwalletlib/issues"
