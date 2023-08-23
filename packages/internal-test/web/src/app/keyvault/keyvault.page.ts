@@ -25,7 +25,7 @@ export class KeyvaultPage implements OnInit {
   vault: Vault;
 
   constructor(protected sanitizer: DomSanitizer) {
-    this.vault = new Vault();
+    this.vault = new Vault('default');
     /* 
       Initialized
       ReInitialized
