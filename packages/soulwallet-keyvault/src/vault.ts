@@ -1,10 +1,34 @@
 import { Result, Ok, Err } from '@soulwallet/result';
 import { IVault, VaultEvents } from './interface/IVault.js';
 import { Storage } from './storage.js';
-import { StorageLocation } from './interface/IStorage.js';
 import { AES_256_GCM, ECDSA, ABFA, Utils } from './crypto.js';
 import { ethers } from 'ethers';
 import mitt, { Emitter } from 'mitt'
+
+
+class KeyVaultStorageStructure {
+    AESKeyHash: string = '';
+    Signers: Map<string, string> = new Map();
+
+    toString(): string {
+        return JSON.stringify({
+            AESKeyHash: this.AESKeyHash,
+            Signers: Array.from(this.Signers.entries())
+        });
+    }
+
+    fromString(data: string): KeyVaultStorageStructure {
+        if (data === '') {
+            return this;
+        } else {
+            const obj = JSON.parse(data);
+            this.AESKeyHash = obj.AESKeyHash;
+            this.Signers = new Map(obj.Signers);
+            return this;
+        }
+    }
+}
+
 
 /**
  * Vault
@@ -14,22 +38,27 @@ import mitt, { Emitter } from 'mitt'
  * @implements {IVault}
  */
 export class Vault implements IVault {
-
     private _storage: Storage;
     private _AES_256_GCM: AES_256_GCM | undefined;
-    private _KEY_HASH: string | undefined;
+
+    private _KeyVaultDataCache: KeyVaultStorageStructure | undefined = undefined;
 
     private _account: Map<string, ECDSA> = new Map();
-
-    private readonly _DECRYPT_KEY_HASH = '@DECRYPT_KEY_HASH';
 
     private _EventEmitter: Emitter<VaultEvents>;
 
     private _timeout: NodeJS.Timeout | undefined;
     private readonly _timeoutDuration = 1000 * 60 * 60; // 60 minutes
+    private _lockTime: number = 0;
 
-    public constructor() {
-        this._storage = new Storage();
+    /**
+     * Creates an instance of Vault.
+     * @param {string} tag tag for keyVault
+     * @memberof Vault
+     */
+    public constructor(tag: string) {
+        tag = tag.slice();/* make a copy */
+        this._storage = new Storage(Vault._hash(tag));
 
         if (typeof window !== 'undefined') {
             // Web Crypto API
@@ -43,6 +72,65 @@ export class Vault implements IVault {
         this._EventEmitter = mitt<VaultEvents>();
     }
 
+    /**
+     * destroy vault
+     *
+     * @static
+     * @param {string} tag tag for keyVault
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
+    public static async remove(tag: string): Promise<Result<void, Error>> {
+        const _storage = new Storage(Vault._hash(tag));
+        return await _storage.selfDestruct();
+    }
+
+    /**
+     * rename vault, must lock first
+     *
+     * @static
+     * @param {string} oldTag old tag
+     * @param {string} newTag new tag
+     * @return {*}  {Promise<Result<void, Error>>}
+     * @memberof Vault
+     */
+    public static async rename(oldTag: string, newTag: string): Promise<Result<void, Error>> {
+        const _storageOld = new Storage(Vault._hash(oldTag));
+        const _storageNew = new Storage(Vault._hash(newTag));
+        const _retOld = await _storageOld.load('');
+        const _retNew = await _storageNew.load('');
+        if (_retOld.isErr() === true) {
+            return new Err(_retOld.ERR);
+        }
+        if (_retNew.isErr() === true) {
+            return new Err(_retNew.ERR);
+        }
+        if (_retNew.OK !== '') {
+            return new Err(new Error(`${newTag} already exists`));
+        }
+        if (_retOld.OK === '') {
+            return new Err(new Error(`${oldTag} not exists`));
+        }
+        let _ret = await _storageNew.save(_retOld.OK);
+        if (_ret.isErr() === true) {
+            return new Err(_ret.ERR);
+        }
+        _ret = await _storageOld.selfDestruct();
+        if (_ret.isErr() === true) {
+            console.error(_ret.ERR);
+        }
+        return new Ok(void (0));
+
+    }
+
+    /**
+     * add event listener
+     *
+     * @template Key extends keyof VaultEvents
+     * @param {Key} eventName event name
+     * @param {(arg: VaultEvents[Key]) => unknown} handler event handler
+     * @memberof Vault
+     */
     public on<Key extends keyof VaultEvents>(eventName: Key, handler: (arg: VaultEvents[Key]) => unknown) {
         try {
             this._EventEmitter.on(eventName, handler);
@@ -51,6 +139,14 @@ export class Vault implements IVault {
         }
     }
 
+    /**
+     * remove event listener
+     *
+     * @template Key extends keyof VaultEvents
+     * @param {Key} eventName event name
+     * @param {(arg: VaultEvents[Key]) => unknown} [handler] event handler
+     * @memberof Vault
+     */
     public off<Key extends keyof VaultEvents>(eventName: Key, handler?: (arg: VaultEvents[Key]) => unknown) {
         try {
             this._EventEmitter.off(eventName, handler);
@@ -60,14 +156,10 @@ export class Vault implements IVault {
     }
 
     private emit<Key extends keyof VaultEvents>(eventName: Key, payload: VaultEvents[Key]) {
-        try {
-            if (eventName == 'Locked') {
-                this._clearTimeout();
-            } else {
-                this._touchTimeout();
-            }
-        } catch (error) {
-            console.error(error);
+        if (eventName !== 'Locked') {
+            this._touchTimeout(eventName !== 'Ping');
+        } else {
+            this._clearTimeout();
         }
 
         this._EventEmitter.emit(
@@ -76,20 +168,54 @@ export class Vault implements IVault {
         );
     }
 
-    private _touchTimeout() {
-        if (this._timeout) {
-            clearTimeout(this._timeout);
+    private _touchTimeout(createTimer: boolean) {
+        this._lockTime = new Date().getTime() + this._timeoutDuration;
+        if (createTimer === true && this._timeout === undefined) {
+            this._timeout = setInterval(async () => {
+                if (new Date().getTime() > this._lockTime) {
+                    this.lock().catch();
+                }
+            }, 1000 * 5);
         }
-        this._timeout = setTimeout(() => {
-            this.lock().catch();
-        }, this._timeoutDuration);
     }
 
     private _clearTimeout() {
-        if (this._timeout) {
-            clearTimeout(this._timeout);
+        if (this._timeout !== undefined) {
+            clearInterval(this._timeout);
             this._timeout = undefined;
         }
+    }
+
+    private async _loadData(): Promise<Result<KeyVaultStorageStructure, Error>> {
+        if (this._KeyVaultDataCache === undefined) {
+            const ret = await this._storage.load('');
+            if (ret.isErr() === true) {
+                return new Err(ret.ERR);
+            }
+            try {
+                const _KeyVaultStorageStructure: KeyVaultStorageStructure = new KeyVaultStorageStructure().fromString(ret.OK);
+                this._KeyVaultDataCache = _KeyVaultStorageStructure;
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    return new Err(error);
+                } else {
+                    console.error(error);
+                    return new Err(
+                        new Error('unknown error')
+                    );
+                }
+            }
+        }
+        return new Ok(this._KeyVaultDataCache);
+    }
+
+    private async _saveData(keyVaultStorageStructure: KeyVaultStorageStructure): Promise<Result<void, Error>> {
+        this._KeyVaultDataCache = keyVaultStorageStructure;
+        const ret = await this._storage.save(keyVaultStorageStructure.toString());
+        if (ret.isErr() === true) {
+            return new Err(ret.ERR);
+        }
+        return new Ok(void (0));
     }
 
     private async _deriveKey(password: string): Promise<Result<string, Error>> {
@@ -130,7 +256,11 @@ export class Vault implements IVault {
             if (_key.isErr() === true) {
                 return new Err(_key.ERR);
             }
-            const _ret = await this._saveDecryptKeyHash(Vault._hash(_key.OK));
+            const AESKeyHash = Vault._hash(_key.OK);
+            const _KeyVaultStorageStructure: KeyVaultStorageStructure = new KeyVaultStorageStructure();
+            _KeyVaultStorageStructure.AESKeyHash = AESKeyHash;
+            _KeyVaultStorageStructure.Signers = new Map();
+            const _ret = await this._saveData(_KeyVaultStorageStructure);
             if (_ret.isErr() === true) {
                 return new Err(_ret.ERR);
             }
@@ -161,23 +291,7 @@ export class Vault implements IVault {
         throw new Error('Method not implemented.');
     }
 
-    private async _loadDecryptKeyHash(): Promise<Result<string, Error>> {
-        const ret = await this._storage.load<string>(StorageLocation.Signer, this._DECRYPT_KEY_HASH, '');
-        if (ret.isErr() === true) {
-            return new Err(ret.ERR);
-        }
-        const decryptKey = ret.OK;
-        this._KEY_HASH = decryptKey;
-        return new Ok(decryptKey);
-    }
 
-    private async _saveDecryptKeyHash(keyHash: string): Promise<Result<void, Error>> {
-        const ret = await this._storage.save<string>(StorageLocation.Signer, this._DECRYPT_KEY_HASH, keyHash);
-        if (ret.isErr() === true) {
-            return new Err(ret.ERR);
-        }
-        return new Ok(void (0));
-    }
 
     /**
      * check if vault is initialized
@@ -186,14 +300,14 @@ export class Vault implements IVault {
      * @memberof Vault
      */
     public async isInitialized(): Promise<Result<boolean, Error>> {
-        const ret = await this._loadDecryptKeyHash();
+        const ret = await this._loadData();
         if (ret.isErr() === true) {
             return new Err(ret.ERR);
         }
 
         this.emit('Ping', void (0));
 
-        return new Ok(ret.OK !== '');
+        return new Ok(ret.OK.AESKeyHash !== '');
     }
 
     /**
@@ -206,6 +320,7 @@ export class Vault implements IVault {
         if (this._AES_256_GCM) {
             this._AES_256_GCM = undefined;
         }
+        this._KeyVaultDataCache = undefined;
         for (const i of this._account.values()) {
             try {
                 i.destroy();
@@ -248,7 +363,13 @@ export class Vault implements IVault {
                 return new Err(_key.ERR);
             }
             const _hash = Vault._hash(_key.OK);
-            if (_hash !== this._KEY_HASH) {
+
+            const keyVaultStorageStructure = await this._loadData();
+            if (keyVaultStorageStructure.isErr() === true) {
+                return new Err(keyVaultStorageStructure.ERR);
+            }
+
+            if (_hash !== keyVaultStorageStructure.OK.AESKeyHash) {
                 return new Err(new Error('invalid password'));
             }
             const _aes = await AES_256_GCM.init(_key.OK);
@@ -280,11 +401,8 @@ export class Vault implements IVault {
             if (ret.OK === true) {
                 return new Err(new Error('already locked'));
             }
-
             await this.destroy();
-
             this.emit('Locked', void (0));
-
             return new Ok(void (0));
         }
     }
@@ -331,16 +449,6 @@ export class Vault implements IVault {
         throw new Error('Method not implemented.');
     }
 
-    // public async getData<T>(key: string, defaultValue: T): Promise<Result<T, Error>> {
-    //     throw new Error('Method not implemented.');
-    // }
-    // public async setData<T>(key: string, value: T): Promise<Result<void, Error>> {
-    //     throw new Error('Method not implemented.');
-    // }
-    // public async removeData(key: string): Promise<Result<void, Error>> {
-    //     throw new Error('Method not implemented.');
-    // }
-
     /**
      * import signer from privateKey
      *
@@ -352,13 +460,21 @@ export class Vault implements IVault {
         if ((await this.isLocked()).OK === true) {
             return new Err(new Error('locked'));
         }
+        privateKey = privateKey.slice()/* make a copy */
         const _signKey = new ethers.SigningKey(privateKey);
         const address = ethers.getAddress(ethers.keccak256("0x" + _signKey.publicKey.substring(4)).substring(26));
         const _encryptRet = await this._AES_256_GCM!.encrypt(privateKey);
+        privateKey = '';
         if (_encryptRet.isErr() === true) {
             return new Err(_encryptRet.ERR);
         }
-        const ret = await this._storage.save<string>(StorageLocation.Signer, address, _encryptRet.OK);
+        const keyVaultStorageRet = await this._loadData();
+        if (keyVaultStorageRet.isErr() === true) {
+            return new Err(keyVaultStorageRet.ERR);
+        }
+        const _KeyVaultStorageStructure = keyVaultStorageRet.OK;
+        _KeyVaultStorageStructure.Signers.set(address, _encryptRet.OK)
+        const ret = await this._saveData(_KeyVaultStorageStructure);
         if (ret.isErr() === true) {
             return new Err(ret.ERR);
         }
@@ -396,11 +512,20 @@ export class Vault implements IVault {
             _ECDSA.destroy();
             this._account.delete(address);
         }
-
-        const ret = await this._storage.remove(StorageLocation.Signer, address);
+        const keyVaultStorageRet = await this._loadData();
+        if (keyVaultStorageRet.isErr() === true) {
+            return new Err(keyVaultStorageRet.ERR);
+        }
+        const _KeyVaultStorageStructure = keyVaultStorageRet.OK;
+        const succ = _KeyVaultStorageStructure.Signers.delete(address);
+        if (succ === false) {
+            return new Err(new Error('unknown address'));
+        }
+        const ret = await this._saveData(_KeyVaultStorageStructure);
         if (ret.isErr() === true) {
             return new Err(ret.ERR);
         }
+
         this.emit('AccountRemoved', address);
 
         return new Ok(void (0));
@@ -413,15 +538,14 @@ export class Vault implements IVault {
      * @memberof Vault
      */
     public async listSigners(): Promise<Result<string[], Error>> {
-        const _storageRet = await this._storage.listKeys(StorageLocation.Signer);
-        if (_storageRet.isErr() === true) {
-            return new Err(_storageRet.ERR);
+        const keyVaultStorageRet = await this._loadData();
+        if (keyVaultStorageRet.isErr() === true) {
+            return new Err(keyVaultStorageRet.ERR);
         }
+        const _KeyVaultStorageStructure = keyVaultStorageRet.OK;
         const _addressList: string[] = [];
-        for (const i of _storageRet.OK) {
-            if (i.startsWith('0x') === true && ethers.isAddress(i) === true) {
-                _addressList.push(i);
-            }
+        for (const i of _KeyVaultStorageStructure.Signers.keys()) {
+            _addressList.push(i);
         }
         this.emit('Ping', void (0));
         return new Ok(_addressList);
@@ -433,15 +557,15 @@ export class Vault implements IVault {
         }
         address = ethers.getAddress(address);
         if (!this._account.has(address)) {
-            const ret = await this._storage.load<string>(StorageLocation.Signer, address, '');
+            const ret = await this._loadData();
             if (ret.isErr() === true) {
                 return new Err(ret.ERR);
             }
-            if (ret.OK === '') {
+            if (ret.OK.Signers.has(address) === false) {
                 return new Err(new Error('unknown address'));
             }
             const _ECDSA = new ECDSA();
-            const _decryptRet = await this._AES_256_GCM!.decrypt(ret.OK);
+            const _decryptRet = await this._AES_256_GCM!.decrypt(ret.OK.Signers.get(address)!);
             if (_decryptRet.isErr() === true) {
                 return new Err(_decryptRet.ERR);
             }

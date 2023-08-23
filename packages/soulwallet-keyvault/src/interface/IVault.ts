@@ -21,7 +21,6 @@ export type VaultEvents = {
 };
 
 export abstract class IVault /*extends EventEmitter*/ {
-
     // #region Vault initialization
     public abstract init(password: string, enforce?: boolean): Promise<Result<void, Error>>;
     public abstract restore(exportData: string, password: string): Promise<Result<void, Error>>;
