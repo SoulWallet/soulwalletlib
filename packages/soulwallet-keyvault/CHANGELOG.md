@@ -1,5 +1,11 @@
 # @soulwallet/keyvault
 
+## 0.1.2
+
+### Patch Changes
+
+- 095ca67: Multiple KeyVault instances are allowed.
+
 ## 0.1.1
 
 ### Patch Changes
