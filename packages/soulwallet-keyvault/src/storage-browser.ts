@@ -158,7 +158,7 @@ export class Storage implements IStorage {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const _window = window as any;
             const storage = _window.chrome.storage.local;
-            const obj = {};
+            const obj: Record<string, string> = {};
             obj[this._signerStorageKey] = value;
             storage.set(obj, () => {
                 if (_window.chrome.runtime.lastError !== undefined) {
