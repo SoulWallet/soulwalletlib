@@ -32,7 +32,7 @@ export class Deploy {
         this.securityControlModuleAddress = _securityControlModuleAddress;
         this.defaultWallet = _defaultWallet;
 
-        this.keyVault = new Vault();
+        this.keyVault = new Vault('default');
     }
 
 
