@@ -28,7 +28,7 @@ export class CryptoTest {
             nonce: "1",
             newSigner: "0x000000000000000000000000f8e81D47203A594245E36C48e151709F0C19fBe8",
         };
-        const vault = new Vault();
+        const vault = new Vault('default');
         await vault.init("password", true);
         await vault.unlock("password");
         await vault.importSigner(privateKey);
