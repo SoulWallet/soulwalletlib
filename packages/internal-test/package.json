@@ -27,10 +27,10 @@
     "url": "https://github.com/SoulWallet/soulwalletlib/issues"
   },
   "dependencies": {
-    "@soulwallet/abi": "workspace:*",
-    "@soulwallet/sdk": "workspace:*",
-    "@soulwallet/decoder": "workspace:*",
-    "@soulwallet/keyvault": "workspace:*",
+    "@soulwallet_test/abi": "workspace:*",
+    "@soulwallet_test/sdk": "workspace:*",
+    "@soulwallet_test/decoder": "workspace:*",
+    "@soulwallet_test/keyvault": "workspace:*",
     "bn.js": "^5.2.1",
     "ethereumjs-util": "^7.1.5",
     "ethers": "^6.7.0"

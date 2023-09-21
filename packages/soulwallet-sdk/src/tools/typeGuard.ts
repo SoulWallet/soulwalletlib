@@ -1,4 +1,4 @@
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Ok, Err, Result } from '@soulwallet_test/result';
 
 export class TypeGuard {
 

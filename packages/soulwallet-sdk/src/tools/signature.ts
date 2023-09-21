@@ -1,6 +1,7 @@
 import { TypeGuard } from './typeGuard.js';
 import { Hex } from "./hex.js";
 import { ethers } from 'ethers';
+import { ECCPoint, SignkeyType } from '../interface/ISoulWallet.js';
 
 export class HookInputData {
     /**
@@ -122,20 +123,7 @@ export class Signature {
     }
 
 
-    /**
-     *
-     *
-     * @static
-     * @param {string} signature signature signature 65 bytes signature
-     * @param {string} [validationData] validationData validationData 32 bytes validationData
-     * @param {HookInputData} [guardHookInputData] key: guardHookPlugin address, value: input data. 
-     * @return {*}  {string}
-     * @memberof Signature
-     */
-    static packSignature(signature: string, validationData: string, guardHookInputData?: HookInputData): string {
-        Signature.onlyEOASignature(signature);
-
-
+    static prePackSignature(signkeyType: SignkeyType, validationData: string, guardHookInputData?: HookInputData): string {
         let guardHookInputDataBytes: string = '';
         if (guardHookInputData !== undefined) {
             // guardHookInputData.guardHookInputData.key ∈ guardHookInputData.guardHooks
@@ -180,16 +168,108 @@ export class Signature {
                 guardHookInputDataBytes += inputData[guardianHookPluginAddress].substring(2);
             }
         }
-        const _validationData = BigInt(validationData);
-        if (guardHookInputDataBytes.length > 0 || _validationData > 0) {
-            const signType = "01";
-            // validationData to 32 bytes hex string
-            const validationDataHex = Hex.paddingZero(_validationData, 32).slice(2);
-            const packedSignature = `0x${signType}${validationDataHex}${signature.substring(2)}${guardHookInputDataBytes}`.toLowerCase();
-            return packedSignature;
+        let packedSignature = '0x';
+        let dataType = "00";
+        if (guardHookInputDataBytes.length > 0) {
+            dataType = "01";
+            packedSignature += dataType;
+            const _len = Hex.paddingZero(guardHookInputDataBytes.length / 2, 32);
+            packedSignature += _len;
+            packedSignature += guardHookInputDataBytes;
         } else {
-            return signature;
+            dataType = "00";
+            packedSignature += dataType;
         }
+        const _validationData = BigInt(validationData);
+        const hasValidationData = _validationData > BigInt(0);
+        let signatureType = "00";
+        if (signkeyType === SignkeyType.EOA) {
+            if (hasValidationData) {
+                signatureType = "01";
+            } else {
+                signatureType = "00";
+            }
+        } else if (signkeyType === SignkeyType.P256) {
+            if (hasValidationData) {
+                signatureType = "03";
+            } else {
+                signatureType = "02";
+            }
+        } else {
+            throw new Error('invalid signkeyType');
+        }
+
+        let _validationDataHex = '';
+        if (hasValidationData) {
+            // validationData to 32 bytes hex string
+            _validationDataHex = Hex.paddingZero(_validationData, 32).slice(2);
+        }
+        return packedSignature + signatureType + _validationDataHex;
+    }
+
+
+    /**
+     * pack EOA signature
+     *
+     * @static
+     * @param {string} signature signature signature 65 bytes signature
+     * @param {string} [validationData] validationData validationData 32 bytes validationData
+     * @param {HookInputData} [guardHookInputData] key: guardHookPlugin address, value: input data. 
+     * @return {*}  {string}
+     * @memberof Signature
+     */
+    static packEOASignature(signature: string, validationData: string, guardHookInputData?: HookInputData): string {
+        Signature.onlyEOASignature(signature);
+        const prePackedSignature = Signature.prePackSignature(SignkeyType.EOA, validationData, guardHookInputData);
+        return (prePackedSignature + signature.substring(2)).toLowerCase();
+    }
+
+    /**
+     * pack P256 signature
+     *
+     * @static
+     * @param {{
+     *             publicKey: ECCPoint,
+     *             r: string,
+     *             s: string,
+     *             authenticatorData: string,
+     *             clientDataSuffix: string
+     *         }} signatureData
+     * @param {string} validationData
+     * @param {HookInputData} [guardHookInputData]
+     * @return {*}  {string}
+     * @memberof Signature
+     */
+    static packP256Signature(
+        signatureData: {
+            publicKey: ECCPoint,
+            r: string,
+            s: string,
+            authenticatorData: string,
+            clientDataSuffix: string
+        },
+        validationData: string,
+        guardHookInputData?: HookInputData
+    ): string {
+        TypeGuard.onlyBytes32(signatureData.publicKey.x);
+        TypeGuard.onlyBytes32(signatureData.publicKey.y);
+        TypeGuard.onlyBytes32(signatureData.r);
+        TypeGuard.onlyBytes32(signatureData.s);
+        TypeGuard.onlyBytes(signatureData.authenticatorData);
+        if (!signatureData.clientDataSuffix.startsWith('"')) {
+            throw new Error('invalid clientDataSuffix');
+        }
+        let packedSignature = Signature.prePackSignature(SignkeyType.P256, validationData, guardHookInputData);
+
+        packedSignature += signatureData.publicKey.x.slice(2);
+        packedSignature += signatureData.publicKey.y.slice(2);
+        packedSignature += signatureData.r.slice(2);
+        packedSignature += signatureData.s.slice(2);
+
+        // abi.encode(authenticatorData,clientDataSuffix)
+        packedSignature += (new ethers.AbiCoder().encode(["bytes", "string"], [signatureData.authenticatorData, signatureData.clientDataSuffix])).slice(2);
+
+        return packedSignature.toLowerCase();
     }
 
     /**

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ABFA, Err, Result } from '@soulwallet/keyvault';
+import { ABFA, Err, Result } from '@soulwallet_test/keyvault';
 
 @Component({
   selector: 'app-scrypt-benchmark',

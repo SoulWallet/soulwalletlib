@@ -33,7 +33,7 @@ export default [
                 "type": "bytes32"
             }
         ],
-        "name": "KeyStoreStorageProofed",
+        "name": "KeyStoreStorageProved",
         "type": "event"
     },
     {
@@ -47,12 +47,12 @@ export default [
             },
             {
                 "indexed": false,
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "signingKey",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
-        "name": "L1KeyStoreProofed",
+        "name": "L1KeyStoreProved",
         "type": "event"
     },
     {
@@ -92,9 +92,9 @@ export default [
         "name": "keystoreBySlot",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "signingKey",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",
@@ -111,9 +111,9 @@ export default [
         "name": "l1SlotToSigningKey",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",
@@ -182,9 +182,9 @@ export default [
                 "type": "bytes32"
             },
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "newSigningKey",
-                "type": "address"
+                "type": "bytes32"
             },
             {
                 "internalType": "bytes",

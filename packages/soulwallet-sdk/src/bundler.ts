@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { UserOperation } from "./interface/UserOperation.js";
 import { IBundler, UserOpDetail, UserOpGas, UserOpReceipt } from "./interface/IBundler.js";
 import { UserOpErrorCodes, UserOpErrors } from "./interface/IUserOpErrors.js";
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Ok, Err, Result } from '@soulwallet_test/result';
 import { userOperationToJSON } from './tools/convert.js';
 
 export class Bundler implements IBundler {

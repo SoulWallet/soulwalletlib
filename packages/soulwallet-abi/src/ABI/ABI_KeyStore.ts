@@ -435,9 +435,9 @@ export default [
         "name": "keystoreBySlot",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "signingKey",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",

@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import { ABI_EntryPoint, ABI_SoulWallet } from "@soulwallet/abi";
-import { DecodeUserOp } from "@soulwallet/decoder";
+import { ABI_EntryPoint, ABI_SoulWallet } from "@soulwallet_test/abi";
+import { DecodeUserOp } from "@soulwallet_test/decoder";
 
 export class Decode {
     constructor() { }

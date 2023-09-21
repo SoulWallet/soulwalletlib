@@ -7,6 +7,11 @@ export default [
                 "internalType": "contract IEntryPoint",
                 "name": "_EntryPoint",
                 "type": "address"
+            },
+            {
+                "internalType": "contract IValidator",
+                "name": "_validator",
+                "type": "address"
             }
         ],
         "stateMutability": "nonpayable",
@@ -39,6 +44,16 @@ export default [
     },
     {
         "inputs": [],
+        "name": "DATA_ALREADY_EXISTS",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "DATA_NOT_EXISTS",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "HASH_ALREADY_APPROVED",
         "type": "error"
     },
@@ -54,6 +69,11 @@ export default [
     },
     {
         "inputs": [],
+        "name": "INVALID_DATA",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "INVALID_GUARD_HOOK_DATA",
         "type": "error"
     },
@@ -65,11 +85,6 @@ export default [
     {
         "inputs": [],
         "name": "INVALID_SELECTOR",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "INVALID_SIGNTYPE",
         "type": "error"
     },
     {
@@ -145,11 +160,6 @@ export default [
     {
         "inputs": [],
         "name": "SELECTOR_ALREADY_EXISTS",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "UNSUPPORTED_SIGNTYPE",
         "type": "error"
     },
     {
@@ -240,9 +250,9 @@ export default [
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "owner",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "name": "OwnerAdded",
@@ -259,9 +269,9 @@ export default [
         "inputs": [
             {
                 "indexed": true,
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "owner",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "name": "OwnerRemoved",
@@ -358,9 +368,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "owner",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "name": "addOwner",
@@ -371,9 +381,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address[]",
+                "internalType": "bytes32[]",
                 "name": "owners",
-                "type": "address[]"
+                "type": "bytes32[]"
             }
         ],
         "name": "addOwners",
@@ -523,9 +533,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32[]",
                 "name": "anOwner",
-                "type": "address"
+                "type": "bytes32[]"
             },
             {
                 "internalType": "address",
@@ -589,9 +599,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "addr",
-                "type": "address"
+                "internalType": "bytes32",
+                "name": "owner",
+                "type": "bytes32"
             }
         ],
         "name": "isOwner",
@@ -652,9 +662,9 @@ export default [
         "name": "listOwner",
         "outputs": [
             {
-                "internalType": "address[]",
+                "internalType": "bytes32[]",
                 "name": "owners",
-                "type": "address[]"
+                "type": "bytes32[]"
             }
         ],
         "stateMutability": "view",
@@ -750,9 +760,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "owner",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "name": "removeOwner",
@@ -776,9 +786,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "newOwner",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "name": "resetOwner",
@@ -789,9 +799,9 @@ export default [
     {
         "inputs": [
             {
-                "internalType": "address[]",
+                "internalType": "bytes32[]",
                 "name": "newOwners",
-                "type": "address[]"
+                "type": "bytes32[]"
             }
         ],
         "name": "resetOwners",
@@ -922,6 +932,19 @@ export default [
             }
         ],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "validator",
+        "outputs": [
+            {
+                "internalType": "contract IValidator",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

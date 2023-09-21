@@ -1,6 +1,6 @@
 {
-    "name": "@soulwallet/sdk",
-    "version": "0.1.1",
+    "name": "@soulwallet_test/sdk",
+    "version": "0.1.0",
     "description": "SoulWalletSDK = {  Basic Functions,  Bundler, KeyStore,  SignatureTools }",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -35,8 +35,8 @@
         "url": "https://github.com/SoulWallet/soulwalletlib/issues"
     },
     "dependencies": {
-        "@soulwallet/abi": "workspace:*",
-        "@soulwallet/result": "workspace:*",
+        "@soulwallet_test/abi": "workspace:*",
+        "@soulwallet_test/result": "workspace:*",
         "ethers": "^6.7.0"
     },
     "devDependencies": {

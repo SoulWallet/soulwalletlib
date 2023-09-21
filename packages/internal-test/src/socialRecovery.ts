@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { L1KeyStore, SoulWallet } from "@soulwallet/sdk";
+import { L1KeyStore, SoulWallet } from "@soulwallet_test/sdk";
 
 export class SocialRecovery {
 

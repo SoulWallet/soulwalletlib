@@ -1,4 +1,4 @@
-import { Result, Ok, Err } from '@soulwallet/result';
+import { Result, Ok, Err } from '@soulwallet_test/result';
 import { IVault, VaultEvents } from './interface/IVault.js';
 import { Storage } from './storage.js';
 import { AES_256_GCM, ECDSA, ABFA, Utils } from './crypto.js';

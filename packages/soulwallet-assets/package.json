@@ -1,6 +1,6 @@
 {
-    "name": "@soulwallet/assets",
-    "version": "0.1.1",
+    "name": "@soulwallet_test/assets",
+    "version": "0.1.0",
     "description": "A database of token",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -36,7 +36,7 @@
         "url": "https://github.com/SoulWallet/soulwalletlib/issues"
     },
     "dependencies": {
-        "@soulwallet/result": "workspace:*"
+        "@soulwallet_test/result": "workspace:*"
     },
     "devDependencies": {
         "@types/node": "^20.3.1"

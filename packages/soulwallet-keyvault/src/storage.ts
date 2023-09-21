@@ -1,4 +1,4 @@
-import { Result, Ok, Err } from '@soulwallet/result';
+import { Result, Ok, Err } from '@soulwallet_test/result';
 import { IStorage } from './interface/IStorage.js';
 import { homedir } from 'os';
 import { join } from 'path';
@@ -27,7 +27,7 @@ export class Storage implements IStorage {
 
 
     // private async safeKey(str: string): Promise<string> {
-    //     str = '@soulwallet/keyvault:' + str;
+    //     str = '@soulwallet_test/keyvault:' + str;
     //     const hash = createHash('sha256');
     //     hash.update(str);
     //     const digest = hash.digest('hex');

@@ -7,11 +7,6 @@ export default [
         "type": "constructor"
     },
     {
-        "inputs": [],
-        "name": "UNSUPPORTED_SIGNTYPE",
-        "type": "error"
-    },
-    {
         "anonymous": false,
         "inputs": [
             {

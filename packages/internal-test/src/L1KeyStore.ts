@@ -1,6 +1,6 @@
 import { TypedDataDomain, TypedDataField, ethers } from "ethers";
-import { GuardianSignature, KeyStoreTypedDataType, L1KeyStore } from "@soulwallet/sdk";
-import { ABI_KeyStore } from "@soulwallet/abi";
+import { GuardianSignature, KeyStoreTypedDataType, L1KeyStore } from "@soulwallet_test/sdk";
+import { ABI_KeyStore } from "@soulwallet_test/abi";
 
 export class L1KeyStoreTest {
     readonly rpc: string;
