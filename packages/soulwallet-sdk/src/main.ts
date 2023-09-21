@@ -1,6 +1,6 @@
 import { SoulWallet } from "./soulWallet.js";
 import { L1KeyStore } from "./L1KeyStore.js";
-import { Transaction } from "./interface/ISoulWallet.js";
+import { Transaction, InitialKey, ECCPoint } from "./interface/ISoulWallet.js";
 import { UserOperation } from "./interface/UserOperation.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { UserOpReceipt, UserOpDetail, UserOpGas } from "./interface/IBundler.js";
@@ -24,5 +24,7 @@ export {
     Transaction,
     KeyStoreInfo,
     GuardianSignature,
-    KeyStoreTypedDataType
+    KeyStoreTypedDataType,
+    InitialKey,
+    ECCPoint
 }

@@ -38,7 +38,7 @@ export abstract class ISoulWallet {
      *
      * @abstract
      * @param {number} index
-     * @param {string} initialKey
+     * @param {InitialKey[]} initialKeys
      * @param {string} initialGuardianHash
      * @param {number} [initialGuardianSafePeriod]
      * @return {*}  {Promise<Result<string, Error>>}
@@ -46,7 +46,7 @@ export abstract class ISoulWallet {
      */
     abstract calcWalletAddress(
         index: number,
-        initialKey: string,
+        initialKeys: InitialKey[],
         initialGuardianHash: string,
         initialGuardianSafePeriod?: number
     ): Promise<Result<string, Error>>;
@@ -57,7 +57,7 @@ export abstract class ISoulWallet {
      *
      * @abstract
      * @param {number} index
-     * @param {string} initialKey
+     * @param {InitialKey[]} initialKeys
      * @param {string} initialGuardianHash
      * @param {string} [callData]
      * @param {number} [initialGuardianSafePeriod]
@@ -66,13 +66,13 @@ export abstract class ISoulWallet {
      */
     abstract createUnsignedDeployWalletUserOp(
         index: number,
-        initialKey: string,
+        initialKeys: InitialKey[],
         initialGuardianHash: string,
         callData?: string,
         initialGuardianSafePeriod?: number
     ): Promise<Result<UserOperation, Error>>;
 
-    
+
     /**
      * get userOpHash from the userOp.
      *
@@ -104,30 +104,18 @@ export abstract class ISoulWallet {
             validationData: string
         }, Error>
     >;
- 
-    /**
-     * pack userOp signature.
-     *
-     * @abstract
-     * @param {string} signature EOA signature
-     * @param {string} validationData validation data
-     * @param {GuardHookInputData} [guardHookInputData] sender: wallet address, inputData: key: guardHookPlugin address, value: input data
-     * @return {*}  {Promise<Result<string, Error>>}
-     * @memberof ISoulWallet
-     */
-    abstract packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>>;
- 
 
     /**
      * Estimate the gas for userOp and fill it into the userOp.
      *
      * @abstract
      * @param {UserOperation} userOp UserOperation
+     * @param {SignkeyType} [signkeyType] default: SignkeyType.EOA
      * @param {GuardHookInputData} [semiValidGuardHookInputData]  sender: wallet address, inputData: key: guardHookPlugin address, value: input data
      * @return {*}  {Promise<Result<true, UserOpErrors>>}
      * @memberof ISoulWallet
      */
-    abstract estimateUserOperationGas(userOp: UserOperation, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>>;
+    abstract estimateUserOperationGas(userOp: UserOperation, signkeyType?: SignkeyType, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>>;
 
     /**
      * broadcast the userOp.
@@ -171,7 +159,7 @@ export abstract class ISoulWallet {
      * @memberof ISoulWallet
      */
     abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, Error>>;
- 
+
 
     /**
      * get the nonce from the wallet.
@@ -209,4 +197,40 @@ export class GuardHookInputData {
      * @memberof GuardHookInputData
      */
     inputData: Record<string, string> = {};
+}
+
+
+
+export interface ECCPoint {
+    /**
+     * Hex string of x coordinate
+     *
+     * @type {string}
+     * @memberof ECCPoint
+     */
+    x: string;
+    /**
+     * Hex string of y coordinate
+     *
+     * @type {string}
+     * @memberof ECCPoint
+     */
+    y: string;
+}
+
+/**
+ * Initial key of the wallet
+ * ECCPoint or EOA address
+ */
+export type InitialKey = ECCPoint | string;
+
+/**
+ * Key type
+ *
+ * @export
+ * @enum {number}
+ */
+export enum SignkeyType {
+    EOA = 0,
+    P256 = 1,
 }
