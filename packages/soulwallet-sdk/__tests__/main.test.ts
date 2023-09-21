@@ -13,7 +13,10 @@ import {
     Transaction,
     KeyStoreInfo,
     GuardianSignature,
-    KeyStoreTypedDataType
+    KeyStoreTypedDataType,
+    InitialKey,
+    ECCPoint,
+    SignkeyType
 } from '..';
 import { describe, expect, test } from '@jest/globals';
 

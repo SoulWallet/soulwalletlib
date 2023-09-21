@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet_test/keyvault",
-    "version": "0.1.2",
+    "version": "0.1.0",
     "description": "A lightweight private key management library",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
