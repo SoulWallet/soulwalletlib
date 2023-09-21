@@ -1,4 +1,4 @@
-import { Result, Ok, Err } from '@soulwallet/result';
+import { Result, Ok, Err } from '@soulwallet_test/result';
 import { scrypt as _scrypt } from 'scrypt-js';
 import scryptConfig from './config/scryptConfig.js'
 import { ethers } from 'ethers';

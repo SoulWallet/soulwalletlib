@@ -1,9 +1,9 @@
 import { GuardianSignature, IL1KeyStore, KeyStoreInfo, KeyStoreTypedDataType } from "./interface/IL1KeyStore.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { TypedDataDomain, TypedDataField, ethers } from "ethers";
-import { ABI_KeyStore } from "@soulwallet/abi";
+import { ABI_KeyStore } from "@soulwallet_test/abi";
 import { Hex } from "./tools/hex.js";
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Ok, Err, Result } from '@soulwallet_test/result';
 import { bigIntToNumber } from './tools/convert.js';
 
 /**

@@ -1,5 +1,5 @@
 {
-  "name": "@soulwallet/result",
+  "name": "@soulwallet_test/result",
   "version": "0.1.1",
   "description": "A lib designed based on the philosophy of 'Errors are values'",
   "author": "Jayden@SoulWallet",

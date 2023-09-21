@@ -4,7 +4,7 @@ import { Transaction } from "./interface/ISoulWallet.js";
 import { UserOperation } from "./interface/UserOperation.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { UserOpReceipt, UserOpDetail, UserOpGas } from "./interface/IBundler.js";
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Ok, Err, Result } from '@soulwallet_test/result';
 import { Bundler } from "./bundler.js";
 import { KeyStoreInfo, GuardianSignature, KeyStoreTypedDataType } from "./interface/IL1KeyStore.js";
 import { UserOpUtils } from "./userOpUtils.js";

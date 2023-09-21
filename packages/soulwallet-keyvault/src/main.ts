@@ -1,5 +1,5 @@
 import { Vault } from './vault.js';
-import { Ok, Err, Result } from '@soulwallet/result';
+import { Ok, Err, Result } from '@soulwallet_test/result';
 import { ABFA } from './crypto.js';
 import { SignData, VaultEvents } from './interface/IVault.js';
 
