@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.2
+
+### Patch Changes
+
+- add packRawHash function
+
 ## 0.1.1
 
 ### Patch Changes

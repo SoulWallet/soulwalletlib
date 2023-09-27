@@ -422,10 +422,16 @@ export class SoulWallet implements ISoulWallet {
 
     async packRawHash(hash: string, validAfter?: number, validUntil?: number): Promise<
         Result<{
-            packedUserOpHash: string,
+            packedHash: string,
             validationData: string
         }, Error>> {
-        return new Ok(Signature.packUserOpHash(hash, validAfter, validUntil));
+        const ret = Signature.packUserOpHash(hash, validAfter, validUntil);
+        return new Ok(
+            {
+                packedHash: ret.packedUserOpHash,
+                validationData: ret.validationData
+            }
+        );
     }
 
     private async guardHookList(walletAddress: string): Promise<Result<string[], Error>> {
