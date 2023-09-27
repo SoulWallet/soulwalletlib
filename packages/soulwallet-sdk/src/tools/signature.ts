@@ -251,11 +251,11 @@ export class Signature {
         validationData: string,
         guardHookInputData?: HookInputData
     ): string {
-        TypeGuard.onlyBytes32(signatureData.publicKey.x);
-        TypeGuard.onlyBytes32(signatureData.publicKey.y);
-        TypeGuard.onlyBytes32(signatureData.r);
-        TypeGuard.onlyBytes32(signatureData.s);
-        TypeGuard.onlyBytes(signatureData.authenticatorData);
+        if (TypeGuard.onlyBytes32(signatureData.publicKey.x).isErr() === true) throw new Error('invalid publicKey.x');
+        if (TypeGuard.onlyBytes32(signatureData.publicKey.y).isErr() === true) throw new Error('invalid publicKey.y');
+        if (TypeGuard.onlyBytes32(signatureData.r).isErr() === true) throw new Error('invalid r');
+        if (TypeGuard.onlyBytes32(signatureData.s).isErr() === true) throw new Error('invalid s');
+        if (TypeGuard.onlyBytes(signatureData.authenticatorData).isErr() === true) throw new Error('invalid authenticatorData');
         if (!signatureData.clientDataSuffix.startsWith('"')) {
             throw new Error('invalid clientDataSuffix');
         }

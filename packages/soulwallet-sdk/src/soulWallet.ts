@@ -192,11 +192,11 @@ export class SoulWallet implements ISoulWallet {
         const _initialKeys: string[] = [];
         for (const oneKey of initialKeys) {
             if (typeof oneKey === 'string') {
-                TypeGuard.onlyAddress(oneKey);
+                if (TypeGuard.onlyAddress(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
                 _initialKeys.push(Hex.paddingZero(oneKey, 32));
             } else {
-                TypeGuard.onlyBytes32(oneKey.x);
-                TypeGuard.onlyBytes32(oneKey.y);
+                if (TypeGuard.onlyBytes32(oneKey.x).isErr() === true) { throw new Error(`invalid key.x: ${oneKey.x}`); }
+                if (TypeGuard.onlyBytes32(oneKey.y).isErr() === true) { throw new Error(`invalid key.y: ${oneKey.y}`); }
                 // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
                 const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [oneKey.x, oneKey.y]));
                 _initialKeys.push(_key);
@@ -420,6 +420,14 @@ export class SoulWallet implements ISoulWallet {
         return new Ok(Signature.packUserOpHash(userOPHashRet.OK, validAfter, validUntil));
     }
 
+    async packRawHash(hash: string, validAfter?: number, validUntil?: number): Promise<
+        Result<{
+            packedUserOpHash: string,
+            validationData: string
+        }, Error>> {
+        return new Ok(Signature.packUserOpHash(hash, validAfter, validUntil));
+    }
+
     private async guardHookList(walletAddress: string): Promise<Result<string[], Error>> {
         try {
             const _soulWallet = new ethers.Contract(walletAddress, ABI_SoulWallet, this.provider);
@@ -573,7 +581,7 @@ export class SoulWallet implements ISoulWallet {
                 }
                 userOp.callGasLimit = `0x${_newCallGasLimit.toString(16)}`;
             }
-            GasOverhead.calcGasOverhead(userOp);
+            GasOverhead.calcGasOverhead(userOp, signkeyType);
             return new Ok(true);
         } finally {
             if (semiValidSignature) {
