@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.3
+
+### Patch Changes
+
+- remove keyStoreModule
+
 ## 0.1.2
 
 ### Patch Changes
