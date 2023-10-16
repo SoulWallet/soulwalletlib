@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { ECCPoint, GuardHookInputData, ISoulWallet, InitialKey, SignkeyType, Transaction } from "./interface/ISoulWallet.js";
+import { GuardHookInputData, ISoulWallet, InitialKey, SignkeyType, Transaction } from "./interface/ISoulWallet.js";
 import { UserOperation } from "./interface/UserOperation.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { StorageCache } from "./tools/storageCache.js";
@@ -11,6 +11,7 @@ import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
 import { Ok, Err, Result } from '@soulwallet_test/result';
 import { getUserOpHash } from "./tools/userOpHash.js";
+import { ECCPoint } from "./tools/webauthn.js";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -492,18 +493,20 @@ export class SoulWallet implements ISoulWallet {
      * pack userOp signature (P256)
      *
      * @param {{
+     *         messageHash:string,
      *         publicKey: ECCPoint,
      *         r: string,
      *         s: string,
      *         authenticatorData: string,
      *         clientDataSuffix: string
-     *     }} signatureData signature data
+     *     }} signatureData signature data, messageHash is userOp hash(packed userOp hash)
      * @param {string} validationData validation data
      * @param {GuardHookInputData} [guardHookInputData]
      * @return {*}  {Promise<Result<string, Error>>}
      * @memberof SoulWallet
      */
     async packUserOpP256Signature(signatureData: {
+        messageHash:string,
         publicKey: ECCPoint,
         r: string,
         s: string,
@@ -545,6 +548,7 @@ export class SoulWallet implements ISoulWallet {
                 if (signkeyType === SignkeyType.P256) {
                     signatureRet = await this.packUserOpP256Signature(
                         {
+                            messageHash:"0x83714056da6e6910b51595330c2c2cdfbf718f2deff5bdd84b95df7a7f36f6dd",
                             publicKey: {
                                 x: "0xe89e8b4be943fadb4dc599fe2e8af87a79b438adde328a3b72d43324506cd5b6",
                                 y: "0x4fbfe4a2f9934783c3b1af712ee87abc08f576e79346efc3b8355d931bd7b976"
@@ -558,7 +562,7 @@ export class SoulWallet implements ISoulWallet {
                         semiValidGuardHookInputData
                     );
                 } else {
-                    const signature = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+                    const signature = "0xb91467e570a6466aa9e9876cbcd013baba02900b8979d43fe208a4a4f339f5fd6007e74cd82e037b800186422fc2da167c747ef045e5d18a5f5d4300f8e1a0291c";
                     signatureRet = await this.packUserOpEOASignature(signature, `0x${validationData.toString(16)}`, semiValidGuardHookInputData);
                 }
                 if (signatureRet.isErr() === true) {

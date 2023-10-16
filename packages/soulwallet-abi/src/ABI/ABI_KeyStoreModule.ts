@@ -93,7 +93,7 @@ export default [
         "name": "keyStoreProof",
         "outputs": [
             {
-                "internalType": "contract IKeystoreProof",
+                "internalType": "contract IKeyStoreProof",
                 "name": "",
                 "type": "address"
             }

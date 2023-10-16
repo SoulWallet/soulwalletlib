@@ -23,6 +23,66 @@ export default [
         "type": "constructor"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "target",
+                "type": "address"
+            }
+        ],
+        "name": "AddressEmptyCode",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "AddressInsufficientBalance",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "FailedInnerCall",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableInvalidOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableUnauthorizedAccount",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "token",
+                "type": "address"
+            }
+        ],
+        "name": "SafeERC20FailedOperation",
+        "type": "error"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {

@@ -89,6 +89,11 @@ export default [
     },
     {
         "inputs": [],
+        "name": "InvalidInitialization",
+        "type": "error"
+    },
+    {
+        "inputs": [],
         "name": "MODULE_ADDRESS_EMPTY",
         "type": "error"
     },
@@ -115,6 +120,11 @@ export default [
     {
         "inputs": [],
         "name": "NO_OWNER",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "NotInitializing",
         "type": "error"
     },
     {
@@ -198,9 +208,9 @@ export default [
         "inputs": [
             {
                 "indexed": false,
-                "internalType": "uint8",
+                "internalType": "uint64",
                 "name": "version",
-                "type": "uint8"
+                "type": "uint64"
             }
         ],
         "name": "Initialized",
