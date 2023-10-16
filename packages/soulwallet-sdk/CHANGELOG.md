@@ -1,5 +1,13 @@
 # @soulwallet/sdk
 
+## 0.1.4
+
+### Patch Changes
+
+- update P256 signature
+- Updated dependencies
+  - @soulwallet_test/abi@0.1.1
+
 ## 0.1.3
 
 ### Patch Changes

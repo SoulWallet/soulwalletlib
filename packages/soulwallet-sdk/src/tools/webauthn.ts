@@ -58,11 +58,14 @@ export class WebAuthN {
         r: string, s: string,
         authenticatorData: string,
         clientDataSuffix: string,
-        clientDataPrefix = '{"type":"webauthn.get","challenge":"'
+        clientDataPrefix?: string
     ): {
         0: ECCPoint,
         1: ECCPoint
     } {
+        if (typeof clientDataPrefix === 'undefined') {
+            clientDataPrefix = '{"type":"webauthn.get","challenge":"'
+        }
         if (TypeGuard.onlyBytes32(message).isErr() === true) { throw new Error(`invalid message.x: ${message}`); }
         if (message.startsWith("0x")) {
             message = message.slice(2);
