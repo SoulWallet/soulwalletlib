@@ -1,6 +1,6 @@
 {
   "name": "@soulwallet_test/abi",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "soulwallet-contract ABI",
   "author": "Jayden@SoulWallet",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",

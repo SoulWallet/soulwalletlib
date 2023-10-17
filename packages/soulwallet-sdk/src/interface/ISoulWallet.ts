@@ -1,6 +1,7 @@
 import { UserOperation } from "./UserOperation.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
 import { Result } from '@soulwallet_test/result';
+import { ECCPoint } from "../tools/webauthn.js";
 
 /**
  * Transaction is the interface for the transaction.
@@ -197,25 +198,6 @@ export class GuardHookInputData {
      * @memberof GuardHookInputData
      */
     inputData: Record<string, string> = {};
-}
-
-
-
-export interface ECCPoint {
-    /**
-     * Hex string of x coordinate
-     *
-     * @type {string}
-     * @memberof ECCPoint
-     */
-    x: string;
-    /**
-     * Hex string of y coordinate
-     *
-     * @type {string}
-     * @memberof ECCPoint
-     */
-    y: string;
 }
 
 /**

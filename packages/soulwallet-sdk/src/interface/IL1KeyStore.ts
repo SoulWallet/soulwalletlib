@@ -120,7 +120,7 @@ export interface KeyStoreInfo {
 /**
  * @interface IL1KeyStore
  * IL1KeyStore is a globally unique contract where each user determines their unique slot using the three fields: 
- * bytes32 initialKey, bytes32 initialGuardianHash, and uint64 initialGuardianSafePeriod.
+ * bytes32 initialKeyHash, bytes32 initialGuardianHash, and uint64 initialGuardianSafePeriod.
  *
  * @abstract
  * @class IL1KeyStore

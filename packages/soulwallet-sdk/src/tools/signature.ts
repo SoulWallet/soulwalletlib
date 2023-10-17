@@ -1,7 +1,8 @@
 import { TypeGuard } from './typeGuard.js';
 import { Hex } from "./hex.js";
 import { ethers } from 'ethers';
-import { ECCPoint, SignkeyType } from '../interface/ISoulWallet.js';
+import { SignkeyType } from '../interface/ISoulWallet.js';
+import { ECCPoint, WebAuthN } from './webauthn.js';
 
 export class HookInputData {
     /**
@@ -22,98 +23,84 @@ export class HookInputData {
 }
 
 export class Signature {
-    /* 
+    /*
+    signature format
 
-    A:
-        # `signType` 0x00:
-        +----------------------------------------+
-        |            raw signature               |
-        +----------------------------------------+
-        |             length:65                  |
-        +----------------------------------------+
-
-    B:
-        # `dynamic structure` definition:
-        +--------------------------------------------------+
-        |      `signType`      |       `dynamic data`      |
-        |----------------------+---------------------------|
-        |      uint8 1byte     |             ...           |
-        +--------------------------------------------------+
-
-        # `signType` 0x01:
-        - EOA signature with validationData ( validAfter and validUntil ) and Plugin guardHook input data
-        +--------------------------------------------------------------------------------------+  
-        |                                   dynamic data                                       |  
-        +--------------------------------------------------------------------------------------+  
-        |     validationData    |        signature        |    multi-guardHookInputData       |
-        +-----------------------+--------------------------------------------------------------+  
-        |    uint256 32 bytes   |   65 length signature   | dynamic data without length header |
-        +--------------------------------------------------------------------------------------+
-
-        +--------------------------------------------------------------------------------+  
-        |                            multi-guardHookInputData                            |  
-        +--------------------------------------------------------------------------------+  
-        |   guardHookInputData  |  guardHookInputData   |   ...  |  guardHookInputData   |
-        +-----------------------+--------------------------------------------------------+  
-        |     dynamic data      |     dynamic data      |   ...  |     dynamic data      |
-        +--------------------------------------------------------------------------------+
-
-        +----------------------------------------------------------------------+  
-        |                                guardHookInputData                    |  
-        +----------------------------------------------------------------------+  
-        |   guardHook address  |   input data length   |      input data       |
-        +----------------------+-----------------------------------------------+  
-        |        20bytes       |     6bytes(uint48)    |         bytes         |
-        +----------------------------------------------------------------------+
-        Note: The order of guardHookInputData must be the same as the order in PluginManager.guardHook()!
+    +-----------------------------------------------------------------------------------------------------+
+    |                                           |                                                         |
+    |                                           |                   validator signature                   |
+    |                                           |                                                         |
+    +---------------+---------------------------+--------------------------+-----------------------------+
+    |     data type | data type dynamic data    |     signature type       |       signature data        |
+    +---------------+---------------------------+--------------------------+-----------------------------+
+    |               |                           |                          |                             |
+    |    1 byte     |      ..........           |        1 byte            |          ......             |
+    |               |                           |                          |                             |
+    +-----------------------------------------------------------------------------------------------------+
 
 
-        # `signType` 0x02: (Not implemented yet)
-        - EIP-1271 signature without validationData
-        +-----------------------------------------------------------------+
-        |                        dynamic data                             |
-        +-----------------------------------------------------------------+
-        |         signer       |  signature (dynamic with length header)  |
-        +----------------------+------------------------------------------+
-        |    address 20 byte   |       dynamic with length header         |
-        +-----------------------------------------------------------------+
+    A: data type 0: no plugin data
+    +-----------------------------------------------------------------------------------------------------+
+    |                                           |                                                         |
+    |                                           |                   validator signature                   |
+    |                                           |                                                         |
+    +---------------+---------------------------+--------------------------+-----------------------------+
+    |     data type | data type dynamic data    |     signature type       |       signature data        |
+    +---------------+---------------------------+--------------------------+-----------------------------+
+    |               |                           |                          |                             |
+    |     0x00      |      empty bytes          |        1 byte            |          ......             |
+    |               |                           |                          |                             |
+    +-----------------------------------------------------------------------------------------------------+
 
 
 
-        +--------------------------------------------------------------------------------+  
-        |                            multi-guardHookInputData                            |  
-        +--------------------------------------------------------------------------------+  
-        |   guardHookInputData  |  guardHookInputData   |   ...  |  guardHookInputData   |
-        +-----------------------+--------------------------------------------------------+  
-        |     dynamic data      |     dynamic data      |   ...  |     dynamic data      |
-        +--------------------------------------------------------------------------------+
 
-        +----------------------------------------------------------------------+  
-        |                                guardHookInputData                    |  
-        +----------------------------------------------------------------------+  
-        |   guardHook address  |   input data length   |      input data       |
-        +----------------------+-----------------------------------------------+  
-        |        20bytes       |     6bytes(uint48)    |         bytes         |
-        +----------------------------------------------------------------------+
+     B: data type 1: plugin data
+
+    +-----------------------------------------------------------------------------------------------------+
+    |                                           |                                                         |
+    |                                           |                   validator signature                   |
+    |                                           |                                                         |
+    +---------------+---------------------------+--------------------------+-----------------------------+
+    |     data type | data type dynamic data    |     signature type       |       signature data        |
+    +---------------+---------------------------+--------------------------+-----------------------------+
+    |               |                           |                          |                             |
+    |     0x01      |      .............        |        1 byte            |          ......             |
+    |               |                           |                          |                             |
+    +-----------------------------------------------------------------------------------------------------+
 
 
-         function _isValidUserOp(bytes32 userOpHash, bytes calldata userOpSignature)
-            internal
-            view
-            returns (uint256 validationData, bool sigValid, bytes calldata guardHookInputData)
-        {
-            uint8 signType;
-            bytes calldata signature;
-            (signType, signature, validationData, guardHookInputData) = SignatureDecoder.decodeSignature(userOpSignature);
-            bytes32 hash = _packSignatureHash(userOpHash, signType, validationData).toEthSignedMessageHash();
-            (address recovered, ECDSA.RecoverError error) = ECDSA.tryRecover(hash, signature);
-            if (error != ECDSA.RecoverError.NoError) {
-                sigValid = false;
-            } else {
-                sigValid = _isOwner(recovered);
-            }
-        }
-    */
+
+    +-------------------------+-------------------------------------+
+    |                                                               |
+    |                  data type dynamic data                       |
+    |                                                               |
+    +-------------------------+-------------------------------------+
+    | dynamic data length     | multi-guardHookInputData            |
+    +-------------------------+-------------------------------------+
+    | uint256 32 bytes        | dynamic data without length header  |
+    +-------------------------+-------------------------------------+
+
+
+    +--------------------------------------------------------------------------------+
+    |                            multi-guardHookInputData                            |
+    +--------------------------------------------------------------------------------+
+    |   guardHookInputData  |  guardHookInputData   |   ...  |  guardHookInputData   |
+    +-----------------------+-----------------------+--------+-----------------------+
+    |     dynamic data      |     dynamic data      |   ...  |     dynamic data      |
+    +--------------------------------------------------------------------------------+
+
+    +----------------------------------------------------------------------+
+    |                                guardHookInputData                    |
+    +----------------------------------------------------------------------+
+    |   guardHook address  |   input data length   |      input data       |
+    +----------------------+-----------------------+-----------------------+
+    |        20bytes       |     6bytes(uint48)    |         bytes         |
+    +----------------------------------------------------------------------+
+
+    Note: The order of guardHookInputData must be the same as the order in PluginManager.guardHook()!
+
+     */
 
     static onlyEOASignature(signature: string): void {
         if (TypeGuard.onlyBytes(signature).isErr() === true) throw new Error('invalid EOA signature');
@@ -229,6 +216,7 @@ export class Signature {
      *
      * @static
      * @param {{
+     *             messageHash:string,
      *             publicKey: ECCPoint,
      *             r: string,
      *             s: string,
@@ -242,6 +230,7 @@ export class Signature {
      */
     static packP256Signature(
         signatureData: {
+            messageHash: string,
             publicKey: ECCPoint,
             r: string,
             s: string,
@@ -251,23 +240,49 @@ export class Signature {
         validationData: string,
         guardHookInputData?: HookInputData
     ): string {
-        TypeGuard.onlyBytes32(signatureData.publicKey.x);
-        TypeGuard.onlyBytes32(signatureData.publicKey.y);
-        TypeGuard.onlyBytes32(signatureData.r);
-        TypeGuard.onlyBytes32(signatureData.s);
-        TypeGuard.onlyBytes(signatureData.authenticatorData);
+        if (TypeGuard.onlyBytes32(signatureData.messageHash).isErr() === true) throw new Error('invalid messageHash');
+        if (TypeGuard.onlyBytes32(signatureData.publicKey.x).isErr() === true) throw new Error('invalid publicKey.x');
+        if (TypeGuard.onlyBytes32(signatureData.publicKey.y).isErr() === true) throw new Error('invalid publicKey.y');
+        if (TypeGuard.onlyBytes32(signatureData.r).isErr() === true) throw new Error('invalid r');
+        if (TypeGuard.onlyBytes32(signatureData.s).isErr() === true) throw new Error('invalid s');
+        if (TypeGuard.onlyBytes(signatureData.authenticatorData).isErr() === true) throw new Error('invalid authenticatorData');
         if (!signatureData.clientDataSuffix.startsWith('"')) {
             throw new Error('invalid clientDataSuffix');
         }
         let packedSignature = Signature.prePackSignature(SignkeyType.P256, validationData, guardHookInputData);
-
-        packedSignature += signatureData.publicKey.x.slice(2);
-        packedSignature += signatureData.publicKey.y.slice(2);
+        let v = ''
+        {
+            const recover = WebAuthN.recoverWebAuthN(signatureData.messageHash, signatureData.r, signatureData.s, signatureData.authenticatorData, signatureData.clientDataSuffix);
+            if (recover[0].y.toLowerCase() === signatureData.publicKey.y.toLowerCase()) {
+                v = '1b';// 27
+            } else if (recover[1].y.toLowerCase() === signatureData.publicKey.y.toLowerCase()) {
+                v = '1c';// 28
+            } else {
+                throw new Error('invalid signature');
+            }
+        }
+        /*
+            signature layout:
+            1. r (32 bytes)
+            2. s (32 bytes)
+            3. v (1 byte)
+            4. authenticatorData length (2 byte max 65535)
+            5. clientDataPrefix length (2 byte max 65535)
+            6. authenticatorData
+            7. clientDataPrefix
+            8. clientDataSuffix
+            
+        */
         packedSignature += signatureData.r.slice(2);
         packedSignature += signatureData.s.slice(2);
-
-        // abi.encode(authenticatorData,clientDataSuffix)
-        packedSignature += (new ethers.AbiCoder().encode(["bytes", "string"], [signatureData.authenticatorData, signatureData.clientDataSuffix])).slice(2);
+        packedSignature += v;
+        if (signatureData.authenticatorData.startsWith('0x')) {
+            signatureData.authenticatorData = signatureData.authenticatorData.slice(2);
+        }
+        packedSignature += Hex.paddingZero(signatureData.authenticatorData.length / 2, 2).slice(2);
+        packedSignature += "0000"; // clientDataPrefix length = 0
+        packedSignature += signatureData.authenticatorData;
+        packedSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
 
         return packedSignature.toLowerCase();
     }
