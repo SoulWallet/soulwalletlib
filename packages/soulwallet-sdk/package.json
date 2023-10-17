@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet_test/sdk",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "SoulWalletSDK = {  Basic Functions,  Bundler, KeyStore,  SignatureTools }",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",

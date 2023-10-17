@@ -186,7 +186,8 @@ export class SoulWallet implements ISoulWallet {
             )
         */
 
-        const _initialKeyHash = L1KeyStore.calcInitialKeyHash(initialKeys);
+        const initalAddresses = L1KeyStore.initialKeysToAddress(initialKeys);
+        const _initialKeyHash = ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [initalAddresses]));
 
         // default dely time is 2 days
         const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
@@ -202,7 +203,7 @@ export class SoulWallet implements ISoulWallet {
         }
         const _soulWallet = new ethers.Contract(_onChainConfig.OK.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            initialKeys,
+            initalAddresses,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,
