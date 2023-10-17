@@ -4,13 +4,7 @@
 
 ### Patch Changes
 
-- Compatible with the latest version of the contract
-
-## 0.1.1
-
-### Patch Changes
-
-- update P256 signature
+- passkey version merged into soulwallet@npmjs.com
 
 ## 0.1.1
 

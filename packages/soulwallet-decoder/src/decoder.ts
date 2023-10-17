@@ -1,7 +1,7 @@
 import soulWalletBytes4 from './soulwalletBytes4.js';
 import hotBytes4 from './hotBytes4.js';
-import { getAsset } from "@soulwallet_test/assets";
-import { Ok, Err, Result } from '@soulwallet_test/result';
+import { getAsset } from "@soulwallet/assets";
+import { Ok, Err, Result } from '@soulwallet/result';
 import { DecodeResult, Method } from './interface/decodeData.js';
 import { ethers } from 'ethers';
 import { Bytes4 } from './interface/bytes4.js';

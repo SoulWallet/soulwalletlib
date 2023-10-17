@@ -1,4 +1,4 @@
-import { Vault } from '@soulwallet_test/keyvault';
+import { Vault } from '@soulwallet/keyvault';
 import { ethers } from "ethers";
 
 

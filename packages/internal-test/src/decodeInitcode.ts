@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
-import { SoulWallet, Transaction, Bundler, UserOpUtils, UserOperation } from "@soulwallet_test/sdk";
-import { Vault } from '@soulwallet_test/keyvault';
+import { SoulWallet, Transaction, Bundler, UserOpUtils, UserOperation } from "@soulwallet/sdk";
+import { Vault } from '@soulwallet/keyvault';
 
-import { ABI_SoulWalletFactory, ABI_SoulWallet } from "@soulwallet_test/abi";
+import { ABI_SoulWalletFactory, ABI_SoulWallet } from "@soulwallet/abi";
 
 
 export class DecodeInitCode {

@@ -74,16 +74,16 @@ importers:
 
   packages/internal-test:
     dependencies:
-      '@soulwallet_test/abi':
+      '@soulwallet/abi':
         specifier: workspace:*
         version: link:../soulwallet-abi
-      '@soulwallet_test/decoder':
+      '@soulwallet/decoder':
         specifier: workspace:*
         version: link:../soulwallet-decoder
-      '@soulwallet_test/keyvault':
+      '@soulwallet/keyvault':
         specifier: workspace:*
         version: link:../soulwallet-keyvault
-      '@soulwallet_test/sdk':
+      '@soulwallet/sdk':
         specifier: workspace:*
         version: link:../soulwallet-sdk
       bn.js:
@@ -120,7 +120,7 @@ importers:
 
   packages/soulwallet-assets:
     dependencies:
-      '@soulwallet_test/result':
+      '@soulwallet/result':
         specifier: workspace:*
         version: link:../soulwallet-result
     devDependencies:
@@ -130,13 +130,13 @@ importers:
 
   packages/soulwallet-decoder:
     dependencies:
-      '@soulwallet_test/abi':
+      '@soulwallet/abi':
         specifier: workspace:*
         version: link:../soulwallet-abi
-      '@soulwallet_test/assets':
+      '@soulwallet/assets':
         specifier: workspace:*
         version: link:../soulwallet-assets
-      '@soulwallet_test/result':
+      '@soulwallet/result':
         specifier: workspace:*
         version: link:../soulwallet-result
       ethers:
@@ -155,7 +155,7 @@ importers:
 
   packages/soulwallet-keyvault:
     dependencies:
-      '@soulwallet_test/result':
+      '@soulwallet/result':
         specifier: workspace:*
         version: link:../soulwallet-result
       ethers:
@@ -176,10 +176,10 @@ importers:
 
   packages/soulwallet-sdk:
     dependencies:
-      '@soulwallet_test/abi':
+      '@soulwallet/abi':
         specifier: workspace:*
         version: link:../soulwallet-abi
-      '@soulwallet_test/result':
+      '@soulwallet/result':
         specifier: workspace:*
         version: link:../soulwallet-result
       ethers:

@@ -1,5 +1,5 @@
 {
-  "name": "@soulwallet_test/abi",
+  "name": "@soulwallet/abi",
   "version": "0.1.2",
   "description": "soulwallet-contract ABI",
   "author": "Jayden@SoulWallet",

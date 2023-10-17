@@ -1,4 +1,4 @@
-import { Result, Ok, Err } from '@soulwallet_test/result';
+import { Result, Ok, Err } from '@soulwallet/result';
 import { IStorage } from './interface/IStorage.js';
 
 export class Storage implements IStorage {
@@ -23,12 +23,12 @@ export class Storage implements IStorage {
         } else {
             throw new Error('Unknown environment');
         }
-        this._signerStorageKey = `@soulwallet_test/keyvault:data-${tag}`;
+        this._signerStorageKey = `@soulwallet/keyvault:data-${tag}`;
     }
 
 
     // private async safeKey(str: string): Promise<string> {
-    //     str = '@soulwallet_test/keyvault:' + str;
+    //     str = '@soulwallet/keyvault:' + str;
     //     // SHA-256
     //     const encoder = new TextEncoder();
     //     const data = encoder.encode(str);

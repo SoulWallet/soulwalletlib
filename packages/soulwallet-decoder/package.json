@@ -1,5 +1,5 @@
 {
-    "name": "@soulwallet_test/decoder",
+    "name": "@soulwallet/decoder",
     "version": "0.1.2",
     "description": "A lib for decode userOp.calldata",
     "author": "Jayden@SoulWallet",
@@ -36,9 +36,9 @@
         "url": "https://github.com/SoulWallet/soulwalletlib/issues"
     },
     "dependencies": {
-        "@soulwallet_test/abi": "workspace:*",
-        "@soulwallet_test/result": "workspace:*",
-        "@soulwallet_test/assets": "workspace:*",
+        "@soulwallet/abi": "workspace:*",
+        "@soulwallet/result": "workspace:*",
+        "@soulwallet/assets": "workspace:*",
         "ethers": "^6.7.0"
     },
     "devDependencies": {
