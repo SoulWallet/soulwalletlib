@@ -1,5 +1,13 @@
 # @soulwallet/sdk
 
+## 0.1.5
+
+### Patch Changes
+
+- Compatible with the latest version of the contract
+- Updated dependencies
+  - @soulwallet_test/abi@0.1.2
+
 ## 0.1.4
 
 ### Patch Changes

@@ -12,6 +12,11 @@ export default [
                 "internalType": "contract IKeyStoreStorage",
                 "name": "_keystorStorage",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
             }
         ],
         "stateMutability": "nonpayable",
@@ -120,11 +125,6 @@ export default [
             }
         ],
         "name": "StringTooLong",
-        "type": "error"
-    },
-    {
-        "inputs": [],
-        "name": "UNAUTHORIZED",
         "type": "error"
     },
     {
@@ -615,7 +615,7 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "initialKey",
+                "name": "initialKeyHash",
                 "type": "bytes32"
             },
             {
@@ -665,7 +665,7 @@ export default [
         "outputs": [
             {
                 "internalType": "bytes32",
-                "name": "signingKey",
+                "name": "signingKeyHash",
                 "type": "bytes32"
             }
         ],
@@ -747,7 +747,7 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "initialKey",
+                "name": "initialKeyHash",
                 "type": "bytes32"
             },
             {
@@ -813,7 +813,7 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "initialKey",
+                "name": "initialKeyHash",
                 "type": "bytes32"
             },
             {
@@ -883,12 +883,22 @@ export default [
                 "type": "bytes32"
             },
             {
-                "internalType": "bytes32",
-                "name": "newKey",
-                "type": "bytes32"
+                "internalType": "bytes",
+                "name": "newRawOwners",
+                "type": "bytes"
+            },
+            {
+                "internalType": "bytes",
+                "name": "rawGuardian",
+                "type": "bytes"
+            },
+            {
+                "internalType": "bytes",
+                "name": "guardianSignature",
+                "type": "bytes"
             }
         ],
-        "name": "setKey",
+        "name": "setKeyByGuardian",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -897,7 +907,7 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "initialKey",
+                "name": "initialKeyHash",
                 "type": "bytes32"
             },
             {
@@ -911,13 +921,8 @@ export default [
                 "type": "uint256"
             },
             {
-                "internalType": "bytes32",
-                "name": "newKey",
-                "type": "bytes32"
-            },
-            {
                 "internalType": "bytes",
-                "name": "rawOwners",
+                "name": "newRawOwners",
                 "type": "bytes"
             },
             {
@@ -944,56 +949,13 @@ export default [
                 "type": "bytes32"
             },
             {
-                "internalType": "bytes32",
-                "name": "newKey",
-                "type": "bytes32"
-            },
-            {
                 "internalType": "bytes",
-                "name": "rawOwners",
+                "name": "newRawOwners",
                 "type": "bytes"
             },
             {
                 "internalType": "bytes",
-                "name": "rawGuardian",
-                "type": "bytes"
-            },
-            {
-                "internalType": "bytes",
-                "name": "guardianSignature",
-                "type": "bytes"
-            }
-        ],
-        "name": "setKeyByGuardian",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes32",
-                "name": "initialKey",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "initialGuardianHash",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "uint256",
-                "name": "initialGuardianSafePeriod",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "newKey",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes",
-                "name": "rawOwners",
+                "name": "currentRawOwners",
                 "type": "bytes"
             },
             {
@@ -1011,17 +973,27 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "slot",
+                "name": "initialKeyHash",
                 "type": "bytes32"
             },
             {
                 "internalType": "bytes32",
-                "name": "newKey",
+                "name": "initialGuardianHash",
                 "type": "bytes32"
             },
             {
+                "internalType": "uint256",
+                "name": "initialGuardianSafePeriod",
+                "type": "uint256"
+            },
+            {
                 "internalType": "bytes",
-                "name": "rawOwners",
+                "name": "newRawOwners",
+                "type": "bytes"
+            },
+            {
+                "internalType": "bytes",
+                "name": "currentRawOwners",
                 "type": "bytes"
             },
             {

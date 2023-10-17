@@ -48,7 +48,7 @@ export default [
             {
                 "indexed": false,
                 "internalType": "bytes32",
-                "name": "signingKey",
+                "name": "signingKeyHash",
                 "type": "bytes32"
             }
         ],
@@ -93,7 +93,7 @@ export default [
         "outputs": [
             {
                 "internalType": "bytes32",
-                "name": "signingKey",
+                "name": "signingKeyHash",
                 "type": "bytes32"
             }
         ],

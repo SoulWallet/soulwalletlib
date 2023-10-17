@@ -544,7 +544,7 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32[]",
-                "name": "anOwner",
+                "name": "owners",
                 "type": "bytes32[]"
             },
             {

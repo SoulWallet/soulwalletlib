@@ -1,5 +1,11 @@
 # @soulwallet/abi
 
+## 0.1.2
+
+### Patch Changes
+
+- Compatible with the latest version of the contract
+
 ## 0.1.1
 
 ### Patch Changes

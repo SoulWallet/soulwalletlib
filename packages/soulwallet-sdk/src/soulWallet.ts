@@ -12,6 +12,7 @@ import { Bundler } from "./bundler.js";
 import { Ok, Err, Result } from '@soulwallet_test/result';
 import { getUserOpHash } from "./tools/userOpHash.js";
 import { ECCPoint } from "./tools/webauthn.js";
+import { L1KeyStore } from "./L1KeyStore.js";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -184,46 +185,15 @@ export class SoulWallet implements ISoulWallet {
                 bytes[] calldata plugins
             )
         */
-        if (initialKeys.length === 0) {
-            return new Err(
-                new Error("initialKeys.length===0")
-            );
-        }
 
-        const _initialKeys: string[] = [];
-        for (const oneKey of initialKeys) {
-            if (typeof oneKey === 'string') {
-                if (TypeGuard.onlyAddress(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
-                _initialKeys.push(Hex.paddingZero(oneKey, 32));
-            } else {
-                if (TypeGuard.onlyBytes32(oneKey.x).isErr() === true) { throw new Error(`invalid key.x: ${oneKey.x}`); }
-                if (TypeGuard.onlyBytes32(oneKey.y).isErr() === true) { throw new Error(`invalid key.y: ${oneKey.y}`); }
-                // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
-                const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [oneKey.x, oneKey.y]));
-                _initialKeys.push(_key);
-            }
-        }
-        _initialKeys.sort((a, b) => {
-            const aBig = BigInt(a);
-            const bBig = BigInt(b);
-            if (aBig === bBig) {
-                throw new Error(`guardian address is duplicated: ${a}`);
-            } else if (aBig < bBig) {
-                return -1;
-            } else {
-                return 1;
-            }
-        });
-        // get all key hash
-        // keccak256(abi.encodePacked(bytes32[] key));
-        const _initialKey = ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [_initialKeys]));
+        const _initialKeyHash = L1KeyStore.calcInitialKeyHash(initialKeys);
 
         // default dely time is 2 days
         const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
         /* 
          (bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod) = abi.decode(_data, (bytes32, bytes32, uint64));
         */
-        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKey, initialGuardianHash, initialGuardianSafePeriod]);
+        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKeyHash, initialGuardianHash, initialGuardianSafePeriod]);
         const keyStoreModuleAndData = (this.keyStoreModuleAddress + keyStoreInitData.substring(2)).toLowerCase();
 
         const _onChainConfig = await this.getOnChainConfig();
@@ -232,7 +202,7 @@ export class SoulWallet implements ISoulWallet {
         }
         const _soulWallet = new ethers.Contract(_onChainConfig.OK.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            _initialKeys,
+            initialKeys,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,
@@ -506,7 +476,7 @@ export class SoulWallet implements ISoulWallet {
      * @memberof SoulWallet
      */
     async packUserOpP256Signature(signatureData: {
-        messageHash:string,
+        messageHash: string,
         publicKey: ECCPoint,
         r: string,
         s: string,
@@ -548,7 +518,7 @@ export class SoulWallet implements ISoulWallet {
                 if (signkeyType === SignkeyType.P256) {
                     signatureRet = await this.packUserOpP256Signature(
                         {
-                            messageHash:"0x83714056da6e6910b51595330c2c2cdfbf718f2deff5bdd84b95df7a7f36f6dd",
+                            messageHash: "0x83714056da6e6910b51595330c2c2cdfbf718f2deff5bdd84b95df7a7f36f6dd",
                             publicKey: {
                                 x: "0xe89e8b4be943fadb4dc599fe2e8af87a79b438adde328a3b72d43324506cd5b6",
                                 y: "0x4fbfe4a2f9934783c3b1af712ee87abc08f576e79346efc3b8355d931bd7b976"
