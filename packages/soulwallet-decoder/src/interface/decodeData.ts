@@ -1,5 +1,5 @@
 import { Result } from "ethers";
-import { TokenInfo } from "@soulwallet_test/assets";
+import { TokenInfo } from "@soulwallet/assets";
 
 /**
  * Method is the interface for the function.

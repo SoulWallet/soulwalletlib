@@ -1,6 +1,6 @@
 {
-  "name": "@soulwallet_test/result",
-  "version": "0.1.0",
+  "name": "@soulwallet/result",
+  "version": "0.1.2",
   "description": "A lib designed based on the philosophy of 'Errors are values'",
   "author": "Jayden@SoulWallet",
   "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",

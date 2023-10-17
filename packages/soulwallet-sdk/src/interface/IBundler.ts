@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { UserOperation } from "./UserOperation.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
-import { Result } from '@soulwallet_test/result';
+import { Result } from '@soulwallet/result';
 
 
 /**

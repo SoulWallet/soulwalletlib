@@ -3,13 +3,13 @@ import { GuardHookInputData, ISoulWallet, InitialKey, SignkeyType, Transaction }
 import { UserOperation } from "./interface/UserOperation.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { StorageCache } from "./tools/storageCache.js";
-import { ABI_SoulWalletFactory, ABI_SoulWallet, ABI_EntryPoint } from "@soulwallet_test/abi";
+import { ABI_SoulWalletFactory, ABI_SoulWallet, ABI_EntryPoint } from "@soulwallet/abi";
 import { HookInputData, Signature } from "./tools/signature.js";
 import { Hex } from "./tools/hex.js";
 import { GasOverhead } from "./tools/gasOverhead.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
-import { Ok, Err, Result } from '@soulwallet_test/result';
+import { Ok, Err, Result } from '@soulwallet/result';
 import { getUserOpHash } from "./tools/userOpHash.js";
 import { ECCPoint } from "./tools/webauthn.js";
 import { L1KeyStore } from "./L1KeyStore.js";
@@ -186,7 +186,8 @@ export class SoulWallet implements ISoulWallet {
             )
         */
 
-        const _initialKeyHash = L1KeyStore.calcInitialKeyHash(initialKeys);
+        const initalAddresses = L1KeyStore.initialKeysToAddress(initialKeys);
+        const _initialKeyHash = ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [initalAddresses]));
 
         // default dely time is 2 days
         const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
@@ -202,7 +203,7 @@ export class SoulWallet implements ISoulWallet {
         }
         const _soulWallet = new ethers.Contract(_onChainConfig.OK.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            initialKeys,
+            initalAddresses,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,

@@ -1,6 +1,6 @@
 {
-    "name": "@soulwallet_test/keyvault",
-    "version": "0.1.0",
+    "name": "@soulwallet/keyvault",
+    "version": "0.1.3",
     "description": "A lightweight private key management library",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -39,7 +39,7 @@
         "url": "https://github.com/SoulWallet/soulwalletlib/issues"
     },
     "dependencies": {
-        "@soulwallet_test/result": "workspace:*",
+        "@soulwallet/result": "workspace:*",
         "ethers": "6.7.0",
         "mitt": "3.0.1",
         "scrypt-js": "3.0.1"

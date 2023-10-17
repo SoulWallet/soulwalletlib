@@ -6,7 +6,7 @@ import {
     Method,
     Ok, Err, Result
 } from '..';
-import { ABI_SoulWallet } from "@soulwallet_test/abi";
+import { ABI_SoulWallet } from "@soulwallet/abi";
 import { describe, expect, test } from '@jest/globals';
 import { ethers } from 'ethers';
 

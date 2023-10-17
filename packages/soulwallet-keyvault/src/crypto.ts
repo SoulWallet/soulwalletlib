@@ -1,4 +1,4 @@
-import { Result, Ok, Err } from '@soulwallet_test/result';
+import { Result, Ok, Err } from '@soulwallet/result';
 import { Buffer } from 'buffer';
 import {
     randomBytes,

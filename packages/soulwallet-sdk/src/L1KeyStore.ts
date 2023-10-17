@@ -1,9 +1,9 @@
 import { GuardianSignature, IL1KeyStore, KeyStoreInfo, KeyStoreTypedDataType } from "./interface/IL1KeyStore.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { TypedDataDomain, TypedDataField, ethers } from "ethers";
-import { ABI_KeyStore } from "@soulwallet_test/abi";
+import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
-import { Ok, Err, Result } from '@soulwallet_test/result';
+import { Ok, Err, Result } from '@soulwallet/result';
 import { bigIntToNumber } from './tools/convert.js';
 import { InitialKey } from "./interface/ISoulWallet.js";
 
@@ -69,15 +69,7 @@ export class L1KeyStore implements IL1KeyStore {
         return new Ok(true);
     }
 
-    /**
-     * calculate the initialkey hash
-     *
-     * @static
-     * @param {InitialKey[]} initialKeys
-     * @return {*}  {string}
-     * @memberof L1KeyStore
-     */
-    static calcInitialKeyHash(initialKeys: InitialKey[]): string {
+    static initialKeysToAddress(initialKeys: InitialKey[]): string[] {
         if (initialKeys.length === 0) {
             throw new Error('initialKeys is empty');
         }
@@ -106,9 +98,7 @@ export class L1KeyStore implements IL1KeyStore {
                 return 1;
             }
         });
-        // get all key hash
-        // keccak256(abi.encodePacked(bytes32[] key));
-        return ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [_initialKeys]));
+        return _initialKeys;
     }
 
     /**

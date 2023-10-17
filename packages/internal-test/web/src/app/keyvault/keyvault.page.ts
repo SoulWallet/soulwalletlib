@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Vault, VaultEvents, SignData, Ok, Err, Result } from '@soulwallet_test/keyvault';
-import { SoulWallet } from '@soulwallet_test/sdk';
+import { Vault, VaultEvents, SignData, Ok, Err, Result } from '@soulwallet/keyvault';
+import { SoulWallet } from '@soulwallet/sdk';
 @Component({
   selector: 'app-keyvault',
   templateUrl: './keyvault.page.html',
