@@ -155,11 +155,19 @@ export abstract class ISoulWallet {
      * @param {string} maxPriorityFeePerGas hex string, unit: wei
      * @param {string} from wallet address
      * @param {Transaction[]} txs transactions
-     * @param {string} [nonceKey] default: "0x0"
+     * @param {string} [nonce]
      * @return {*}  {Promise<Result<UserOperation, Error>>}
      * @memberof ISoulWallet
      */
-    abstract fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, Error>>;
+    abstract fromTransaction(
+        maxFeePerGas: string, 
+        maxPriorityFeePerGas: string, 
+        from: string, 
+        txs: Transaction[],
+        nonce?: {
+            nonceKey?: string,
+            nonceValue?: string
+        }): Promise<Result<UserOperation, Error>>;
 
 
     /**

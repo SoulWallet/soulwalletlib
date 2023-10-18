@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.3
+
+### Patch Changes
+
+- Allow caller to customize nonce
+
 ## 0.1.2
 
 ### Patch Changes

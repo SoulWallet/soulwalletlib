@@ -650,7 +650,16 @@ export class SoulWallet implements ISoulWallet {
         }
     }
 
-    async fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, Error>> {
+    async fromTransaction(
+        maxFeePerGas: string,
+        maxPriorityFeePerGas: string,
+        from: string,
+        txs: Transaction[],
+        nonce?: {
+            nonceKey?: string,
+            nonceValue?: string
+        }
+    ): Promise<Result<UserOperation, Error>> {
         if (txs.length === 0) {
             return new Err(
                 new Error("txs.length === 0")
@@ -683,11 +692,25 @@ export class SoulWallet implements ISoulWallet {
                 callGasLimit += BigInt(1);
             }
         }
-
-        const nonceRet = await this.getNonce(from, nonceKey);
-        if (nonceRet.isErr() === true) {
-            return new Err(nonceRet.ERR);
+        let nonceKey: string | undefined = undefined;
+        let nonceValue: string | undefined = undefined;
+        if (nonce !== undefined) {
+            nonceKey = nonce.nonceKey;
+            nonceValue = nonce.nonceValue;
         }
+        if (nonceValue === undefined) {
+            const nonceRet = await this.getNonce(from, nonceKey);
+            if (nonceRet.isErr() === true) {
+                return new Err(nonceRet.ERR);
+            }
+            nonceValue = nonceRet.OK;
+        }
+
+        if (TypeGuard.onlyHex(nonceValue!).isErr()) {
+            return new Err(new Error(`invalid nonce: ${nonceValue}`));
+        }
+
+
         let callData: string = '0x';
         {
             /*
@@ -730,7 +753,7 @@ export class SoulWallet implements ISoulWallet {
 
         const _userOperation: UserOperation = {
             sender: from,
-            nonce: nonceRet.OK,
+            nonce: nonceValue,
             /* 
              address factory = address(bytes20(initCode[0 : 20]));
              bytes memory initCallData = initCode[20 :];
