@@ -1,6 +1,6 @@
 {
-    "extends": "../../tsconfig.esm.json",
-    "compilerOptions": {
-      "module": "es2020"
-    }
+  "extends": "../../tsconfig.esm.json",
+  "compilerOptions": {
+    "module": "ES2022"
+  }
 }

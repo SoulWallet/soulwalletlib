@@ -35,8 +35,8 @@ describe('Assets', () => {
             expect(ret.isOk() === true).toBeTruthy();
             const tokenInfo = ret.OK;
             expect(tokenInfo.decimals).toBe(6);
-            expect(tokenInfo.symbol).toBe('USDC');
-            expect(tokenInfo.name).toBe('USDCoin');
+            expect(tokenInfo.symbol).toBe('USDC.e');
+            expect(tokenInfo.name).toBe('USDCoin (Bridged from Ethereum)');
         }
         
         // chainId: 137
@@ -45,8 +45,8 @@ describe('Assets', () => {
             expect(ret.isOk() === true).toBeTruthy();
             const tokenInfo = ret.OK;
             expect(tokenInfo.decimals).toBe(6);
-            expect(tokenInfo.symbol).toBe('USDC');
-            expect(tokenInfo.name).toBe('USDCoin');
+            expect(tokenInfo.symbol).toBe('USDC.e');
+            expect(tokenInfo.name).toBe('USDCoin (PoS)');
         }
 
         // chainId: 42161

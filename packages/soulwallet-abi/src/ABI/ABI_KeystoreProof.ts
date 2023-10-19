@@ -33,7 +33,7 @@ export default [
                 "type": "bytes32"
             }
         ],
-        "name": "KeyStoreStorageProofed",
+        "name": "KeyStoreStorageProved",
         "type": "event"
     },
     {
@@ -47,12 +47,12 @@ export default [
             },
             {
                 "indexed": false,
-                "internalType": "address",
-                "name": "signingKey",
-                "type": "address"
+                "internalType": "bytes32",
+                "name": "signingKeyHash",
+                "type": "bytes32"
             }
         ],
-        "name": "L1KeyStoreProofed",
+        "name": "L1KeyStoreProved",
         "type": "event"
     },
     {
@@ -92,9 +92,28 @@ export default [
         "name": "keystoreBySlot",
         "outputs": [
             {
-                "internalType": "address",
-                "name": "signingKey",
-                "type": "address"
+                "internalType": "bytes32",
+                "name": "signingKeyHash",
+                "type": "bytes32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
+            }
+        ],
+        "name": "l1SlotToRawOwners",
+        "outputs": [
+            {
+                "internalType": "bytes",
+                "name": "",
+                "type": "bytes"
             }
         ],
         "stateMutability": "view",
@@ -111,9 +130,9 @@ export default [
         "name": "l1SlotToSigningKey",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",
@@ -182,9 +201,14 @@ export default [
                 "type": "bytes32"
             },
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "newSigningKey",
-                "type": "address"
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes",
+                "name": "rawOwners",
+                "type": "bytes"
             },
             {
                 "internalType": "bytes",
@@ -195,6 +219,25 @@ export default [
         "name": "proofL1Keystore",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "l1Slot",
+                "type": "bytes32"
+            }
+        ],
+        "name": "rawOwnersBySlot",
+        "outputs": [
+            {
+                "internalType": "bytes",
+                "name": "owners",
+                "type": "bytes"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

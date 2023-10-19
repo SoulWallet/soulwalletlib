@@ -2,6 +2,14 @@ import { Ok, Err, Result } from '@soulwallet/result';
 
 export class TypeGuard {
 
+    static onlyHex(hex: string): Result<true, string> {
+        const regex = /^0x[0-9a-f]+$/i;
+        if (!regex.test(hex)) {
+            return new Err("invalid hex:" + hex);
+        }
+        return new Ok(true);
+    }
+
     static onlyAddress(address: string): Result<true, string> {
         const regex = /^0x[a-fA-F0-9]{40}$/;
         if (!regex.test(address)) {

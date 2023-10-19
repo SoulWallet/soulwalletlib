@@ -55,7 +55,7 @@ export class Deploy {
 
         const userOpRet = await soulWallet.createUnsignedDeployWalletUserOp(
             0,
-            signer,
+            [signer],
             ethers.ZeroHash
         );
         if (userOpRet.isErr() === true) {
@@ -101,7 +101,7 @@ export class Deploy {
         const packedUserOpHash = packedUserOpHashRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signature = (await this.keyVault.personalSign(signer, packedUserOpHash.packedUserOpHash)).OK;
-        const packedSignatureRet = await soulWallet.packUserOpSignature(signature, packedUserOpHash.validationData);
+        const packedSignatureRet = await soulWallet.packUserOpEOASignature(signature, packedUserOpHash.validationData);
         if (packedSignatureRet.isErr() === true) {
             throw new Error(packedSignatureRet.ERR.message);
         }
@@ -187,7 +187,7 @@ export class Deploy {
         const packedUserOpHashTx = packedUserOpHashTxRet.OK;
         // sign packedUserOpHash.toEthSignedMessageHash() via this.defaultWallet 
         const signatureTx = (await this.keyVault.personalSign(signer, packedUserOpHashTx.packedUserOpHash)).OK;
-        const packedSignatureTxRet = await soulWallet.packUserOpSignature(signatureTx, packedUserOpHashTx.validationData);
+        const packedSignatureTxRet = await soulWallet.packUserOpEOASignature(signatureTx, packedUserOpHashTx.validationData);
         if (packedSignatureTxRet.isErr() === true) {
             throw new Error(packedSignatureTxRet.ERR.message);
         }
