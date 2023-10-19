@@ -5,6 +5,7 @@ import { ABI_KeyStore } from "@soulwallet/abi";
 import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { bigIntToNumber } from './tools/convert.js';
+import { InitialKey } from "./interface/ISoulWallet.js";
 
 /**
  * L1KeyStore
@@ -68,18 +69,65 @@ export class L1KeyStore implements IL1KeyStore {
         return new Ok(true);
     }
 
+    static initialKeysToAddress(initialKeys: InitialKey[]): string[] {
+        if (initialKeys.length === 0) {
+            throw new Error('initialKeys is empty');
+        }
+
+        const _initialKeys: string[] = [];
+        for (const oneKey of initialKeys) {
+            if (typeof oneKey === 'string') {
+                if (TypeGuard.onlyAddress(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
+                _initialKeys.push(Hex.paddingZero(oneKey, 32));
+            } else {
+                if (TypeGuard.onlyBytes32(oneKey.x).isErr() === true) { throw new Error(`invalid key.x: ${oneKey.x}`); }
+                if (TypeGuard.onlyBytes32(oneKey.y).isErr() === true) { throw new Error(`invalid key.y: ${oneKey.y}`); }
+                // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
+                const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [oneKey.x, oneKey.y]));
+                _initialKeys.push(_key);
+            }
+        }
+        _initialKeys.sort((a, b) => {
+            const aBig = BigInt(a);
+            const bBig = BigInt(b);
+            if (aBig === bBig) {
+                throw new Error(`guardian address is duplicated: ${a}`);
+            } else if (aBig < bBig) {
+                return -1;
+            } else {
+                return 1;
+            }
+        });
+        return _initialKeys;
+    }
+
+    /**
+     * calculate the key hash
+     *
+     * @static
+     * @param {string[]} keys result of initialKeysToAddress
+     * @return {*}  {string} bytes32
+     * @memberof L1KeyStore
+     */
+    static getKeyHash(keys: string[]): string {
+        for (const oneKey of keys) {
+            if (TypeGuard.onlyBytes32(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
+        }
+        return ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [keys]));
+    }
+
     /**
      * calculate the slot
      *
      * @static
-     * @param {string} initialKey bytes32
+     * @param {string} initialKeyHash bytes32
      * @param {string} initialGuardianHash bytes32
      * @param {number} [initialGuardianSafePeriod=2 * this.days]
      * @return {*}  {string} bytes32
      * @memberof L1KeyStore
      */
-    static getSlot(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
-        let ret = TypeGuard.onlyBytes32(initialKey);
+    static getSlot(initialKeyHash: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
+        let ret = TypeGuard.onlyBytes32(initialKeyHash);
         if (ret.isErr() === true) {
             throw new Error(ret.ERR);
         }
@@ -94,7 +142,7 @@ export class L1KeyStore implements IL1KeyStore {
 
         // bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod
         // keccak256(abi.encode(initialKey, initialGuardianHash, guardianSafePeriod));  
-        const abiEncoded = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [initialKey, initialGuardianHash, initialGuardianSafePeriod]);
+        const abiEncoded = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [initialKeyHash, initialGuardianHash, initialGuardianSafePeriod]);
         const keccak256 = ethers.keccak256(abiEncoded);
         return keccak256;
     }

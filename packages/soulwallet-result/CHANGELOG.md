@@ -1,5 +1,11 @@
 # @soulwallet/result
 
+## 0.1.2
+
+### Patch Changes
+
+- passkey version merged into soulwallet@npmjs.com
+
 ## 0.1.1
 
 ### Patch Changes

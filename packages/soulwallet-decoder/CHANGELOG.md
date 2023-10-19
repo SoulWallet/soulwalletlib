@@ -1,5 +1,15 @@
 # @soulwallet/decoder
 
+## 0.1.2
+
+### Patch Changes
+
+- passkey version merged into soulwallet@npmjs.com
+- Updated dependencies
+  - @soulwallet/assets@0.1.2
+  - @soulwallet/result@0.1.2
+  - @soulwallet/abi@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

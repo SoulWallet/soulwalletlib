@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import fs from 'fs';
-import { UriCompression } from '../uriCompression.js';
+import { UriCompression } from '../uriCompression';
 
 
 const __dirname = resolve();

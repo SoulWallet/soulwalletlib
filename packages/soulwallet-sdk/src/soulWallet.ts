@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { GuardHookInputData, ISoulWallet, Transaction } from "./interface/ISoulWallet.js";
+import { GuardHookInputData, ISoulWallet, InitialKey, SignkeyType, Transaction } from "./interface/ISoulWallet.js";
 import { UserOperation } from "./interface/UserOperation.js";
 import { TypeGuard } from "./tools/typeGuard.js";
 import { StorageCache } from "./tools/storageCache.js";
@@ -11,6 +11,8 @@ import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { getUserOpHash } from "./tools/userOpHash.js";
+import { ECCPoint } from "./tools/webauthn.js";
+import { L1KeyStore } from "./L1KeyStore.js";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -174,23 +176,25 @@ export class SoulWallet implements ISoulWallet {
         return new Ok(_onChainConfig.OK.entryPoint);
     }
 
-    async initializeData(initialKey: string, initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod): Promise<Result<string, Error>> {
+    async initializeData(initialKeys: InitialKey[], initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod): Promise<Result<string, Error>> {
         /* 
             function initialize(
-                address anOwner,
+                bytes32[] anOwner,
                 address defalutCallbackHandler,
                 bytes[] calldata modules,
                 bytes[] calldata plugins
             )
         */
 
+        const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
+        const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
+
         // default dely time is 2 days
         const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
         /* 
          (bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod) = abi.decode(_data, (bytes32, bytes32, uint64));
         */
-        const _initialKey = Hex.paddingZero(initialKey, 32)
-        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKey, initialGuardianHash, initialGuardianSafePeriod]);
+        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [initialKeyHash, initialGuardianHash, initialGuardianSafePeriod]);
         const keyStoreModuleAndData = (this.keyStoreModuleAddress + keyStoreInitData.substring(2)).toLowerCase();
 
         const _onChainConfig = await this.getOnChainConfig();
@@ -199,7 +203,7 @@ export class SoulWallet implements ISoulWallet {
         }
         const _soulWallet = new ethers.Contract(_onChainConfig.OK.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            initialKey,
+            initalkeys,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,
@@ -215,11 +219,11 @@ export class SoulWallet implements ISoulWallet {
 
     async calcWalletAddress(
         index: number,
-        initialKey: string,
+        initialKeys: InitialKey[],
         initialGuardianHash: string,
         initialGuardianSafePeriod?: number
     ): Promise<Result<string, Error>> {
-        const _initializeDataRet = await this.initializeData(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+        const _initializeDataRet = await this.initializeData(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
         if (_initializeDataRet.isErr() === true) {
             return new Err(_initializeDataRet.ERR);
         }
@@ -307,7 +311,7 @@ export class SoulWallet implements ISoulWallet {
 
     async createUnsignedDeployWalletUserOp(
         index: number,
-        initialKey: string,
+        initialKeys: InitialKey[],
         initialGuardianHash: string,
         callData: string = "0x",
         initialGuardianSafePeriod?: number
@@ -318,7 +322,7 @@ export class SoulWallet implements ISoulWallet {
                 new Error(ret.ERR)
             );
         }
-        const _initializeData = await this.initializeData(initialKey, initialGuardianHash, initialGuardianSafePeriod);
+        const _initializeData = await this.initializeData(initialKeys, initialGuardianHash, initialGuardianSafePeriod);
         if (_initializeData.isErr() === true) {
             return new Err(_initializeData.ERR);
         }
@@ -326,7 +330,7 @@ export class SoulWallet implements ISoulWallet {
             .encodeFunctionData("createWallet", [_initializeData.OK, Hex.paddingZero(index, 32)])
             .substring(2)
             }`.toLowerCase();
-        const senderRet = await this.calcWalletAddress(index, initialKey, initialGuardianHash, initialGuardianSafePeriod);
+        const senderRet = await this.calcWalletAddress(index, initialKeys, initialGuardianHash, initialGuardianSafePeriod);
         if (senderRet.isErr() === true) {
             return new Err(senderRet.ERR);
         }
@@ -388,6 +392,20 @@ export class SoulWallet implements ISoulWallet {
         return new Ok(Signature.packUserOpHash(userOPHashRet.OK, validAfter, validUntil));
     }
 
+    async packRawHash(hash: string, validAfter?: number, validUntil?: number): Promise<
+        Result<{
+            packedHash: string,
+            validationData: string
+        }, Error>> {
+        const ret = Signature.packUserOpHash(hash, validAfter, validUntil);
+        return new Ok(
+            {
+                packedHash: ret.packedUserOpHash,
+                validationData: ret.validationData
+            }
+        );
+    }
+
     private async guardHookList(walletAddress: string): Promise<Result<string[], Error>> {
         try {
             const _soulWallet = new ethers.Contract(walletAddress, ABI_SoulWallet, this.provider);
@@ -405,7 +423,7 @@ export class SoulWallet implements ISoulWallet {
         }
     }
 
-    async packUserOpSignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>> {
+    private async prePackUserOpSignature(guardHookInputData?: GuardHookInputData): Promise<Result<HookInputData | undefined, Error>> {
         let hookInputData: HookInputData | undefined = undefined;
         if (guardHookInputData !== undefined) {
             const ret = TypeGuard.onlyAddress(guardHookInputData.sender);
@@ -420,12 +438,62 @@ export class SoulWallet implements ISoulWallet {
             hookInputData.guardHooks = guardHooksRet.OK;
             hookInputData.inputData = guardHookInputData.inputData;
         }
+        return new Ok(hookInputData);
+    }
+
+    /**
+     * pack userOp signature (EOA)
+     *
+     * @param {string} signature EOA signature
+     * @param {string} validationData validation data
+     * @param {GuardHookInputData} [guardHookInputData] 
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof SoulWallet
+     */
+    async packUserOpEOASignature(signature: string, validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>> {
+        const hookInputData = await this.prePackUserOpSignature(guardHookInputData);
+        if (hookInputData.isErr() === true) {
+            return new Err(hookInputData.ERR);
+        }
         return new Ok(
-            Signature.packSignature(signature, validationData, hookInputData)
+            Signature.packEOASignature(signature, validationData, hookInputData.OK)
         );
     }
 
-    async estimateUserOperationGas(userOp: UserOperation, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>> {
+    /**
+     * pack userOp signature (P256)
+     *
+     * @param {{
+     *         messageHash:string,
+     *         publicKey: ECCPoint,
+     *         r: string,
+     *         s: string,
+     *         authenticatorData: string,
+     *         clientDataSuffix: string
+     *     }} signatureData signature data, messageHash is userOp hash(packed userOp hash)
+     * @param {string} validationData validation data
+     * @param {GuardHookInputData} [guardHookInputData]
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof SoulWallet
+     */
+    async packUserOpP256Signature(signatureData: {
+        messageHash: string,
+        publicKey: ECCPoint,
+        r: string,
+        s: string,
+        authenticatorData: string,
+        clientDataSuffix: string
+    }, validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>> {
+        const hookInputData = await this.prePackUserOpSignature(guardHookInputData);
+        if (hookInputData.isErr() === true) {
+            return new Err(hookInputData.ERR);
+        }
+        return new Ok(
+            Signature.packP256Signature(signatureData, validationData, hookInputData.OK)
+        );
+    }
+
+    async estimateUserOperationGas(userOp: UserOperation, signkeyType?: SignkeyType, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>> {
         if (semiValidGuardHookInputData !== undefined) {
             if (semiValidGuardHookInputData.sender.toLowerCase() !== userOp.sender.toLowerCase()) {
                 return new Err(
@@ -446,9 +514,28 @@ export class SoulWallet implements ISoulWallet {
         try {
             if (semiValidSignature) {
                 // semiValidSignature
-                const signature = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
                 const validationData = (BigInt(68719476735) << BigInt(160)) + (BigInt(1599999999) << BigInt(160 + 48));
-                const signatureRet = await this.packUserOpSignature(signature, `0x${validationData.toString(16)}`, semiValidGuardHookInputData);
+                let signatureRet: Result<string, Error>;
+                if (signkeyType === SignkeyType.P256) {
+                    signatureRet = await this.packUserOpP256Signature(
+                        {
+                            messageHash: "0x83714056da6e6910b51595330c2c2cdfbf718f2deff5bdd84b95df7a7f36f6dd",
+                            publicKey: {
+                                x: "0xe89e8b4be943fadb4dc599fe2e8af87a79b438adde328a3b72d43324506cd5b6",
+                                y: "0x4fbfe4a2f9934783c3b1af712ee87abc08f576e79346efc3b8355d931bd7b976"
+                            },
+                            r: "0x2ae3ddfe4cc414dc0fad7ff3a5c960d1cee1211722d3099ade76e5ac1826731a",
+                            s: "0x87e5d654f357e4cd6cb52512b2da4d91eae0ae48e9d892ce532b9352f63a55d6",
+                            authenticatorData: "0x49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000",
+                            clientDataSuffix: "\",\"origin\":\"http://localhost:5500\",\"crossOrigin\":false}"
+                        },
+                        `0x${validationData.toString(16)}`,
+                        semiValidGuardHookInputData
+                    );
+                } else {
+                    const signature = "0xb91467e570a6466aa9e9876cbcd013baba02900b8979d43fe208a4a4f339f5fd6007e74cd82e037b800186422fc2da167c747ef045e5d18a5f5d4300f8e1a0291c";
+                    signatureRet = await this.packUserOpEOASignature(signature, `0x${validationData.toString(16)}`, semiValidGuardHookInputData);
+                }
                 if (signatureRet.isErr() === true) {
                     return new Err(
                         new UserOpErrors(UserOpErrorCodes.UnknownError, signatureRet.ERR.message)
@@ -475,7 +562,7 @@ export class SoulWallet implements ISoulWallet {
                 }
                 userOp.callGasLimit = `0x${_newCallGasLimit.toString(16)}`;
             }
-            GasOverhead.calcGasOverhead(userOp);
+            GasOverhead.calcGasOverhead(userOp, signkeyType);
             return new Ok(true);
         } finally {
             if (semiValidSignature) {
@@ -563,7 +650,16 @@ export class SoulWallet implements ISoulWallet {
         }
     }
 
-    async fromTransaction(maxFeePerGas: string, maxPriorityFeePerGas: string, from: string, txs: Transaction[], nonceKey?: string): Promise<Result<UserOperation, Error>> {
+    async fromTransaction(
+        maxFeePerGas: string,
+        maxPriorityFeePerGas: string,
+        from: string,
+        txs: Transaction[],
+        nonce?: {
+            nonceKey?: string,
+            nonceValue?: string
+        }
+    ): Promise<Result<UserOperation, Error>> {
         if (txs.length === 0) {
             return new Err(
                 new Error("txs.length === 0")
@@ -596,11 +692,25 @@ export class SoulWallet implements ISoulWallet {
                 callGasLimit += BigInt(1);
             }
         }
-
-        const nonceRet = await this.getNonce(from, nonceKey);
-        if (nonceRet.isErr() === true) {
-            return new Err(nonceRet.ERR);
+        let nonceKey: string | undefined = undefined;
+        let nonceValue: string | undefined = undefined;
+        if (nonce !== undefined) {
+            nonceKey = nonce.nonceKey;
+            nonceValue = nonce.nonceValue;
         }
+        if (nonceValue === undefined) {
+            const nonceRet = await this.getNonce(from, nonceKey);
+            if (nonceRet.isErr() === true) {
+                return new Err(nonceRet.ERR);
+            }
+            nonceValue = nonceRet.OK;
+        }
+
+        if (TypeGuard.onlyHex(nonceValue!).isErr()) {
+            return new Err(new Error(`invalid nonce: ${nonceValue}`));
+        }
+
+
         let callData: string = '0x';
         {
             /*
@@ -643,7 +753,7 @@ export class SoulWallet implements ISoulWallet {
 
         const _userOperation: UserOperation = {
             sender: from,
-            nonce: nonceRet.OK,
+            nonce: nonceValue,
             /* 
              address factory = address(bytes20(initCode[0 : 20]));
              bytes memory initCallData = initCode[20 :];

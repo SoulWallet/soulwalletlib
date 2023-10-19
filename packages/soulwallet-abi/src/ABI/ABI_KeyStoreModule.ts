@@ -54,9 +54,9 @@ export default [
             },
             {
                 "indexed": true,
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "_newOwners",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "name": "KeyStoreSyncd",
@@ -93,7 +93,7 @@ export default [
         "name": "keyStoreProof",
         "outputs": [
             {
-                "internalType": "contract IKeystoreProof",
+                "internalType": "contract IKeyStoreProof",
                 "name": "",
                 "type": "address"
             }
@@ -131,9 +131,9 @@ export default [
         "name": "lastKeyStoreSyncSignKey",
         "outputs": [
             {
-                "internalType": "address",
+                "internalType": "bytes32",
                 "name": "",
-                "type": "address"
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",
