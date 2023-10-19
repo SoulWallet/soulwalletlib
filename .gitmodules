@@ -5,4 +5,4 @@
 [submodule "soul-wallet-contract"]
 	path = soul-wallet-contract
 	url = https://github.com/SoulWallet/soul-wallet-contract.git
-	branch = passkey
+	branch = develop
