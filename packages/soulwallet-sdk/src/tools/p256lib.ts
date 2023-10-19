@@ -197,7 +197,8 @@ export class P256Lib {
                 _point.x = point.x;
                 _point.y = point.y;
             } else if (T4 == BigInt(3)) {
-                _point = H;
+                _point.x = H.x;
+                _point.y = H.y;
             }
         }
         index--;
