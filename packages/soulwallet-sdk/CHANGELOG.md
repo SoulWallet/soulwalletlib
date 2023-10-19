@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.5
+
+### Patch Changes
+
+- 1592675: Fix a bug in P256Lib caused by reference type
+
 ## 0.1.4
 
 ### Patch Changes
