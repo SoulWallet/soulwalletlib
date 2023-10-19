@@ -102,6 +102,21 @@ export class L1KeyStore implements IL1KeyStore {
     }
 
     /**
+     * calculate the key hash
+     *
+     * @static
+     * @param {string[]} keys result of initialKeysToAddress
+     * @return {*}  {string} bytes32
+     * @memberof L1KeyStore
+     */
+    static getKeyHash(keys: string[]): string {
+        for (const oneKey of keys) {
+            if (TypeGuard.onlyBytes32(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
+        }
+        return ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [keys]));
+    }
+
+    /**
      * calculate the slot
      *
      * @static

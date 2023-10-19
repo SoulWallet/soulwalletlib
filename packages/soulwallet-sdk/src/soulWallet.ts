@@ -186,15 +186,15 @@ export class SoulWallet implements ISoulWallet {
             )
         */
 
-        const initalAddresses = L1KeyStore.initialKeysToAddress(initialKeys);
-        const _initialKeyHash = ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [initalAddresses]));
+        const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
+        const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
 
         // default dely time is 2 days
         const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
         /* 
          (bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod) = abi.decode(_data, (bytes32, bytes32, uint64));
         */
-        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [_initialKeyHash, initialGuardianHash, initialGuardianSafePeriod]);
+        const keyStoreInitData = new ethers.AbiCoder().encode(["bytes32", "bytes32", "uint64"], [initialKeyHash, initialGuardianHash, initialGuardianSafePeriod]);
         const keyStoreModuleAndData = (this.keyStoreModuleAddress + keyStoreInitData.substring(2)).toLowerCase();
 
         const _onChainConfig = await this.getOnChainConfig();
@@ -203,7 +203,7 @@ export class SoulWallet implements ISoulWallet {
         }
         const _soulWallet = new ethers.Contract(_onChainConfig.OK.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            initalAddresses,
+            initalkeys,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,

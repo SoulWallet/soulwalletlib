@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.4
+
+### Patch Changes
+
+- Added L1KeyStore.getKeyHash(string[]) function
+
 ## 0.1.3
 
 ### Patch Changes
