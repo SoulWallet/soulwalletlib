@@ -706,7 +706,7 @@ export class SoulWallet implements ISoulWallet {
             nonceValue = nonceRet.OK;
         }
 
-        if (TypeGuard.onlyHex(nonceValue!).isErr()) {
+        if (TypeGuard.onlyHex(nonceValue!).isErr() === true) {
             return new Err(new Error(`invalid nonce: ${nonceValue}`));
         }
 
