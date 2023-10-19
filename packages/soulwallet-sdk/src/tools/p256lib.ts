@@ -182,7 +182,7 @@ export class P256Lib {
         }
         const H = P256Lib.ecAff_add(new Point(gx, gy), point); //will not work if Q=P, obvious forbidden private key
         let index: bigint = BigInt(255);
-        let _point: Point = new Point(BigInt(0), BigInt(0));
+        const _point: Point = new Point(BigInt(0), BigInt(0));
         {
             let T4 = (((scalar_v >> index) & BigInt(1)) << BigInt(1)) + ((scalar_u >> index) & BigInt(1));
             while (T4 === BigInt(0)) {
