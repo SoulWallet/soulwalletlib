@@ -6,10 +6,11 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/strict-boolean-expressions": [
-      2,
+      "error",
       {
-        "allowString": false,
-        "allowNumber": false
+        "allowNullableBoolean": false,
+        "allowNullableString": false,
+        "allowAny": false
       }
     ]
   },
