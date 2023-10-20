@@ -2,6 +2,7 @@ import { UserOperation } from "./UserOperation.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
 import { Result } from '@soulwallet/result';
 import { ECCPoint } from "../tools/webauthn.js";
+import { TypedDataDomain, TypedDataField } from "ethers";
 
 /**
  * Transaction is the interface for the transaction.
@@ -160,9 +161,9 @@ export abstract class ISoulWallet {
      * @memberof ISoulWallet
      */
     abstract fromTransaction(
-        maxFeePerGas: string, 
-        maxPriorityFeePerGas: string, 
-        from: string, 
+        maxFeePerGas: string,
+        maxPriorityFeePerGas: string,
+        from: string,
         txs: Transaction[],
         nonce?: {
             nonceKey?: string,
@@ -180,6 +181,29 @@ export abstract class ISoulWallet {
      * @memberof ISoulWallet
      */
     abstract getNonce(walletAddr: string, key?: string): Promise<Result<string, Error>>;
+
+    /**
+     * get TypedData from EIP1271.
+     *
+     * @abstract
+     * @param {string} walletAddr
+     * @param {string} message
+     * @return {*}  {Promise<Result<{
+     *         domain: TypedDataDomain,
+     *         types: Record<string, Array<TypedDataField>>,
+     *         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     *         value: Record<string, any>,
+     *         typedMessage: string
+     *     }, Error>>}
+     * @memberof ISoulWallet
+     */
+    abstract getEIP1271TypedData(walletAddr: string, message: string): Promise<Result<{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        value: Record<string, any>,
+        typedMessage: string
+    }, Error>>;
 
 }
 
