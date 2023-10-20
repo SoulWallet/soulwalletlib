@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { TypedDataDomain, TypedDataField, ethers } from "ethers";
 import { GuardHookInputData, ISoulWallet, InitialKey, SignkeyType, Transaction } from "./interface/ISoulWallet.js";
 import { UserOperation } from "./interface/UserOperation.js";
 import { TypeGuard } from "./tools/typeGuard.js";
@@ -753,7 +753,7 @@ export class SoulWallet implements ISoulWallet {
 
         const _userOperation: UserOperation = {
             sender: from,
-            nonce: nonceValue,
+            nonce: nonceValue!,
             /* 
              address factory = address(bytes20(initCode[0 : 20]));
              bytes memory initCallData = initCode[20 :];
@@ -773,5 +773,66 @@ export class SoulWallet implements ISoulWallet {
 
         return new Ok(_userOperation);
 
+    }
+
+    /**
+     * get TypedData from EIP1271.
+     *
+     * @abstract
+     * @param {string} walletAddr
+     * @param {string} message
+     * @return {*}  {Promise<Result<{
+     *         domain: TypedDataDomain,
+     *         types: Record<string, Array<TypedDataField>>,
+     *         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     *         value: Record<string, any>,
+     *         typedMessage: string
+     *     }, Error>>}
+     * @memberof ISoulWallet
+     */
+    async getEIP1271TypedData(walletAddr: string, message: string): Promise<Result<{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        value: Record<string, any>,
+        typedMessage: string
+    }, Error>> {
+        if (TypeGuard.onlyBytes32(message).isErr() === true) {
+            return new Err(new Error(`invalid message: ${message}`));
+        }
+        const _onChainConfig = await this.getOnChainConfig();
+        if (_onChainConfig.isErr() === true) {
+            return new Err(_onChainConfig.ERR);
+        }
+        /* 
+            keccak256("SoulWalletMessage(bytes32 message)");
+            bytes32 private constant SOUL_WALLET_MSG_TYPEHASH =0x04e6b5b1de6ba008d582849d4956d004d09a345fc11e7ba894975b5b56a4be66;
+            
+            keccak256("EIP712Domain(uint256 chainId,address verifyingContract)");
+            bytes32 private constant DOMAIN_SEPARATOR_TYPEHASH =0x47e79534a245952e8b16893a336b85a3d9ea9fa8c573f3d803afb92a79469218;
+        */
+        const domain: TypedDataDomain = {
+            chainId: _onChainConfig.OK.chainId,
+            verifyingContract: ethers.getAddress(walletAddr)
+        };
+        const types: Record<string, Array<TypedDataField>> = {
+            SoulWalletMessage: [
+                { name: "message", type: "bytes32" }
+            ]
+        };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const value: Record<string, any> = {
+            message: message
+        };
+
+        const typedMessage = ethers.TypedDataEncoder.hash(domain, types, value);
+
+        return new Ok(
+            {
+                domain,
+                types,
+                value,
+                typedMessage
+            });
     }
 }
