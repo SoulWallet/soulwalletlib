@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.6
+
+### Patch Changes
+
+- 774b525: EIP1271 EIP712-signature supported
+
 ## 0.1.5
 
 ### Patch Changes
