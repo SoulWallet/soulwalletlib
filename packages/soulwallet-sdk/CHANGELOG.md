@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.7
+
+### Patch Changes
+
+- fixed rawowners encode bug
+
 ## 0.1.6
 
 ### Patch Changes

@@ -113,7 +113,7 @@ export class L1KeyStore implements IL1KeyStore {
         for (const oneKey of keys) {
             if (TypeGuard.onlyBytes32(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
         }
-        return ethers.keccak256(ethers.solidityPacked(["bytes32[]"], [keys]));
+        return ethers.keccak256(new ethers.AbiCoder().encode(["bytes32[]"], [keys]));
     }
 
     /**
