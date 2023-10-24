@@ -1,5 +1,12 @@
 # @soulwallet/sdk
 
+## 0.1.8
+
+### Patch Changes
+
+- 1. Added a local implementation compatible with webauthn.
+  2. Allowed the minimum value for guardianSafePeriod to be 60\*1 (1 minute).
+
 ## 0.1.7
 
 ### Patch Changes

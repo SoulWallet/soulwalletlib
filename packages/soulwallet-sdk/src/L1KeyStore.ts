@@ -15,8 +15,10 @@ import { InitialKey } from "./interface/ISoulWallet.js";
  * @implements {IL1KeyStore}
  */
 export class L1KeyStore implements IL1KeyStore {
-
     static readonly days = 86400;
+    static readonly defalutInitialGuardianSafePeriod = 2 * L1KeyStore.days;
+    static readonly guardianSafePeriodMin = 60 * 1;
+    static readonly guardianSafePeriodMax = L1KeyStore.days * 30;
 
     readonly L1KeyStoreContractAddress: string;
     readonly L1Provider: ethers.JsonRpcProvider;
@@ -60,10 +62,10 @@ export class L1KeyStore implements IL1KeyStore {
     }
 
     private static guardianSafePeriodGuard(guardianSafePeriod: number): Result<true, string> {
-        if (guardianSafePeriod < (this.days * 2)) {
+        if (guardianSafePeriod < L1KeyStore.guardianSafePeriodMin) {
             return new Err("initialGuardianSafePeriod is too small");
         }
-        if (guardianSafePeriod > (this.days * 30)) {
+        if (guardianSafePeriod > L1KeyStore.guardianSafePeriodMax) {
             return new Err("initialGuardianSafePeriod is too large");
         }
         return new Ok(true);
@@ -126,7 +128,7 @@ export class L1KeyStore implements IL1KeyStore {
      * @return {*}  {string} bytes32
      * @memberof L1KeyStore
      */
-    static getSlot(initialKeyHash: string, initialGuardianHash: string, initialGuardianSafePeriod: number = 2 * this.days): string {
+    static getSlot(initialKeyHash: string, initialGuardianHash: string, initialGuardianSafePeriod: number = L1KeyStore.defalutInitialGuardianSafePeriod): string {
         let ret = TypeGuard.onlyBytes32(initialKeyHash);
         if (ret.isErr() === true) {
             throw new Error(ret.ERR);

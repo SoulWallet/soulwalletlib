@@ -29,9 +29,6 @@ export class onChainConfig {
  * @implements {ISoulWallet}
  */
 export class SoulWallet implements ISoulWallet {
-    readonly days = 86400;
-    readonly defalutInitialGuardianSafePeriod = 2 * this.days;
-
     readonly provider: ethers.JsonRpcProvider;
     readonly bundler: ethers.JsonRpcProvider;
     readonly soulWalletFactoryAddress: string;
@@ -176,7 +173,7 @@ export class SoulWallet implements ISoulWallet {
         return new Ok(_onChainConfig.OK.entryPoint);
     }
 
-    async initializeData(initialKeys: InitialKey[], initialGuardianHash: string, initialGuardianSafePeriod: number = this.defalutInitialGuardianSafePeriod): Promise<Result<string, Error>> {
+    async initializeData(initialKeys: InitialKey[], initialGuardianHash: string, initialGuardianSafePeriod: number = L1KeyStore.defalutInitialGuardianSafePeriod): Promise<Result<string, Error>> {
         /* 
             function initialize(
                 bytes32[] anOwner,
@@ -190,7 +187,7 @@ export class SoulWallet implements ISoulWallet {
         const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
 
         // default dely time is 2 days
-        const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(this.defalutInitialGuardianSafePeriod, 32).substring(2)).toLowerCase();
+        const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(initialGuardianSafePeriod, 32).substring(2)).toLowerCase();
         /* 
          (bytes32 initialKey, bytes32 initialGuardianHash, uint64 guardianSafePeriod) = abi.decode(_data, (bytes32, bytes32, uint64));
         */

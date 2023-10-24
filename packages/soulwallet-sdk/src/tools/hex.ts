@@ -16,4 +16,8 @@ export class Hex {
             throw new Error(`value ${value} is not string | number | bigint`);
         }
     }
+
+    public static uint8ArrayToHex(uint8Array: Uint8Array): string {
+        return '0x' + Array.from(uint8Array).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
 }
