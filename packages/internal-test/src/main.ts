@@ -9,7 +9,7 @@ import { SocialRecovery } from "./socialRecovery.js";
 import { Decode } from './decode.js';
 import { CryptoTest } from './crypto.js';
 import { L1KeyStoreTest } from './L1KeyStore.js';
-import { GasApproach } from './gasApproach.js';
+// import { GasApproach } from './gasApproach.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { TypeGuard } from './typeGuard';
 import { P256Lib } from './p256lib.js';
 import { Hex } from './hex.js';
+import { Base64Url } from './base64Url.js';
 
 export interface ECCPoint {
     /**
@@ -67,14 +68,7 @@ export class WebAuthN {
             clientDataPrefix = '{"type":"webauthn.get","challenge":"'
         }
         if (TypeGuard.onlyBytes32(message).isErr() === true) { throw new Error(`invalid message.x: ${message}`); }
-        if (message.startsWith("0x")) {
-            message = message.slice(2);
-        }
-        const byteArray = new Uint8Array(32);
-        for (let i = 0; i < 64; i += 2) {
-            byteArray[i / 2] = parseInt(message.substring(i, i + 2), 16);
-        }
-        const messageBase64Url: string = btoa(String.fromCharCode(...byteArray)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+        const messageBase64Url = Base64Url.bytes32Tobase64Url(message);
         const clientDataJSON: string = clientDataPrefix + messageBase64Url + clientDataSuffix;
         // check clientDataJSON is valid JSON
         JSON.parse(clientDataJSON);

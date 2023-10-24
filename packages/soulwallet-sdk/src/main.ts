@@ -10,6 +10,7 @@ import { KeyStoreInfo, GuardianSignature, KeyStoreTypedDataType } from "./interf
 import { UserOpUtils } from "./userOpUtils.js";
 import { ECCPoint, WebAuthN } from "./tools/webauthn.js";
 import { P256Lib } from "./tools/p256lib.js";
+import { Base64Url } from "./tools/base64Url.js";
 
 export {
     SoulWallet,
@@ -30,6 +31,7 @@ export {
     InitialKey,
     ECCPoint,
     SignkeyType,
+    Base64Url,
     WebAuthN,/* dev export */
     P256Lib/* dev export */
 }
