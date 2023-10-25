@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { TypeGuard } from './typeGuard';
+import { TypeGuard } from './typeGuard.js';
 import { P256Lib } from './p256lib.js';
 import { Hex } from './hex.js';
 import { Base64Url } from './base64Url.js';
