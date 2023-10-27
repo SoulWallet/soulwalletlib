@@ -1,9 +1,9 @@
 import { ethers } from 'ethers';
-import { TypeGuard } from './typeGuard';
+import { TypeGuard } from './typeGuard.js';
 import { P256Lib } from './p256lib.js';
 import { Hex } from './hex.js';
 import { Base64Url } from './base64Url.js';
-
+// import { webcrypto } from './webCrypto.js';
 export interface ECCPoint {
     /**
      * Hex string of x coordinate
@@ -35,7 +35,7 @@ export class WebAuthN {
         if (TypeGuard.onlyBytes32(point.y).isErr() === true) { throw new Error(`invalid key.y: ${point.y}`); }
         // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
         const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [point.x, point.y]));
-        return _key;
+        return _key.toLowerCase();
     }
 
     /**
@@ -78,6 +78,107 @@ export class WebAuthN {
         const _message = ethers.sha256('0x' + authenticatorData + clientDataJSONHash);
         return WebAuthN.recover(_message, r, s);
     }
+
+    /**
+     *
+     *
+     * @static
+     * @param {string} r r
+     * @param {string} s s
+     * @param {string} message userOp hash
+     * @param {string} authenticatorData hex string of authenticatorData
+     * @param {string} clientDataSuffix clientDataSuffix string
+     * @param {string} [clientDataPrefix='{"type":"webauthn.get","challenge":"'] clientDataPrefix
+     * @return {*}  {{
+     *             0: string,
+     *             1: string
+     *         }}
+     * @memberof WebAuthN
+     */
+    public static recoverWebAuthNPublicKey(
+        message: string,
+        r: string, s: string,
+        authenticatorData: string,
+        clientDataSuffix: string,
+        clientDataPrefix?: string
+    ): {
+        0: string,
+        1: string
+    } {
+        const p = WebAuthN.recoverWebAuthN(message, r, s, authenticatorData, clientDataSuffix, clientDataPrefix);
+        return {
+            0: WebAuthN.publicKeyToAddress(p[0]),
+            1: WebAuthN.publicKeyToAddress(p[1])
+        }
+    }
+
+
+    /**
+     *
+     *
+     * @static
+     * @param {string} r r
+     * @param {string} s s
+     * @param {string} message userOp hash
+     * @param {string} authenticatorData hex string of authenticatorData
+     * @param {string} clientDataSuffix clientDataSuffix string
+     * @param {string} clientDataPrefix
+     * @memberof WebAuthN
+     */
+    // public static async recoverWebAuthNPublicKey(
+    //     message: string,
+    //     r: string, s: string,
+    //     authenticatorData: string,
+    //     clientDataSuffix: string,
+    //     clientDataPrefix?: string
+    // ): Promise<{
+    //     publicKey: ECCPoint,
+    //     v: number
+    // }> {
+    //     let pk = WebAuthN.recoverWebAuthN(message, r, s, authenticatorData, clientDataSuffix, clientDataPrefix);
+    //     const algoParams = {
+    //         name: 'ECDSA',
+    //         namedCurve: 'P-256',
+    //         hash: 'SHA-256'
+    //     };
+    //     const challengeBase64 = Base64Url.bytes32Tobase64Url(message); 
+    //     const clientDataJSON = `{"type":"webauthn.get","challenge":"${challengeBase64}${clientDataSuffix}`;
+    //     const jsonBytes = ethers.toUtf8Bytes(clientDataJSON);
+    //     const jsonBytesHex = '0x' + Array.from(jsonBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    //     let clientDataJSONHash: string = ethers.sha256(jsonBytesHex); 
+    //     if (clientDataJSONHash.startsWith('0x')) clientDataJSONHash = clientDataJSONHash.slice(2);
+    //     const message = authenticatorData + clientDataJSONHash;
+    //     const _message = ethers.sha256(message);
+    //     const _buffer1 = [48, 89, 48, 19, 6, 7, 42, 134, 72, 206, 61, 2, 1, 6, 8, 42, 134, 72, 206, 61, 3, 1, 7, 3, 66, 0, 4];
+    //     const _buffer: Uint8Array = new Uint8Array(91);
+    //     for (let i = 0; i < 27; i++) {
+    //         _buffer[i] = _buffer1[i];
+    //     }
+
+    //     for (let j = 0; j < 2; j++) {
+    //         const X = Hex.hexToUint8Array(pk[j].x);
+    //         const Y = Hex.hexToUint8Array(pk[j].y);
+    //         for (let i = 0; i < X.length; i++) {
+    //             _buffer[58 - i] = X[X.length - 1 - i];
+    //         }
+    //         for (let i = 0; i < Y.length; i++) {
+    //             _buffer[90 - i] = Y[Y.length - 1 - i];
+    //         }
+    //         const publicKey = await webcrypto.subtle.importKey(
+    //             'spki',
+    //             _buffer.buffer,
+    //             algoParams,
+    //             true,
+    //             ['verify']
+    //         );
+    //         const isValid = await webcrypto.subtle.verify(algoParams, publicKey, signature, Buffer.from(message.slice(2), 'hex'));
+    //         if (isValid !== true) {
+    //             throw new Error('sign failed');
+    //         }
+    //     }
+
+
+    // }
 
     /**
      *

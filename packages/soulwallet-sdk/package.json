@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/sdk",
-    "version": "0.1.8",
+    "version": "0.1.10",
     "description": "SoulWalletSDK = {  Basic Functions,  Bundler, KeyStore,  SignatureTools }",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
@@ -8,6 +8,9 @@
     "main": "./lib.cjs/main.js",
     "module": "./lib.esm/main.js",
     "types": "./lib.esm/main.d.ts",
+    "browser": {
+        "./lib.esm/tools/webCrypto.js": "./lib.esm/tools/webCrypto-browser.js"
+    },
     "directories": {
         "lib": "lib.cjs",
         "test": "__tests__"

@@ -1,5 +1,17 @@
 # @soulwallet/sdk
 
+## 0.1.10
+
+### Patch Changes
+
+- Fix bug
+
+## 0.1.9
+
+### Patch Changes
+
+- add securityControlModuleDelay argument
+
 ## 0.1.8
 
 ### Patch Changes

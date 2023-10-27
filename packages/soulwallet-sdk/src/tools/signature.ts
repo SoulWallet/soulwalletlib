@@ -1,8 +1,8 @@
 import { TypeGuard } from './typeGuard.js';
 import { Hex } from "./hex.js";
 import { ethers } from 'ethers';
-import { SignkeyType } from '../interface/ISoulWallet.js';
-import { ECCPoint, WebAuthN } from './webauthn.js';
+import { InitialKey, SignkeyType } from '../interface/ISoulWallet.js';
+import { WebAuthN } from './webauthn.js';
 
 export class HookInputData {
     /**
@@ -217,7 +217,7 @@ export class Signature {
      * @static
      * @param {{
      *             messageHash:string,
-     *             publicKey: ECCPoint,
+     *             publicKey: InitialKey,
      *             r: string,
      *             s: string,
      *             authenticatorData: string,
@@ -231,7 +231,7 @@ export class Signature {
     static packP256Signature(
         signatureData: {
             messageHash: string,
-            publicKey: ECCPoint,
+            publicKey: InitialKey,
             r: string,
             s: string,
             authenticatorData: string,
@@ -241,8 +241,19 @@ export class Signature {
         guardHookInputData?: HookInputData
     ): string {
         if (TypeGuard.onlyBytes32(signatureData.messageHash).isErr() === true) throw new Error('invalid messageHash');
-        if (TypeGuard.onlyBytes32(signatureData.publicKey.x).isErr() === true) throw new Error('invalid publicKey.x');
-        if (TypeGuard.onlyBytes32(signatureData.publicKey.y).isErr() === true) throw new Error('invalid publicKey.y');
+        let publicKeyhash = '';
+        if (typeof signatureData.publicKey === 'string') {
+            if (TypeGuard.onlyBytes32(signatureData.publicKey).isErr() === true) {
+                throw new Error('invalid publicKey:' + signatureData.publicKey);
+            }
+            publicKeyhash = signatureData.publicKey.toLowerCase();
+        } else {
+            if (TypeGuard.onlyBytes32(signatureData.publicKey.x).isErr() === true) { throw new Error(`invalid key.x: ${signatureData.publicKey.x}`); }
+            if (TypeGuard.onlyBytes32(signatureData.publicKey.y).isErr() === true) { throw new Error(`invalid key.y: ${signatureData.publicKey.y}`); }
+            // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
+            const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [signatureData.publicKey.x, signatureData.publicKey.y]));
+            publicKeyhash = _key.toLowerCase();
+        }
         if (TypeGuard.onlyBytes32(signatureData.r).isErr() === true) throw new Error('invalid r');
         if (TypeGuard.onlyBytes32(signatureData.s).isErr() === true) throw new Error('invalid s');
         if (TypeGuard.onlyBytes(signatureData.authenticatorData).isErr() === true) throw new Error('invalid authenticatorData');
@@ -253,9 +264,13 @@ export class Signature {
         let v = ''
         {
             const recover = WebAuthN.recoverWebAuthN(signatureData.messageHash, signatureData.r, signatureData.s, signatureData.authenticatorData, signatureData.clientDataSuffix);
-            if (recover[0].y.toLowerCase() === signatureData.publicKey.y.toLowerCase()) {
+            if (
+                ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [recover[0].x, recover[0].y])).toLowerCase() === publicKeyhash
+            ) {
                 v = '1b';// 27
-            } else if (recover[1].y.toLowerCase() === signatureData.publicKey.y.toLowerCase()) {
+            } else if (
+                ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [recover[1].x, recover[1].y])).toLowerCase() === publicKeyhash
+            ) {
                 v = '1c';// 28
             } else {
                 throw new Error('invalid signature');
