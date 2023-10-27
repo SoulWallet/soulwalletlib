@@ -32,6 +32,6 @@ export {
     ECCPoint,
     SignkeyType,
     Base64Url,
-    WebAuthN,/* dev export */
+    WebAuthN,
     P256Lib/* dev export */
 }

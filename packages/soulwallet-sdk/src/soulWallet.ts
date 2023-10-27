@@ -11,7 +11,6 @@ import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { getUserOpHash } from "./tools/userOpHash.js";
-import { ECCPoint } from "./tools/webauthn.js";
 import { L1KeyStore } from "./L1KeyStore.js";
 
 export class onChainConfig {
@@ -188,8 +187,8 @@ export class SoulWallet implements ISoulWallet {
             )
         */
 
-        const initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
-        const initialKeyHash = L1KeyStore.getKeyHash(initalkeys);
+        const _initalkeys = L1KeyStore.initialKeysToAddress(initialKeys);
+        const initialKeyHash = L1KeyStore.getKeyHash(_initalkeys);
 
         // default dely time is 2 days
         const securityControlModuleAndData = (this.securityControlModuleAddress + Hex.paddingZero(securityControlModuleDelay, 32).substring(2)).toLowerCase();
@@ -205,7 +204,7 @@ export class SoulWallet implements ISoulWallet {
         }
         const _soulWallet = new ethers.Contract(_onChainConfig.OK.soulWalletLogic, ABI_SoulWallet, this.provider);
         const initializeData = _soulWallet.interface.encodeFunctionData("initialize", [
-            initalkeys,
+            _initalkeys,
             this.defalutCallbackHandlerAddress,
             [
                 securityControlModuleAndData,
@@ -467,7 +466,7 @@ export class SoulWallet implements ISoulWallet {
      *
      * @param {{
      *         messageHash:string,
-     *         publicKey: ECCPoint,
+     *         publicKey: InitialKey,
      *         r: string,
      *         s: string,
      *         authenticatorData: string,
@@ -480,7 +479,7 @@ export class SoulWallet implements ISoulWallet {
      */
     async packUserOpP256Signature(signatureData: {
         messageHash: string,
-        publicKey: ECCPoint,
+        publicKey: InitialKey,
         r: string,
         s: string,
         authenticatorData: string,

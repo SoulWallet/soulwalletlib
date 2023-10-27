@@ -8,6 +8,9 @@
     "main": "./lib.cjs/main.js",
     "module": "./lib.esm/main.js",
     "types": "./lib.esm/main.d.ts",
+    "browser": {
+        "./lib.esm/tools/webCrypto.js": "./lib.esm/tools/webCrypto-browser.js"
+    },
     "directories": {
         "lib": "lib.cjs",
         "test": "__tests__"

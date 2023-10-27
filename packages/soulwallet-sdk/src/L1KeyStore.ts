@@ -79,8 +79,13 @@ export class L1KeyStore implements IL1KeyStore {
         const _initialKeys: string[] = [];
         for (const oneKey of initialKeys) {
             if (typeof oneKey === 'string') {
-                if (TypeGuard.onlyAddress(oneKey).isErr() === true) { throw new Error(`invalid key: ${oneKey}`); }
-                _initialKeys.push(Hex.paddingZero(oneKey, 32));
+                if (TypeGuard.onlyAddress(oneKey).isOk() === true) {
+                    _initialKeys.push(Hex.paddingZero(oneKey, 32));
+                } else if (TypeGuard.onlyBytes32(oneKey).isOk() === true) {
+                    _initialKeys.push(oneKey);
+                } else {
+                    throw new Error(`invalid key: ${oneKey}`);
+                }
             } else {
                 if (TypeGuard.onlyBytes32(oneKey.x).isErr() === true) { throw new Error(`invalid key.x: ${oneKey.x}`); }
                 if (TypeGuard.onlyBytes32(oneKey.y).isErr() === true) { throw new Error(`invalid key.y: ${oneKey.y}`); }

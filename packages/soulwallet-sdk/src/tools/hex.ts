@@ -20,4 +20,15 @@ export class Hex {
     public static uint8ArrayToHex(uint8Array: Uint8Array): string {
         return '0x' + Array.from(uint8Array).map(b => b.toString(16).padStart(2, '0')).join('');
     }
+
+    public static hexToUint8Array(hex: string): Uint8Array {
+        if (hex.startsWith('0x')) hex = hex.slice(2);
+        const len = hex.length;
+        const uint8Array = new Uint8Array(len / 2);
+        for (let i = 0; i < len; i += 2) {
+            uint8Array[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+        }
+        return uint8Array;
+    }
+
 }

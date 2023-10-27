@@ -29,7 +29,6 @@ import {
     randomBytes
 } from 'crypto';
 
-
 describe('SDK', () => {
     test('P256Lib', () => {
         //uint256 Qx = uint256(0xe89e8b4be943fadb4dc599fe2e8af87a79b438adde328a3b72d43324506cd5b6);
@@ -121,19 +120,29 @@ describe('SDK', () => {
     test('passkey-test', async () => {
         for (let index = 0; index < 10; index++) {
             const { privateKeyBase64, publicKeyBase64, X, Y } = await WebAuthNMock.createPassKey();
+            for (let j = 0; j < 5; j++) {
+                const userOpHash = '0x' + randomBytes(32).toString('hex');
+                const { r, s, authenticatorData, clientDataSuffix, _message } = await WebAuthNMock.signPassKey(privateKeyBase64, publicKeyBase64, userOpHash);
 
-            const userOpHash = '0x' + randomBytes(32).toString('hex');
-            const { r, s, authenticatorData, clientDataSuffix } = await WebAuthNMock.signPassKey(privateKeyBase64, publicKeyBase64, userOpHash);
+                const p = WebAuthN.recoverWebAuthN(userOpHash, r, s, authenticatorData, clientDataSuffix);
 
-            const p = WebAuthN.recoverWebAuthN(userOpHash, r, s, authenticatorData, clientDataSuffix);
-            if (BigInt(p[0].x) === X && BigInt(p[0].y) === Y) {
-                // succ
-            } else if (BigInt(p[1].x) === X && BigInt(p[1].y) === Y) {
-                // succ
-            } else {
-                throw new Error('recover failed');
+                if (BigInt(p[0].x) === X && BigInt(p[0].y) === Y) {
+                    // succ  
+                } else if (BigInt(p[1].x) === X && BigInt(p[1].y) === Y) {
+                    // succ  
+                } else {
+                    throw new Error('recover failed');
+                }
+
+                if (P256Lib.verify(BigInt(p[0].x), BigInt(p[0].y), BigInt(_message), BigInt(r), BigInt(s)) === false) {
+                    throw new Error('verify failed');
+                }
+                if (P256Lib.verify(BigInt(p[1].x), BigInt(p[1].y), BigInt(_message), BigInt(r), BigInt(s)) === false) {
+                    throw new Error('verify failed');
+                }
             }
         }
+        console.log('passkey-test 1000 times succ');
     });
 });
 
@@ -172,6 +181,17 @@ class WebAuthNMock {
     private static uint8ArrayToHex(uint8Array: Uint8Array): string {
         return '0x' + Array.from(uint8Array).map(b => b.toString(16).padStart(2, '0')).join('');
     }
+
+    private static hexToUint8Array(hex: string): Uint8Array {
+        if (hex.startsWith('0x')) hex = hex.slice(2);
+        const len = hex.length;
+        const uint8Array = new Uint8Array(len / 2);
+        for (let i = 0; i < len; i += 2) {
+            uint8Array[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+        }
+        return uint8Array;
+    }
+
     private static arrayBufferToBase64(buffer: ArrayBuffer) {
         let binary = '';
         const bytes = new Uint8Array(buffer);
@@ -202,6 +222,11 @@ class WebAuthNMock {
         // keyPair.publicKey to x,y
         const publicKeyBuffer = await webcrypto.subtle.exportKey('spki', keyPair.publicKey);
         if (publicKeyBuffer.byteLength === 91) {
+            // ASN.1 DER format
+            const _buffer: Uint8Array = new Uint8Array(publicKeyBuffer);
+            if (_buffer[26] !== 0x04) {
+                throw new Error('Unexpected public key format');
+            }
             const x = publicKeyBuffer.slice(27, 59);
             const y = publicKeyBuffer.slice(59, 91);
             X = BigInt(WebAuthNMock.uint8ArrayToHex(new Uint8Array(x)));
@@ -209,6 +234,39 @@ class WebAuthNMock {
         } else {
             throw new Error('Unexpected public key format');
         }
+        /*
+        {
+            const _pk_x = WebAuthNMock.hexToUint8Array(X.toString(16));
+            const _pk_y = WebAuthNMock.hexToUint8Array(Y.toString(16));
+
+            const _buffer1 = [48, 89, 48, 19, 6, 7, 42, 134, 72, 206, 61, 2, 1, 6, 8, 42, 134, 72, 206, 61, 3, 1, 7, 3, 66, 0, 4];
+            const _buffer: Uint8Array = new Uint8Array(91);
+            for (let i = 0; i < 27; i++) {
+                _buffer[i] = _buffer1[i];
+            }
+            for (let i = 0; i < _pk_x.length; i++) {
+                _buffer[58 - i] = _pk_x[_pk_x.length - 1 - i];
+            }
+            for (let i = 0; i < _pk_y.length; i++) {
+                _buffer[59 - i] = _pk_y[_pk_y.length - 1 - i];
+            }
+
+            const p1 = new Uint8Array(publicKeyBuffer).toString();
+            const p2 = _buffer.toString();
+            if (p1 !== p2) {
+                throw new Error('Unexpected public key format');
+            }
+
+            // const publicKey: webcrypto.CryptoKey = await webcrypto.subtle.importKey(
+            //     'spki',
+            //     _buffer.buffer,
+            //     algoParams,
+            //     true,
+            //     ['verify']
+            // );
+
+        }
+        */
 
 
         const privateKeyBase64 = WebAuthNMock.arrayBufferToBase64(await webcrypto.subtle.exportKey('pkcs8', keyPair.privateKey));
@@ -275,7 +333,8 @@ class WebAuthNMock {
             r,
             s,
             authenticatorData,
-            clientDataSuffix
+            clientDataSuffix,
+            _message
         }
     }
 }
