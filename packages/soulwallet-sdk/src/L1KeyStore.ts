@@ -6,6 +6,7 @@ import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { bigIntToNumber } from './tools/convert.js';
 import { InitialKey } from "./interface/ISoulWallet.js";
+import { WebAuthN } from "./tools/webauthn.js";
 
 /**
  * L1KeyStore
@@ -87,11 +88,7 @@ export class L1KeyStore implements IL1KeyStore {
                     throw new Error(`invalid key: ${oneKey}`);
                 }
             } else {
-                if (TypeGuard.onlyBytes32(oneKey.x).isErr() === true) { throw new Error(`invalid key.x: ${oneKey.x}`); }
-                if (TypeGuard.onlyBytes32(oneKey.y).isErr() === true) { throw new Error(`invalid key.y: ${oneKey.y}`); }
-                // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
-                const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [oneKey.x, oneKey.y]));
-                _initialKeys.push(_key);
+                _initialKeys.push(WebAuthN.publicKeyToKeyhash(oneKey));
             }
         }
         _initialKeys.sort((a, b) => {

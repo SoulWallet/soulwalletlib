@@ -12,6 +12,7 @@ import { Bundler } from "./bundler.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { getUserOpHash } from "./tools/userOpHash.js";
 import { L1KeyStore } from "./L1KeyStore.js";
+import { ECCPoint, RSAPublicKey } from "./tools/webauthn.js";
 
 export class onChainConfig {
     chainId: number = 0;
@@ -479,7 +480,7 @@ export class SoulWallet implements ISoulWallet {
      */
     async packUserOpP256Signature(signatureData: {
         messageHash: string,
-        publicKey: InitialKey,
+        publicKey: ECCPoint | string,
         r: string,
         s: string,
         authenticatorData: string,
@@ -491,6 +492,40 @@ export class SoulWallet implements ISoulWallet {
         }
         return new Ok(
             Signature.packP256Signature(signatureData, validationData, hookInputData.OK)
+        );
+    }
+
+    /**
+     * pack userOp signature (RS256)
+     * 
+     * @param {{
+     *             messageHash:string,
+     *             publicKey: InitialKey,
+     *             r: string,
+     *             s: string,
+     *             authenticatorData: string,
+     *             clientDataSuffix: string
+     *         }} signatureData
+     * @param {string} validationData
+     * @param {HookInputData} [guardHookInputData]
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof SoulWallet
+     */
+    async packUserOpRS256Signature(
+        signatureData: {
+            messageHash: string,
+            publicKey: RSAPublicKey,
+            signature: string,
+            authenticatorData: string,
+            clientDataSuffix: string
+        },
+        validationData: string, guardHookInputData?: GuardHookInputData): Promise<Result<string, Error>> {
+        const hookInputData = await this.prePackUserOpSignature(guardHookInputData);
+        if (hookInputData.isErr() === true) {
+            return new Err(hookInputData.ERR);
+        }
+        return new Ok(
+            Signature.packRS256Signature(signatureData, validationData, hookInputData.OK)
         );
     }
 
@@ -528,6 +563,21 @@ export class SoulWallet implements ISoulWallet {
                             r: "0x2ae3ddfe4cc414dc0fad7ff3a5c960d1cee1211722d3099ade76e5ac1826731a",
                             s: "0x87e5d654f357e4cd6cb52512b2da4d91eae0ae48e9d892ce532b9352f63a55d6",
                             authenticatorData: "0x49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000000",
+                            clientDataSuffix: "\",\"origin\":\"http://localhost:5500\",\"crossOrigin\":false}"
+                        },
+                        `0x${validationData.toString(16)}`,
+                        semiValidGuardHookInputData
+                    );
+                } else if (signkeyType === SignkeyType.RS256) {
+                    signatureRet = await this.packUserOpRS256Signature(
+                        {
+                            messageHash: "0x83714056da6e6910b51595330c2c2cdfbf718f2deff5bdd84b95df7a7f36f6dd",
+                            publicKey: {
+                                e: "0x010001",
+                                n: "0xc6807412ed8d616565508c879292686bb1db6f0561b62c7b66a2d3806d161c0ccef888d2c1efcf061e268a15e61e7d023646014c33b1ead31bef0e5379558e6ff71249b143c03abec33a2b055fc8e0a947393512e7e26ad33f0ad4aabfe32d0642965856d8e20204a44d78e36cc90db2a12cfbc37fa97360efd3a735c625ab814d6f6bb7c63abe261bbd9c52681c6221f936d617dc84de61556074f6c1d73b3ffd242d2940d3c02c5a269e390bd8e6b6301a5a0a339910f6480403d27d32c2ff2b9bf33bae45c36f423025ca41f05c97be5148b2cb276b31441274100bf3ca0b50da1ee04511be9bdbb4f12b7579ab3da780bc2c615e2a49f5e1f750b034d0af"
+                            },
+                            signature: "0x357a51b26e22dcfb87346bb6938cfb2b066d48d4c36cafd30ac105fe345199966f24c87fa66791d4c2341b97fa07421ef4115a9923e6249c53887b6f2313df60654083758fe7104286490e1a37481246395dcb097a86645dc3251afa5c87e4bc8f2960cfe3efa34c44bbee0fe3d602866c81a5fc432709443c623595556670a427502c63c1e6a86761c8b326b5f503bdcfdcf1f00871f330a9fddf6ae11adcff4a5f411edec30019c86936f8064b70f88cdb56ba6635175f7ef5c74f52de9db5498e4c4d4b75c8a3210e5b1a631af271c4b613a8752b2a1cea499bd81115d9ed34305d9ab4af753dc9b9630478fdb0787e5f5e0efb76504d15eff5fd02a38bf1",
+                            authenticatorData: "0x49960de5880e8c687434170f6476605b8fe4aeb9a28632c7995cf3ba831d97630500000001",
                             clientDataSuffix: "\",\"origin\":\"http://localhost:5500\",\"crossOrigin\":false}"
                         },
                         `0x${validationData.toString(16)}`,

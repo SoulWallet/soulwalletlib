@@ -40,7 +40,7 @@
     },
     "dependencies": {
         "@soulwallet/result": "workspace:*",
-        "ethers": "6.7.0",
+        "ethers": "^6.8.1",
         "mitt": "3.0.1",
         "scrypt-js": "3.0.1"
     },

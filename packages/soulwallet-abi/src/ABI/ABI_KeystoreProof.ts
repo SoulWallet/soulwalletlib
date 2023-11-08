@@ -159,7 +159,7 @@ export default [
     },
     {
         "inputs": [],
-        "name": "lastestProofL1BlockNumber",
+        "name": "latestProofL1BlockNumber",
         "outputs": [
             {
                 "internalType": "uint256",

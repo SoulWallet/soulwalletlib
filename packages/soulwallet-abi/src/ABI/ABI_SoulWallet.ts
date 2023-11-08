@@ -629,7 +629,7 @@ export default [
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "hash",
+                "name": "rawHash",
                 "type": "bytes32"
             },
             {

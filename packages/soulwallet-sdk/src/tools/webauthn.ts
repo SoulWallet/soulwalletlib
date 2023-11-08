@@ -20,22 +20,90 @@ export interface ECCPoint {
      */
     y: string;
 }
+
+export interface RSAPublicKey {
+    /**
+     * Hex string of public exponent
+     *
+     * @type {string}
+     * @memberof RSAPublicKey
+     */
+    e: string;
+
+    /**
+     * Hex string of public key
+     *
+     * @type {string}
+     * @memberof RSAPublicKey
+     */
+    n: string;
+}
+
 export class WebAuthN {
 
     /**
-     * 
+    * calculate the key hash
+    *
+    * @static
+    * @param {ECCPoint} p256Key
+    * @return {*}  {string} 
+    */
+    private static p256PublicKeyToKeyhash(p256Key: ECCPoint): string {
+        if (TypeGuard.onlyBytes32(p256Key.x).isErr() === true) { throw new Error(`invalid key.x: ${p256Key.x}`); }
+        if (TypeGuard.onlyBytes32(p256Key.y).isErr() === true) { throw new Error(`invalid key.y: ${p256Key.y}`); }
+        // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
+        const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [p256Key.x, p256Key.y]));
+        return _key;
+    }
+
+    /**
+     * calculate the key hash
      *
      * @static
-     * @param {ECCPoint} point
+     * @param {RSAPublicKey} rs256Key
+     * @return {*}  {string} 
+     */
+    private static rs256PublicKeyToKeyhash(rs256Key: RSAPublicKey): string {
+        if (TypeGuard.onlyHex(rs256Key.e).isErr() === true) {
+            throw new Error('invalid publicKey.e');
+        } else {
+            if (BigInt(rs256Key.e) !== BigInt(65537)) {
+                throw new Error('e!=65537 is not supported yet');
+            }
+        }
+        if (TypeGuard.onlyHex(rs256Key.n).isErr() === true) {
+            throw new Error('invalid publicKey.n');
+        } else {
+            if ((rs256Key.n.length - 2) % 64 !== 0) {
+                throw new Error('invalid publicKey.n length');
+            }
+        }
+        // bytes memory e = hex"0000000000000000000000000000000000000000000000000000000000010001";
+        // expected = keccak256(abi.encodePacked(e, n));
+        const _key = ethers.keccak256(ethers.solidityPacked(["bytes", "bytes"], ['0x0000000000000000000000000000000000000000000000000000000000010001', rs256Key.n]));
+        return _key;
+    }
+
+    /**
+     * public key to Keyhash
+     *
+     * @static
+     * @param {(ECCPoint | RSAPublicKey)} publicKey
      * @return {*}  {string}
      * @memberof P256
      */
-    public static publicKeyToAddress(point: ECCPoint): string {
-        if (TypeGuard.onlyBytes32(point.x).isErr() === true) { throw new Error(`invalid key.x: ${point.x}`); }
-        if (TypeGuard.onlyBytes32(point.y).isErr() === true) { throw new Error(`invalid key.y: ${point.y}`); }
-        // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
-        const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [point.x, point.y]));
-        return _key.toLowerCase();
+    public static publicKeyToKeyhash(publicKey: ECCPoint | RSAPublicKey): string {
+        if (typeof publicKey === 'object' && Object.prototype.hasOwnProperty.call(publicKey, 'x') && Object.prototype.hasOwnProperty.call(publicKey, 'y')) {
+            // ES256
+            const es256Key = publicKey as ECCPoint;
+            return WebAuthN.p256PublicKeyToKeyhash(es256Key);
+        } else if (typeof publicKey === 'object' && Object.prototype.hasOwnProperty.call(publicKey, 'e') && Object.prototype.hasOwnProperty.call(publicKey, 'n')) {
+            // RS256
+            const rs256Key = publicKey as RSAPublicKey;
+            return WebAuthN.rs256PublicKeyToKeyhash(rs256Key);
+        } else {
+            throw new Error('invalid publicKey');
+        }
     }
 
     /**
@@ -107,78 +175,12 @@ export class WebAuthN {
     } {
         const p = WebAuthN.recoverWebAuthN(message, r, s, authenticatorData, clientDataSuffix, clientDataPrefix);
         return {
-            0: WebAuthN.publicKeyToAddress(p[0]),
-            1: WebAuthN.publicKeyToAddress(p[1])
+            0: WebAuthN.publicKeyToKeyhash(p[0]),
+            1: WebAuthN.publicKeyToKeyhash(p[1])
         }
     }
 
 
-    /**
-     *
-     *
-     * @static
-     * @param {string} r r
-     * @param {string} s s
-     * @param {string} message userOp hash
-     * @param {string} authenticatorData hex string of authenticatorData
-     * @param {string} clientDataSuffix clientDataSuffix string
-     * @param {string} clientDataPrefix
-     * @memberof WebAuthN
-     */
-    // public static async recoverWebAuthNPublicKey(
-    //     message: string,
-    //     r: string, s: string,
-    //     authenticatorData: string,
-    //     clientDataSuffix: string,
-    //     clientDataPrefix?: string
-    // ): Promise<{
-    //     publicKey: ECCPoint,
-    //     v: number
-    // }> {
-    //     let pk = WebAuthN.recoverWebAuthN(message, r, s, authenticatorData, clientDataSuffix, clientDataPrefix);
-    //     const algoParams = {
-    //         name: 'ECDSA',
-    //         namedCurve: 'P-256',
-    //         hash: 'SHA-256'
-    //     };
-    //     const challengeBase64 = Base64Url.bytes32Tobase64Url(message); 
-    //     const clientDataJSON = `{"type":"webauthn.get","challenge":"${challengeBase64}${clientDataSuffix}`;
-    //     const jsonBytes = ethers.toUtf8Bytes(clientDataJSON);
-    //     const jsonBytesHex = '0x' + Array.from(jsonBytes).map(b => b.toString(16).padStart(2, '0')).join('');
-    //     let clientDataJSONHash: string = ethers.sha256(jsonBytesHex); 
-    //     if (clientDataJSONHash.startsWith('0x')) clientDataJSONHash = clientDataJSONHash.slice(2);
-    //     const message = authenticatorData + clientDataJSONHash;
-    //     const _message = ethers.sha256(message);
-    //     const _buffer1 = [48, 89, 48, 19, 6, 7, 42, 134, 72, 206, 61, 2, 1, 6, 8, 42, 134, 72, 206, 61, 3, 1, 7, 3, 66, 0, 4];
-    //     const _buffer: Uint8Array = new Uint8Array(91);
-    //     for (let i = 0; i < 27; i++) {
-    //         _buffer[i] = _buffer1[i];
-    //     }
-
-    //     for (let j = 0; j < 2; j++) {
-    //         const X = Hex.hexToUint8Array(pk[j].x);
-    //         const Y = Hex.hexToUint8Array(pk[j].y);
-    //         for (let i = 0; i < X.length; i++) {
-    //             _buffer[58 - i] = X[X.length - 1 - i];
-    //         }
-    //         for (let i = 0; i < Y.length; i++) {
-    //             _buffer[90 - i] = Y[Y.length - 1 - i];
-    //         }
-    //         const publicKey = await webcrypto.subtle.importKey(
-    //             'spki',
-    //             _buffer.buffer,
-    //             algoParams,
-    //             true,
-    //             ['verify']
-    //         );
-    //         const isValid = await webcrypto.subtle.verify(algoParams, publicKey, signature, Buffer.from(message.slice(2), 'hex'));
-    //         if (isValid !== true) {
-    //             throw new Error('sign failed');
-    //         }
-    //     }
-
-
-    // }
 
     /**
      *

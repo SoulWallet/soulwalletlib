@@ -33,7 +33,7 @@
     "@soulwallet/keyvault": "workspace:*",
     "bn.js": "^5.2.1",
     "ethereumjs-util": "^7.1.5",
-    "ethers": "^6.7.0"
+    "ethers": "^6.8.1"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",

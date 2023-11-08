@@ -67,7 +67,7 @@ export default [
         "anonymous": false,
         "inputs": [
             {
-                "indexed": false,
+                "indexed": true,
                 "internalType": "address",
                 "name": "proxy",
                 "type": "address"

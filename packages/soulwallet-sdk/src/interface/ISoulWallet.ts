@@ -1,7 +1,7 @@
 import { UserOperation } from "./UserOperation.js";
 import { UserOpErrors } from "./IUserOpErrors.js";
 import { Result } from '@soulwallet/result';
-import { ECCPoint } from "../tools/webauthn.js";
+import { ECCPoint, RSAPublicKey } from "../tools/webauthn.js";
 import { TypedDataDomain, TypedDataField } from "ethers";
 
 /**
@@ -234,9 +234,9 @@ export class GuardHookInputData {
 
 /**
  * Initial key of the wallet
- * ECCPoint or EOA address
+ * ECCPoint, RSAPublicKey, EOA or packed bytes32
  */
-export type InitialKey = ECCPoint | string;
+export type InitialKey = ECCPoint | RSAPublicKey | string;
 
 /**
  * Key type
@@ -247,4 +247,5 @@ export type InitialKey = ECCPoint | string;
 export enum SignkeyType {
     EOA = 0,
     P256 = 1,
+    RS256 = 2,
 }
