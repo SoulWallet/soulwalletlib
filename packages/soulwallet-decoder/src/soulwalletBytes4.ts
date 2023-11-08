@@ -137,7 +137,6 @@ b.set('0xc353f4bd',{text:'getKeyStoreInfo(bytes32)',bytes4:'0xc353f4bd'});
 b.set('0xc399ec88',{text:'getDeposit()',bytes4:'0xc399ec88'});
 b.set('0xc4c1c94f',{text:'add(address[])',bytes4:'0xc4c1c94f'});
 b.set('0xc4d252f5',{text:'cancel(bytes32)',bytes4:'0xc4d252f5'});
-b.set('0xc84e3e26',{text:'lastestProofL1BlockNumber()',bytes4:'0xc84e3e26'});
 b.set('0xc86ec2bf',{text:'threshold(address)',bytes4:'0xc86ec2bf'});
 b.set('0xc90db447',{text:'cancelRecovery(address)',bytes4:'0xc90db447'});
 b.set('0xca5ce119',{text:'postHook(address,uint256,bytes)',bytes4:'0xca5ce119'});
@@ -172,6 +171,7 @@ b.set('0xf5311501',{text:'setKeyByGuardian(bytes32,bytes32,uint256,bytes,bytes,b
 b.set('0xf698da25',{text:'domainSeparator()',bytes4:'0xf698da25'});
 b.set('0xf9960c19',{text:'setGuardian(bytes32,bytes32,bytes,bytes)',bytes4:'0xf9960c19'});
 b.set('0xf9f95c79',{text:'passBlockHashInL2(uint256,uint256,uint256)',bytes4:'0xf9f95c79'});
+b.set('0xfa36cac4',{text:'latestProofL1BlockNumber()',bytes4:'0xfa36cac4'});
 b.set('0xfb0e722b',{text:'inbox()',bytes4:'0xfb0e722b'});
 b.set('0xfc63e00e',{text:'resetOwners(bytes32[])',bytes4:'0xfc63e00e'});
 b.set('0xfc7e286d',{text:'deposits(address)',bytes4:'0xfc7e286d'});

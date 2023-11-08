@@ -5,7 +5,7 @@
   "fixed": [],
   "linked": [],
   "access": "restricted",
-  "baseBranch": "webauthn",
+  "baseBranch": "develop",
   "updateInternalDependencies": "patch",
   "ignore": [
     "internal-test"

@@ -8,7 +8,7 @@ import { Ok, Err, Result } from '@soulwallet/result';
 import { Bundler } from "./bundler.js";
 import { KeyStoreInfo, GuardianSignature, KeyStoreTypedDataType } from "./interface/IL1KeyStore.js";
 import { UserOpUtils } from "./userOpUtils.js";
-import { ECCPoint, WebAuthN } from "./tools/webauthn.js";
+import { ECCPoint, RSAPublicKey, WebAuthN } from "./tools/webauthn.js";
 import { P256Lib } from "./tools/p256lib.js";
 import { Base64Url } from "./tools/base64Url.js";
 
@@ -30,6 +30,7 @@ export {
     KeyStoreTypedDataType,
     InitialKey,
     ECCPoint,
+    RSAPublicKey,
     SignkeyType,
     Base64Url,
     WebAuthN,

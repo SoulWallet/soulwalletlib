@@ -1,8 +1,8 @@
 import { TypeGuard } from './typeGuard.js';
 import { Hex } from "./hex.js";
 import { ethers } from 'ethers';
-import { InitialKey, SignkeyType } from '../interface/ISoulWallet.js';
-import { WebAuthN } from './webauthn.js';
+import { SignkeyType } from '../interface/ISoulWallet.js';
+import { ECCPoint, RSAPublicKey, WebAuthN } from './webauthn.js';
 
 export class HookInputData {
     /**
@@ -176,7 +176,7 @@ export class Signature {
             } else {
                 signatureType = "00";
             }
-        } else if (signkeyType === SignkeyType.P256) {
+        } else if (signkeyType === SignkeyType.P256 || signkeyType === SignkeyType.RS256) {
             if (hasValidationData) {
                 signatureType = "03";
             } else {
@@ -217,7 +217,7 @@ export class Signature {
      * @static
      * @param {{
      *             messageHash:string,
-     *             publicKey: InitialKey,
+     *             publicKey: ECCPoint | string
      *             r: string,
      *             s: string,
      *             authenticatorData: string,
@@ -231,7 +231,7 @@ export class Signature {
     static packP256Signature(
         signatureData: {
             messageHash: string,
-            publicKey: InitialKey,
+            publicKey: ECCPoint | string,
             r: string,
             s: string,
             authenticatorData: string,
@@ -248,10 +248,7 @@ export class Signature {
             }
             publicKeyhash = signatureData.publicKey.toLowerCase();
         } else {
-            if (TypeGuard.onlyBytes32(signatureData.publicKey.x).isErr() === true) { throw new Error(`invalid key.x: ${signatureData.publicKey.x}`); }
-            if (TypeGuard.onlyBytes32(signatureData.publicKey.y).isErr() === true) { throw new Error(`invalid key.y: ${signatureData.publicKey.y}`); }
-            // keccak256(abi.encodePacked(uint256 Qx,uint256 Qy));
-            const _key = ethers.keccak256(ethers.solidityPacked(["uint256", "uint256"], [signatureData.publicKey.x, signatureData.publicKey.y]));
+            const _key = WebAuthN.publicKeyToKeyhash(signatureData.publicKey);
             publicKeyhash = _key.toLowerCase();
         }
         if (TypeGuard.onlyBytes32(signatureData.r).isErr() === true) throw new Error('invalid r');
@@ -276,6 +273,14 @@ export class Signature {
                 throw new Error('invalid signature');
             }
         }
+
+        /*
+            webauthn signature type:
+             0x0: p256
+             0x1: rs256
+        */
+        packedSignature += '00';
+
         /*
             signature layout:
             1. r (32 bytes)
@@ -291,16 +296,118 @@ export class Signature {
         packedSignature += signatureData.r.slice(2);
         packedSignature += signatureData.s.slice(2);
         packedSignature += v;
-        if (signatureData.authenticatorData.startsWith('0x')) {
-            signatureData.authenticatorData = signatureData.authenticatorData.slice(2);
+        let _authenticatorData = signatureData.authenticatorData;
+        if (_authenticatorData.startsWith('0x')) {
+            _authenticatorData = _authenticatorData.slice(2);
         }
-        packedSignature += Hex.paddingZero(signatureData.authenticatorData.length / 2, 2).slice(2);
+        packedSignature += Hex.paddingZero(_authenticatorData.length / 2, 2).slice(2);
         packedSignature += "0000"; // clientDataPrefix length = 0
-        packedSignature += signatureData.authenticatorData;
+        packedSignature += _authenticatorData;
         packedSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
 
         return packedSignature.toLowerCase();
     }
+
+
+    /**
+     * pack RS256 signature
+     *
+     * @static
+     * @param {{
+    *             messageHash:string,
+    *             publicKey: InitialKey,
+    *             r: string,
+    *             s: string,
+    *             authenticatorData: string,
+    *             clientDataSuffix: string
+    *         }} signatureData
+    * @param {string} validationData
+    * @param {HookInputData} [guardHookInputData]
+    * @return {*}  {string}
+    * @memberof Signature
+    */
+    static packRS256Signature(
+        signatureData: {
+            messageHash: string,
+            publicKey: RSAPublicKey,
+            signature: string,
+            authenticatorData: string,
+            clientDataSuffix: string
+        },
+        validationData: string,
+        guardHookInputData?: HookInputData
+    ): string {
+        if (TypeGuard.onlyBytes32(signatureData.messageHash).isErr() === true) throw new Error('invalid messageHash');
+        if (TypeGuard.onlyHex(signatureData.publicKey.e).isErr() === true) {
+            throw new Error('invalid publicKey.e');
+        } else {
+            if (BigInt(signatureData.publicKey.e) !== BigInt(65537)) {
+                throw new Error('e!=65537 is not supported yet');
+            }
+        }
+        if (TypeGuard.onlyHex(signatureData.publicKey.n).isErr() === true) {
+            throw new Error('invalid publicKey.n');
+        } else {
+            if ((signatureData.publicKey.n.length - 2) % 64 !== 0) {
+                throw new Error('invalid publicKey.n length');
+            }
+        }
+        if (TypeGuard.onlyBytes(signatureData.signature).isErr() === true) {
+            throw new Error('invalid signature');
+        }
+
+        let packedSignature = Signature.prePackSignature(SignkeyType.P256, validationData, guardHookInputData);
+
+
+        /*
+            webauthn signature type:
+             0x0: p256
+             0x1: rs256
+        */
+        packedSignature += '01';
+
+        /*
+            signature layout:
+            1. n(exponent) length (2 byte max to 8192 bits key)
+            2. authenticatorData length (2 byte max 65535)
+            3. clientDataPrefix length (2 byte max 65535)
+            4. n(exponent) (exponent,dynamic bytes)
+            5. signature (signature,signature.length== n.length)
+            6. authenticatorData
+            7. clientDataPrefix
+            8. clientDataSuffix
+            
+        */
+        const _n = signatureData.publicKey.n.slice(2);
+        // 1. n(exponent) length (2 byte max to 8192 bits key)
+        packedSignature += Hex.paddingZero((_n.length / 2), 2).slice(2);
+
+        let _authenticatorData = signatureData.authenticatorData;
+        if (_authenticatorData.startsWith('0x')) {
+            _authenticatorData = _authenticatorData.slice(2);
+        }
+        // 2. authenticatorData length (2 byte max 65535)
+        packedSignature += Hex.paddingZero(_authenticatorData.length / 2, 2).slice(2);
+        // 3. clientDataPrefix length (2 byte max 65535)
+        packedSignature += "0000"; // clientDataPrefix length = 0
+        // 4. n(exponent) (exponent,dynamic bytes)
+        packedSignature += _n;
+
+        const _s = signatureData.signature.slice(2);
+        if (_s.length !== _n.length) {
+            throw new Error('invalid signature');
+        }
+        // 5. signature (signature,signature.length== n.length)
+        packedSignature += _s;
+        // 6. authenticatorData
+        packedSignature += _authenticatorData;
+        // 7. clientDataPrefix
+        // 8. clientDataSuffix
+        packedSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
+
+        return packedSignature.toLowerCase();
+    }
+
 
     /**
      *

@@ -39,7 +39,7 @@
         "@soulwallet/abi": "workspace:*",
         "@soulwallet/result": "workspace:*",
         "@soulwallet/assets": "workspace:*",
-        "ethers": "^6.7.0"
+        "ethers": "^6.8.1"
     },
     "devDependencies": {
         "@types/node": "^20.3.1",
