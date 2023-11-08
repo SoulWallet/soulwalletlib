@@ -1,6 +1,6 @@
 {
     "name": "@soulwallet/decoder",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "A lib for decode userOp.calldata",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
