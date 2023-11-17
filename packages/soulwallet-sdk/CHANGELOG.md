@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.13
+
+### Patch Changes
+
+- 26ebf12: Remove guardianSafePeriodMin restriction
+
 ## 0.1.12
 
 ### Patch Changes
