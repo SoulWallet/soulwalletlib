@@ -18,7 +18,7 @@ import { WebAuthN } from "./tools/webauthn.js";
 export class L1KeyStore implements IL1KeyStore {
     static readonly days = 86400;
     static readonly defalutInitialGuardianSafePeriod = 2 * L1KeyStore.days;
-    static readonly guardianSafePeriodMin = 60 * 1;
+    static readonly guardianSafePeriodMin = 0;
     static readonly guardianSafePeriodMax = L1KeyStore.days * 30;
 
     readonly L1KeyStoreContractAddress: string;
