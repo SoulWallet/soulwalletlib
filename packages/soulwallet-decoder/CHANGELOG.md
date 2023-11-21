@@ -1,5 +1,11 @@
 # @soulwallet/decoder
 
+## 0.1.4
+
+### Patch Changes
+
+- 97c253e: Updated bytes4 signature list
+
 ## 0.1.3
 
 ### Patch Changes
