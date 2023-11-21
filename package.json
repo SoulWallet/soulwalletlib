@@ -15,7 +15,7 @@
     "internalTest": "pnpm -r run internalTest --filter 'internal-test'",
     "test": "pnpm -r run test",
     "generateABI": "pnpm -r run generateABI --filter 'soulwallet-abi'",
-    "generateBytes4": "pnpm -r run generateBytes4 --filter 'soulwallet-decoder'",
+    "generateBytes4": "pnpm --filter '@soulwallet/decoder' -r run generateBytes4",
     "generateTokens": "pnpm --filter '@soulwallet/assets' -r run generateTokens",
     "clean": "lerna run clean && rm -rf ./packages/*/lib/*",
     "bundlerInit": "cd bundler/ && yarn && yarn preprocess",
