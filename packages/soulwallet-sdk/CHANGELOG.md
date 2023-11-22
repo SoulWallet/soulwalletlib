@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.1.14
+
+### Patch Changes
+
+- 654d182: Remove the hacky implementation in estimateUserOperationGas::callGasLimit.
+
 ## 0.1.13
 
 ### Patch Changes
