@@ -600,19 +600,8 @@ export class SoulWallet implements ISoulWallet {
             }
             userOp.preVerificationGas = userOpGasRet.OK.preVerificationGas;
             userOp.verificationGasLimit = userOpGasRet.OK.verificationGasLimit;
-            // Value of 'gas': Even number: automatic setting, 
-            //                 Odd number: manually specified. Do not override!
-            const _callGasLimit = BigInt(userOp.callGasLimit);
-            const isEven = _callGasLimit % BigInt(2) === BigInt(0);
-            if (isEven) {
-                // auto
-                let _newCallGasLimit = BigInt(userOpGasRet.OK.callGasLimit);
-                if (_newCallGasLimit % BigInt(2) === BigInt(1)) {
-                    // odd number -> even number
-                    _newCallGasLimit += BigInt(1);
-                }
-                userOp.callGasLimit = `0x${_newCallGasLimit.toString(16)}`;
-            }
+            userOp.callGasLimit = `0x${BigInt(userOpGasRet.OK.callGasLimit).toString(16)}`;
+
             GasOverhead.calcGasOverhead(userOp, signkeyType);
             return new Ok(true);
         } finally {
