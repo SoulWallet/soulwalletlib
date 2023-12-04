@@ -4,7 +4,7 @@
     "description": "A lightweight private key management library",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
-    "license": "ISC",
+    "license": "MIT",
     "main": "./lib.cjs/main.js",
     "module": "./lib.esm/main.js",
     "types": "./lib.esm/main.d.ts",
