@@ -1,5 +1,14 @@
 # @soulwallet/sdk
 
+## 0.1.15
+
+### Patch Changes
+
+- fee433c: Updating Project License to Reflect Accurate Licensing
+- Updated dependencies [fee433c]
+  - @soulwallet/result@0.1.3
+  - @soulwallet/abi@0.1.4
+
 ## 0.1.14
 
 ### Patch Changes

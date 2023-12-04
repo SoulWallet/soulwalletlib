@@ -1,5 +1,11 @@
 # @soulwallet/result
 
+## 0.1.3
+
+### Patch Changes
+
+- fee433c: Updating Project License to Reflect Accurate Licensing
+
 ## 0.1.2
 
 ### Patch Changes
