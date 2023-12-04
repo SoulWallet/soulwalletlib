@@ -1,5 +1,11 @@
 # @soulwallet/abi
 
+## 0.1.4
+
+### Patch Changes
+
+- fee433c: Updating Project License to Reflect Accurate Licensing
+
 ## 0.1.3
 
 ### Patch Changes
