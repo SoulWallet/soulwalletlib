@@ -4,7 +4,7 @@
     "description": "SoulWalletSDK = {  Basic Functions,  Bundler, KeyStore,  SignatureTools }",
     "author": "Jayden@SoulWallet",
     "homepage": "https://github.com/SoulWallet/soulwalletlib#readme",
-    "license": "ISC",
+    "license": "GPL-3.0",
     "main": "./lib.cjs/main.js",
     "module": "./lib.esm/main.js",
     "types": "./lib.esm/main.d.ts",
