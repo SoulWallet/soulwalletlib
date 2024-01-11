@@ -1,207 +1,207 @@
 //Please do not modify manually,use `git submodule update --init --recursive && pnpm run generateABI`
 
 export default [
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_keyStoreProof",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "_wallet",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "internalType": "bytes32",
-                "name": "_initialKey",
-                "type": "bytes32"
-            },
-            {
-                "indexed": false,
-                "internalType": "bytes32",
-                "name": "initialGuardianHash",
-                "type": "bytes32"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint64",
-                "name": "guardianSafePeriod",
-                "type": "uint64"
-            }
-        ],
-        "name": "KeyStoreInited",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "_wallet",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "_newOwners",
-                "type": "bytes32"
-            }
-        ],
-        "name": "KeyStoreSyncd",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "wallet",
-                "type": "address"
-            }
-        ],
-        "name": "ModuleDeInit",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "address",
-                "name": "wallet",
-                "type": "address"
-            }
-        ],
-        "name": "ModuleInit",
-        "type": "event"
-    },
-    {
-        "inputs": [],
-        "name": "keyStoreProof",
-        "outputs": [
-            {
-                "internalType": "contract IKeyStoreProof",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "l1Slot",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "name": "lastKeyStoreSyncSignKey",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "requiredFunctions",
-        "outputs": [
-            {
-                "internalType": "bytes4[]",
-                "name": "",
-                "type": "bytes4[]"
-            }
-        ],
-        "stateMutability": "pure",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes4",
-                "name": "interfaceId",
-                "type": "bytes4"
-            }
-        ],
-        "name": "supportsInterface",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "pure",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "wallet",
-                "type": "address"
-            }
-        ],
-        "name": "syncL1Keystore",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "walletDeInit",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-            }
-        ],
-        "name": "walletInit",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "_keyStoreProof",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "DeInit",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "Init",
+    "inputs": [
+      {
+        "name": "data",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "keyStoreProof",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract IKeyStoreProof"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "l1Slot",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "lastKeyStoreSyncSignKey",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "requiredFunctions",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes4[]",
+        "internalType": "bytes4[]"
+      }
+    ],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "supportsInterface",
+    "inputs": [
+      {
+        "name": "interfaceId",
+        "type": "bytes4",
+        "internalType": "bytes4"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "syncL1Keystore",
+    "inputs": [
+      {
+        "name": "wallet",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "KeyStoreInited",
+    "inputs": [
+      {
+        "name": "_wallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "_initialKey",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "initialGuardianHash",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "guardianSafePeriod",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "KeyStoreSyncd",
+    "inputs": [
+      {
+        "name": "_wallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "_newOwners",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ModuleDeInit",
+    "inputs": [
+      {
+        "name": "wallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ModuleInit",
+    "inputs": [
+      {
+        "name": "wallet",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  }
 ];

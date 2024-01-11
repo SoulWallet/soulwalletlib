@@ -21,20 +21,24 @@ Vault
 ### Properties
 
 - [\_AES\_256\_GCM](Vault.md#_aes_256_gcm)
-- [\_DECRYPT\_KEY\_HASH](Vault.md#_decrypt_key_hash)
 - [\_EventEmitter](Vault.md#_eventemitter)
-- [\_KEY\_HASH](Vault.md#_key_hash)
+- [\_KeyVaultDataCache](Vault.md#_keyvaultdatacache)
 - [\_account](Vault.md#_account)
+- [\_lockTime](Vault.md#_locktime)
 - [\_storage](Vault.md#_storage)
+- [\_timeout](Vault.md#_timeout)
+- [\_timeoutDuration](Vault.md#_timeoutduration)
 
 ### Methods
 
+- [\_clearTimeout](Vault.md#_cleartimeout)
 - [\_deriveKey](Vault.md#_derivekey)
 - [\_isInitialized](Vault.md#_isinitialized)
-- [\_loadDecryptKeyHash](Vault.md#_loaddecryptkeyhash)
+- [\_loadData](Vault.md#_loaddata)
 - [\_loadSigner](Vault.md#_loadsigner)
 - [\_rawSign](Vault.md#_rawsign)
-- [\_saveDecryptKeyHash](Vault.md#_savedecryptkeyhash)
+- [\_saveData](Vault.md#_savedata)
+- [\_touchTimeout](Vault.md#_touchtimeout)
 - [changePassword](Vault.md#changepassword)
 - [createSigner](Vault.md#createsigner)
 - [destroy](Vault.md#destroy)
@@ -55,16 +59,34 @@ Vault
 - [typedDataSign](Vault.md#typeddatasign)
 - [unlock](Vault.md#unlock)
 - [\_hash](Vault.md#_hash)
+- [remove](Vault.md#remove)
+- [rename](Vault.md#rename)
 
 ## Constructors
 
 ### constructor
 
-• **new Vault**()
+• **new Vault**(`tag`): [`Vault`](Vault.md)
+
+Creates an instance of Vault.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `tag` | `string` | tag for keyVault |
+
+#### Returns
+
+[`Vault`](Vault.md)
+
+**`Memberof`**
+
+Vault
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:46](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L46)
+[soulwallet-keyvault/src/vault.ts:59](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L59)
 
 ## Properties
 
@@ -74,47 +96,47 @@ Vault
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L37)
-
-___
-
-### \_DECRYPT\_KEY\_HASH
-
-• `Private` `Readonly` **\_DECRYPT\_KEY\_HASH**: ``"@DECRYPT_KEY_HASH"``
-
-#### Defined in
-
-[soulwallet-keyvault/src/vault.ts:42](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L42)
+[soulwallet-keyvault/src/vault.ts:42](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L42)
 
 ___
 
 ### \_EventEmitter
 
-• `Private` **\_EventEmitter**: `Emitter`<[`VaultEvents`](../modules.md#vaultevents)\>
+• `Private` **\_EventEmitter**: `Emitter`\<[`VaultEvents`](../modules.md#vaultevents)\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L44)
+[soulwallet-keyvault/src/vault.ts:48](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L48)
 
 ___
 
-### \_KEY\_HASH
+### \_KeyVaultDataCache
 
-• `Private` **\_KEY\_HASH**: `undefined` \| `string`
+• `Private` **\_KeyVaultDataCache**: `undefined` \| `KeyVaultStorageStructure` = `undefined`
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L38)
+[soulwallet-keyvault/src/vault.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L44)
 
 ___
 
 ### \_account
 
-• `Private` **\_account**: `Map`<`string`, `ECDSA`\>
+• `Private` **\_account**: `Map`\<`string`, `ECDSA`\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:40](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L40)
+[soulwallet-keyvault/src/vault.ts:46](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L46)
+
+___
+
+### \_lockTime
+
+• `Private` **\_lockTime**: `number` = `0`
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:52](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L52)
 
 ___
 
@@ -124,13 +146,47 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L36)
+[soulwallet-keyvault/src/vault.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L41)
+
+___
+
+### \_timeout
+
+• `Private` **\_timeout**: `undefined` \| `Timeout`
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:50](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L50)
+
+___
+
+### \_timeoutDuration
+
+• `Private` `Readonly` **\_timeoutDuration**: `number`
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:51](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L51)
 
 ## Methods
 
+### \_clearTimeout
+
+▸ **_clearTimeout**(): `void`
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:182](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L182)
+
+___
+
 ### \_deriveKey
 
-▸ `Private` **_deriveKey**(`password`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **_deriveKey**(`password`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -140,45 +196,45 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:84](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L84)
+[soulwallet-keyvault/src/vault.ts:221](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L221)
 
 ___
 
 ### \_isInitialized
 
-▸ `Private` **_isInitialized**(): `Promise`<`boolean`\>
+▸ **_isInitialized**(): `Promise`\<`boolean`\>
 
 #### Returns
 
-`Promise`<`boolean`\>
+`Promise`\<`boolean`\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:202](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L202)
+[soulwallet-keyvault/src/vault.ts:334](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L334)
 
 ___
 
-### \_loadDecryptKeyHash
+### \_loadData
 
-▸ `Private` **_loadDecryptKeyHash**(): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **_loadData**(): `Promise`\<[`Result`](../modules.md#result)\<`KeyVaultStorageStructure`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`KeyVaultStorageStructure`, `Error`\>\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:150](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L150)
+[soulwallet-keyvault/src/vault.ts:189](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L189)
 
 ___
 
 ### \_loadSigner
 
-▸ `Private` **_loadSigner**(`address`): `Promise`<[`Result`](../modules.md#result)<`ECDSA`, `Error`\>\>
+▸ **_loadSigner**(`address`): `Promise`\<[`Result`](../modules.md#result)\<`ECDSA`, `Error`\>\>
 
 #### Parameters
 
@@ -188,17 +244,17 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`ECDSA`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`ECDSA`, `Error`\>\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:409](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L409)
+[soulwallet-keyvault/src/vault.ts:554](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L554)
 
 ___
 
 ### \_rawSign
 
-▸ `Private` **_rawSign**(`address`, `message`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **_rawSign**(`address`, `message`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -209,43 +265,59 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:457](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L457)
+[soulwallet-keyvault/src/vault.ts:602](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L602)
 
 ___
 
-### \_saveDecryptKeyHash
+### \_saveData
 
-▸ `Private` **_saveDecryptKeyHash**(`keyHash`): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **_saveData**(`keyVaultStorageStructure`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `keyHash` | `string` |
+| `keyVaultStorageStructure` | `KeyVaultStorageStructure` |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:160](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L160)
+[soulwallet-keyvault/src/vault.ts:212](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L212)
+
+___
+
+### \_touchTimeout
+
+▸ **_touchTimeout**(`createTimer`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `createTimer` | `boolean` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:171](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L171)
 
 ___
 
 ### changePassword
 
-▸ **changePassword**(`oldPassword`, `newPassword`): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **changePassword**(`oldPassword`, `newPassword`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 not implemented
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -256,9 +328,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 {Promise<Result<void, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -266,25 +342,25 @@ IVault.changePassword
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:293](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L293)
+[soulwallet-keyvault/src/vault.ts:430](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L430)
 
 ___
 
 ### createSigner
 
-▸ **createSigner**(): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **createSigner**(): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 create a signer
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+{Promise<Result<string, Error>>}
 
 **`Memberof`**
 
 Vault
-
-#### Returns
-
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
-
-{Promise<Result<string, Error>>}
 
 #### Implementation of
 
@@ -292,35 +368,35 @@ IVault.createSigner
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:357](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L357)
+[soulwallet-keyvault/src/vault.ts:493](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L493)
 
 ___
 
 ### destroy
 
-▸ `Private` **destroy**(): `Promise`<`void`\>
+▸ **destroy**(): `Promise`\<`void`\>
 
 for security reason, allways call this method after use
+
+#### Returns
+
+`Promise`\<`void`\>
+
+{Promise<void>}
 
 **`Memberof`**
 
 Vault
 
-#### Returns
-
-`Promise`<`void`\>
-
-{Promise<void>}
-
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:188](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L188)
+[soulwallet-keyvault/src/vault.ts:319](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L319)
 
 ___
 
 ### emit
 
-▸ `Private` **emit**<`Key`\>(`eventName`, `payload`): `void`
+▸ **emit**\<`Key`\>(`eventName`, `payload`): `void`
 
 #### Type parameters
 
@@ -341,19 +417,15 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:77](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L77)
+[soulwallet-keyvault/src/vault.ts:158](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L158)
 
 ___
 
 ### export
 
-▸ **export**(`password`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **export**(`password`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 not implemented
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -363,9 +435,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 {Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -373,19 +449,15 @@ IVault.export
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:307](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L307)
+[soulwallet-keyvault/src/vault.ts:445](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L445)
 
 ___
 
 ### importSigner
 
-▸ **importSigner**(`privateKey`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **importSigner**(`privateKey`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 import signer from privateKey
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -395,9 +467,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 {Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -405,19 +481,15 @@ IVault.importSigner
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:331](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L331)
+[soulwallet-keyvault/src/vault.ts:459](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L459)
 
 ___
 
 ### init
 
-▸ **init**(`password`, `enforce?`): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **init**(`password`, `enforce?`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 initialize vault
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -428,9 +500,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 {Promise<Result<void, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -438,25 +514,25 @@ IVault.init
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:106](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L106)
+[soulwallet-keyvault/src/vault.ts:243](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L243)
 
 ___
 
 ### isInitialized
 
-▸ **isInitialized**(): `Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
+▸ **isInitialized**(): `Promise`\<[`Result`](../modules.md#result)\<`boolean`, `Error`\>\>
 
 check if vault is initialized
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`boolean`, `Error`\>\>
+
+{Promise<Result<boolean, Error>>}
 
 **`Memberof`**
 
 Vault
-
-#### Returns
-
-`Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
-
-{Promise<Result<boolean, Error>>}
 
 #### Implementation of
 
@@ -464,25 +540,25 @@ IVault.isInitialized
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:174](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L174)
+[soulwallet-keyvault/src/vault.ts:302](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L302)
 
 ___
 
 ### isLocked
 
-▸ **isLocked**(): `Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
+▸ **isLocked**(): `Promise`\<[`Result`](../modules.md#result)\<`boolean`, `Error`\>\>
 
 check if vault is locked
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`boolean`, `Error`\>\>
+
+{Promise<Result<boolean, Error>>}
 
 **`Memberof`**
 
 Vault
-
-#### Returns
-
-`Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
-
-{Promise<Result<boolean, Error>>}
 
 #### Implementation of
 
@@ -490,25 +566,25 @@ IVault.isLocked
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:281](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L281)
+[soulwallet-keyvault/src/vault.ts:416](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L416)
 
 ___
 
 ### listSigners
 
-▸ **listSigners**(): `Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
+▸ **listSigners**(): `Promise`\<[`Result`](../modules.md#result)\<`string`[], `Error`\>\>
 
 list all signers
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`string`[], `Error`\>\>
+
+{Promise<Result<string[], Error>>}
 
 **`Memberof`**
 
 Vault
-
-#### Returns
-
-`Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
-
-{Promise<Result<string[], Error>>}
 
 #### Implementation of
 
@@ -516,25 +592,25 @@ IVault.listSigners
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:395](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L395)
+[soulwallet-keyvault/src/vault.ts:540](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L540)
 
 ___
 
 ### lock
 
-▸ **lock**(): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **lock**(): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 lock keyVault
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
+
+{Promise<Result<void, Error>>}
 
 **`Memberof`**
 
 Vault
-
-#### Returns
-
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
-
-{Promise<Result<void, Error>>}
 
 #### Implementation of
 
@@ -542,73 +618,81 @@ IVault.lock
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:255](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L255)
+[soulwallet-keyvault/src/vault.ts:393](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L393)
 
 ___
 
 ### off
 
-▸ **off**<`Key`\>(`eventName`, `handler?`): `void`
+▸ **off**\<`Key`\>(`eventName`, `handler?`): `void`
+
+remove event listener
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `Key` | extends keyof [`VaultEvents`](../modules.md#vaultevents) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `Key` | extends keyof [`VaultEvents`](../modules.md#vaultevents) | extends keyof VaultEvents |
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `Key` |
-| `handler?` | (`arg`: [`VaultEvents`](../modules.md#vaultevents)[`Key`]) => `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `eventName` | `Key` | event name |
+| `handler?` | (`arg`: [`VaultEvents`](../modules.md#vaultevents)[`Key`]) => `unknown` | event handler |
 
 #### Returns
 
 `void`
 
+**`Memberof`**
+
+Vault
+
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:69](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L69)
+[soulwallet-keyvault/src/vault.ts:150](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L150)
 
 ___
 
 ### on
 
-▸ **on**<`Key`\>(`eventName`, `handler`): `void`
+▸ **on**\<`Key`\>(`eventName`, `handler`): `void`
+
+add event listener
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `Key` | extends keyof [`VaultEvents`](../modules.md#vaultevents) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `Key` | extends keyof [`VaultEvents`](../modules.md#vaultevents) | extends keyof VaultEvents |
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `Key` |
-| `handler` | (`arg`: [`VaultEvents`](../modules.md#vaultevents)[`Key`]) => `any` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `eventName` | `Key` | event name |
+| `handler` | (`arg`: [`VaultEvents`](../modules.md#vaultevents)[`Key`]) => `unknown` | event handler |
 
 #### Returns
 
 `void`
 
+**`Memberof`**
+
+Vault
+
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:61](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L61)
+[soulwallet-keyvault/src/vault.ts:134](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L134)
 
 ___
 
 ### personalSign
 
-▸ **personalSign**(`address`, `message`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **personalSign**(`address`, `message`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 sign a message (personalSign)
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -619,9 +703,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 {Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -629,19 +717,15 @@ IVault.personalSign
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:441](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L441)
+[soulwallet-keyvault/src/vault.ts:586](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L586)
 
 ___
 
 ### rawSign
 
-▸ **rawSign**(`address`, `message`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **rawSign**(`address`, `message`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 sign a message (rawSign)
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -652,9 +736,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 {Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -662,19 +750,15 @@ IVault.rawSign
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:474](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L474)
+[soulwallet-keyvault/src/vault.ts:619](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L619)
 
 ___
 
 ### removeSigner
 
-▸ **removeSigner**(`address`): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **removeSigner**(`address`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 delete a signer
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -684,9 +768,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 {Promise<Result<void, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -694,19 +782,15 @@ IVault.removeSigner
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:369](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L369)
+[soulwallet-keyvault/src/vault.ts:505](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L505)
 
 ___
 
 ### restore
 
-▸ **restore**(`exportData`, `password`): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **restore**(`exportData`, `password`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 not implemented
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -717,9 +801,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 {Promise<Result<void, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -727,19 +815,15 @@ IVault.restore
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:146](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L146)
+[soulwallet-keyvault/src/vault.ts:290](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L290)
 
 ___
 
 ### typedDataSign
 
-▸ **typedDataSign**(`address`, `domain`, `types`, `value`, `provider?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **typedDataSign**(`address`, `domain`, `types`, `value`, `provider?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 sign typedData message (EIP712)
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -747,15 +831,19 @@ Vault
 | :------ | :------ |
 | `address` | `string` |
 | `domain` | `TypedDataDomain` |
-| `types` | `Record`<`string`, `TypedDataField`[]\> |
-| `value` | `Record`<`string`, `any`\> |
+| `types` | `Record`\<`string`, `TypedDataField`[]\> |
+| `value` | `Record`\<`string`, `any`\> |
 | `provider?` | `string` \| `JsonRpcProvider` |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 {Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -763,19 +851,15 @@ IVault.typedDataSign
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:497](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L497)
+[soulwallet-keyvault/src/vault.ts:643](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L643)
 
 ___
 
 ### unlock
 
-▸ **unlock**(`password`): `Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+▸ **unlock**(`password`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 unlock keyVault
-
-**`Memberof`**
-
-Vault
 
 #### Parameters
 
@@ -785,9 +869,13 @@ Vault
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`void`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
 
 {Promise<Result<void, Error>>}
+
+**`Memberof`**
+
+Vault
 
 #### Implementation of
 
@@ -795,13 +883,13 @@ IVault.unlock
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:217](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L217)
+[soulwallet-keyvault/src/vault.ts:349](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L349)
 
 ___
 
 ### \_hash
 
-▸ `Static` `Private` **_hash**(`data`): `string`
+▸ **_hash**(`data`): `string`
 
 #### Parameters
 
@@ -815,4 +903,65 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:93](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L93)
+[soulwallet-keyvault/src/vault.ts:230](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L230)
+
+___
+
+### remove
+
+▸ **remove**(`tag`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
+
+destroy vault
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `tag` | `string` | tag for keyVault |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
+
+{Promise<Result<void, Error>>}
+
+**`Static`**
+
+**`Memberof`**
+
+Vault
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:83](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L83)
+
+___
+
+### rename
+
+▸ **rename**(`oldTag`, `newTag`): `Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
+
+rename vault, must lock first
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `oldTag` | `string` | old tag |
+| `newTag` | `string` | new tag |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`void`, `Error`\>\>
+
+{Promise<Result<void, Error>>}
+
+**`Static`**
+
+**`Memberof`**
+
+Vault
+
+#### Defined in
+
+[soulwallet-keyvault/src/vault.ts:97](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/vault.ts#L97)

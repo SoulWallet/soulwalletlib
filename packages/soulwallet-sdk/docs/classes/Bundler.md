@@ -29,7 +29,7 @@
 
 ### constructor
 
-• **new Bundler**(`bundler`)
+• **new Bundler**(`bundler`): [`Bundler`](Bundler.md)
 
 #### Parameters
 
@@ -37,9 +37,13 @@
 | :------ | :------ |
 | `bundler` | `string` \| `JsonRpcProvider` |
 
+#### Returns
+
+[`Bundler`](Bundler.md)
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L11)
+[packages/soulwallet-sdk/src/bundler.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L11)
 
 ## Properties
 
@@ -49,17 +53,17 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L9)
+[packages/soulwallet-sdk/src/bundler.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L9)
 
 ## Methods
 
 ### eth\_chainId
 
-▸ **eth_chainId**(): `Promise`<[`Result`](../modules.md#result)<`number`, `Error`\>\>
+▸ **eth_chainId**(): `Promise`\<[`Result`](../modules.md#result)\<`number`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`number`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`number`, `Error`\>\>
 
 #### Implementation of
 
@@ -67,13 +71,13 @@ IBundler.eth\_chainId
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:140](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L140)
+[packages/soulwallet-sdk/src/bundler.ts:142](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L142)
 
 ___
 
 ### eth\_estimateUserOperationGas
 
-▸ **eth_estimateUserOperationGas**(`entryPoint`, `userOp`): `Promise`<[`Result`](../modules.md#result)<[`UserOpGas`](../interfaces/UserOpGas.md), [`UserOpErrors`](UserOpErrors.md)\>\>
+▸ **eth_estimateUserOperationGas**(`entryPoint`, `userOp`): `Promise`\<[`Result`](../modules.md#result)\<[`UserOpGas`](../interfaces/UserOpGas.md), [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Parameters
 
@@ -84,7 +88,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<[`UserOpGas`](../interfaces/UserOpGas.md), [`UserOpErrors`](UserOpErrors.md)\>\>
+`Promise`\<[`Result`](../modules.md#result)\<[`UserOpGas`](../interfaces/UserOpGas.md), [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Implementation of
 
@@ -92,13 +96,13 @@ IBundler.eth\_estimateUserOperationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L43)
+[packages/soulwallet-sdk/src/bundler.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L44)
 
 ___
 
 ### eth\_getUserOperationByHash
 
-▸ **eth_getUserOperationByHash**(`userOpHash`): `Promise`<[`Result`](../modules.md#result)<``null`` \| [`UserOpDetail`](../interfaces/UserOpDetail.md), `Error`\>\>
+▸ **eth_getUserOperationByHash**(`userOpHash`): `Promise`\<[`Result`](../modules.md#result)\<``null`` \| [`UserOpDetail`](../interfaces/UserOpDetail.md), `Error`\>\>
 
 #### Parameters
 
@@ -108,7 +112,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<``null`` \| [`UserOpDetail`](../interfaces/UserOpDetail.md), `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<``null`` \| [`UserOpDetail`](../interfaces/UserOpDetail.md), `Error`\>\>
 
 #### Implementation of
 
@@ -116,13 +120,13 @@ IBundler.eth\_getUserOperationByHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:72](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L72)
+[packages/soulwallet-sdk/src/bundler.ts:74](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L74)
 
 ___
 
 ### eth\_getUserOperationReceipt
 
-▸ **eth_getUserOperationReceipt**(`userOpHash`): `Promise`<[`Result`](../modules.md#result)<``null`` \| [`UserOpReceipt`](../interfaces/UserOpReceipt.md), `Error`\>\>
+▸ **eth_getUserOperationReceipt**(`userOpHash`): `Promise`\<[`Result`](../modules.md#result)\<``null`` \| [`UserOpReceipt`](../interfaces/UserOpReceipt.md), `Error`\>\>
 
 #### Parameters
 
@@ -132,7 +136,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<``null`` \| [`UserOpReceipt`](../interfaces/UserOpReceipt.md), `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<``null`` \| [`UserOpReceipt`](../interfaces/UserOpReceipt.md), `Error`\>\>
 
 #### Implementation of
 
@@ -140,13 +144,13 @@ IBundler.eth\_getUserOperationReceipt
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:93](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L93)
+[packages/soulwallet-sdk/src/bundler.ts:95](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L95)
 
 ___
 
 ### eth\_sendUserOperation
 
-▸ **eth_sendUserOperation**(`entryPoint`, `userOp`): `Promise`<[`Result`](../modules.md#result)<`string`, [`UserOpErrors`](UserOpErrors.md)\>\>
+▸ **eth_sendUserOperation**(`entryPoint`, `userOp`): `Promise`\<[`Result`](../modules.md#result)\<`string`, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Parameters
 
@@ -157,7 +161,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, [`UserOpErrors`](UserOpErrors.md)\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Implementation of
 
@@ -165,17 +169,17 @@ IBundler.eth\_sendUserOperation
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L19)
+[packages/soulwallet-sdk/src/bundler.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L19)
 
 ___
 
 ### eth\_supportedEntryPoints
 
-▸ **eth_supportedEntryPoints**(): `Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
+▸ **eth_supportedEntryPoints**(): `Promise`\<[`Result`](../modules.md#result)\<`string`[], `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`[], `Error`\>\>
 
 #### Implementation of
 
@@ -183,4 +187,4 @@ IBundler.eth\_supportedEntryPoints
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:114](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/bundler.ts#L114)
+[packages/soulwallet-sdk/src/bundler.ts:116](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L116)

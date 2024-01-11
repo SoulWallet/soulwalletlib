@@ -1,6 +1,6 @@
 [@soulwallet/result](../README.md) / [Modules](../modules.md) / Err
 
-# Class: Err<T, E\>
+# Class: Err\<T, E\>
 
 Defines an Err class, representing a failed operation result.
 
@@ -37,13 +37,9 @@ Defines an Err class, representing a failed operation result.
 
 ### constructor
 
-• **new Err**<`T`, `E`\>(`error`)
+• **new Err**\<`T`, `E`\>(`error`): [`Err`](Err.md)\<`T`, `E`\>
 
 Creates an instance of Err.
-
-**`Memberof`**
-
-Err
 
 #### Type parameters
 
@@ -58,9 +54,17 @@ Err
 | :------ | :------ |
 | `error` | `E` |
 
+#### Returns
+
+[`Err`](Err.md)\<`T`, `E`\>
+
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-[Result.ts:86](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L86)
+[Result.ts:86](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L86)
 
 ## Properties
 
@@ -70,7 +74,7 @@ Err
 
 #### Defined in
 
-[Result.ts:79](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L79)
+[Result.ts:79](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L79)
 
 ## Accessors
 
@@ -80,17 +84,17 @@ Err
 
 Gets the error.
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `E`
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-[Result.ts:108](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L108)
+[Result.ts:108](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L108)
 
 ___
 
@@ -100,17 +104,17 @@ ___
 
 Gets the successful result value.
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `T`
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-[Result.ts:97](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L97)
+[Result.ts:97](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L97)
 
 ## Methods
 
@@ -118,19 +122,19 @@ Err
 
 ▸ **isErr**(): `boolean`
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-[Result.ts:128](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L128)
+[Result.ts:128](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L128)
 
 ___
 
@@ -138,16 +142,16 @@ ___
 
 ▸ **isOk**(): `boolean`
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-[Result.ts:118](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L118)
+[Result.ts:118](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L118)

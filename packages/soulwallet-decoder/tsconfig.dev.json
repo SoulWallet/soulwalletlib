@@ -1,7 +1,7 @@
 { 
-  "ts-node": {
-    "esm": true
-  },
+  // "ts-node": {
+  //   "esm": true
+  // },
   "compilerOptions": {
     "module": "CommonJS",    
     "resolveJsonModule": true,                        /* Enable importing .json files. */

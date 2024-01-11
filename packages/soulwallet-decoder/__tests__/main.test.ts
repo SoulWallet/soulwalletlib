@@ -58,11 +58,49 @@ describe('Decoder', () => {
         ];
 
         if (to.length > 1) {
-            if (value[0] !== '0x0') {
-                callData = abi.encodeFunctionData("executeBatch(address[],uint256[],bytes[])", [to, value, data]);
-            } else {
-                callData = abi.encodeFunctionData("executeBatch(address[],bytes[])", [to, data]);
+            /* 
+                {
+                    "type": "function",
+                    "name": "executeBatch",
+                    "inputs": [
+                    {
+                        "name": "executions",
+                        "type": "tuple[]",
+                        "internalType": "struct Execution[]",
+                        "components": [
+                        {
+                            "name": "target",
+                            "type": "address",
+                            "internalType": "address"
+                        },
+                        {
+                            "name": "value",
+                            "type": "uint256",
+                            "internalType": "uint256"
+                        },
+                        {
+                            "name": "data",
+                            "type": "bytes",
+                            "internalType": "bytes"
+                        }
+                        ]
+                    }
+                    ],
+                    "outputs": [],
+                    "stateMutability": "payable"
+                },
+            */
+            const executions: string[][] = [];
+            for (let i = 0; i < to.length; i++) {
+                const execution: string[] = [
+                    to[i],
+                    value[i],
+                    data[i]
+                ];
+                executions.push(execution);
             }
+
+            callData = abi.encodeFunctionData("executeBatch((address,uint256,bytes)[])", [executions]);
         } else {
             callData = abi.encodeFunctionData("execute", [to[0], value[0], data[0]]);
         }

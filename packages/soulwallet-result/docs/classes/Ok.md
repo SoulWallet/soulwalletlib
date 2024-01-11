@@ -1,6 +1,6 @@
 [@soulwallet/result](../README.md) / [Modules](../modules.md) / Ok
 
-# Class: Ok<T, E\>
+# Class: Ok\<T, E\>
 
 Defines an Ok class, representing a successful operation result.
 
@@ -37,13 +37,9 @@ Defines an Ok class, representing a successful operation result.
 
 ### constructor
 
-• **new Ok**<`T`, `E`\>(`value`)
+• **new Ok**\<`T`, `E`\>(`value`): [`Ok`](Ok.md)\<`T`, `E`\>
 
 Creates an instance of Ok.
-
-**`Memberof`**
-
-Ok
 
 #### Type parameters
 
@@ -58,9 +54,17 @@ Ok
 | :------ | :------ |
 | `value` | `T` |
 
+#### Returns
+
+[`Ok`](Ok.md)\<`T`, `E`\>
+
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-[Result.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L22)
+[Result.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L22)
 
 ## Properties
 
@@ -70,7 +74,7 @@ Ok
 
 #### Defined in
 
-[Result.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L15)
+[Result.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L15)
 
 ## Accessors
 
@@ -80,17 +84,17 @@ Ok
 
 Gets the error.
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `E`
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-[Result.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L44)
+[Result.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L44)
 
 ___
 
@@ -100,17 +104,17 @@ ___
 
 Gets the successful result value.
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `T`
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-[Result.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L33)
+[Result.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L33)
 
 ## Methods
 
@@ -118,19 +122,19 @@ Ok
 
 ▸ **isErr**(): `boolean`
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-[Result.ts:64](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L64)
+[Result.ts:64](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L64)
 
 ___
 
@@ -138,16 +142,16 @@ ___
 
 ▸ **isOk**(): `boolean`
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-[Result.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L54)
+[Result.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L54)

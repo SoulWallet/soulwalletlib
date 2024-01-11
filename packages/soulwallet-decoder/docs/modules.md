@@ -31,7 +31,7 @@
 
 ### Result
 
-Ƭ **Result**<`T`, `E`\>: [`Ok`](classes/Ok.md)<`T`, `E`\> \| [`Err`](classes/Err.md)<`T`, `E`\>
+Ƭ **Result**\<`T`, `E`\>: [`Ok`](classes/Ok.md)\<`T`, `E`\> \| [`Err`](classes/Err.md)\<`T`, `E`\>
 
 Defines a Result type, which can be either Ok or Err.
 
@@ -44,21 +44,15 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:4
+soulwallet-result/lib.esm/Result.d.ts:4
 
 ## Functions
 
 ### DecodeUserOp
 
-▸ **DecodeUserOp**(`chainId`, `entrypoint`, `userOperations`): `Promise`<[`Result`](modules.md#result)<[`DecodeResult`](interfaces/DecodeResult.md)[], `Error`\>\>
+▸ **DecodeUserOp**(`chainId`, `entrypoint`, `userOperations`): `Promise`\<[`Result`](modules.md#result)\<[`DecodeResult`](interfaces/DecodeResult.md)[], `Error`\>\>
 
 Decode the transaction data (userOp.calldata, interaction from soulwallet contract only).
-
-**`Static`**
-
-**`Memberof`**
-
-Decoder
 
 #### Parameters
 
@@ -70,10 +64,16 @@ Decoder
 
 #### Returns
 
-`Promise`<[`Result`](modules.md#result)<[`DecodeResult`](interfaces/DecodeResult.md)[], `Error`\>\>
+`Promise`\<[`Result`](modules.md#result)\<[`DecodeResult`](interfaces/DecodeResult.md)[], `Error`\>\>
 
 {Promise<Result<DecodeResult[], Error>>}
 
+**`Static`**
+
+**`Memberof`**
+
+Decoder
+
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:171](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-decoder/src/decoder.ts#L171)
+[soulwallet-decoder/src/decoder.ts:169](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-decoder/src/decoder.ts#L169)

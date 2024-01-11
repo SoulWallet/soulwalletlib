@@ -11,6 +11,7 @@ import { UserOpUtils } from "./userOpUtils.js";
 import { ECCPoint, RSAPublicKey, WebAuthN } from "./tools/webauthn.js";
 import { P256Lib } from "./tools/p256lib.js";
 import { Base64Url } from "./tools/base64Url.js";
+import { WalletFactory } from "./tools/walletFactory.js";
 
 export {
     SoulWallet,
@@ -34,5 +35,6 @@ export {
     SignkeyType,
     Base64Url,
     WebAuthN,
-    P256Lib/* dev export */
+    P256Lib,/* dev export */
+    WalletFactory
 }

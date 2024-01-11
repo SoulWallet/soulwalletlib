@@ -111,13 +111,14 @@ export abstract class ISoulWallet {
      * Estimate the gas for userOp and fill it into the userOp.
      *
      * @abstract
+     * @param {string} validatorAddress validator contract address
      * @param {UserOperation} userOp UserOperation
      * @param {SignkeyType} [signkeyType] default: SignkeyType.EOA
      * @param {GuardHookInputData} [semiValidGuardHookInputData]  sender: wallet address, inputData: key: guardHookPlugin address, value: input data
      * @return {*}  {Promise<Result<true, UserOpErrors>>}
      * @memberof ISoulWallet
      */
-    abstract estimateUserOperationGas(userOp: UserOperation, signkeyType?: SignkeyType, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>>;
+    abstract estimateUserOperationGas(validatorAddress: string, userOp: UserOperation, signkeyType?: SignkeyType, semiValidGuardHookInputData?: GuardHookInputData): Promise<Result<true, UserOpErrors>>;
 
     /**
      * broadcast the userOp.

@@ -1,6 +1,6 @@
 [@soulwallet/assets](../README.md) / [Modules](../modules.md) / Err
 
-# Class: Err<T, E\>
+# Class: Err\<T, E\>
 
 Defines an Err class, representing a failed operation result.
 
@@ -37,13 +37,9 @@ Defines an Err class, representing a failed operation result.
 
 ### constructor
 
-• **new Err**<`T`, `E`\>(`error`)
+• **new Err**\<`T`, `E`\>(`error`): [`Err`](Err.md)\<`T`, `E`\>
 
 Creates an instance of Err.
-
-**`Memberof`**
-
-Err
 
 #### Type parameters
 
@@ -58,9 +54,17 @@ Err
 | :------ | :------ |
 | `error` | `E` |
 
+#### Returns
+
+[`Err`](Err.md)\<`T`, `E`\>
+
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:67
+soulwallet-result/lib.esm/Result.d.ts:67
 
 ## Properties
 
@@ -70,7 +74,7 @@ soulwallet-result/lib.cjs/Result.d.ts:67
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:61
+soulwallet-result/lib.esm/Result.d.ts:61
 
 ## Accessors
 
@@ -80,17 +84,17 @@ soulwallet-result/lib.cjs/Result.d.ts:61
 
 Gets the error.
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `E`
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:83
+soulwallet-result/lib.esm/Result.d.ts:83
 
 ___
 
@@ -100,17 +104,17 @@ ___
 
 Gets the successful result value.
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `T`
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:75
+soulwallet-result/lib.esm/Result.d.ts:75
 
 ## Methods
 
@@ -118,19 +122,19 @@ soulwallet-result/lib.cjs/Result.d.ts:75
 
 ▸ **isErr**(): `boolean`
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:97
+soulwallet-result/lib.esm/Result.d.ts:97
 
 ___
 
@@ -138,16 +142,16 @@ ___
 
 ▸ **isOk**(): `boolean`
 
-**`Memberof`**
-
-Err
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Err
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:90
+soulwallet-result/lib.esm/Result.d.ts:90

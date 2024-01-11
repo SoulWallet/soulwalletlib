@@ -37,7 +37,7 @@ UserOpErrors
 
 ### constructor
 
-• **new UserOpErrors**(`code`, `message`, `data?`)
+• **new UserOpErrors**(`code`, `message`, `data?`): [`UserOpErrors`](UserOpErrors.md)
 
 #### Parameters
 
@@ -47,13 +47,17 @@ UserOpErrors
 | `message` | `string` |
 | `data?` | `any` |
 
+#### Returns
+
+[`UserOpErrors`](UserOpErrors.md)
+
 #### Overrides
 
 Error.constructor
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L25)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:27](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L27)
 
 ## Properties
 
@@ -69,7 +73,7 @@ UserOpErrors
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L16)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L16)
 
 ___
 
@@ -85,7 +89,7 @@ UserOpErrors
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:24](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L24)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L25)
 
 ___
 
@@ -99,7 +103,7 @@ Error.message
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.1.6/node_modules/typescript/lib/lib.es5.d.ts:1068
+node_modules/.pnpm/typescript@5.3.3/node_modules/typescript/lib/lib.es5.d.ts:1076
 
 ___
 
@@ -113,7 +117,7 @@ Error.name
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.1.6/node_modules/typescript/lib/lib.es5.d.ts:1067
+node_modules/.pnpm/typescript@5.3.3/node_modules/typescript/lib/lib.es5.d.ts:1075
 
 ___
 
@@ -127,7 +131,7 @@ Error.stack
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.1.6/node_modules/typescript/lib/lib.es5.d.ts:1069
+node_modules/.pnpm/typescript@5.3.3/node_modules/typescript/lib/lib.es5.d.ts:1077
 
 ___
 
@@ -135,15 +139,17 @@ ___
 
 ▪ `Static` `Optional` **prepareStackTrace**: (`err`: `Error`, `stackTraces`: `CallSite`[]) => `any`
 
-#### Type declaration
-
-▸ (`err`, `stackTraces`): `any`
-
 Optional override for formatting stack traces
 
 **`See`**
 
 https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
+#### Type declaration
+
+▸ (`err`, `stackTraces`): `any`
+
+Optional override for formatting stack traces
 
 ##### Parameters
 
@@ -156,13 +162,17 @@ https://v8.dev/docs/stack-trace-api#customizing-stack-traces
 
 `any`
 
+**`See`**
+
+https://v8.dev/docs/stack-trace-api#customizing-stack-traces
+
 #### Inherited from
 
 Error.prepareStackTrace
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:11
+node_modules/.pnpm/@types+node@20.11.10/node_modules/@types/node/globals.d.ts:28
 
 ___
 
@@ -176,7 +186,7 @@ Error.stackTraceLimit
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:13
+node_modules/.pnpm/@types+node@20.11.10/node_modules/@types/node/globals.d.ts:30
 
 ## Methods
 
@@ -190,13 +200,13 @@ node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:13
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L31)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L33)
 
 ___
 
 ### captureStackTrace
 
-▸ `Static` **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
+▸ **captureStackTrace**(`targetObject`, `constructorOpt?`): `void`
 
 Create .stack property on a target object
 
@@ -217,4 +227,4 @@ Error.captureStackTrace
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.4.2/node_modules/@types/node/globals.d.ts:4
+node_modules/.pnpm/@types+node@20.11.10/node_modules/@types/node/globals.d.ts:21

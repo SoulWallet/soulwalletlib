@@ -6,6 +6,7 @@
 
 ### Classes
 
+- [ABFA](classes/ABFA.md)
 - [Err](classes/Err.md)
 - [Ok](classes/Ok.md)
 - [Vault](classes/Vault.md)
@@ -23,7 +24,7 @@
 
 ### Result
 
-Ƭ **Result**<`T`, `E`\>: [`Ok`](classes/Ok.md)<`T`, `E`\> \| [`Err`](classes/Err.md)<`T`, `E`\>
+Ƭ **Result**\<`T`, `E`\>: [`Ok`](classes/Ok.md)\<`T`, `E`\> \| [`Err`](classes/Err.md)\<`T`, `E`\>
 
 Defines a Result type, which can be either Ok or Err.
 
@@ -36,7 +37,7 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:4
+soulwallet-result/lib.esm/Result.d.ts:4
 
 ___
 
@@ -53,6 +54,7 @@ ___
 | `Initialized` | `void` |
 | `Locked` | `void` |
 | `PersonalSign` | [`SignData`](interfaces/SignData.md) |
+| `Ping` | `void` |
 | `ReInitialized` | `void` |
 | `Sign` | [`SignData`](interfaces/SignData.md) |
 | `TypedDataSign` | [`SignData`](interfaces/SignData.md) |
@@ -60,4 +62,4 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L15)
+[soulwallet-keyvault/src/interface/IVault.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-keyvault/src/interface/IVault.ts#L10)

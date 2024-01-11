@@ -1,6 +1,6 @@
 [@soulwallet/decoder](../README.md) / [Modules](../modules.md) / Ok
 
-# Class: Ok<T, E\>
+# Class: Ok\<T, E\>
 
 Defines an Ok class, representing a successful operation result.
 
@@ -37,13 +37,9 @@ Defines an Ok class, representing a successful operation result.
 
 ### constructor
 
-• **new Ok**<`T`, `E`\>(`value`)
+• **new Ok**\<`T`, `E`\>(`value`): [`Ok`](Ok.md)\<`T`, `E`\>
 
 Creates an instance of Ok.
-
-**`Memberof`**
-
-Ok
 
 #### Type parameters
 
@@ -58,9 +54,17 @@ Ok
 | :------ | :------ |
 | `value` | `T` |
 
+#### Returns
+
+[`Ok`](Ok.md)\<`T`, `E`\>
+
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:20
+soulwallet-result/lib.esm/Result.d.ts:20
 
 ## Properties
 
@@ -70,7 +74,7 @@ soulwallet-result/lib.cjs/Result.d.ts:20
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:14
+soulwallet-result/lib.esm/Result.d.ts:14
 
 ## Accessors
 
@@ -80,17 +84,17 @@ soulwallet-result/lib.cjs/Result.d.ts:14
 
 Gets the error.
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `E`
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:36
+soulwallet-result/lib.esm/Result.d.ts:36
 
 ___
 
@@ -100,17 +104,17 @@ ___
 
 Gets the successful result value.
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `T`
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:28
+soulwallet-result/lib.esm/Result.d.ts:28
 
 ## Methods
 
@@ -118,19 +122,19 @@ soulwallet-result/lib.cjs/Result.d.ts:28
 
 ▸ **isErr**(): `boolean`
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:50
+soulwallet-result/lib.esm/Result.d.ts:50
 
 ___
 
@@ -138,16 +142,16 @@ ___
 
 ▸ **isOk**(): `boolean`
 
-**`Memberof`**
-
-Ok
-
 #### Returns
 
 `boolean`
 
 {boolean}
 
+**`Memberof`**
+
+Ok
+
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:43
+soulwallet-result/lib.esm/Result.d.ts:43

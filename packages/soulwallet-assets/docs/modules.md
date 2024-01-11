@@ -29,7 +29,7 @@
 
 ### Result
 
-Ƭ **Result**<`T`, `E`\>: [`Ok`](classes/Ok.md)<`T`, `E`\> \| [`Err`](classes/Err.md)<`T`, `E`\>
+Ƭ **Result**\<`T`, `E`\>: [`Ok`](classes/Ok.md)\<`T`, `E`\> \| [`Err`](classes/Err.md)\<`T`, `E`\>
 
 Defines a Result type, which can be either Ok or Err.
 
@@ -42,13 +42,13 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-soulwallet-result/lib.cjs/Result.d.ts:4
+soulwallet-result/lib.esm/Result.d.ts:4
 
 ## Functions
 
 ### getAsset
 
-▸ **getAsset**(`chainId`, `address`): `Promise`<[`Result`](modules.md#result)<[`TokenInfo`](interfaces/TokenInfo.md), `Error`\>\>
+▸ **getAsset**(`chainId`, `address`): `Promise`\<[`Result`](modules.md#result)\<[`TokenInfo`](interfaces/TokenInfo.md), `Error`\>\>
 
 Get the token information from the token list.
 
@@ -61,10 +61,10 @@ Get the token information from the token list.
 
 #### Returns
 
-`Promise`<[`Result`](modules.md#result)<[`TokenInfo`](interfaces/TokenInfo.md), `Error`\>\>
+`Promise`\<[`Result`](modules.md#result)\<[`TokenInfo`](interfaces/TokenInfo.md), `Error`\>\>
 
 {Promise<Result<TokenInfo, Error>>}
 
 #### Defined in
 
-[soulwallet-assets/src/asset.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-assets/src/asset.ts#L14)
+[soulwallet-assets/src/asset.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-assets/src/asset.ts#L14)
