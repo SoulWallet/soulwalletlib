@@ -22,7 +22,7 @@ Key type
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:249](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L249)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:249](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L249)
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:250](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L250)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:250](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L250)
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:251](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L251)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:251](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L251)

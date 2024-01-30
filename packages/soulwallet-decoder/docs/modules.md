@@ -76,4 +76,4 @@ Decoder
 
 #### Defined in
 
-[soulwallet-decoder/src/decoder.ts:169](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-decoder/src/decoder.ts#L169)
+[soulwallet-decoder/src/decoder.ts:169](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-decoder/src/decoder.ts#L169)

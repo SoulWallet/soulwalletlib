@@ -23,7 +23,7 @@ ECCPoint
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L14)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L14)
 
 ___
 
@@ -39,4 +39,4 @@ ECCPoint
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L21)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L21)

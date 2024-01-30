@@ -64,7 +64,7 @@ Err
 
 #### Defined in
 
-[Result.ts:86](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L86)
+[Result.ts:86](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L86)
 
 ## Properties
 
@@ -74,7 +74,7 @@ Err
 
 #### Defined in
 
-[Result.ts:79](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L79)
+[Result.ts:79](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L79)
 
 ## Accessors
 
@@ -94,7 +94,7 @@ Err
 
 #### Defined in
 
-[Result.ts:108](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L108)
+[Result.ts:108](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L108)
 
 ___
 
@@ -114,7 +114,7 @@ Err
 
 #### Defined in
 
-[Result.ts:97](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L97)
+[Result.ts:97](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L97)
 
 ## Methods
 
@@ -134,7 +134,7 @@ Err
 
 #### Defined in
 
-[Result.ts:128](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L128)
+[Result.ts:128](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L128)
 
 ___
 
@@ -154,4 +154,4 @@ Err
 
 #### Defined in
 
-[Result.ts:118](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-result/src/Result.ts#L118)
+[Result.ts:118](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L118)

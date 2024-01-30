@@ -52,7 +52,7 @@ ECCPoint, RSAPublicKey, EOA or packed bytes32
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L240)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L240)
 
 ___
 
@@ -97,4 +97,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)

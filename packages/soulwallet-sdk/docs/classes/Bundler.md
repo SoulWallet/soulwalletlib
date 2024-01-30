@@ -43,7 +43,7 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L11)
+[packages/soulwallet-sdk/src/bundler.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L11)
 
 ## Properties
 
@@ -53,7 +53,7 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L9)
+[packages/soulwallet-sdk/src/bundler.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L9)
 
 ## Methods
 
@@ -71,7 +71,7 @@ IBundler.eth\_chainId
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:142](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L142)
+[packages/soulwallet-sdk/src/bundler.ts:142](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L142)
 
 ___
 
@@ -96,7 +96,7 @@ IBundler.eth\_estimateUserOperationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L44)
+[packages/soulwallet-sdk/src/bundler.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L44)
 
 ___
 
@@ -120,7 +120,7 @@ IBundler.eth\_getUserOperationByHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:74](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L74)
+[packages/soulwallet-sdk/src/bundler.ts:74](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L74)
 
 ___
 
@@ -144,7 +144,7 @@ IBundler.eth\_getUserOperationReceipt
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:95](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L95)
+[packages/soulwallet-sdk/src/bundler.ts:95](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L95)
 
 ___
 
@@ -169,7 +169,7 @@ IBundler.eth\_sendUserOperation
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L19)
+[packages/soulwallet-sdk/src/bundler.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L19)
 
 ___
 
@@ -187,4 +187,4 @@ IBundler.eth\_supportedEntryPoints
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/bundler.ts:116](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/bundler.ts#L116)
+[packages/soulwallet-sdk/src/bundler.ts:116](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/bundler.ts#L116)

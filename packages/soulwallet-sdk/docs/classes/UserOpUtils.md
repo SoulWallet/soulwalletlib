@@ -58,7 +58,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
+[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
 
 ___
 
@@ -88,7 +88,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
+[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
 
 ___
 
@@ -118,4 +118,4 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/userOpUtils.ts#L21)
+[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L21)

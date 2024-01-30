@@ -25,7 +25,7 @@ Transaction
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L16)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L16)
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L17)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L17)
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L14)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L14)
 
 ___
 
@@ -55,4 +55,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L15)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L15)

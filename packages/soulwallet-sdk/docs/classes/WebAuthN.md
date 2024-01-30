@@ -51,7 +51,7 @@ calculate the key hash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:51](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L51)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:51](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L51)
 
 ___
 
@@ -81,7 +81,7 @@ P256
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:95](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L95)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:95](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L95)
 
 ___
 
@@ -119,7 +119,7 @@ P256
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:198](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L198)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:198](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L198)
 
 ___
 
@@ -160,7 +160,7 @@ WebAuthN
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:125](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L125)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:125](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L125)
 
 ___
 
@@ -201,7 +201,7 @@ WebAuthN
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:166](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L166)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:166](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L166)
 
 ___
 
@@ -227,4 +227,4 @@ calculate the key hash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:66](https://github.com/SoulWallet/soulwalletlib/blob/fc04501/packages/soulwallet-sdk/src/tools/webauthn.ts#L66)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:66](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L66)
