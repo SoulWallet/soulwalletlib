@@ -12,7 +12,7 @@ export class WalletFactory {
          );
         */
 
-        if (TypeGuard.onlyAddress(implementation).isErr()) {
+        if (TypeGuard.onlyAddress(implementation).isErr() === true) {
             throw new Error("implementation is invalid");
         }
         const _implementation = implementation.substring(2);
