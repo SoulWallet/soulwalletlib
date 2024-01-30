@@ -1,5 +1,18 @@
 # @soulwallet/decoder
 
+## 0.2.0
+
+### Minor Changes
+
+- ba276ce: Updated to support the latest contract
+
+### Patch Changes
+
+- Updated dependencies [ba276ce]
+  - @soulwallet/assets@0.2.0
+  - @soulwallet/result@0.2.0
+  - @soulwallet/abi@0.2.0
+
 ## 0.1.5
 
 ### Patch Changes
