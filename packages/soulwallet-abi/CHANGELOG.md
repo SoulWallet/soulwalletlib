@@ -1,5 +1,11 @@
 # @soulwallet/abi
 
+## 0.2.0
+
+### Minor Changes
+
+- ba276ce: Updated to support the latest contract
+
 ## 0.1.4
 
 ### Patch Changes

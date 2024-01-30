@@ -1,5 +1,16 @@
 # @soulwallet/keyvault
 
+## 0.2.0
+
+### Minor Changes
+
+- ba276ce: Updated to support the latest contract
+
+### Patch Changes
+
+- Updated dependencies [ba276ce]
+  - @soulwallet/result@0.2.0
+
 ## 0.1.5
 
 ### Patch Changes
