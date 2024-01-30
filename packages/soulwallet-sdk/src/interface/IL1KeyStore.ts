@@ -181,9 +181,10 @@ export abstract class IL1KeyStore {
         data?: string
     ): Promise<Result<{
         domain: TypedDataDomain,
-        types: Record<string, Array<TypedDataField>>,
+        types: Record<string, Array<TypedDataField>>,  
+        primaryType: string,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        value: Record<string, any>,
+        message: Record<string, any>,
         typedMessage: string
     }, Error>>;
 

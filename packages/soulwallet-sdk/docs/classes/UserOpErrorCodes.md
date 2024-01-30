@@ -30,7 +30,11 @@ refer: https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace
 
 ### constructor
 
-• **new UserOpErrorCodes**()
+• **new UserOpErrorCodes**(): [`UserOpErrorCodes`](UserOpErrorCodes.md)
+
+#### Returns
+
+[`UserOpErrorCodes`](UserOpErrorCodes.md)
 
 ## Properties
 
@@ -40,7 +44,7 @@ refer: https://eips.ethereum.org/EIPS/eip-4337#rpc-methods-eth-namespace
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L45)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L47)
 
 ___
 
@@ -50,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L44)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:46](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L46)
 
 ___
 
@@ -60,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L47)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:49](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L49)
 
 ___
 
@@ -70,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:50](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L50)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:52](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L52)
 
 ___
 
@@ -80,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:49](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L49)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:51](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L51)
 
 ___
 
@@ -90,7 +94,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:46](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L46)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:48](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L48)
 
 ___
 
@@ -100,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:52](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L52)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L54)
 
 ___
 
@@ -110,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:48](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L48)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:50](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L50)
 
 ___
 
@@ -120,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L43)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L45)
 
 ___
 
@@ -130,4 +134,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:51](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L51)
+[packages/soulwallet-sdk/src/interface/IUserOpErrors.ts:53](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IUserOpErrors.ts#L53)

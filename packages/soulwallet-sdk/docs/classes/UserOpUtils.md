@@ -22,21 +22,19 @@ UserOpUtils
 
 ### constructor
 
-• **new UserOpUtils**()
+• **new UserOpUtils**(): [`UserOpUtils`](UserOpUtils.md)
+
+#### Returns
+
+[`UserOpUtils`](UserOpUtils.md)
 
 ## Methods
 
 ### getUserOpHash
 
-▸ `Static` **getUserOpHash**(`userOp`, `entryPoint`, `chainId`): `string`
+▸ **getUserOpHash**(`userOp`, `entryPoint`, `chainId`): `string`
 
 getUserOpHash
-
-**`Static`**
-
-**`Memberof`**
-
-UserOpUtils
 
 #### Parameters
 
@@ -52,23 +50,23 @@ UserOpUtils
 
 {string}
 
-#### Defined in
-
-[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
-
-___
-
-### userOperationFromJSON
-
-▸ `Static` **userOperationFromJSON**(`json`): [`UserOperation`](../modules.md#useroperation)
-
-userOperationFromJSON
-
 **`Static`**
 
 **`Memberof`**
 
 UserOpUtils
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
+
+___
+
+### userOperationFromJSON
+
+▸ **userOperationFromJSON**(`json`): [`UserOperation`](../modules.md#useroperation)
+
+userOperationFromJSON
 
 #### Parameters
 
@@ -82,23 +80,23 @@ UserOpUtils
 
 {UserOperation} UserOperation
 
-#### Defined in
-
-[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
-
-___
-
-### userOperationToJSON
-
-▸ `Static` **userOperationToJSON**(`userOp`): `string`
-
-userOperationToJSON
-
 **`Static`**
 
 **`Memberof`**
 
 UserOpUtils
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
+
+___
+
+### userOperationToJSON
+
+▸ **userOperationToJSON**(`userOp`): `string`
+
+userOperationToJSON
 
 #### Parameters
 
@@ -112,6 +110,12 @@ UserOpUtils
 
 {string} json
 
+**`Static`**
+
+**`Memberof`**
+
+UserOpUtils
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/userOpUtils.ts#L21)
+[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L21)

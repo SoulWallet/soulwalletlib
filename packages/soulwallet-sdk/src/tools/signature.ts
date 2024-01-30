@@ -110,7 +110,54 @@ export class Signature {
     }
 
 
-    static prePackSignature(signkeyType: SignkeyType, validationData: string, guardHookInputData?: HookInputData): string {
+    static packSignature(
+        validatorAddress: string,
+        signkeyType: SignkeyType,
+        rawSignature: string,
+        validationData: string,
+        guardHookInputData?: HookInputData): string {
+        if (TypeGuard.onlyAddress(validatorAddress).isErr() === true) throw new Error('invalid validatorAddress');
+
+        // `Signature`:
+        // [0:20]: `validator address`
+        let packedSignature = validatorAddress;
+        // [20:24]: n = `validator signature length`, bytes4 max to 16777215 bytes
+        let validatorSignature = '';
+        {
+            const _validationData = BigInt(validationData);
+            const hasValidationData = _validationData > BigInt(0);
+            if (signkeyType === SignkeyType.EOA) {
+                if (hasValidationData) {
+                    validatorSignature += "01";
+                } else {
+                    validatorSignature += "00";
+                }
+            } else if (signkeyType === SignkeyType.P256 || signkeyType === SignkeyType.RS256) {
+                if (hasValidationData) {
+                    validatorSignature += "03";
+                } else {
+                    validatorSignature += "02";
+                }
+            } else {
+                throw new Error('invalid signkeyType');
+            }
+            let _validationDataHex = '';
+            if (hasValidationData) {
+                // validationData to 32 bytes hex string
+                _validationDataHex = Hex.paddingZero(_validationData, 32).slice(2);
+            }
+            validatorSignature += _validationDataHex;
+            if (rawSignature.startsWith('0x')) {
+                rawSignature = rawSignature.slice(2);
+            }
+            validatorSignature += rawSignature;
+
+        }
+        packedSignature += (Hex.paddingZero(validatorSignature.length / 2, 4).slice(2));
+        // [24:24+n]: `validator signature`
+        packedSignature += validatorSignature;
+        // `hook signature`:
+
         let guardHookInputDataBytes: string = '';
         if (guardHookInputData !== undefined) {
             // guardHookInputData.guardHookInputData.key ∈ guardHookInputData.guardHooks
@@ -155,43 +202,9 @@ export class Signature {
                 guardHookInputDataBytes += inputData[guardianHookPluginAddress].substring(2);
             }
         }
-        let packedSignature = '0x';
-        let dataType = "00";
-        if (guardHookInputDataBytes.length > 0) {
-            dataType = "01";
-            packedSignature += dataType;
-            const _len = Hex.paddingZero(guardHookInputDataBytes.length / 2, 32);
-            packedSignature += _len;
-            packedSignature += guardHookInputDataBytes;
-        } else {
-            dataType = "00";
-            packedSignature += dataType;
-        }
-        const _validationData = BigInt(validationData);
-        const hasValidationData = _validationData > BigInt(0);
-        let signatureType = "00";
-        if (signkeyType === SignkeyType.EOA) {
-            if (hasValidationData) {
-                signatureType = "01";
-            } else {
-                signatureType = "00";
-            }
-        } else if (signkeyType === SignkeyType.P256 || signkeyType === SignkeyType.RS256) {
-            if (hasValidationData) {
-                signatureType = "03";
-            } else {
-                signatureType = "02";
-            }
-        } else {
-            throw new Error('invalid signkeyType');
-        }
 
-        let _validationDataHex = '';
-        if (hasValidationData) {
-            // validationData to 32 bytes hex string
-            _validationDataHex = Hex.paddingZero(_validationData, 32).slice(2);
-        }
-        return packedSignature + signatureType + _validationDataHex;
+        packedSignature += guardHookInputDataBytes;
+        return packedSignature.toLowerCase();
     }
 
 
@@ -199,22 +212,25 @@ export class Signature {
      * pack EOA signature
      *
      * @static
+     * @param {string} validatorAddress validator contract address
      * @param {string} signature signature signature 65 bytes signature
      * @param {string} [validationData] validationData validationData 32 bytes validationData
      * @param {HookInputData} [guardHookInputData] key: guardHookPlugin address, value: input data. 
      * @return {*}  {string}
      * @memberof Signature
      */
-    static packEOASignature(signature: string, validationData: string, guardHookInputData?: HookInputData): string {
+    static packEOASignature(
+        validatorAddress: string,
+        signature: string, validationData: string, guardHookInputData?: HookInputData): string {
         Signature.onlyEOASignature(signature);
-        const prePackedSignature = Signature.prePackSignature(SignkeyType.EOA, validationData, guardHookInputData);
-        return (prePackedSignature + signature.substring(2)).toLowerCase();
+        return Signature.packSignature(validatorAddress, SignkeyType.EOA, signature, validationData, guardHookInputData);
     }
 
     /**
      * pack P256 signature
      *
      * @static
+     * @param {string} validator contract address
      * @param {{
      *             messageHash:string,
      *             publicKey: ECCPoint | string
@@ -229,6 +245,7 @@ export class Signature {
      * @memberof Signature
      */
     static packP256Signature(
+        validatorAddress: string,
         signatureData: {
             messageHash: string,
             publicKey: ECCPoint | string,
@@ -257,7 +274,6 @@ export class Signature {
         if (!signatureData.clientDataSuffix.startsWith('"')) {
             throw new Error('invalid clientDataSuffix');
         }
-        let packedSignature = Signature.prePackSignature(SignkeyType.P256, validationData, guardHookInputData);
         let v = ''
         {
             const recover = WebAuthN.recoverWebAuthN(signatureData.messageHash, signatureData.r, signatureData.s, signatureData.authenticatorData, signatureData.clientDataSuffix);
@@ -279,7 +295,7 @@ export class Signature {
              0x0: p256
              0x1: rs256
         */
-        packedSignature += '00';
+        let rawSignature = '00';
 
         /*
             signature layout:
@@ -293,19 +309,19 @@ export class Signature {
             8. clientDataSuffix
             
         */
-        packedSignature += signatureData.r.slice(2);
-        packedSignature += signatureData.s.slice(2);
-        packedSignature += v;
+        rawSignature += signatureData.r.slice(2);
+        rawSignature += signatureData.s.slice(2);
+        rawSignature += v;
         let _authenticatorData = signatureData.authenticatorData;
         if (_authenticatorData.startsWith('0x')) {
             _authenticatorData = _authenticatorData.slice(2);
         }
-        packedSignature += Hex.paddingZero(_authenticatorData.length / 2, 2).slice(2);
-        packedSignature += "0000"; // clientDataPrefix length = 0
-        packedSignature += _authenticatorData;
-        packedSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
+        rawSignature += Hex.paddingZero(_authenticatorData.length / 2, 2).slice(2);
+        rawSignature += "0000"; // clientDataPrefix length = 0
+        rawSignature += _authenticatorData;
+        rawSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
 
-        return packedSignature.toLowerCase();
+        return Signature.packSignature(validatorAddress, SignkeyType.P256, rawSignature, validationData, guardHookInputData);
     }
 
 
@@ -313,6 +329,7 @@ export class Signature {
      * pack RS256 signature
      *
      * @static
+     * @param {string} validator contract address
      * @param {{
     *             messageHash:string,
     *             publicKey: InitialKey,
@@ -327,6 +344,7 @@ export class Signature {
     * @memberof Signature
     */
     static packRS256Signature(
+        validatorAddress: string,
         signatureData: {
             messageHash: string,
             publicKey: RSAPublicKey,
@@ -356,15 +374,13 @@ export class Signature {
             throw new Error('invalid signature');
         }
 
-        let packedSignature = Signature.prePackSignature(SignkeyType.P256, validationData, guardHookInputData);
-
 
         /*
             webauthn signature type:
              0x0: p256
              0x1: rs256
         */
-        packedSignature += '01';
+        let rawSignature = '01';
 
         /*
             signature layout:
@@ -380,32 +396,51 @@ export class Signature {
         */
         const _n = signatureData.publicKey.n.slice(2);
         // 1. n(exponent) length (2 byte max to 8192 bits key)
-        packedSignature += Hex.paddingZero((_n.length / 2), 2).slice(2);
+        rawSignature += Hex.paddingZero((_n.length / 2), 2).slice(2);
 
         let _authenticatorData = signatureData.authenticatorData;
         if (_authenticatorData.startsWith('0x')) {
             _authenticatorData = _authenticatorData.slice(2);
         }
         // 2. authenticatorData length (2 byte max 65535)
-        packedSignature += Hex.paddingZero(_authenticatorData.length / 2, 2).slice(2);
+        rawSignature += Hex.paddingZero(_authenticatorData.length / 2, 2).slice(2);
         // 3. clientDataPrefix length (2 byte max 65535)
-        packedSignature += "0000"; // clientDataPrefix length = 0
+        rawSignature += "0000"; // clientDataPrefix length = 0
         // 4. n(exponent) (exponent,dynamic bytes)
-        packedSignature += _n;
+        rawSignature += _n;
 
         const _s = signatureData.signature.slice(2);
         if (_s.length !== _n.length) {
             throw new Error('invalid signature');
         }
         // 5. signature (signature,signature.length== n.length)
-        packedSignature += _s;
+        rawSignature += _s;
         // 6. authenticatorData
-        packedSignature += _authenticatorData;
+        rawSignature += _authenticatorData;
         // 7. clientDataPrefix
         // 8. clientDataSuffix
-        packedSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
+        rawSignature += ethers.hexlify(ethers.toUtf8Bytes(signatureData.clientDataSuffix)).slice(2);
 
-        return packedSignature.toLowerCase();
+        return Signature.packSignature(validatorAddress, SignkeyType.RS256, rawSignature, validationData, guardHookInputData);
+    }
+
+    static getSignatureType(EOASigner: boolean, validAfter?: number, validUntil?: number) {
+        /*
+        signatureType:0 , EOA signature 
+        */
+        if (EOASigner) {
+            if (validAfter !== undefined || validUntil !== undefined) {
+                return '01';
+            } else {
+                return '00';
+            }
+        } else {
+            if (validAfter !== undefined || validUntil !== undefined) {
+                return '03';
+            } else {
+                return '02';
+            }
+        }
     }
 
 

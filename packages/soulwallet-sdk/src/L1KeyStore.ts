@@ -6,7 +6,8 @@ import { Hex } from "./tools/hex.js";
 import { Ok, Err, Result } from '@soulwallet/result';
 import { bigIntToNumber } from './tools/convert.js';
 import { InitialKey } from "./interface/ISoulWallet.js";
-import { WebAuthN } from "./tools/webauthn.js";
+import { ECCPoint, RSAPublicKey, WebAuthN } from "./tools/webauthn.js";
+import { Signature } from "./tools/signature.js";
 
 /**
  * L1KeyStore
@@ -508,11 +509,13 @@ export class L1KeyStore implements IL1KeyStore {
     static getTypedData(type: KeyStoreTypedDataType, chainId: number, keyStoreContract: string, slot: string, nonce: number, data?: string): {
         domain: TypedDataDomain,
         types: Record<string, Array<TypedDataField>>,
+        primaryType: string,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        value: Record<string, any>,
+        message: Record<string, any>,
         typedMessage: string
     } {
         if (TypeGuard.onlyBytes32(slot).isErr() === true) throw new Error('slot must be bytes32');
+        let primaryType = '';
         const domain: TypedDataDomain = {
             name: "KeyStore",
             version: "1",
@@ -532,6 +535,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newSigner", type: "bytes32" }
                     ]
                 };
+                primaryType = 'SetKey';
                 if (TypeGuard.onlyBytes32(data!).isErr() === true) throw new Error('data must be bytes32');
                 value = {
                     keyStoreSlot: slot,
@@ -548,6 +552,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newGuardianHash", type: "bytes32" }
                     ]
                 };
+                primaryType = 'SetGuardian';
                 if (TypeGuard.onlyBytes32(data!).isErr() === true) throw new Error('data must be bytes32');
                 value = {
                     keyStoreSlot: slot,
@@ -564,6 +569,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newGuardianSafePeriod", type: "uint64" }
                     ]
                 };
+                primaryType = 'SetGuardianSafePeriod';
                 // eslint-disable-next-line no-case-declarations
                 const ret = TypeGuard.maxToUint64(data!);
                 if (ret.isErr() === true) {
@@ -583,6 +589,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "nonce", type: "uint256" }
                     ]
                 };
+                primaryType = 'CancelSetGuardian';
                 if (typeof data !== 'undefined') {
                     throw new Error('data must be undefined');
                 }
@@ -599,6 +606,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "nonce", type: "uint256" }
                     ]
                 };
+                primaryType = 'CancelSetGuardianSafePeriod';
                 if (typeof data !== 'undefined') {
                     throw new Error('data must be undefined');
                 }
@@ -616,6 +624,7 @@ export class L1KeyStore implements IL1KeyStore {
                         { name: "newSigner", type: "bytes32" },
                     ]
                 };
+                primaryType = 'SocialRecovery';
                 if (TypeGuard.onlyBytes32(data!).isErr() === true) throw new Error('data must be bytes32');
                 value = {
                     keyStoreSlot: slot,
@@ -632,7 +641,8 @@ export class L1KeyStore implements IL1KeyStore {
         return {
             domain,
             types,
-            value,
+            message: value,
+            primaryType,
             typedMessage
         };
     }
@@ -674,8 +684,9 @@ export class L1KeyStore implements IL1KeyStore {
     ): Promise<Result<{
         domain: TypedDataDomain,
         types: Record<string, Array<TypedDataField>>,
+        primaryType: string,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        value: Record<string, any>,
+        message: Record<string, any>,
         typedMessage: string
     }, Error>> {
         let chainId = 0;
@@ -714,6 +725,79 @@ export class L1KeyStore implements IL1KeyStore {
                 );
             }
         }
+    }
+
+
+    /**
+     * pack Keystore signature (EOA)
+     *
+     * @param {string} signature EOA signature
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof SoulWallet
+     */
+    async packKeystoreEOASignature(signature: string): Promise<Result<string, Error>> {
+        let sign = Signature.packEOASignature('0x0000000000000000000000000000000000000000', signature, '0x00', undefined)
+        // remove the first 20+4 bytes(validatorAddress+validatorSignature.length), 
+        sign = '0x' + sign.substring(2 + ((20 + 4) * 2));
+        return new Ok(sign);
+    }
+
+    /**
+     * pack Keystore signature (P256)
+     * 
+     * @param {{
+     *         messageHash:string,
+     *         publicKey: InitialKey,
+     *         r: string,
+     *         s: string,
+     *         authenticatorData: string,
+     *         clientDataSuffix: string
+     *     }} signatureData signature data, messageHash is userOp hash(packed userOp hash)  
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof SoulWallet
+     */
+    async packKeystoreP256Signature(
+        signatureData: {
+            messageHash: string,
+            publicKey: ECCPoint | string,
+            r: string,
+            s: string,
+            authenticatorData: string,
+            clientDataSuffix: string
+        }): Promise<Result<string, Error>> {
+        let sign = Signature.packP256Signature('0x0000000000000000000000000000000000000000', signatureData, '0x00', undefined)
+        // remove the first 20+4 bytes(validatorAddress+validatorSignature.length), 
+        sign = '0x' + sign.substring(2 + ((20 + 4) * 2));
+        return new Ok(sign);
+    }
+
+    /**
+     * pack Keystore signature (RS256)
+     * 
+     * @param {{
+     *             messageHash:string,
+     *             publicKey: InitialKey,
+     *             r: string,
+     *             s: string,
+     *             authenticatorData: string,
+     *             clientDataSuffix: string
+     *         }} signatureData
+     * @return {*}  {Promise<Result<string, Error>>}
+     * @memberof SoulWallet
+     */
+    async packKeystoreRS256Signature(
+        signatureData: {
+            messageHash: string,
+            publicKey: RSAPublicKey,
+            signature: string,
+            authenticatorData: string,
+            clientDataSuffix: string
+        }
+    ): Promise<Result<string, Error>> {
+        let sign = Signature.packRS256Signature('0x0000000000000000000000000000000000000000', signatureData, '0x00', undefined)
+        // remove the first 20+4 bytes(validatorAddress+validatorSignature.length), 
+        sign = '0x' + sign.substring(2 + ((20 + 4) * 2));
+        return new Ok(sign);
     }
 
 }

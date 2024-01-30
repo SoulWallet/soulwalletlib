@@ -44,23 +44,17 @@ class Decoder {
         let _to: string[] = [];
         let _value: bigint[] = [];
         let _data: string[] = [];
-        if (bytes4 === '0x18dfb3c7') {
-            // b.set('0x18dfb3c7',{text:'executeBatch(address[],bytes[])',bytes4:'0x18dfb3c7'});
-            const fun = soulWalletBytes4.get('0x18dfb3c7')!;
+        if (bytes4 === '0x34fcd5be') {
+            // b.set('0x34fcd5be',{text:'executeBatch((address,uint256,bytes)[])',bytes4:'0x34fcd5be'});
+            const fun = soulWalletBytes4.get('0x34fcd5be')!;
             const iface = new ethers.Interface(['function ' + fun.text]);
             const decodedData = iface.decodeFunctionData(fun.text.substring(0, fun.text.indexOf('(')), calldata);
             _from = to;
-            _to = decodedData[0];
-            _data = decodedData[1];
-        } else if (bytes4 === '0x47e1da2a') {
-            // b.set('0x47e1da2a',{text:'executeBatch(address[],uint256[],bytes[])',bytes4:'0x47e1da2a'});
-            const fun = soulWalletBytes4.get('0x47e1da2a')!;
-            const iface = new ethers.Interface(['function ' + fun.text]);
-            const decodedData = iface.decodeFunctionData(fun.text.substring(0, fun.text.indexOf('(')), calldata);
-            _from = to;
-            _to = decodedData[0];
-            _value = decodedData[1];
-            _data = decodedData[2];
+            for (let i = 0; i < decodedData[0].length; i++) {
+                _to.push(decodedData[0][i][0]);
+                _value.push(decodedData[0][i][1]);
+                _data.push(decodedData[0][i][2]);
+            }
         } else if (bytes4 === '0xb61d27f6') {
             // b.set('0xb61d27f6',{text:'execute(address,uint256,bytes)',bytes4:'0xb61d27f6'});
             const fun = soulWalletBytes4.get('0xb61d27f6')!;

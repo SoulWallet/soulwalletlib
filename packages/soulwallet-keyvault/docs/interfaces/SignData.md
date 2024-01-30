@@ -18,7 +18,7 @@
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L10)
+[soulwallet-keyvault/src/interface/IVault.ts:5](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-keyvault/src/interface/IVault.ts#L5)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L11)
+[soulwallet-keyvault/src/interface/IVault.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-keyvault/src/interface/IVault.ts#L6)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/vault.ts:12](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-keyvault/src/vault.ts#L12)
+[soulwallet-keyvault/src/interface/IVault.ts:7](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-keyvault/src/interface/IVault.ts#L7)

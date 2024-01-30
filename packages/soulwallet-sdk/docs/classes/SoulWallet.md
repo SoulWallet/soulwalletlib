@@ -22,10 +22,10 @@ main class of the SDK.
 
 - [Bundler](SoulWallet.md#bundler)
 - [\_entryPointContract](SoulWallet.md#_entrypointcontract)
+- [\_onChainConfig](SoulWallet.md#_onchainconfig)
 - [bundler](SoulWallet.md#bundler-1)
-- [days](SoulWallet.md#days)
 - [defalutCallbackHandlerAddress](SoulWallet.md#defalutcallbackhandleraddress)
-- [defalutInitialGuardianSafePeriod](SoulWallet.md#defalutinitialguardiansafeperiod)
+- [defaultValidator](SoulWallet.md#defaultvalidator)
 - [keyStoreModuleAddress](SoulWallet.md#keystoremoduleaddress)
 - [preVerificationGasDeploy](SoulWallet.md#preverificationgasdeploy)
 - [provider](SoulWallet.md#provider)
@@ -39,14 +39,19 @@ main class of the SDK.
 - [entryPoint](SoulWallet.md#entrypoint)
 - [estimateUserOperationGas](SoulWallet.md#estimateuseroperationgas)
 - [fromTransaction](SoulWallet.md#fromtransaction)
+- [getEIP1271TypedData](SoulWallet.md#geteip1271typeddata)
 - [getEntryPointContract](SoulWallet.md#getentrypointcontract)
 - [getNonce](SoulWallet.md#getnonce)
 - [getOnChainConfig](SoulWallet.md#getonchainconfig)
 - [guardHookList](SoulWallet.md#guardhooklist)
 - [initializeData](SoulWallet.md#initializedata)
+- [packRawHash](SoulWallet.md#packrawhash)
+- [packUserOpEOASignature](SoulWallet.md#packuseropeoasignature)
 - [packUserOpHash](SoulWallet.md#packuserophash)
-- [packUserOpSignature](SoulWallet.md#packuseropsignature)
+- [packUserOpP256Signature](SoulWallet.md#packuseropp256signature)
+- [packUserOpRS256Signature](SoulWallet.md#packuseroprs256signature)
 - [preFund](SoulWallet.md#prefund)
+- [prePackUserOpSignature](SoulWallet.md#prepackuseropsignature)
 - [sendUserOperation](SoulWallet.md#senduseroperation)
 - [userOpHash](SoulWallet.md#userophash)
 - [walletDeployed](SoulWallet.md#walletdeployed)
@@ -55,7 +60,7 @@ main class of the SDK.
 
 ### constructor
 
-• **new SoulWallet**(`_provider`, `_bundler`, `_soulWalletFactoryAddress`, `_defalutCallbackHandlerAddress`, `_keyStoreModuleAddress`, `_securityControlModuleAddress`)
+• **new SoulWallet**(`_provider`, `_bundler`, `_soulWalletFactoryAddress`, `_defaultValidator`, `_defalutCallbackHandlerAddress`, `_keyStoreModuleAddress`, `_securityControlModuleAddress`): [`SoulWallet`](SoulWallet.md)
 
 #### Parameters
 
@@ -64,13 +69,18 @@ main class of the SDK.
 | `_provider` | `string` \| `JsonRpcProvider` |
 | `_bundler` | `string` \| `JsonRpcProvider` |
 | `_soulWalletFactoryAddress` | `string` |
+| `_defaultValidator` | `string` |
 | `_defalutCallbackHandlerAddress` | `string` |
 | `_keyStoreModuleAddress` | `string` |
 | `_securityControlModuleAddress` | `string` |
 
+#### Returns
+
+[`SoulWallet`](SoulWallet.md)
+
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L45)
+[packages/soulwallet-sdk/src/soulWallet.ts:48](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L48)
 
 ## Properties
 
@@ -80,7 +90,7 @@ main class of the SDK.
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:42](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L42)
+[packages/soulwallet-sdk/src/soulWallet.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L43)
 
 ___
 
@@ -90,7 +100,17 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:147](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L147)
+[packages/soulwallet-sdk/src/soulWallet.ts:176](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L176)
+
+___
+
+### \_onChainConfig
+
+• `Private` **\_onChainConfig**: `undefined` \| `onChainConfig` = `undefined`
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/soulWallet.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L45)
 
 ___
 
@@ -100,17 +120,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L34)
-
-___
-
-### days
-
-• `Readonly` **days**: ``86400``
-
-#### Defined in
-
-[packages/soulwallet-sdk/src/soulWallet.ts:30](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L30)
+[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L34)
 
 ___
 
@@ -120,17 +130,17 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L36)
+[packages/soulwallet-sdk/src/soulWallet.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L36)
 
 ___
 
-### defalutInitialGuardianSafePeriod
+### defaultValidator
 
-• `Readonly` **defalutInitialGuardianSafePeriod**: `number`
+• `Readonly` **defaultValidator**: `string`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L31)
+[packages/soulwallet-sdk/src/soulWallet.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L39)
 
 ___
 
@@ -140,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L37)
+[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L37)
 
 ___
 
@@ -150,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:40](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L40)
+[packages/soulwallet-sdk/src/soulWallet.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L41)
 
 ___
 
@@ -160,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L33)
+[packages/soulwallet-sdk/src/soulWallet.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L33)
 
 ___
 
@@ -170,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L38)
+[packages/soulwallet-sdk/src/soulWallet.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L38)
 
 ___
 
@@ -180,26 +190,35 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:35](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L35)
+[packages/soulwallet-sdk/src/soulWallet.ts:35](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L35)
 
 ## Methods
 
 ### calcWalletAddress
 
-▸ **calcWalletAddress**(`index`, `initialKey`, `initialGuardianHash`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **calcWalletAddress**(`index`, `initialKeys`, `initialGuardianHash`, `initialGuardianSafePeriod?`, `chainId?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+get wallet address by index
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
-| `initialKey` | `string` |
-| `initialGuardianHash` | `string` |
-| `initialGuardianSafePeriod?` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | readable index |
+| `initialKeys` | [`InitialKey`](../modules.md#initialkey)[] | initial keys |
+| `initialGuardianHash` | `string` | initial guardian hash |
+| `initialGuardianSafePeriod?` | `number` | initial guardian safe period |
+| `chainId?` | `string` \| `number` | number or hex string(must start with 0x) |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+{Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+SoulWallet
 
 #### Implementation of
 
@@ -207,27 +226,27 @@ ISoulWallet.calcWalletAddress
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:207](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L207)
+[packages/soulwallet-sdk/src/soulWallet.ts:253](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L253)
 
 ___
 
 ### createUnsignedDeployWalletUserOp
 
-▸ **createUnsignedDeployWalletUserOp**(`index`, `initialKey`, `initialGuardianHash`, `callData?`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
+▸ **createUnsignedDeployWalletUserOp**(`index`, `initialKeys`, `initialGuardianHash`, `callData?`, `initialGuardianSafePeriod?`): `Promise`\<[`Result`](../modules.md#result)\<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `index` | `number` | `undefined` |
-| `initialKey` | `string` | `undefined` |
+| `initialKeys` | [`InitialKey`](../modules.md#initialkey)[] | `undefined` |
 | `initialGuardianHash` | `string` | `undefined` |
 | `callData` | `string` | `"0x"` |
 | `initialGuardianSafePeriod?` | `number` | `undefined` |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
 
 #### Implementation of
 
@@ -235,17 +254,17 @@ ISoulWallet.createUnsignedDeployWalletUserOp
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:299](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L299)
+[packages/soulwallet-sdk/src/soulWallet.ts:348](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L348)
 
 ___
 
 ### entryPoint
 
-▸ **entryPoint**(): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **entryPoint**(): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Implementation of
 
@@ -253,24 +272,26 @@ ISoulWallet.entryPoint
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:160](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L160)
+[packages/soulwallet-sdk/src/soulWallet.ts:189](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L189)
 
 ___
 
 ### estimateUserOperationGas
 
-▸ **estimateUserOperationGas**(`userOp`, `semiValidGuardHookInputData?`): `Promise`<[`Result`](../modules.md#result)<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
+▸ **estimateUserOperationGas**(`validatorAddress`, `userOp`, `signkeyType?`, `semiValidGuardHookInputData?`): `Promise`\<[`Result`](../modules.md#result)\<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `validatorAddress` | `string` |
 | `userOp` | [`UserOperation`](../modules.md#useroperation) |
+| `signkeyType?` | [`SignkeyType`](../enums/SignkeyType.md) |
 | `semiValidGuardHookInputData?` | `GuardHookInputData` |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
+`Promise`\<[`Result`](../modules.md#result)\<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Implementation of
 
@@ -278,13 +299,13 @@ ISoulWallet.estimateUserOperationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:419](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L419)
+[packages/soulwallet-sdk/src/soulWallet.ts:580](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L580)
 
 ___
 
 ### fromTransaction
 
-▸ **fromTransaction**(`maxFeePerGas`, `maxPriorityFeePerGas`, `from`, `txs`, `nonceKey?`): `Promise`<[`Result`](../modules.md#result)<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
+▸ **fromTransaction**(`maxFeePerGas`, `maxPriorityFeePerGas`, `from`, `txs`, `nonce?`): `Promise`\<[`Result`](../modules.md#result)\<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
 
 #### Parameters
 
@@ -294,11 +315,13 @@ ___
 | `maxPriorityFeePerGas` | `string` |
 | `from` | `string` |
 | `txs` | [`Transaction`](../interfaces/Transaction.md)[] |
-| `nonceKey?` | `string` |
+| `nonce?` | `Object` |
+| `nonce.nonceKey?` | `string` |
+| `nonce.nonceValue?` | `string` |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<[`UserOperation`](../modules.md#useroperation), `Error`\>\>
 
 #### Implementation of
 
@@ -306,27 +329,68 @@ ISoulWallet.fromTransaction
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:557](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L557)
+[packages/soulwallet-sdk/src/soulWallet.ts:743](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L743)
+
+___
+
+### getEIP1271TypedData
+
+▸ **getEIP1271TypedData**(`walletAddr`, `message`): `Promise`\<[`Result`](../modules.md#result)\<\{ `domain`: `TypedDataDomain` ; `typedMessage`: `string` ; `types`: `Record`\<`string`, `TypedDataField`[]\> ; `value`: `Record`\<`string`, `any`\>  }, `Error`\>\>
+
+get TypedData from EIP1271.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `walletAddr` | `string` |
+| `message` | `string` |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<\{ `domain`: `TypedDataDomain` ; `typedMessage`: `string` ; `types`: `Record`\<`string`, `TypedDataField`[]\> ; `value`: `Record`\<`string`, `any`\>  }, `Error`\>\>
+
+{Promise<Result<{
+        domain: TypedDataDomain,
+        types: Record<string, Array<TypedDataField>>,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        value: Record<string, any>,
+        typedMessage: string
+    }, Error>>}
+
+**`Abstract`**
+
+**`Memberof`**
+
+ISoulWallet
+
+#### Implementation of
+
+ISoulWallet.getEIP1271TypedData
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/soulWallet.ts:886](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L886)
 
 ___
 
 ### getEntryPointContract
 
-▸ `Private` **getEntryPointContract**(): `Promise`<[`Result`](../modules.md#result)<`Contract`, `Error`\>\>
+▸ **getEntryPointContract**(): `Promise`\<[`Result`](../modules.md#result)\<`Contract`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`Contract`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`Contract`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:149](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L149)
+[packages/soulwallet-sdk/src/soulWallet.ts:178](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L178)
 
 ___
 
 ### getNonce
 
-▸ **getNonce**(`walletAddr`, `key?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **getNonce**(`walletAddr`, `key?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -337,7 +401,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Implementation of
 
@@ -345,27 +409,27 @@ ISoulWallet.getNonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:500](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L500)
+[packages/soulwallet-sdk/src/soulWallet.ts:686](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L686)
 
 ___
 
 ### getOnChainConfig
 
-▸ **getOnChainConfig**(): `Promise`<[`Result`](../modules.md#result)<`onChainConfig`, `Error`\>\>
+▸ **getOnChainConfig**(): `Promise`\<[`Result`](../modules.md#result)\<`onChainConfig`, `Error`\>\>
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`onChainConfig`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`onChainConfig`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:80](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L80)
+[packages/soulwallet-sdk/src/soulWallet.ts:85](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L85)
 
 ___
 
 ### guardHookList
 
-▸ `Private` **guardHookList**(`walletAddress`): `Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
+▸ **guardHookList**(`walletAddress`): `Promise`\<[`Result`](../modules.md#result)\<`string`[], `Error`\>\>
 
 #### Parameters
 
@@ -375,39 +439,93 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`[], `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`[], `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:382](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L382)
+[packages/soulwallet-sdk/src/soulWallet.ts:451](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L451)
 
 ___
 
 ### initializeData
 
-▸ **initializeData**(`initialKey`, `initialGuardianHash`, `initialGuardianSafePeriod?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **initializeData**(`initialKeys`, `initialGuardianHash`, `initialGuardianSafePeriod?`, `securityControlModuleDelay?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `initialKeys` | [`InitialKey`](../modules.md#initialkey)[] | `undefined` |
+| `initialGuardianHash` | `string` | `undefined` |
+| `initialGuardianSafePeriod` | `number` | `L1KeyStore.defalutInitialGuardianSafePeriod` |
+| `securityControlModuleDelay` | `number` | `L1KeyStore.defalutInitialGuardianSafePeriod` |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/soulWallet.ts:197](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L197)
+
+___
+
+### packRawHash
+
+▸ **packRawHash**(`hash`, `validAfter?`, `validUntil?`): `Promise`\<[`Result`](../modules.md#result)\<\{ `packedHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `initialKey` | `string` |
-| `initialGuardianHash` | `string` |
-| `initialGuardianSafePeriod` | `number` |
+| `hash` | `string` |
+| `validAfter?` | `number` |
+| `validUntil?` | `number` |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<\{ `packedHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:168](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L168)
+[packages/soulwallet-sdk/src/soulWallet.ts:437](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L437)
+
+___
+
+### packUserOpEOASignature
+
+▸ **packUserOpEOASignature**(`validatorAddress`, `signature`, `validationData`, `guardHookInputData?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+pack userOp signature (EOA)
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `validatorAddress` | `string` | validator contract address |
+| `signature` | `string` | EOA signature |
+| `validationData` | `string` | validation data |
+| `guardHookInputData?` | `GuardHookInputData` |  |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+{Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+SoulWallet
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/soulWallet.ts:496](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L496)
 
 ___
 
 ### packUserOpHash
 
-▸ **packUserOpHash**(`userOp`, `validAfter?`, `validUntil?`): `Promise`<[`Result`](../modules.md#result)<{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
+▸ **packUserOpHash**(`userOp`, `validAfter?`, `validUntil?`): `Promise`\<[`Result`](../modules.md#result)\<\{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
 
 #### Parameters
 
@@ -419,7 +537,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<\{ `packedUserOpHash`: `string` ; `validationData`: `string`  }, `Error`\>\>
 
 #### Implementation of
 
@@ -427,39 +545,86 @@ ISoulWallet.packUserOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:370](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L370)
+[packages/soulwallet-sdk/src/soulWallet.ts:425](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L425)
 
 ___
 
-### packUserOpSignature
+### packUserOpP256Signature
 
-▸ **packUserOpSignature**(`signature`, `validationData`, `guardHookInputData?`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **packUserOpP256Signature**(`validatorAddress`, `signatureData`, `validationData`, `guardHookInputData?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+pack userOp signature (P256)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `signature` | `string` |
-| `validationData` | `string` |
-| `guardHookInputData?` | `GuardHookInputData` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `validatorAddress` | `string` | validator contract address |
+| `signatureData` | `Object` | signature data, messageHash is userOp hash(packed userOp hash) |
+| `signatureData.authenticatorData` | `string` | - |
+| `signatureData.clientDataSuffix` | `string` | - |
+| `signatureData.messageHash` | `string` | - |
+| `signatureData.publicKey` | `string` \| [`ECCPoint`](../interfaces/ECCPoint.md) | - |
+| `signatureData.r` | `string` | - |
+| `signatureData.s` | `string` | - |
+| `validationData` | `string` | validation data |
+| `guardHookInputData?` | `GuardHookInputData` |  |
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
-#### Implementation of
+{Promise<Result<string, Error>>}
 
-ISoulWallet.packUserOpSignature
+**`Memberof`**
+
+SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:399](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L399)
+[packages/soulwallet-sdk/src/soulWallet.ts:525](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L525)
+
+___
+
+### packUserOpRS256Signature
+
+▸ **packUserOpRS256Signature**(`validatorAddress`, `signatureData`, `validationData`, `guardHookInputData?`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+pack userOp signature (RS256)
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `validatorAddress` | `string` | validator contract address |
+| `signatureData` | `Object` |  |
+| `signatureData.authenticatorData` | `string` | - |
+| `signatureData.clientDataSuffix` | `string` | - |
+| `signatureData.messageHash` | `string` | - |
+| `signatureData.publicKey` | [`RSAPublicKey`](../interfaces/RSAPublicKey.md) | - |
+| `signatureData.signature` | `string` | - |
+| `validationData` | `string` |  |
+| `guardHookInputData?` | `GuardHookInputData` |  |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
+
+{Promise<Result<string, Error>>}
+
+**`Memberof`**
+
+SoulWallet
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/soulWallet.ts:561](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L561)
 
 ___
 
 ### preFund
 
-▸ **preFund**(`userOp`): `Promise`<[`Result`](../modules.md#result)<{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `Error`\>\>
+▸ **preFund**(`userOp`): `Promise`\<[`Result`](../modules.md#result)\<\{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `Error`\>\>
 
 #### Parameters
 
@@ -469,7 +634,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<\{ `deposit`: `string` ; `missfund`: `string` ; `prefund`: `string`  }, `Error`\>\>
 
 #### Implementation of
 
@@ -477,13 +642,33 @@ ISoulWallet.preFund
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:228](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L228)
+[packages/soulwallet-sdk/src/soulWallet.ts:277](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L277)
+
+___
+
+### prePackUserOpSignature
+
+▸ **prePackUserOpSignature**(`guardHookInputData?`): `Promise`\<[`Result`](../modules.md#result)\<`undefined` \| `HookInputData`, `Error`\>\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `guardHookInputData?` | `GuardHookInputData` |
+
+#### Returns
+
+`Promise`\<[`Result`](../modules.md#result)\<`undefined` \| `HookInputData`, `Error`\>\>
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/soulWallet.ts:468](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L468)
 
 ___
 
 ### sendUserOperation
 
-▸ **sendUserOperation**(`userOp`): `Promise`<[`Result`](../modules.md#result)<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
+▸ **sendUserOperation**(`userOp`): `Promise`\<[`Result`](../modules.md#result)\<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Parameters
 
@@ -493,7 +678,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
+`Promise`\<[`Result`](../modules.md#result)\<``true``, [`UserOpErrors`](UserOpErrors.md)\>\>
 
 #### Implementation of
 
@@ -501,13 +686,13 @@ ISoulWallet.sendUserOperation
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:478](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L478)
+[packages/soulwallet-sdk/src/soulWallet.ts:664](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L664)
 
 ___
 
 ### userOpHash
 
-▸ **userOpHash**(`userOp`): `Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+▸ **userOpHash**(`userOp`): `Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Parameters
 
@@ -517,7 +702,7 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`string`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`string`, `Error`\>\>
 
 #### Implementation of
 
@@ -525,13 +710,13 @@ ISoulWallet.userOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:361](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L361)
+[packages/soulwallet-sdk/src/soulWallet.ts:416](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L416)
 
 ___
 
 ### walletDeployed
 
-▸ `Private` **walletDeployed**(`walletAddress`): `Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
+▸ **walletDeployed**(`walletAddress`): `Promise`\<[`Result`](../modules.md#result)\<`boolean`, `Error`\>\>
 
 #### Parameters
 
@@ -541,8 +726,8 @@ ___
 
 #### Returns
 
-`Promise`<[`Result`](../modules.md#result)<`boolean`, `Error`\>\>
+`Promise`\<[`Result`](../modules.md#result)\<`boolean`, `Error`\>\>
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:529](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-sdk/src/soulWallet.ts#L529)
+[packages/soulwallet-sdk/src/soulWallet.ts:715](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/soulWallet.ts#L715)

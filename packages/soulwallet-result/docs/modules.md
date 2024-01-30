@@ -17,7 +17,7 @@
 
 ### Result
 
-Ƭ **Result**<`T`, `E`\>: [`Ok`](classes/Ok.md)<`T`, `E`\> \| [`Err`](classes/Err.md)<`T`, `E`\>
+Ƭ **Result**\<`T`, `E`\>: [`Ok`](classes/Ok.md)\<`T`, `E`\> \| [`Err`](classes/Err.md)\<`T`, `E`\>
 
 Defines a Result type, which can be either Ok or Err.
 
@@ -30,4 +30,4 @@ Defines a Result type, which can be either Ok or Err.
 
 #### Defined in
 
-[Result.ts:4](https://github.com/SoulWallet/soulwalletlib/blob/2de4184/packages/soulwallet-result/src/Result.ts#L4)
+[Result.ts:4](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-result/src/Result.ts#L4)
