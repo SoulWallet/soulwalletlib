@@ -133,11 +133,6 @@ export default [
   },
   {
     "type": "error",
-    "name": "ADDRESS_NOT_EXISTS",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "CALLER_MUST_BE_AUTHORIZED_MODULE",
     "inputs": []
   },
@@ -173,7 +168,17 @@ export default [
   },
   {
     "type": "error",
+    "name": "MODULE_NOT_EXISTS",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "MODULE_SELECTORS_EMPTY",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "MOUDLE_ALREADY_EXISTS",
     "inputs": []
   },
   {

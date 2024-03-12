@@ -125,6 +125,11 @@ export default [
   },
   {
     "type": "error",
+    "name": "HOOK_ALREADY_EXISTS",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "HOOK_NOT_EXISTS",
     "inputs": []
   },

@@ -11,7 +11,8 @@ if (!shell.which('forge')) {
 
 const __dirname = resolve();
 
-const soulwalletcontractDir = resolve(__dirname, '..', '..', '..', 'soul-wallet-contract');
+const soulwalletcontractDir = resolve(__dirname, '..', '..', 'soul-wallet-contract');
+console.log('soulwalletcontractDir', soulwalletcontractDir);
 shell.cd(soulwalletcontractDir);
 shell.exec("forge build", { silent: false });
 const soulwalletcontractOutDir = resolve(soulwalletcontractDir, 'out');
@@ -45,11 +46,12 @@ for (let i = 0; i < contractDir.length; i++) {
             }
             const jsonStr = readFileSync(abiJson, 'utf-8');
             const json = JSON.parse(jsonStr);
-            if (json.abi === undefined || json.abi.length == 0 || json.ast === undefined || json.ast.absolutePath === undefined) {
+            if (json.abi === undefined || json.abi.length == 0 || typeof (json.metadata.sources) !== 'object' || Object.keys(json.metadata.sources).length === 0) {
                 console.log('skip', contractPath);
                 continue;
             }
-            const absolutePath: string = json.ast.absolutePath;
+
+            const absolutePath: string = Object.keys(json.metadata.sources)[0];
             if (absolutePath.startsWith("contracts/")) {
                 const abiFilePath = resolve(__dirname, 'src', 'ABI', 'ABI_' + className + '.ts');
                 writeFileSync(abiFilePath, `${warning}export default ${JSON.stringify(json.abi, null, 2)};`);
@@ -64,7 +66,7 @@ for (let i = 0; i < contractDir.length; i++) {
     }
 }
 // entrypoint
-const entryPointABI = readFileSync(resolve(__dirname, 'src', 'entrypoint', 'v0.6.json'), 'utf-8');
+const entryPointABI = readFileSync(resolve(__dirname, 'src', 'entrypoint', 'v0.7.json'), 'utf-8');
 const entryPointAbiFilePath = resolve(__dirname, 'src', 'ABI', 'ABI_EntryPoint.ts');
 writeFileSync(entryPointAbiFilePath, `${warning}export default ${entryPointABI};`);
 mainTsImport += `import ABI_EntryPoint from "./ABI/ABI_EntryPoint.js";\n`;

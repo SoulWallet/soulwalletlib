@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
-import { BigNumberish, UserOperation } from "../interface/UserOperation.js";
+import { BigNumberish, UserOperation, PackedUserOperation, HexString, Bytes32, Address } from "../interface/UserOperation.js";
+import { Hex } from "./hex.js";
 
 function bigIntToNumber(value: bigint): number {
     if (value > Number.MAX_SAFE_INTEGER) {
@@ -34,8 +35,11 @@ function userOperationToJSON(userOp: UserOperation): string {
         preVerificationGas: _BigNumberishToHexString(userOp.preVerificationGas),
         maxFeePerGas: _BigNumberishToHexString(userOp.maxFeePerGas),
         maxPriorityFeePerGas: _BigNumberishToHexString(userOp.maxPriorityFeePerGas),
-        paymasterAndData: _HexstringToBytes(userOp.paymasterAndData),
-        signature: _HexstringToBytes(userOp.signature),
+        paymaster: ethers.getAddress(userOp.paymaster),
+        paymasterVerificationGasLimit: _BigNumberishToHexString(userOp.paymasterVerificationGasLimit),
+        paymasterPostOpGasLimit: _BigNumberishToHexString(userOp.paymasterPostOpGasLimit),
+        paymasterData: _HexstringToBytes(userOp.paymasterData),
+        signature: _HexstringToBytes(userOp.signature)
     };
     return JSON.stringify(obj);
 }
@@ -51,14 +55,143 @@ function userOperationFromJSON(json: string): UserOperation {
         preVerificationGas: '0x' + BigInt(obj.preVerificationGas).toString(16),
         maxFeePerGas: '0x' + BigInt(obj.maxFeePerGas).toString(16),
         maxPriorityFeePerGas: '0x' + BigInt(obj.maxPriorityFeePerGas).toString(16),
-        paymasterAndData: obj.paymasterAndData,
+        paymaster: ethers.getAddress(obj.paymaster),
+        paymasterVerificationGasLimit: '0x' + BigInt(obj.paymasterVerificationGasLimit).toString(16),
+        paymasterPostOpGasLimit: '0x' + BigInt(obj.paymasterPostOpGasLimit).toString(16),
+        paymasterData: obj.paymasterData,
         signature: obj.signature,
     };
     return userOp;
 }
 
+const UINT128_MAX = BigInt(2) ** BigInt(128) - BigInt(1);
+const UINT256_MAX = BigInt(2) ** BigInt(256) - BigInt(1);
+
+function packUints(high128: BigNumberish, low128: BigNumberish): Bytes32 {
+    const _high128 = BigInt(high128);
+    const _low128 = BigInt(low128);
+    if (_high128 < 0 || _high128 > UINT128_MAX) {
+        throw new Error(`high128 ${high128} is out of range`);
+    }
+    if (_low128 < 0 || _low128 > UINT128_MAX) {
+        throw new Error(`low128 ${low128} is out of range`);
+    }
+    // (high128 << 128) | low128
+    return Hex.paddingZero(((_high128 << BigInt(128)) | _low128).toString(16), 32);
+}
+
+function unpackUints(packed: Bytes32): {
+    high128: BigNumberish,
+    low128: BigNumberish
+} {
+
+    // return (uint128(bytes16(packed)), uint128(uint256(packed)));
+    const _packed = BigInt(packed);
+    if (_packed < 0 || _packed > UINT256_MAX) {
+        throw new Error(`packed ${packed} is out of range`);
+    }
+    const high128 = Number(_packed >> BigInt(128));
+    const low128 = Number(_packed & UINT128_MAX);
+    return {
+        high128: Hex.paddingZero(high128),
+        low128: Hex.paddingZero(low128)
+    };
+}
+
+function unpackPaymasterStaticFields(
+    paymasterAndData: HexString
+): {
+    paymaster: Address,
+    validationGasLimit: BigNumberish,
+    postOpGasLimit: BigNumberish,
+    paymasterData: HexString
+} {
+    if (!paymasterAndData.startsWith('0x')) {
+        throw new Error(`paymasterAndData ${paymasterAndData} is not a valid HexString`);
+    }
+    if (paymasterAndData.length < (2 + 52 * 2)) {
+        return {
+            paymaster: ethers.ZeroAddress,
+            validationGasLimit: 0,
+            postOpGasLimit: 0,
+            paymasterData: '0x'
+        };
+    }
+
+    const paymaster = paymasterAndData.slice(0, 42);
+    const validationGasLimit = Hex.paddingZero(BigInt('0x' + paymasterAndData.slice(42, 74)));
+    const postOpGasLimit = Hex.paddingZero(BigInt('0x' + paymasterAndData.slice(74, 106)));
+    const paymasterData = '0x' + paymasterAndData.slice(106);
+
+    return {
+        paymaster: paymaster,
+        validationGasLimit: validationGasLimit,
+        postOpGasLimit: postOpGasLimit,
+        paymasterData: paymasterData
+    };
+}
+
+function packPaymasterStaticFields(
+    paymaster: Address,
+    validationGasLimit: BigNumberish,
+    postOpGasLimit: BigNumberish,
+    paymasterData: HexString
+): HexString {
+    if (paymaster.length !== 42 || paymaster === ethers.ZeroAddress) {
+        return '0x';
+    }
+
+    let paymasterAndData = paymaster;
+    paymasterAndData += Hex.paddingZero(validationGasLimit, 16).slice(2);
+    paymasterAndData += Hex.paddingZero(postOpGasLimit, 16).slice(2);
+    if (paymasterData.startsWith('0x') && paymasterData.length > 2) {
+        paymasterAndData += paymasterData.slice(2);
+    }
+    return paymasterAndData.toLowerCase();
+}
+
+
+
+function packUserOp(userOp: UserOperation): PackedUserOperation {
+    return {
+        sender: userOp.sender,
+        nonce: userOp.nonce,
+        initCode: userOp.initCode,
+        callData: userOp.callData,
+        accountGasLimits: packUints(userOp.verificationGasLimit, userOp.callGasLimit),
+        preVerificationGas: userOp.preVerificationGas,
+        gasFees: packUints(userOp.maxPriorityFeePerGas, userOp.maxFeePerGas),
+        paymasterAndData: packPaymasterStaticFields(userOp.paymaster, userOp.paymasterVerificationGasLimit, userOp.paymasterPostOpGasLimit, userOp.paymasterData),
+        signature: userOp.signature
+    };
+}
+
+function unpackUserOp(packedUserOp: PackedUserOperation): UserOperation {
+    const _accountGasLimits = unpackUints(packedUserOp.accountGasLimits);
+    const _gasFees = unpackUints(packedUserOp.gasFees);
+    const _paymasterStaticFields = unpackPaymasterStaticFields(packedUserOp.paymasterAndData);
+    return {
+        sender: packedUserOp.sender,
+        nonce: packedUserOp.nonce,
+        initCode: packedUserOp.initCode,
+        callData: packedUserOp.callData,
+        callGasLimit: _accountGasLimits.low128,
+        verificationGasLimit: _accountGasLimits.high128,
+        preVerificationGas: packedUserOp.preVerificationGas,
+        maxFeePerGas: _gasFees.low128,
+        maxPriorityFeePerGas: _gasFees.high128,
+        paymaster: _paymasterStaticFields.paymaster,
+        paymasterVerificationGasLimit: _paymasterStaticFields.validationGasLimit,
+        paymasterPostOpGasLimit: _paymasterStaticFields.postOpGasLimit,
+        paymasterData: _paymasterStaticFields.paymasterData,
+        signature: packedUserOp.signature
+    };
+}
+
 export {
     userOperationFromJSON,
     userOperationToJSON,
-    bigIntToNumber
+    bigIntToNumber,
+    packUserOp,
+    unpackUserOp
 }

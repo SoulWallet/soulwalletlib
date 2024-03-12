@@ -1,3 +1,4 @@
+import ABI_AaveUsdcSaveAutomation from "./ABI/ABI_AaveUsdcSaveAutomation.js";
 import ABI_ArbKeyStoreCrossChainMerkleRootManager from "./ABI/ABI_ArbKeyStoreCrossChainMerkleRootManager.js";
 import ABI_ArbMerkleRootHistory from "./ABI/ABI_ArbMerkleRootHistory.js";
 import ABI_BaseKeyStore from "./ABI/ABI_BaseKeyStore.js";
@@ -53,9 +54,10 @@ import ABI_SoulWallet from "./ABI/ABI_SoulWallet.js";
 import ABI_SoulWalletDefaultValidator from "./ABI/ABI_SoulWalletDefaultValidator.js";
 import ABI_SoulWalletFactory from "./ABI/ABI_SoulWalletFactory.js";
 import ABI_SoulWalletHookManager from "./ABI/ABI_SoulWalletHookManager.js";
+import ABI_SoulWalletInstence from "./ABI/ABI_SoulWalletInstence.js";
+import ABI_SoulWalletLogicInstence from "./ABI/ABI_SoulWalletLogicInstence.js";
 import ABI_SoulWalletModuleManager from "./ABI/ABI_SoulWalletModuleManager.js";
 import ABI_SoulWalletOwnerManager from "./ABI/ABI_SoulWalletOwnerManager.js";
-import ABI_SoulWalletProxy from "./ABI/ABI_SoulWalletProxy.js";
 import ABI_SoulWalletUpgradeManager from "./ABI/ABI_SoulWalletUpgradeManager.js";
 import ABI_SoulWalletValidatorManager from "./ABI/ABI_SoulWalletValidatorManager.js";
 import ABI_TestOracle from "./ABI/ABI_TestOracle.js";
@@ -70,6 +72,7 @@ import ABI_EntryPoint from "./ABI/ABI_EntryPoint.js";
 
 
 export { 
+    ABI_AaveUsdcSaveAutomation,
     ABI_ArbKeyStoreCrossChainMerkleRootManager,
     ABI_ArbMerkleRootHistory,
     ABI_BaseKeyStore,
@@ -125,9 +128,10 @@ export {
     ABI_SoulWalletDefaultValidator,
     ABI_SoulWalletFactory,
     ABI_SoulWalletHookManager,
+    ABI_SoulWalletInstence,
+    ABI_SoulWalletLogicInstence,
     ABI_SoulWalletModuleManager,
     ABI_SoulWalletOwnerManager,
-    ABI_SoulWalletProxy,
     ABI_SoulWalletUpgradeManager,
     ABI_SoulWalletValidatorManager,
     ABI_TestOracle,

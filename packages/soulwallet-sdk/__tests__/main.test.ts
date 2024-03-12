@@ -2,6 +2,7 @@ import { TypedDataDomain, TypedDataField, ethers } from 'ethers';
 import {
     SoulWallet,
     UserOperation,
+    PackedUserOperation,
     UserOpUtils,
     UserOpErrors,
     UserOpErrorCodes,
@@ -244,6 +245,73 @@ describe('SDK', () => {
 
         const offchainAddress = WalletFactory.getWalletAddress(SoulWalletFactory, implementation, initializer, salt);
         expect(offchainAddress.toLowerCase()).toBe(expectAddress.toLowerCase());
+    });
+    test('userOp pack unpack', async () => {
+        const userOp: UserOperation = {
+            sender: "0x123456789abcdef0123456789abcdef012345678",
+            nonce: '0x01',
+            initCode: '0x02',
+            callData: '0x03',
+            callGasLimit: '0xa1',
+            verificationGasLimit: '0xa2',
+            preVerificationGas: '0xa3',
+            maxFeePerGas: '0xa4',
+            maxPriorityFeePerGas: '0xa5',
+            paymaster: '0xaa3456789abcdef0123456789abcdef012345678',
+            paymasterVerificationGasLimit: '0xa6',
+            paymasterPostOpGasLimit: '0xa7',
+            paymasterData: '0xa8',
+            signature: '0xb0'
+        };
+
+        const packedUserOp: PackedUserOperation = {
+            sender: "0x123456789abcdef0123456789abcdef012345678",
+            nonce: '0x01',
+            initCode: '0x02',
+            callData: '0x03',
+            accountGasLimits: '0x000000000000000000000000000000a2000000000000000000000000000000a1',
+            preVerificationGas: '0xa3',
+            gasFees: '0x000000000000000000000000000000a5000000000000000000000000000000a4',
+            paymasterAndData: '0xaa3456789abcdef0123456789abcdef012345678000000000000000000000000000000a6000000000000000000000000000000a7a8',
+            signature: '0xb0'
+        };
+
+        {
+            const _packedUserOp = UserOpUtils.packUserOp(userOp);
+            expect(JSON.stringify(_packedUserOp)).toBe(JSON.stringify(packedUserOp));
+        }
+        {
+            const _UserOp = UserOpUtils.unpackUserOp(packedUserOp);
+            expect(JSON.stringify(_UserOp)).toBe(JSON.stringify(userOp));
+        }
+    });
+
+    test('userOpHash', async () => {
+        const packedUserOp: PackedUserOperation = {
+            sender: "0x123456789abcdef0123456789abcdef012345678",
+            nonce: '0x01',
+            initCode: '0x02',
+            callData: '0x03',
+            accountGasLimits: '0x000000000000000000000000000000a2000000000000000000000000000000a1',
+            preVerificationGas: '0xa3',
+            gasFees: '0x000000000000000000000000000000a5000000000000000000000000000000a4',
+            paymasterAndData: '0xaa3456789abcdef0123456789abcdef012345678000000000000000000000000000000a6000000000000000000000000000000a7a8',
+            signature: '0xb0'
+        };
+
+        const entrypointAddress = '0x0000000071727De22E5E9d8BAf0edAc6f37da032';
+        const chainId = 1;
+        const userOpHash = '0xe8d32d363ebd7cc216f57e99b74810385ec4e87fc6536c3688b2067f3d28fa58';
+        {
+            const _userOpHash = UserOpUtils.getUserOpHash(packedUserOp, entrypointAddress, chainId);
+            expect(_userOpHash).toBe(userOpHash);
+        }
+        {
+            const userOp: UserOperation = UserOpUtils.unpackUserOp(packedUserOp);
+            const _userOpHash = UserOpUtils.getUserOpHash(userOp, entrypointAddress, chainId);
+            expect(_userOpHash).toBe(userOpHash);
+        }
+
     });
 });
 

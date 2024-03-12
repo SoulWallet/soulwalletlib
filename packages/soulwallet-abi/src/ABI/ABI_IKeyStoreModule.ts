@@ -47,7 +47,7 @@ export default [
   },
   {
     "type": "event",
-    "name": "KeyStoreSyncd",
+    "name": "KeyStoreSynced",
     "inputs": [
       {
         "name": "_wallet",

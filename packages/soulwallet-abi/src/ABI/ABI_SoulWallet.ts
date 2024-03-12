@@ -479,7 +479,7 @@ export default [
       {
         "name": "userOp",
         "type": "tuple",
-        "internalType": "struct UserOperation",
+        "internalType": "struct PackedUserOperation",
         "components": [
           {
             "name": "sender",
@@ -502,14 +502,9 @@ export default [
             "internalType": "bytes"
           },
           {
-            "name": "callGasLimit",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "verificationGasLimit",
-            "type": "uint256",
-            "internalType": "uint256"
+            "name": "accountGasLimits",
+            "type": "bytes32",
+            "internalType": "bytes32"
           },
           {
             "name": "preVerificationGas",
@@ -517,14 +512,9 @@ export default [
             "internalType": "uint256"
           },
           {
-            "name": "maxFeePerGas",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "maxPriorityFeePerGas",
-            "type": "uint256",
-            "internalType": "uint256"
+            "name": "gasFees",
+            "type": "bytes32",
+            "internalType": "bytes32"
           },
           {
             "name": "paymasterAndData",
@@ -759,11 +749,6 @@ export default [
   },
   {
     "type": "error",
-    "name": "ADDRESS_NOT_EXISTS",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "CALLER_MUST_BE_AUTHORIZED_MODULE",
     "inputs": []
   },
@@ -790,6 +775,11 @@ export default [
   {
     "type": "error",
     "name": "DATA_NOT_EXISTS",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "HOOK_ALREADY_EXISTS",
     "inputs": []
   },
   {
@@ -854,7 +844,17 @@ export default [
   },
   {
     "type": "error",
+    "name": "MODULE_NOT_EXISTS",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "MODULE_SELECTORS_EMPTY",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "MOUDLE_ALREADY_EXISTS",
     "inputs": []
   },
   {
@@ -880,6 +880,16 @@ export default [
   {
     "type": "error",
     "name": "UPGRADE_FAILED",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "VALIDATOR_ALREADY_EXISTS",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "VALIDATOR_NOT_EXISTS",
     "inputs": []
   }
 ];

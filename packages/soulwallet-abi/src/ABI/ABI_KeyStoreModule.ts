@@ -66,7 +66,7 @@ export default [
   },
   {
     "type": "function",
-    "name": "lastKeyStoreSyncSignKey",
+    "name": "latestSyncedSignKey",
     "inputs": [
       {
         "name": "",
@@ -161,7 +161,7 @@ export default [
   },
   {
     "type": "event",
-    "name": "KeyStoreSyncd",
+    "name": "KeyStoreSynced",
     "inputs": [
       {
         "name": "_wallet",

@@ -86,7 +86,7 @@ export default [
       {
         "name": "userOp",
         "type": "tuple",
-        "internalType": "struct UserOperation",
+        "internalType": "struct PackedUserOperation",
         "components": [
           {
             "name": "sender",
@@ -109,14 +109,9 @@ export default [
             "internalType": "bytes"
           },
           {
-            "name": "callGasLimit",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "verificationGasLimit",
-            "type": "uint256",
-            "internalType": "uint256"
+            "name": "accountGasLimits",
+            "type": "bytes32",
+            "internalType": "bytes32"
           },
           {
             "name": "preVerificationGas",
@@ -124,14 +119,9 @@ export default [
             "internalType": "uint256"
           },
           {
-            "name": "maxFeePerGas",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "maxPriorityFeePerGas",
-            "type": "uint256",
-            "internalType": "uint256"
+            "name": "gasFees",
+            "type": "bytes32",
+            "internalType": "bytes32"
           },
           {
             "name": "paymasterAndData",
