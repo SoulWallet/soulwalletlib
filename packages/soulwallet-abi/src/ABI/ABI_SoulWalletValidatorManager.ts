@@ -86,11 +86,6 @@ export default [
   },
   {
     "type": "error",
-    "name": "ADDRESS_NOT_EXISTS",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "CALLER_MUST_BE_MODULE",
     "inputs": []
   },
@@ -107,6 +102,16 @@ export default [
   {
     "type": "error",
     "name": "INVALID_VALIDATOR",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "VALIDATOR_ALREADY_EXISTS",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "VALIDATOR_NOT_EXISTS",
     "inputs": []
   }
 ];

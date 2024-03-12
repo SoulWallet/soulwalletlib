@@ -24,7 +24,7 @@ GuardianSignature
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IL1KeyStore.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IL1KeyStore.ts#L19)
+[packages/soulwallet-sdk/src/interface/IL1KeyStore.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IL1KeyStore.ts#L19)
 
 ___
 
@@ -40,7 +40,7 @@ GuardianSignature
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IL1KeyStore.ts:27](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IL1KeyStore.ts#L27)
+[packages/soulwallet-sdk/src/interface/IL1KeyStore.ts:27](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IL1KeyStore.ts#L27)
 
 ___
 
@@ -56,4 +56,4 @@ GuardianSignature
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IL1KeyStore.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/IL1KeyStore.ts#L11)
+[packages/soulwallet-sdk/src/interface/IL1KeyStore.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IL1KeyStore.ts#L11)

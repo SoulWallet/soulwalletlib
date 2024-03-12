@@ -75,7 +75,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L36)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L36)
 
 ## Properties
 
@@ -85,7 +85,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:27](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L27)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:27](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L27)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L25)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L25)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:26](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L26)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:26](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L26)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:20](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L20)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:20](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L20)
 
 ___
 
@@ -125,7 +125,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L21)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L21)
 
 ___
 
@@ -135,7 +135,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:23](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L23)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:23](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L23)
 
 ___
 
@@ -145,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L22)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L22)
 
 ## Methods
 
@@ -177,7 +177,7 @@ IL1KeyStore.getKey
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:348](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L348)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:348](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L348)
 
 ___
 
@@ -209,7 +209,7 @@ IL1KeyStore.getKeyStoreInfo
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:377](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L377)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:377](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L377)
 
 ___
 
@@ -238,7 +238,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:467](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L467)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:467](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L467)
 
 ___
 
@@ -267,7 +267,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:449](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L449)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:449](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L449)
 
 ___
 
@@ -308,7 +308,7 @@ IL1KeyStore.getTypedData
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:680](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L680)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:680](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L680)
 
 ___
 
@@ -336,7 +336,7 @@ SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:738](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L738)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:738](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L738)
 
 ___
 
@@ -370,7 +370,7 @@ SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:759](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L759)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:759](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L759)
 
 ___
 
@@ -403,7 +403,7 @@ SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:788](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L788)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:788](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L788)
 
 ___
 
@@ -423,7 +423,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:61](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L61)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:61](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L61)
 
 ___
 
@@ -443,7 +443,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:57](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L57)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:57](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L57)
 
 ___
 
@@ -475,7 +475,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:212](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L212)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:212](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L212)
 
 ___
 
@@ -505,7 +505,7 @@ IL1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:164](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L164)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:164](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L164)
 
 ___
 
@@ -535,7 +535,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:117](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L117)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:117](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L117)
 
 ___
 
@@ -568,7 +568,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:431](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L431)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:431](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L431)
 
 ___
 
@@ -600,7 +600,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:134](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L134)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:134](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L134)
 
 ___
 
@@ -648,7 +648,7 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:509](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L509)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:509](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L509)
 
 ___
 
@@ -668,7 +668,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:66](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L66)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:66](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L66)
 
 ___
 
@@ -688,7 +688,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:76](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L76)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:76](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L76)
 
 ___
 
@@ -718,4 +718,4 @@ L1KeyStore
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/L1KeyStore.ts:230](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/L1KeyStore.ts#L230)
+[packages/soulwallet-sdk/src/L1KeyStore.ts:230](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/L1KeyStore.ts#L230)

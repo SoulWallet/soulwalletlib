@@ -6,7 +6,7 @@ import { StorageCache } from "./tools/storageCache.js";
 import { ABI_SoulWalletFactory, ABI_SoulWallet, ABI_EntryPoint } from "@soulwallet/abi";
 import { HookInputData, Signature } from "./tools/signature.js";
 import { Hex } from "./tools/hex.js";
-import { GasOverhead } from "./tools/gasOverhead.js";
+// import { GasOverhead } from "./tools/gasOverhead.js";
 import { UserOpErrors, UserOpErrorCodes } from "./interface/IUserOpErrors.js";
 import { Bundler } from "./bundler.js";
 import { Ok, Err, Result } from '@soulwallet/result';
@@ -280,34 +280,11 @@ export class SoulWallet implements ISoulWallet {
             prefund: string,
             missfund: string
         }, Error>> {
-        /*
-        function _getRequiredPrefund(MemoryUserOp memory mUserOp) internal pure returns (uint256 requiredPrefund) {
-        unchecked {
-            //when using a Paymaster, the verificationGasLimit is used also to as a limit for the postOp call.
-            // our security model might call postOp eventually twice
-            uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
-            uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
 
-            requiredPrefund = requiredGas * mUserOp.maxFeePerGas;
-        }
-        }
-        */
-        // userOp.maxFeePerGas, userOp.preVerificationGas, userOp.verificationGasLimit must > 0
         try {
-            const ZERO = BigInt(0);
             const maxFeePerGas = BigInt(userOp.maxFeePerGas);
-            const preVerificationGas = BigInt(userOp.preVerificationGas);
-            const verificationGasLimit = BigInt(userOp.verificationGasLimit);
-            const callGasLimit = BigInt(userOp.callGasLimit);
-            if (maxFeePerGas === ZERO || preVerificationGas === ZERO || verificationGasLimit === ZERO) {
-                throw new Error("maxFeePerGas, preVerificationGas, verificationGasLimit must > 0");
-            }
-
-            // uint256 mul = mUserOp.paymaster != address(0) ? 3 : 1;
-            const mul = userOp.paymasterAndData !== '0x' ? 3 : 1;
-            // uint256 requiredGas = mUserOp.callGasLimit + mUserOp.verificationGasLimit * mul + mUserOp.preVerificationGas;
-            const requiredGas = callGasLimit + verificationGasLimit * BigInt(mul) + preVerificationGas;
-            // requiredPrefund = requiredGas * mUserOp.maxFeePerGas;
+            const requiredGas = BigInt(userOp.verificationGasLimit) + BigInt(userOp.callGasLimit) + BigInt(userOp.preVerificationGas) +
+                BigInt(userOp.paymasterVerificationGasLimit) + BigInt(userOp.paymasterPostOpGasLimit);
             const requiredPrefund = requiredGas * maxFeePerGas;
 
             //return '0x' + requiredPrefund.toString(16);
@@ -326,7 +303,7 @@ export class SoulWallet implements ISoulWallet {
             // balanceOf(): uint256 
             const _deposit: bigint = await _entrypointRet.OK.getFunction("balanceOf").staticCall(userOp.sender);
 
-            const _missfund = _deposit < requiredPrefund ? requiredPrefund - _deposit : ZERO;
+            const _missfund = _deposit < requiredPrefund ? requiredPrefund - _deposit : BigInt(0);
 
             const data = {
                 deposit: '0x' + _deposit.toString(16),
@@ -377,27 +354,8 @@ export class SoulWallet implements ISoulWallet {
             return new Err(senderRet.ERR);
         }
         const _userOperation: UserOperation = {
-            /* 
-             sender: PromiseOrValue<string>;
-                nonce: PromiseOrValue<BigNumberish>;
-                initCode: PromiseOrValue<BytesLike>;
-                callData: PromiseOrValue<BytesLike>;
-                callGasLimit: PromiseOrValue<BigNumberish>;
-                verificationGasLimit: PromiseOrValue<BigNumberish>;
-                preVerificationGas: PromiseOrValue<BigNumberish>;
-                maxFeePerGas: PromiseOrValue<BigNumberish>;
-                maxPriorityFeePerGas: PromiseOrValue<BigNumberish>;
-                paymasterAndData: PromiseOrValue<BytesLike>;
-                signature: PromiseOrValue<BytesLike>;
-            */
             sender: senderRet.OK,
             nonce: 0,
-            /* 
-             address factory = address(bytes20(initCode[0 : 20]));
-             bytes memory initCallData = initCode[20 :];
-             call(gas(), factory, 0, add(initCallData, 0x20), mload(initCallData), 0, 32)
-              function createWallet(bytes memory _initializer, bytes32 _salt)
-            */
             initCode,
             callData,
             callGasLimit: 0,
@@ -405,9 +363,11 @@ export class SoulWallet implements ISoulWallet {
             preVerificationGas: this.preVerificationGasDeploy,
             maxFeePerGas: 0,
             maxPriorityFeePerGas: 0,
-            paymasterAndData: "0x",
+            paymaster: "0x",
+            paymasterVerificationGasLimit: 0,
+            paymasterPostOpGasLimit: 0,
+            paymasterData: "0x",
             signature: "0x"
-
         };
 
         return new Ok(_userOperation);
@@ -652,7 +612,7 @@ export class SoulWallet implements ISoulWallet {
             userOp.verificationGasLimit = userOpGasRet.OK.verificationGasLimit;
             userOp.callGasLimit = `0x${BigInt(userOpGasRet.OK.callGasLimit).toString(16)}`;
 
-            GasOverhead.calcGasOverhead(userOp, signkeyType);
+            //GasOverhead.calcGasOverhead(userOp, signkeyType);
             return new Ok(true);
         } finally {
             if (semiValidSignature) {
@@ -860,7 +820,10 @@ export class SoulWallet implements ISoulWallet {
             preVerificationGas: 0,
             maxFeePerGas: '0x' + BigInt(maxFeePerGas).toString(16),
             maxPriorityFeePerGas: '0x' + BigInt(maxPriorityFeePerGas).toString(16),
-            paymasterAndData: "0x",
+            paymaster: "0x",
+            paymasterVerificationGasLimit: 0,
+            paymasterPostOpGasLimit: 0,
+            paymasterData: "0x",
             signature: "0x"
         };
 

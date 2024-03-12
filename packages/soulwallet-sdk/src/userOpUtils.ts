@@ -1,5 +1,5 @@
-import { UserOperation } from './interface/UserOperation.js';
-import { userOperationFromJSON, userOperationToJSON } from './tools/convert.js';
+import { PackedUserOperation, UserOperation } from './interface/UserOperation.js';
+import { userOperationFromJSON, userOperationToJSON, packUserOp, unpackUserOp } from './tools/convert.js';
 import { getUserOpHash } from './tools/userOpHash.js'
 
 /**
@@ -44,7 +44,31 @@ export class UserOpUtils {
      * @return {*}  {string}
      * @memberof UserOpUtils
      */
-    static getUserOpHash(userOp: UserOperation, entryPoint: string, chainId: number): string {
+    static getUserOpHash(userOp: UserOperation | PackedUserOperation, entryPoint: string, chainId: number): string {
         return getUserOpHash(userOp, entryPoint, chainId);
+    }
+
+    /**
+     * packUserOp
+     *
+     * @static
+     * @param {UserOperation} userOp
+     * @return {*}  {PackedUserOperation}
+     * @memberof UserOpUtils
+     */
+    static packUserOp(userOp: UserOperation): PackedUserOperation {
+        return packUserOp(userOp);
+    }
+
+    /**
+     * unpackUserOp
+     *
+     * @static
+     * @param {PackedUserOperation} packedUserOp
+     * @return {*}  {UserOperation}
+     * @memberof UserOpUtils
+     */
+    static unpackUserOp(packedUserOp: PackedUserOperation): UserOperation {
+        return unpackUserOp(packedUserOp);
     }
 }

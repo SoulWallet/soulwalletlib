@@ -1,8 +1,7 @@
-[submodule "bundler"]
-	path = bundler
-	url = https://github.com/jayden-sudo/bundler
 
 [submodule "soul-wallet-contract"]
 	path = soul-wallet-contract
-	url = https://github.com/SoulWallet/soul-wallet-contract.git
-	branch = develop
+	url = https://github.com/SoulWallet/soul-wallet-contract
+[submodule "bundler"]
+	path = bundler
+	url = https://github.com/eth-infinitism/bundler

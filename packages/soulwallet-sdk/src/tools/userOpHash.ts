@@ -1,32 +1,33 @@
 import { ethers, keccak256 } from "ethers";
-import { UserOperation } from "../interface/UserOperation.js"
+import { UserOperation, PackedUserOperation } from "../interface/UserOperation.js"
+import { packUserOp as userOp2PackedUserOp } from "./convert.js";
+
 
 /**
- * pack the userOperation
- * @param op
- * @param forSignature "true" if the hash is needed to calculate the getUserOpHash()
- *  "false" to pack entire UserOp, for calculating the calldata cost of putting it on-chain.
+ * pack a PackedUserOperation into a string.
+ *
+ * @export
+ * @param {PackedUserOperation} packedOp
+ * @return {*}  {string}
  */
-export function packUserOp(op: UserOperation, forSignature = true): string {
+export function packUserOp(packedOp: PackedUserOperation): string {
     const abiCoder = new ethers.AbiCoder();
-    if (forSignature) {
-        return abiCoder.encode(
-            ['address', 'uint256', 'bytes32', 'bytes32',
-                'uint256', 'uint256', 'uint256', 'uint256', 'uint256',
-                'bytes32'],
-            [op.sender, op.nonce, keccak256(op.initCode), keccak256(op.callData),
-            op.callGasLimit, op.verificationGasLimit, op.preVerificationGas, op.maxFeePerGas, op.maxPriorityFeePerGas,
-            keccak256(op.paymasterAndData)])
-    } else {
-        // for the purpose of calculating gas cost encode also signature (and no keccak of bytes)
-        return abiCoder.encode(
-            ['address', 'uint256', 'bytes', 'bytes',
-                'uint256', 'uint256', 'uint256', 'uint256', 'uint256',
-                'bytes', 'bytes'],
-            [op.sender, op.nonce, op.initCode, op.callData,
-            op.callGasLimit, op.verificationGasLimit, op.preVerificationGas, op.maxFeePerGas, op.maxPriorityFeePerGas,
-            op.paymasterAndData, op.signature])
-    }
+    return abiCoder.encode(
+        [
+            'address', 'uint256', 'bytes32', 'bytes32',
+            'bytes32', 'uint256', 'bytes32', 'bytes32'
+        ],
+        [
+            packedOp.sender,
+            packedOp.nonce,
+            keccak256(packedOp.initCode),
+            keccak256(packedOp.callData),
+            packedOp.accountGasLimits,
+            packedOp.preVerificationGas,
+            packedOp.gasFees,
+            keccak256(packedOp.paymasterAndData)
+        ]
+    );
 }
 
 /**
@@ -38,8 +39,14 @@ export function packUserOp(op: UserOperation, forSignature = true): string {
  * @param entryPoint
  * @param chainId
  */
-export function getUserOpHash(op: UserOperation, entryPoint: string, chainId: number): string {
-    const userOpHash = keccak256(packUserOp(op, true))
+export function getUserOpHash(op: UserOperation | PackedUserOperation, entryPoint: string, chainId: number): string {
+    let packedOp: PackedUserOperation;
+    if ('verificationGasLimit' in op) {
+        packedOp = userOp2PackedUserOp(op as UserOperation);
+    } else {
+        packedOp = op as PackedUserOperation;
+    }
+    const userOpHash = keccak256(packUserOp(packedOp));
     const enc = new ethers.AbiCoder().encode(
         ['bytes32', 'address', 'uint256'],
         [userOpHash, entryPoint, chainId])
