@@ -1,5 +1,11 @@
 # @soulwallet/assets
 
+## 0.3.0
+
+### Minor Changes
+
+- 32f4da1: EntryPoint v0.7.0 Compatible
+
 ## 0.2.0
 
 ### Minor Changes
