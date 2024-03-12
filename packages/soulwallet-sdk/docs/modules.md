@@ -38,6 +38,7 @@
 ### Type Aliases
 
 - [InitialKey](modules.md#initialkey)
+- [PackedUserOperation](modules.md#packeduseroperation)
 - [Result](modules.md#result)
 - [UserOperation](modules.md#useroperation)
 
@@ -52,7 +53,31 @@ ECCPoint, RSAPublicKey, EOA or packed bytes32
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L240)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L240)
+
+___
+
+### PackedUserOperation
+
+Ƭ **PackedUserOperation**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `accountGasLimits` | `Bytes32` |
+| `callData` | `HexString` |
+| `gasFees` | `Bytes32` |
+| `initCode` | `HexString` |
+| `nonce` | `BigNumberish` |
+| `paymasterAndData` | `HexString` |
+| `preVerificationGas` | `BigNumberish` |
+| `sender` | `Address` |
+| `signature` | `HexString` |
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L25)
 
 ___
 
@@ -89,7 +114,10 @@ ___
 | `maxFeePerGas` | `BigNumberish` |
 | `maxPriorityFeePerGas` | `BigNumberish` |
 | `nonce` | `BigNumberish` |
-| `paymasterAndData` | `HexString` |
+| `paymaster` | `Address` |
+| `paymasterData` | `HexString` |
+| `paymasterPostOpGasLimit` | `BigNumberish` |
+| `paymasterVerificationGasLimit` | `BigNumberish` |
 | `preVerificationGas` | `BigNumberish` |
 | `sender` | `Address` |
 | `signature` | `HexString` |
@@ -97,4 +125,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/interface/UserOperation.ts#L6)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:8](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L8)

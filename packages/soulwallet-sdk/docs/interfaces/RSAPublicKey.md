@@ -23,7 +23,7 @@ RSAPublicKey
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L31)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/webauthn.ts#L31)
 
 ___
 
@@ -39,4 +39,4 @@ RSAPublicKey
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/webauthn.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/tools/webauthn.ts#L39)
+[packages/soulwallet-sdk/src/tools/webauthn.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/webauthn.ts#L39)

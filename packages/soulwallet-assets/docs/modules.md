@@ -67,4 +67,4 @@ Get the token information from the token list.
 
 #### Defined in
 
-[soulwallet-assets/src/asset.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-assets/src/asset.ts#L14)
+[soulwallet-assets/src/asset.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-assets/src/asset.ts#L14)

@@ -15,6 +15,8 @@ UserOpUtils
 ### Methods
 
 - [getUserOpHash](UserOpUtils.md#getuserophash)
+- [packUserOp](UserOpUtils.md#packuserop)
+- [unpackUserOp](UserOpUtils.md#unpackuserop)
 - [userOperationFromJSON](UserOpUtils.md#useroperationfromjson)
 - [userOperationToJSON](UserOpUtils.md#useroperationtojson)
 
@@ -40,7 +42,7 @@ getUserOpHash
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `userOp` | [`UserOperation`](../modules.md#useroperation) | UserOperation |
+| `userOp` | [`UserOperation`](../modules.md#useroperation) \| [`PackedUserOperation`](../modules.md#packeduseroperation) | UserOperation |
 | `entryPoint` | `string` | entryPoint contract address |
 | `chainId` | `number` | chainId |
 
@@ -58,7 +60,67 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
+[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
+
+___
+
+### packUserOp
+
+▸ **packUserOp**(`userOp`): [`PackedUserOperation`](../modules.md#packeduseroperation)
+
+packUserOp
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `userOp` | [`UserOperation`](../modules.md#useroperation) |
+
+#### Returns
+
+[`PackedUserOperation`](../modules.md#packeduseroperation)
+
+{PackedUserOperation}
+
+**`Static`**
+
+**`Memberof`**
+
+UserOpUtils
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/userOpUtils.ts:59](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L59)
+
+___
+
+### unpackUserOp
+
+▸ **unpackUserOp**(`packedUserOp`): [`UserOperation`](../modules.md#useroperation)
+
+unpackUserOp
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `packedUserOp` | [`PackedUserOperation`](../modules.md#packeduseroperation) |
+
+#### Returns
+
+[`UserOperation`](../modules.md#useroperation)
+
+{UserOperation}
+
+**`Static`**
+
+**`Memberof`**
+
+UserOpUtils
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/userOpUtils.ts:71](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L71)
 
 ___
 
@@ -88,7 +150,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
+[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
 
 ___
 
@@ -118,4 +180,4 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/ba276ce/packages/soulwallet-sdk/src/userOpUtils.ts#L21)
+[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L21)
