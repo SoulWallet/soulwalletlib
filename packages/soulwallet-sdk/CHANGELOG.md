@@ -1,5 +1,14 @@
 # @soulwallet/sdk
 
+## 0.3.1
+
+### Patch Changes
+
+- b81f625: Some optimizations:
+
+  1. Temporarily restrict batch requests to the bundler.
+  2. Removed fixed parameters from the constructor of SoulWallet and added variable parameters.
+
 ## 0.3.0
 
 ### Minor Changes
