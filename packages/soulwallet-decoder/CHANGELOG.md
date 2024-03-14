@@ -1,5 +1,17 @@
 # @soulwallet/decoder
 
+## 0.3.0
+
+### Minor Changes
+
+- 32f4da1: EntryPoint v0.7.0 Compatible
+
+### Patch Changes
+
+- Updated dependencies [32f4da1]
+  - @soulwallet/assets@0.3.0
+  - @soulwallet/abi@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
