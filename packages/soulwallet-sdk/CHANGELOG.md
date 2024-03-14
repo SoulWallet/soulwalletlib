@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.3.2
+
+### Patch Changes
+
+- c4026ab: Fixed bugs
+
 ## 0.3.1
 
 ### Patch Changes
