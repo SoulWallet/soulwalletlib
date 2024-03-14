@@ -8,17 +8,18 @@ export type Bytes32 = HexString;
 export type UserOperation = {
     sender: Address;
     nonce: BigNumberish;
-    initCode: HexString;
+    factory: Address|null;
+    factoryData: HexString|null;
     callData: HexString;
     callGasLimit: BigNumberish;
     verificationGasLimit: BigNumberish;
     preVerificationGas: BigNumberish;
     maxFeePerGas: BigNumberish;
     maxPriorityFeePerGas: BigNumberish;
-    paymaster: Address;
+    paymaster: Address|null;
     paymasterVerificationGasLimit: BigNumberish;
     paymasterPostOpGasLimit: BigNumberish;
-    paymasterData: HexString;
+    paymasterData: HexString|null;
     signature: HexString;
 };
 

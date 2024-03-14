@@ -64,7 +64,7 @@ Ok
 
 #### Defined in
 
-[Result.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-result/src/Result.ts#L22)
+[Result.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-result/src/Result.ts#L22)
 
 ## Properties
 
@@ -74,7 +74,7 @@ Ok
 
 #### Defined in
 
-[Result.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-result/src/Result.ts#L15)
+[Result.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-result/src/Result.ts#L15)
 
 ## Accessors
 
@@ -94,7 +94,7 @@ Ok
 
 #### Defined in
 
-[Result.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-result/src/Result.ts#L44)
+[Result.ts:44](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-result/src/Result.ts#L44)
 
 ___
 
@@ -114,7 +114,7 @@ Ok
 
 #### Defined in
 
-[Result.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-result/src/Result.ts#L33)
+[Result.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-result/src/Result.ts#L33)
 
 ## Methods
 
@@ -134,7 +134,7 @@ Ok
 
 #### Defined in
 
-[Result.ts:64](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-result/src/Result.ts#L64)
+[Result.ts:64](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-result/src/Result.ts#L64)
 
 ___
 
@@ -154,4 +154,4 @@ Ok
 
 #### Defined in
 
-[Result.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-result/src/Result.ts#L54)
+[Result.ts:54](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-result/src/Result.ts#L54)

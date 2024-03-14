@@ -62,4 +62,4 @@ ___
 
 #### Defined in
 
-[soulwallet-keyvault/src/interface/IVault.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-keyvault/src/interface/IVault.ts#L10)
+[soulwallet-keyvault/src/interface/IVault.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-keyvault/src/interface/IVault.ts#L10)

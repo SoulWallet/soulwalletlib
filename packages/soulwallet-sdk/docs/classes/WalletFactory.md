@@ -45,7 +45,7 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/walletFactory.ts:23](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/walletFactory.ts#L23)
+[packages/soulwallet-sdk/src/tools/walletFactory.ts:23](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/walletFactory.ts#L23)
 
 ___
 
@@ -78,7 +78,7 @@ WalletFactory
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/walletFactory.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/walletFactory.ts#L45)
+[packages/soulwallet-sdk/src/tools/walletFactory.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/walletFactory.ts#L45)
 
 ___
 
@@ -111,7 +111,7 @@ WalletFactory
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/walletFactory.ts:75](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/walletFactory.ts#L75)
+[packages/soulwallet-sdk/src/tools/walletFactory.ts:75](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/walletFactory.ts#L75)
 
 ___
 
@@ -145,7 +145,7 @@ WalletFactory
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/walletFactory.ts:99](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/walletFactory.ts#L99)
+[packages/soulwallet-sdk/src/tools/walletFactory.ts:99](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/walletFactory.ts#L99)
 
 ___
 
@@ -165,4 +165,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/walletFactory.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/walletFactory.ts#L6)
+[packages/soulwallet-sdk/src/tools/walletFactory.ts:6](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/walletFactory.ts#L6)

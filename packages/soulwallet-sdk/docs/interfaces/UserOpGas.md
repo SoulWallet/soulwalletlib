@@ -11,9 +11,9 @@ UserOpGas
 ### Properties
 
 - [callGasLimit](UserOpGas.md#callgaslimit)
+- [paymasterPostOpGasLimit](UserOpGas.md#paymasterpostopgaslimit)
+- [paymasterVerificationGasLimit](UserOpGas.md#paymasterverificationgaslimit)
 - [preVerificationGas](UserOpGas.md#preverificationgas)
-- [validAfter](UserOpGas.md#validafter)
-- [validUntil](UserOpGas.md#validuntil)
 - [verificationGasLimit](UserOpGas.md#verificationgaslimit)
 
 ## Properties
@@ -24,7 +24,27 @@ UserOpGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L14)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L14)
+
+___
+
+### paymasterPostOpGasLimit
+
+• **paymasterPostOpGasLimit**: `string`
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/interface/IBundler.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L15)
+
+___
+
+### paymasterVerificationGasLimit
+
+• **paymasterVerificationGasLimit**: `string`
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/interface/IBundler.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L16)
 
 ___
 
@@ -34,27 +54,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L15)
-
-___
-
-### validAfter
-
-• **validAfter**: `string`
-
-#### Defined in
-
-[packages/soulwallet-sdk/src/interface/IBundler.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L16)
-
-___
-
-### validUntil
-
-• **validUntil**: `string`
-
-#### Defined in
-
-[packages/soulwallet-sdk/src/interface/IBundler.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L17)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L17)
 
 ___
 
@@ -64,4 +64,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:18](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L18)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:18](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L18)

@@ -60,7 +60,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
+[packages/soulwallet-sdk/src/userOpUtils.ts:47](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/userOpUtils.ts#L47)
 
 ___
 
@@ -90,7 +90,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:59](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L59)
+[packages/soulwallet-sdk/src/userOpUtils.ts:59](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/userOpUtils.ts#L59)
 
 ___
 
@@ -120,7 +120,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:71](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L71)
+[packages/soulwallet-sdk/src/userOpUtils.ts:71](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/userOpUtils.ts#L71)
 
 ___
 
@@ -150,7 +150,7 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
+[packages/soulwallet-sdk/src/userOpUtils.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/userOpUtils.ts#L33)
 
 ___
 
@@ -180,4 +180,4 @@ UserOpUtils
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/userOpUtils.ts#L21)
+[packages/soulwallet-sdk/src/userOpUtils.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/userOpUtils.ts#L21)

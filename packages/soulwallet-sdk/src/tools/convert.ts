@@ -25,40 +25,74 @@ function _HexstringToBytes(value: string): string {
 }
 
 function userOperationToJSON(userOp: UserOperation): string {
+    let factory: string | null = null;
+    if (userOp.factory !== null && userOp.factory.length === 42 && userOp.factory !== ethers.ZeroAddress) {
+        factory = ethers.getAddress(userOp.factory);
+    }
+    let paymaster: string | null = null;
+    if (userOp.paymaster !== null && userOp.paymaster.length === 42 && userOp.paymaster !== ethers.ZeroAddress) {
+        paymaster = ethers.getAddress(userOp.paymaster);
+    }
     const obj = {
         sender: ethers.getAddress(userOp.sender),
         nonce: _BigNumberishToHexString(userOp.nonce),
-        initCode: _HexstringToBytes(userOp.initCode),
+        factory: factory,
+        factoryData: (factory === null ? null : _HexstringToBytes(userOp.factoryData === null ? '0x' : userOp.factoryData)),
         callData: _HexstringToBytes(userOp.callData),
         callGasLimit: _BigNumberishToHexString(userOp.callGasLimit),
         verificationGasLimit: _BigNumberishToHexString(userOp.verificationGasLimit),
         preVerificationGas: _BigNumberishToHexString(userOp.preVerificationGas),
         maxFeePerGas: _BigNumberishToHexString(userOp.maxFeePerGas),
         maxPriorityFeePerGas: _BigNumberishToHexString(userOp.maxPriorityFeePerGas),
-        paymaster: ethers.getAddress(userOp.paymaster),
+        paymaster: paymaster,
         paymasterVerificationGasLimit: _BigNumberishToHexString(userOp.paymasterVerificationGasLimit),
         paymasterPostOpGasLimit: _BigNumberishToHexString(userOp.paymasterPostOpGasLimit),
-        paymasterData: _HexstringToBytes(userOp.paymasterData),
+        paymasterData: (paymaster === null ? null : _HexstringToBytes(userOp.paymasterData === null ? '0x' : userOp.paymasterData)),
         signature: _HexstringToBytes(userOp.signature)
     };
     return JSON.stringify(obj);
 }
 function userOperationFromJSON(json: string): UserOperation {
     const obj = JSON.parse(json);
+    let factory: string | null = null;
+    if (typeof (obj.factory) === 'string' && obj.factory.length === 42) {
+        factory = ethers.getAddress(obj.factory);
+    }
+    let factoryData: string | null = null;
+    if (factory !== null) {
+        if (typeof (obj.factoryData) === 'string') {
+            factoryData = obj.factoryData;
+        } else {
+            factoryData = '0x';
+        }
+    }
+    let paymaster: string | null = null;
+    if (typeof (obj.paymaster) === 'string' && obj.paymaster.length === 42) {
+        paymaster = ethers.getAddress(obj.paymaster);
+    }
+    let paymasterData: string | null = null;
+    if (paymaster !== null) {
+        if (typeof (obj.paymasterData) === 'string') {
+            paymasterData = obj.paymasterData;
+        } else {
+            paymasterData = '0x';
+        }
+    }
     const userOp: UserOperation = {
         sender: ethers.getAddress(obj.sender),
         nonce: '0x' + BigInt(obj.nonce).toString(16),
-        initCode: obj.initCode,
+        factory: factory,
+        factoryData: factoryData,
         callData: obj.callData,
         callGasLimit: '0x' + BigInt(obj.callGasLimit).toString(16),
         verificationGasLimit: '0x' + BigInt(obj.verificationGasLimit).toString(16),
         preVerificationGas: '0x' + BigInt(obj.preVerificationGas).toString(16),
         maxFeePerGas: '0x' + BigInt(obj.maxFeePerGas).toString(16),
         maxPriorityFeePerGas: '0x' + BigInt(obj.maxPriorityFeePerGas).toString(16),
-        paymaster: ethers.getAddress(obj.paymaster),
+        paymaster: paymaster,
         paymasterVerificationGasLimit: '0x' + BigInt(obj.paymasterVerificationGasLimit).toString(16),
         paymasterPostOpGasLimit: '0x' + BigInt(obj.paymasterPostOpGasLimit).toString(16),
-        paymasterData: obj.paymasterData,
+        paymasterData: paymasterData,
         signature: obj.signature,
     };
     return userOp;
@@ -101,20 +135,20 @@ function unpackUints(packed: Bytes32): {
 function unpackPaymasterStaticFields(
     paymasterAndData: HexString
 ): {
-    paymaster: Address,
+    paymaster: Address | null,
     validationGasLimit: BigNumberish,
     postOpGasLimit: BigNumberish,
-    paymasterData: HexString
+    paymasterData: HexString | null
 } {
     if (!paymasterAndData.startsWith('0x')) {
         throw new Error(`paymasterAndData ${paymasterAndData} is not a valid HexString`);
     }
     if (paymasterAndData.length < (2 + 52 * 2)) {
         return {
-            paymaster: ethers.ZeroAddress,
+            paymaster: null,
             validationGasLimit: 0,
             postOpGasLimit: 0,
-            paymasterData: '0x'
+            paymasterData: null
         };
     }
 
@@ -132,19 +166,19 @@ function unpackPaymasterStaticFields(
 }
 
 function packPaymasterStaticFields(
-    paymaster: Address,
+    paymaster: Address | null,
     validationGasLimit: BigNumberish,
     postOpGasLimit: BigNumberish,
-    paymasterData: HexString
+    paymasterData: HexString | null
 ): HexString {
-    if (paymaster.length !== 42 || paymaster === ethers.ZeroAddress) {
+    if (paymaster === null || paymaster.length !== 42 || paymaster === ethers.ZeroAddress) {
         return '0x';
     }
 
     let paymasterAndData = paymaster;
     paymasterAndData += Hex.paddingZero(validationGasLimit, 16).slice(2);
     paymasterAndData += Hex.paddingZero(postOpGasLimit, 16).slice(2);
-    if (paymasterData.startsWith('0x') && paymasterData.length > 2) {
+    if (paymasterData !== null && paymasterData.startsWith('0x') && paymasterData.length > 2) {
         paymasterAndData += paymasterData.slice(2);
     }
     return paymasterAndData.toLowerCase();
@@ -153,10 +187,18 @@ function packPaymasterStaticFields(
 
 
 function packUserOp(userOp: UserOperation): PackedUserOperation {
+    let initCode = '0x';
+    if (userOp.factory !== null && userOp.factory.length === 42 && userOp.factory !== ethers.ZeroAddress) {
+        let factoryData = userOp.factoryData;
+        if (factoryData !== null && factoryData.startsWith('0x')) {
+            factoryData = factoryData.slice(2);
+        }
+        initCode = ethers.getAddress(userOp.factory) + factoryData;
+    }
     return {
         sender: userOp.sender,
         nonce: userOp.nonce,
-        initCode: userOp.initCode,
+        initCode: initCode,
         callData: userOp.callData,
         accountGasLimits: packUints(userOp.verificationGasLimit, userOp.callGasLimit),
         preVerificationGas: userOp.preVerificationGas,
@@ -170,10 +212,17 @@ function unpackUserOp(packedUserOp: PackedUserOperation): UserOperation {
     const _accountGasLimits = unpackUints(packedUserOp.accountGasLimits);
     const _gasFees = unpackUints(packedUserOp.gasFees);
     const _paymasterStaticFields = unpackPaymasterStaticFields(packedUserOp.paymasterAndData);
+    let factory: string | null = null;
+    let factoryData: string | null = null;
+    if (packedUserOp.initCode.startsWith('0x') && packedUserOp.initCode.length >= 42) {
+        factory = ethers.getAddress(packedUserOp.initCode.slice(0, 42));
+        factoryData = '0x' + packedUserOp.initCode.slice(42);
+    }
     return {
         sender: packedUserOp.sender,
         nonce: packedUserOp.nonce,
-        initCode: packedUserOp.initCode,
+        factory: factory,
+        factoryData: factoryData,
         callData: packedUserOp.callData,
         callGasLimit: _accountGasLimits.low128,
         verificationGasLimit: _accountGasLimits.high128,

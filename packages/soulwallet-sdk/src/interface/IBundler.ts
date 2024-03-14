@@ -12,9 +12,9 @@ import { Result } from '@soulwallet/result';
  */
 export interface UserOpGas {
     callGasLimit: string;
+    paymasterPostOpGasLimit: string;
+    paymasterVerificationGasLimit: string;
     preVerificationGas: string;
-    validAfter: string;
-    validUntil: string;
     verificationGasLimit: string;
 }
 

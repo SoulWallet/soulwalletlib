@@ -53,7 +53,7 @@ ECCPoint, RSAPublicKey, EOA or packed bytes32
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L240)
+[packages/soulwallet-sdk/src/interface/ISoulWallet.ts:240](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/ISoulWallet.ts#L240)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:25](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L25)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:26](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L26)
 
 ___
 
@@ -110,12 +110,13 @@ ___
 | :------ | :------ |
 | `callData` | `HexString` |
 | `callGasLimit` | `BigNumberish` |
-| `initCode` | `HexString` |
+| `factory` | `Address` \| ``null`` |
+| `factoryData` | `HexString` \| ``null`` |
 | `maxFeePerGas` | `BigNumberish` |
 | `maxPriorityFeePerGas` | `BigNumberish` |
 | `nonce` | `BigNumberish` |
-| `paymaster` | `Address` |
-| `paymasterData` | `HexString` |
+| `paymaster` | `Address` \| ``null`` |
+| `paymasterData` | `HexString` \| ``null`` |
 | `paymasterPostOpGasLimit` | `BigNumberish` |
 | `paymasterVerificationGasLimit` | `BigNumberish` |
 | `preVerificationGas` | `BigNumberish` |
@@ -125,4 +126,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:8](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L8)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:8](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L8)

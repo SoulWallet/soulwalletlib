@@ -60,7 +60,7 @@ main class of the SDK.
 
 ### constructor
 
-• **new SoulWallet**(`_provider`, `_bundler`, `_soulWalletFactoryAddress`, `_defaultValidator`, `_defalutCallbackHandlerAddress`, `_keyStoreModuleAddress`, `_securityControlModuleAddress`): [`SoulWallet`](SoulWallet.md)
+• **new SoulWallet**(`_provider`, `_bundler`, `_soulWalletFactoryAddress`, `_defaultValidator?`, `_defalutCallbackHandlerAddress?`, `_keyStoreModuleAddress?`, `_securityControlModuleAddress?`): [`SoulWallet`](SoulWallet.md)
 
 #### Parameters
 
@@ -69,10 +69,10 @@ main class of the SDK.
 | `_provider` | `string` \| `JsonRpcProvider` |
 | `_bundler` | `string` \| `JsonRpcProvider` |
 | `_soulWalletFactoryAddress` | `string` |
-| `_defaultValidator` | `string` |
-| `_defalutCallbackHandlerAddress` | `string` |
-| `_keyStoreModuleAddress` | `string` |
-| `_securityControlModuleAddress` | `string` |
+| `_defaultValidator?` | `string` |
+| `_defalutCallbackHandlerAddress?` | `string` |
+| `_keyStoreModuleAddress?` | `string` |
+| `_securityControlModuleAddress?` | `string` |
 
 #### Returns
 
@@ -80,7 +80,7 @@ main class of the SDK.
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:48](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L48)
+[packages/soulwallet-sdk/src/soulWallet.ts:48](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L48)
 
 ## Properties
 
@@ -90,7 +90,7 @@ main class of the SDK.
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L43)
+[packages/soulwallet-sdk/src/soulWallet.ts:43](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L43)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:176](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L176)
+[packages/soulwallet-sdk/src/soulWallet.ts:178](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L178)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L45)
+[packages/soulwallet-sdk/src/soulWallet.ts:45](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L45)
 
 ___
 
@@ -120,37 +120,37 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L34)
+[packages/soulwallet-sdk/src/soulWallet.ts:34](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L34)
 
 ___
 
 ### defalutCallbackHandlerAddress
 
-• `Readonly` **defalutCallbackHandlerAddress**: `string`
+• `Optional` `Readonly` **defalutCallbackHandlerAddress**: `string`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L36)
+[packages/soulwallet-sdk/src/soulWallet.ts:36](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L36)
 
 ___
 
 ### defaultValidator
 
-• `Readonly` **defaultValidator**: `string`
+• `Optional` `Readonly` **defaultValidator**: `string`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L39)
+[packages/soulwallet-sdk/src/soulWallet.ts:39](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L39)
 
 ___
 
 ### keyStoreModuleAddress
 
-• `Readonly` **keyStoreModuleAddress**: `string`
+• `Optional` `Readonly` **keyStoreModuleAddress**: `string`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L37)
+[packages/soulwallet-sdk/src/soulWallet.ts:37](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L37)
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L41)
+[packages/soulwallet-sdk/src/soulWallet.ts:41](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L41)
 
 ___
 
@@ -170,17 +170,17 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L33)
+[packages/soulwallet-sdk/src/soulWallet.ts:33](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L33)
 
 ___
 
 ### securityControlModuleAddress
 
-• `Readonly` **securityControlModuleAddress**: `string`
+• `Optional` `Readonly` **securityControlModuleAddress**: `string`
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L38)
+[packages/soulwallet-sdk/src/soulWallet.ts:38](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L38)
 
 ___
 
@@ -190,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:35](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L35)
+[packages/soulwallet-sdk/src/soulWallet.ts:35](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L35)
 
 ## Methods
 
@@ -226,7 +226,7 @@ ISoulWallet.calcWalletAddress
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:253](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L253)
+[packages/soulwallet-sdk/src/soulWallet.ts:260](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L260)
 
 ___
 
@@ -254,7 +254,7 @@ ISoulWallet.createUnsignedDeployWalletUserOp
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:325](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L325)
+[packages/soulwallet-sdk/src/soulWallet.ts:332](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L332)
 
 ___
 
@@ -272,7 +272,7 @@ ISoulWallet.entryPoint
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:189](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L189)
+[packages/soulwallet-sdk/src/soulWallet.ts:191](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L191)
 
 ___
 
@@ -299,7 +299,7 @@ ISoulWallet.estimateUserOperationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:540](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L540)
+[packages/soulwallet-sdk/src/soulWallet.ts:550](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L550)
 
 ___
 
@@ -329,7 +329,7 @@ ISoulWallet.fromTransaction
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:703](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L703)
+[packages/soulwallet-sdk/src/soulWallet.ts:716](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L716)
 
 ___
 
@@ -370,7 +370,7 @@ ISoulWallet.getEIP1271TypedData
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:849](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L849)
+[packages/soulwallet-sdk/src/soulWallet.ts:863](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L863)
 
 ___
 
@@ -384,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:178](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L178)
+[packages/soulwallet-sdk/src/soulWallet.ts:180](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L180)
 
 ___
 
@@ -409,7 +409,7 @@ ISoulWallet.getNonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:646](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L646)
+[packages/soulwallet-sdk/src/soulWallet.ts:659](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L659)
 
 ___
 
@@ -423,7 +423,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:85](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L85)
+[packages/soulwallet-sdk/src/soulWallet.ts:87](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L87)
 
 ___
 
@@ -443,7 +443,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:411](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L411)
+[packages/soulwallet-sdk/src/soulWallet.ts:421](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L421)
 
 ___
 
@@ -466,7 +466,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:197](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L197)
+[packages/soulwallet-sdk/src/soulWallet.ts:199](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L199)
 
 ___
 
@@ -488,7 +488,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:397](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L397)
+[packages/soulwallet-sdk/src/soulWallet.ts:407](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L407)
 
 ___
 
@@ -519,7 +519,7 @@ SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:456](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L456)
+[packages/soulwallet-sdk/src/soulWallet.ts:466](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L466)
 
 ___
 
@@ -545,7 +545,7 @@ ISoulWallet.packUserOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:385](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L385)
+[packages/soulwallet-sdk/src/soulWallet.ts:395](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L395)
 
 ___
 
@@ -582,7 +582,7 @@ SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:485](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L485)
+[packages/soulwallet-sdk/src/soulWallet.ts:495](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L495)
 
 ___
 
@@ -618,7 +618,7 @@ SoulWallet
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:521](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L521)
+[packages/soulwallet-sdk/src/soulWallet.ts:531](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L531)
 
 ___
 
@@ -642,7 +642,7 @@ ISoulWallet.preFund
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:277](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L277)
+[packages/soulwallet-sdk/src/soulWallet.ts:284](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L284)
 
 ___
 
@@ -662,7 +662,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:428](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L428)
+[packages/soulwallet-sdk/src/soulWallet.ts:438](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L438)
 
 ___
 
@@ -686,7 +686,7 @@ ISoulWallet.sendUserOperation
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:624](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L624)
+[packages/soulwallet-sdk/src/soulWallet.ts:637](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L637)
 
 ___
 
@@ -710,7 +710,7 @@ ISoulWallet.userOpHash
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:376](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L376)
+[packages/soulwallet-sdk/src/soulWallet.ts:386](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L386)
 
 ___
 
@@ -730,4 +730,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/soulWallet.ts:675](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/soulWallet.ts#L675)
+[packages/soulwallet-sdk/src/soulWallet.ts:688](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/soulWallet.ts#L688)
