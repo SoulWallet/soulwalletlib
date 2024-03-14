@@ -250,7 +250,8 @@ describe('SDK', () => {
         const userOp: UserOperation = {
             sender: "0x123456789abcdef0123456789abcdef012345678",
             nonce: '0x01',
-            initCode: '0x02',
+            factory: "0xa100000000000000000000000000000000000000",
+            factoryData: '0x02',
             callData: '0x03',
             callGasLimit: '0xa1',
             verificationGasLimit: '0xa2',
@@ -267,7 +268,7 @@ describe('SDK', () => {
         const packedUserOp: PackedUserOperation = {
             sender: "0x123456789abcdef0123456789abcdef012345678",
             nonce: '0x01',
-            initCode: '0x02',
+            initCode: '0xa10000000000000000000000000000000000000002',
             callData: '0x03',
             accountGasLimits: '0x000000000000000000000000000000a2000000000000000000000000000000a1',
             preVerificationGas: '0xa3',
@@ -278,11 +279,11 @@ describe('SDK', () => {
 
         {
             const _packedUserOp = UserOpUtils.packUserOp(userOp);
-            expect(JSON.stringify(_packedUserOp)).toBe(JSON.stringify(packedUserOp));
+            expect(JSON.stringify(_packedUserOp).toLowerCase()).toBe(JSON.stringify(packedUserOp).toLowerCase());
         }
         {
             const _UserOp = UserOpUtils.unpackUserOp(packedUserOp);
-            expect(JSON.stringify(_UserOp)).toBe(JSON.stringify(userOp));
+            expect(JSON.stringify(_UserOp).toLowerCase()).toBe(JSON.stringify(userOp).toLowerCase());
         }
     });
 
@@ -290,7 +291,7 @@ describe('SDK', () => {
         const packedUserOp: PackedUserOperation = {
             sender: "0x123456789abcdef0123456789abcdef012345678",
             nonce: '0x01',
-            initCode: '0x02',
+            initCode: '0xa10000000000000000000000000000000000000002',
             callData: '0x03',
             accountGasLimits: '0x000000000000000000000000000000a2000000000000000000000000000000a1',
             preVerificationGas: '0xa3',
@@ -301,7 +302,7 @@ describe('SDK', () => {
 
         const entrypointAddress = '0x0000000071727De22E5E9d8BAf0edAc6f37da032';
         const chainId = 1;
-        const userOpHash = '0xe8d32d363ebd7cc216f57e99b74810385ec4e87fc6536c3688b2067f3d28fa58';
+        const userOpHash = '0xb52cfcae9bba87f372db89cc6e43d71d53f304be0cbda3db9f28c4d93c37949d';
         {
             const _userOpHash = UserOpUtils.getUserOpHash(packedUserOp, entrypointAddress, chainId);
             expect(_userOpHash).toBe(userOpHash);
@@ -313,6 +314,28 @@ describe('SDK', () => {
         }
 
     });
+    test('calcWalletAddress', async () => {
+        const soulwallet = new SoulWallet(
+            "https://base-sepolia-rpc.publicnode.com",
+            "https://api-dev.soulwallet.io/appapi/bundler/base-sepolia/rpc",
+            "0x148D4185ab1F3139ADe6AC3343A9b27A2488Dd9f",
+            "0xAF2a5BcC4c10b5289946Daaa87caa467f3abaDcC",
+            "0x4E73CC879D11916820FA49343Be19b0630a0bBA3",
+            undefined,
+            undefined
+        );
+        const a2 = await soulwallet.calcWalletAddress(0, [
+            "0x8f63d7dD6A3F5938616Ef06016BBf25BD6023315"
+        ], "0x55e85a731014097612c7d462fbdededcb5f50a5cb64b0c2068cfe017b51268d0");
+        console.log(a2);
+        debugger;
+        const userop = await soulwallet.createUnsignedDeployWalletUserOp(0, [
+            "0x8f63d7dD6A3F5938616Ef06016BBf25BD6023315"
+        ], "0x", undefined, undefined);
+        console.log(userop);
+        const re = await soulwallet.estimateUserOperationGas("0xAF2a5BcC4c10b5289946Daaa87caa467f3abaDcC", userop.OK);
+        expect(re.isOk()).toBe(true);
+    }, 1000 * 15);
 });
 
 

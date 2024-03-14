@@ -350,7 +350,9 @@ export class SoulWallet implements ISoulWallet {
         if (_onChainConfig.isErr() === true) {
             throw new Err(_onChainConfig.ERR);
         }
-        const initCode = `${this.soulWalletFactoryAddress}${new ethers.Interface(ABI_SoulWalletFactory)
+
+        const factory = this.soulWalletFactoryAddress;
+        const factoryData = `${new ethers.Interface(ABI_SoulWalletFactory)
             .encodeFunctionData("createWallet", [_initializeData.OK,
             WalletFactory.calcWalletAddressSalt(index, _onChainConfig.OK.chainId)
             ])
@@ -363,17 +365,18 @@ export class SoulWallet implements ISoulWallet {
         const _userOperation: UserOperation = {
             sender: senderRet.OK,
             nonce: 0,
-            initCode,
+            factory,
+            factoryData,
             callData,
             callGasLimit: 0,
             verificationGasLimit: 0,
             preVerificationGas: this.preVerificationGasDeploy,
-            maxFeePerGas: 0,
-            maxPriorityFeePerGas: 0,
-            paymaster: "0x",
+            maxFeePerGas: 2,
+            maxPriorityFeePerGas: 1,
+            paymaster: null,
             paymasterVerificationGasLimit: 0,
             paymasterPostOpGasLimit: 0,
-            paymasterData: "0x",
+            paymasterData: null,
             signature: "0x"
         };
 
@@ -551,7 +554,7 @@ export class SoulWallet implements ISoulWallet {
                     new UserOpErrors(UserOpErrorCodes.UnknownError, `invalid sender: ${semiValidGuardHookInputData.sender}`)
                 );
             }
-            if (userOp.initCode === "0x") {
+            if (userOp.factory === null || userOp.factory === "" || userOp.factory === "0x" || userOp.factory === ethers.ZeroAddress) {
                 return new Err(
                     new UserOpErrors(UserOpErrorCodes.UnknownError, `cannot set semiValidGuardHookInputData when the contract wallet is not deployed`)
                 );
@@ -615,9 +618,12 @@ export class SoulWallet implements ISoulWallet {
             if (userOpGasRet.isErr() === true) {
                 return new Err(userOpGasRet.ERR);
             }
-            userOp.preVerificationGas = userOpGasRet.OK.preVerificationGas;
-            userOp.verificationGasLimit = userOpGasRet.OK.verificationGasLimit;
+
             userOp.callGasLimit = `0x${BigInt(userOpGasRet.OK.callGasLimit).toString(16)}`;
+            userOp.paymasterPostOpGasLimit = `0x${BigInt(userOpGasRet.OK.paymasterPostOpGasLimit).toString(16)}`;
+            userOp.paymasterVerificationGasLimit = `0x${BigInt(userOpGasRet.OK.paymasterVerificationGasLimit).toString(16)}`;
+            userOp.preVerificationGas = `0x${BigInt(userOpGasRet.OK.preVerificationGas).toString(16)}`;
+            userOp.verificationGasLimit = `0x${BigInt(userOpGasRet.OK.verificationGasLimit).toString(16)}`;
 
             //GasOverhead.calcGasOverhead(userOp, signkeyType);
             return new Ok(true);
@@ -820,17 +826,18 @@ export class SoulWallet implements ISoulWallet {
              call(gas(), factory, 0, add(initCallData, 0x20), mload(initCallData), 0, 32)
               function createWallet(bytes memory _initializer, bytes32 _salt)
             */
-            initCode: '0x',
+            factory: null,
+            factoryData: null,
             callData: callData,
             callGasLimit: '0x' + callGasLimit.toString(16),
             verificationGasLimit: 0,
             preVerificationGas: 0,
             maxFeePerGas: '0x' + BigInt(maxFeePerGas).toString(16),
             maxPriorityFeePerGas: '0x' + BigInt(maxPriorityFeePerGas).toString(16),
-            paymaster: "0x",
+            paymaster: null,
             paymasterVerificationGasLimit: 0,
             paymasterPostOpGasLimit: 0,
-            paymasterData: "0x",
+            paymasterData: null,
             signature: "0x"
         };
 
