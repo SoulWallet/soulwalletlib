@@ -10,7 +10,9 @@ export class Bundler implements IBundler {
 
     constructor(bundler: string | ethers.JsonRpcProvider) {
         if (typeof bundler === 'string') {
-            this.bundler = new ethers.JsonRpcProvider(bundler);
+            this.bundler = new ethers.JsonRpcProvider(bundler, undefined, {
+                batchMaxCount: 1
+            });
         } else {
             this.bundler = bundler;
         }
