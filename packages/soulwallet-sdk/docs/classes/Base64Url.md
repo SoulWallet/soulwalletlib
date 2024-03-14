@@ -49,7 +49,7 @@ Base64Url
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/base64Url.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/base64Url.ts#L10)
+[packages/soulwallet-sdk/src/tools/base64Url.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/base64Url.ts#L10)
 
 ___
 
@@ -77,4 +77,4 @@ Base64Url
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/base64Url.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/base64Url.ts#L22)
+[packages/soulwallet-sdk/src/tools/base64Url.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/base64Url.ts#L22)

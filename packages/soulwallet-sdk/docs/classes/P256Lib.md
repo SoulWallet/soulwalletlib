@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:88](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L88)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:88](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L88)
 
 ___
 
@@ -86,7 +86,7 @@ inversion mod nusing little Fermat theorem via a^(n-2), use of precompiled
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:94](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L94)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:94](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L94)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:508](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L508)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:508](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L508)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:102](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L102)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:102](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L102)
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:532](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L532)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:532](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L532)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:482](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L482)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:482](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L482)
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:365](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L365)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:365](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L365)
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:329](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L329)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:329](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L329)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:438](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L438)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:438](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L438)
 
 ___
 
@@ -264,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:467](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L467)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:467](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L467)
 
 ___
 
@@ -286,7 +286,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:81](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L81)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:81](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L81)
 
 ___
 
@@ -310,7 +310,7 @@ Check if the curve is the zero curve in affine rep.
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:170](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L170)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:170](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L170)
 
 ___
 
@@ -335,7 +335,7 @@ Add two elliptic curve points in affine coordinates.
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:178](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L178)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:178](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L178)
 
 ___
 
@@ -361,7 +361,7 @@ warning: assume that P1(x1,y1)!=P2(x2,y2), true in multiplication loop with prim
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:143](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L143)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:143](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L143)
 
 ___
 
@@ -386,7 +386,7 @@ Convert from XYZZ rep to affine rep
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:129](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L129)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:129](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L129)
 
 ___
 
@@ -413,7 +413,7 @@ Computation of uG+vQ using Strauss-Shamir's trick, G basepoint, Q public key
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:189](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L189)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:189](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L189)
 
 ___
 
@@ -434,7 +434,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:112](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L112)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:112](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L112)
 
 ___
 
@@ -457,7 +457,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:311](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L311)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:311](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L311)
 
 ___
 
@@ -479,7 +479,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:63](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L63)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:63](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L63)
 
 ___
 
@@ -501,7 +501,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:78](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L78)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:78](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L78)
 
 ___
 
@@ -525,4 +525,4 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/tools/p256lib.ts:545](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/tools/p256lib.ts#L545)
+[packages/soulwallet-sdk/src/tools/p256lib.ts:545](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/tools/p256lib.ts#L545)

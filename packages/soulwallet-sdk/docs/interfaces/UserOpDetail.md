@@ -21,7 +21,8 @@ UserOpDetail
 - [callData](UserOpDetail.md#calldata)
 - [callGasLimit](UserOpDetail.md#callgaslimit)
 - [entryPoint](UserOpDetail.md#entrypoint)
-- [initCode](UserOpDetail.md#initcode)
+- [factory](UserOpDetail.md#factory)
+- [factoryData](UserOpDetail.md#factorydata)
 - [maxFeePerGas](UserOpDetail.md#maxfeepergas)
 - [maxPriorityFeePerGas](UserOpDetail.md#maxpriorityfeepergas)
 - [nonce](UserOpDetail.md#nonce)
@@ -43,7 +44,7 @@ UserOpDetail
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L31)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:31](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L31)
 
 ___
 
@@ -53,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:30](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L30)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:30](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L30)
 
 ___
 
@@ -67,7 +68,7 @@ UserOperation.callData
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:12](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L12)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:13](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L13)
 
 ___
 
@@ -81,7 +82,7 @@ UserOperation.callGasLimit
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:13](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L13)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L14)
 
 ___
 
@@ -91,21 +92,35 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:29](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L29)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:29](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L29)
 
 ___
 
-### initCode
+### factory
 
-• **initCode**: `string`
+• **factory**: ``null`` \| `string`
 
 #### Inherited from
 
-UserOperation.initCode
+UserOperation.factory
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L11)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:11](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L11)
+
+___
+
+### factoryData
+
+• **factoryData**: ``null`` \| `string`
+
+#### Inherited from
+
+UserOperation.factoryData
+
+#### Defined in
+
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:12](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L12)
 
 ___
 
@@ -119,7 +134,7 @@ UserOperation.maxFeePerGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L16)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L17)
 
 ___
 
@@ -133,7 +148,7 @@ UserOperation.maxPriorityFeePerGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:17](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L17)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:18](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L18)
 
 ___
 
@@ -147,13 +162,13 @@ UserOperation.nonce
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L10)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:10](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L10)
 
 ___
 
 ### paymaster
 
-• **paymaster**: `string`
+• **paymaster**: ``null`` \| `string`
 
 #### Inherited from
 
@@ -161,13 +176,13 @@ UserOperation.paymaster
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:18](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L18)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L19)
 
 ___
 
 ### paymasterData
 
-• **paymasterData**: `string`
+• **paymasterData**: ``null`` \| `string`
 
 #### Inherited from
 
@@ -175,7 +190,7 @@ UserOperation.paymasterData
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L21)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L22)
 
 ___
 
@@ -189,7 +204,7 @@ UserOperation.paymasterPostOpGasLimit
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:20](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L20)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:21](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L21)
 
 ___
 
@@ -203,7 +218,7 @@ UserOperation.paymasterVerificationGasLimit
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:19](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L19)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:20](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L20)
 
 ___
 
@@ -217,7 +232,7 @@ UserOperation.preVerificationGas
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L15)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:16](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L16)
 
 ___
 
@@ -231,7 +246,7 @@ UserOperation.sender
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L9)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:9](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L9)
 
 ___
 
@@ -245,7 +260,7 @@ UserOperation.signature
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:22](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L22)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:23](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L23)
 
 ___
 
@@ -255,7 +270,7 @@ ___
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/IBundler.ts:32](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/IBundler.ts#L32)
+[packages/soulwallet-sdk/src/interface/IBundler.ts:32](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/IBundler.ts#L32)
 
 ___
 
@@ -269,4 +284,4 @@ UserOperation.verificationGasLimit
 
 #### Defined in
 
-[packages/soulwallet-sdk/src/interface/UserOperation.ts:14](https://github.com/SoulWallet/soulwalletlib/blob/32f4da1/packages/soulwallet-sdk/src/interface/UserOperation.ts#L14)
+[packages/soulwallet-sdk/src/interface/UserOperation.ts:15](https://github.com/SoulWallet/soulwalletlib/blob/c4026ab/packages/soulwallet-sdk/src/interface/UserOperation.ts#L15)
