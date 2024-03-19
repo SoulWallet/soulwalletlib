@@ -1,5 +1,5 @@
 import { PackedUserOperation, UserOperation } from './interface/UserOperation.js';
-import { userOperationFromJSON, userOperationToJSON, packUserOp, unpackUserOp } from './tools/convert.js';
+import { packedUserOperationToTuple, packedUserOperationToJSON, userOperationFromJSON, userOperationToJSON, packUserOp, unpackUserOp } from './tools/convert.js';
 import { getUserOpHash } from './tools/userOpHash.js'
 
 /**
@@ -9,6 +9,24 @@ import { getUserOpHash } from './tools/userOpHash.js'
  * @class UserOpUtils
  */
 export class UserOpUtils {
+
+    static packedUserOperationToTuple(packedUserOp: PackedUserOperation): string {
+        return packedUserOperationToTuple(packedUserOp);
+    }
+
+    /**
+     * packedUserOperationToJSON
+     *
+     * @static
+     * @param {PackedUserOperation} packedUserOp
+     * @return {*}  {string}
+     * @memberof UserOpUtils
+     */
+    static packedUserOperationToJSON(packedUserOp: PackedUserOperation): string {
+        return packedUserOperationToJSON(packedUserOp);
+    }
+
+
 
     /**
      * userOperationToJSON
