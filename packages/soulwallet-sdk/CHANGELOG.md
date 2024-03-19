@@ -1,5 +1,11 @@
 # @soulwallet/sdk
 
+## 0.3.3
+
+### Patch Changes
+
+- 01a952f: New function export: 'async getSemiValidSignature(args...) `
+
 ## 0.3.2
 
 ### Patch Changes
