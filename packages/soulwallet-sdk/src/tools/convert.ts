@@ -24,6 +24,37 @@ function _HexstringToBytes(value: string): string {
     }
 }
 
+function packedUserOperationToTuple(packedUserOp: PackedUserOperation): string {
+    let tupleStr = '[';
+    tupleStr += `"${ethers.getAddress(packedUserOp.sender)}",`
+    tupleStr += `${BigInt(packedUserOp.nonce).toString(10)},`
+    tupleStr += `"${_HexstringToBytes(packedUserOp.initCode)}",`
+    tupleStr += `"${_HexstringToBytes(packedUserOp.callData)}",`
+    tupleStr += `"${_HexstringToBytes(packedUserOp.accountGasLimits)}",`
+    tupleStr += `${BigInt(packedUserOp.preVerificationGas).toString(10)},`
+    tupleStr += `"${_HexstringToBytes(packedUserOp.gasFees)}",`
+    tupleStr += `"${_HexstringToBytes(packedUserOp.paymasterAndData)}",`
+    tupleStr += `"${_HexstringToBytes(packedUserOp.signature)}"`
+    tupleStr += ']';
+
+    return tupleStr.toLowerCase();
+}
+
+function packedUserOperationToJSON(packedUserOp: PackedUserOperation): string {
+    const obj = {
+        sender: ethers.getAddress(packedUserOp.sender),
+        nonce: _BigNumberishToHexString(packedUserOp.nonce),
+        initCode: _HexstringToBytes(packedUserOp.initCode),
+        callData: _HexstringToBytes(packedUserOp.callData),
+        accountGasLimits: _BigNumberishToHexString(packedUserOp.accountGasLimits),
+        preVerificationGas: _BigNumberishToHexString(packedUserOp.preVerificationGas),
+        gasFees: _BigNumberishToHexString(packedUserOp.gasFees),
+        paymasterAndData: _HexstringToBytes(packedUserOp.paymasterAndData),
+        signature: _HexstringToBytes(packedUserOp.signature)
+    };
+    return JSON.stringify(obj);
+}
+
 function userOperationToJSON(userOp: UserOperation): string {
     let factory: string | null = null;
     if (userOp.factory !== null && userOp.factory.length === 42 && userOp.factory !== ethers.ZeroAddress) {
@@ -238,9 +269,11 @@ function unpackUserOp(packedUserOp: PackedUserOperation): UserOperation {
 }
 
 export {
+    packedUserOperationToJSON,
     userOperationFromJSON,
     userOperationToJSON,
     bigIntToNumber,
     packUserOp,
-    unpackUserOp
+    unpackUserOp,
+    packedUserOperationToTuple
 }

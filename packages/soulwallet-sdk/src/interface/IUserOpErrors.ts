@@ -31,7 +31,7 @@ export class UserOpErrors extends Error {
     this.data = data;
   }
   toString(): string {
-    return `UserOpErrors: ${this.message} (${this.code})`;
+    return `UserOpErrors - ${this.code}\t${this.message}`;
   }
 }
 

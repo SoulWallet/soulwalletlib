@@ -328,7 +328,6 @@ describe('SDK', () => {
             "0x8f63d7dD6A3F5938616Ef06016BBf25BD6023315"
         ], "0x55e85a731014097612c7d462fbdededcb5f50a5cb64b0c2068cfe017b51268d0");
         console.log(a2);
-        debugger;
         const userop = await soulwallet.createUnsignedDeployWalletUserOp(0, [
             "0x8f63d7dD6A3F5938616Ef06016BBf25BD6023315"
         ], "0x", undefined, undefined);
